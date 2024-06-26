@@ -2,9 +2,10 @@ package breeze.linalg
 
 import breeze.generic.UFunc
 import breeze.math.Semiring
+import breeze.storage.Zero
+
 import scala.collection.mutable
 import scala.reflect.ClassTag
-import breeze.storage.Zero
 
 /**
  * returns a vector along the diagonal of v.

@@ -16,17 +16,18 @@ package breeze.linalg
  limitations under the License.
  */
 
-import org.scalatest._
-import org.scalatest.funsuite._
-import matchers.should.Matchers._
-import org.scalatestplus.scalacheck._
 import breeze.math.Complex
 import breeze.numerics._
 import breeze.stats.distributions.Rand
 import breeze.storage.Zero
 import breeze.util.DoubleImplicits
+import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatestplus.scalacheck._
 
 import scala.reflect.ClassTag
+
+import matchers.should.Matchers._
 
 class DenseMatrixTest extends AnyFunSuite with Checkers with DoubleImplicits with MatrixTestUtils {
 

@@ -16,10 +16,10 @@ package breeze.stats.distributions
  limitations under the License.
  */
 
+import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
-import org.scalacheck._
 
 class WaldTest extends AnyFunSuite with Checkers with UnivariateContinuousDistrTestBase with MomentsTestBase[Double] {
   type Distr = Wald

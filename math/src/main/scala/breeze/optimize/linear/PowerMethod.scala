@@ -1,10 +1,12 @@
 package breeze.optimize.linear
 
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
+import breeze.linalg.norm
 import breeze.numerics.abs
 import breeze.optimize.proximal.QuadraticMinimizer
-import breeze.util.SerializableLogging
-import breeze.linalg.{norm, DenseMatrix, DenseVector}
 import breeze.util.Implicits._
+import breeze.util.SerializableLogging
 
 /**
  * Power Method to compute maximum eigen value and companion object to

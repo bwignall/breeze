@@ -1,7 +1,7 @@
 package breeze.io
 
-import org.scalatest.funsuite.AnyFunSuite
 import breeze.io.ByteConverterBigEndian._
+import org.scalatest.funsuite.AnyFunSuite
 import spire.math.ULong
 
 /**

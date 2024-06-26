@@ -3,10 +3,11 @@ package breeze.linalg
 import breeze.generic.UFunc
 import breeze.linalg._
 import breeze.linalg.eig.Eig
-import breeze.linalg.eigSym.{DenseEigSym, EigSym}
+import breeze.linalg.eigSym.DenseEigSym
+import breeze.linalg.eigSym.EigSym
+import breeze.macros.cforRange
 import breeze.numerics._
 import breeze.stats.distributions.Rand
-import breeze.macros.cforRange
 
 /**
  * Approximate truncated randomized EVD

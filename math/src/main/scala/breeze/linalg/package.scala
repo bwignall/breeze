@@ -15,17 +15,24 @@ package breeze
  limitations under the License.
  */
 
+import breeze.io.CSVReader
+import breeze.io.CSVWriter
+import breeze.io.FileStreams
 import breeze.linalg.DenseMatrix
+import breeze.linalg.support.CanCopy
+import breeze.linalg.support.CanMapValues
+import breeze.linalg.support.RangeExtender
+import breeze.macros._
 import breeze.numerics.abs
-import breeze.io.{CSVReader, CSVWriter, FileStreams}
+
+import java.io.File
+import java.io.FileReader
+import java.io.PrintWriter
+import scala.reflect.ClassTag
+
 import linalg.operators._
-import breeze.linalg.support.{CanCopy, CanMapValues, RangeExtender}
 import math.Semiring
 import storage.Zero
-
-import java.io.{File, FileReader, PrintWriter}
-import scala.reflect.ClassTag
-import breeze.macros._
 
 /**
  * This package contains everything relating to Vectors, Matrices, Tensors, etc.

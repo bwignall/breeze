@@ -16,15 +16,15 @@ package breeze.collection.mutable
  limitations under the License.
  */
 
-import java.util.Comparator
-
-import breeze.collection.mutable.Beam.{BeamResult, NotAdded}
+import breeze.collection.mutable.Beam.BeamResult
+import breeze.collection.mutable.Beam.NotAdded
 import breeze.linalg.clip
 
-import scala.jdk.CollectionConverters._
+import java.util.Comparator
+import scala.collection._
 import scala.collection.generic._
 import scala.collection.mutable.ArrayBuffer
-import scala.collection._
+import scala.jdk.CollectionConverters._
 
 /**
  * Represents a beam, which is essentially a priority queue

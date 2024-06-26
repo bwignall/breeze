@@ -16,8 +16,9 @@ package breeze.optimize.linear
  limitations under the License.
  */
 
-import collection.mutable.BitSet
 import scala.collection.compat.immutable.ArraySeq
+
+import collection.mutable.BitSet
 
 object CompetitiveLinking extends BipartiteMatching {
 

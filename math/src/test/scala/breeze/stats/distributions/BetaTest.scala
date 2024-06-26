@@ -16,7 +16,8 @@ package breeze.stats.distributions;
  limitations under the License.
  */
 
-import breeze.linalg.{norm, DenseVector}
+import breeze.linalg.DenseVector
+import breeze.linalg.norm
 import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._

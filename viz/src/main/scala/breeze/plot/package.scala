@@ -1,12 +1,14 @@
 package breeze
 
-import java.awt.{Paint, Stroke}
-
-import linalg.Matrix
+import breeze.compat.Scala3Compat._
 import org.jfree.chart.renderer.xy.XYItemRenderer
 import org.jfree.chart.ui.RectangleAnchor
 import org.jfree.data.xy
-import breeze.compat.Scala3Compat._
+
+import java.awt.Paint
+import java.awt.Stroke
+
+import linalg.Matrix
 
 /**
  * Basic 2-d plotting package. This API is very experimentable, I

@@ -1,10 +1,12 @@
 package breeze.linalg
 
-import org.scalatest.funsuite.AnyFunSuite
 import breeze.math._
-import org.scalacheck.{Arbitrary, Gen, Prop}
-import org.scalatestplus.scalacheck.Checkers
 import breeze.numerics.closeTo
+import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
+import org.scalacheck.Prop
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatestplus.scalacheck.Checkers
 
 /**
  *

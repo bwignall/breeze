@@ -16,7 +16,9 @@ package breeze.linalg.operators
  limitations under the License.
  */
 
-import breeze.generic.{MMRegistry2, MMRegistry3, UFunc}
+import breeze.generic.MMRegistry2
+import breeze.generic.MMRegistry3
+import breeze.generic.UFunc
 import breeze.generic.UFunc.InPlaceImpl3
 
 import scala.reflect.ClassTag

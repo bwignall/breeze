@@ -15,27 +15,26 @@ package breeze.linalg
  limitations under the License.
  */
 
-import scala.{specialized => spec}
 import breeze.generic._
-import breeze.linalg.support._
 import breeze.linalg.operators._
-import breeze.math._
-import breeze.util._
-import breeze.storage.Zero
-
-import scala.reflect.ClassTag
-import dev.ludovic.netlib.blas.BLAS.{getInstance => blas}
-import breeze.macros.expand
-
-import scala.math.BigInt
-import breeze.macros._
-import CanTraverseValues.ValuesVisitor
-import CanZipAndTraverseValues.PairValuesVisitor
 import breeze.linalg.support.CanMapValues.DenseCanMapValues
+import breeze.linalg.support._
+import breeze.macros._
+import breeze.macros._
+import breeze.macros.expand
+import breeze.math._
+import breeze.storage.Zero
+import breeze.util._
+import dev.ludovic.netlib.blas.BLAS.{getInstance => blas}
 
 import java.io.ObjectStreamException
 import scala.collection.mutable.ArrayBuilder
-import breeze.macros._
+import scala.math.BigInt
+import scala.reflect.ClassTag
+import scala.{specialized => spec}
+
+import CanTraverseValues.ValuesVisitor
+import CanZipAndTraverseValues.PairValuesVisitor
 
 /**
  * A DenseVector is the "obvious" implementation of a Vector, with one twist.

@@ -15,16 +15,19 @@ package breeze.linalg
  limitations under the License.
  */
 
-import java.util
+import breeze.macros._
+import breeze.macros._
 import breeze.math._
 import breeze.storage.Zero
-import breeze.util.{ArrayUtil, ReflectionUtil, Sorting, Terminal}
+import breeze.util.ArrayUtil
+import breeze.util.ReflectionUtil
+import breeze.util.Sorting
+import breeze.util.Terminal
 
+import java.util
 import scala.collection.mutable
 import scala.reflect.ClassTag
 import scala.{specialized => spec}
-import breeze.macros._
-import breeze.macros._
 
 /**
  * A compressed sparse column matrix, as used in Matlab and CSparse, etc.

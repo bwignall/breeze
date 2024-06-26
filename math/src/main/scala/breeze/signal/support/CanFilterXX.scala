@@ -3,7 +3,8 @@ package breeze.signal.support
 /**Implementation for BP, BS, LP and HP filters (CanFilterBPBS, CanFilterLPHP)
  * @author ktakagaki
  */
-import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
 import breeze.signal._
 
 /**

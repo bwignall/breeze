@@ -1,8 +1,8 @@
 package breeze.linalg
 
+import breeze.generic.UFunc
 import breeze.linalg.support.CanTraverseValues
 import breeze.linalg.support.CanTraverseValues.ValuesVisitor
-import breeze.generic.UFunc
 import breeze.storage.Zero
 
 import scala.util.control.ControlThrowable

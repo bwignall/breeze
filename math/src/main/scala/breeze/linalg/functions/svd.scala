@@ -1,13 +1,13 @@
 package breeze.linalg
 
 import breeze.generic.UFunc
-import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
-import dev.ludovic.netlib.arpack.ARPACK
-import org.netlib.util.intW
-import org.netlib.util.doubleW
 import breeze.linalg.operators.OpMulMatrix
 import breeze.linalg.support.CanTranspose
 import breeze.macros.cforRange
+import dev.ludovic.netlib.arpack.ARPACK
+import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
+import org.netlib.util.doubleW
+import org.netlib.util.intW
 
 //  Options fot the singular value decomposition (SVD) of a real M-by-N matrix
 sealed abstract private[this] class SVDMode(val JOBZ: String)

@@ -1,6 +1,8 @@
 package breeze.optimize.linear
 
-import breeze.linalg.{norm, DenseMatrix, DenseVector}
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
+import breeze.linalg.norm
 import breeze.numerics._
 import breeze.optimize.OptimizeTestBase
 

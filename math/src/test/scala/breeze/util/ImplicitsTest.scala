@@ -20,8 +20,8 @@ package breeze.util
 
 import org.scalatest.funsuite.AnyFunSuite
 
-import scala.collection.mutable.ArrayBuffer
 import scala.collection.compat._
+import scala.collection.mutable.ArrayBuffer
 
 class ImplicitsTest extends AnyFunSuite {
 

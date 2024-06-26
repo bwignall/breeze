@@ -1,7 +1,8 @@
 package breeze.linalg
 
 import breeze.generic.UFunc
-import breeze.linalg.operators.{OpMulInner, OpSub}
+import breeze.linalg.operators.OpMulInner
+import breeze.linalg.operators.OpSub
 import breeze.macros._
 
 /**

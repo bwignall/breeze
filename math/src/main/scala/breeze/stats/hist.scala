@@ -2,9 +2,10 @@ package breeze.stats
 
 import breeze.generic.UFunc
 import breeze.linalg._
+import breeze.linalg.support.CanTraverseValues
 import breeze.linalg.support.CanTraverseValues.ValuesVisitor
+import breeze.linalg.support.CanZipAndTraverseValues
 import breeze.linalg.support.CanZipAndTraverseValues.PairValuesVisitor
-import breeze.linalg.support.{CanTraverseValues, CanZipAndTraverseValues}
 import breeze.stats.hist.Impl3
 import breeze.util.WideningConversion
 

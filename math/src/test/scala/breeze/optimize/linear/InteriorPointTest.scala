@@ -16,9 +16,9 @@ package breeze.optimize.linear
  limitations under the License.
  */
 
+import breeze.linalg._
 import org.scalatest._
 import org.scalatest.funsuite._
-import breeze.linalg._
 
 class InteriorPointTest extends AnyFunSuite {
   // from: http://en.wikipedia.org/wiki/Karmarkar's_algorithm

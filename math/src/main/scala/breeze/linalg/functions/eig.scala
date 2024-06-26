@@ -1,9 +1,9 @@
 package breeze.linalg
 
 import breeze.generic.UFunc
-import org.netlib.util.intW
-import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
 import breeze.macros._
+import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
+import org.netlib.util.intW
 
 /**
  * Eigenvalue decomposition (right eigenvectors)

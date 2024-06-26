@@ -1,7 +1,8 @@
 package breeze.stats
 package distributions
 
-import breeze.numerics.{digamma, lgamma}
+import breeze.numerics.digamma
+import breeze.numerics.lgamma
 
 case class InvGamma(shape: Double, scale: Double)(implicit val basis: RandBasis)
     extends ContinuousDistr[Double]

@@ -16,11 +16,15 @@
 package breeze;
 package io;
 
-import java.io.File;
-import java.io.{InputStream, OutputStream};
-import java.io.{FileInputStream, FileOutputStream};
-import java.io.{BufferedInputStream, BufferedOutputStream};
-import java.util.zip.{GZIPInputStream, GZIPOutputStream};
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.io.OutputStream
+import java.util.zip.GZIPInputStream
+import java.util.zip.GZIPOutputStream;
 
 /**
  * Gets input and output streams to a file, wrapping them in

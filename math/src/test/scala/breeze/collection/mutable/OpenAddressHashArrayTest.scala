@@ -15,9 +15,10 @@ package breeze.collection.mutable
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import org.scalatestplus.scalacheck.Checkers
+import org.scalacheck.Arbitrary
+import org.scalacheck.Prop
 import org.scalatest.funsuite.AnyFunSuite
-import org.scalacheck.{Arbitrary, Prop}
+import org.scalatestplus.scalacheck.Checkers
 
 /**
  *

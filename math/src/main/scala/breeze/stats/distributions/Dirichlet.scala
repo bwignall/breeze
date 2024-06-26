@@ -16,11 +16,11 @@ package breeze.stats.distributions
  limitations under the License.
  */
 
-import breeze.optimize._
 import breeze.linalg._
-import breeze.numerics._
 import breeze.math._
 import breeze.numerics
+import breeze.numerics._
+import breeze.optimize._
 
 import scala.reflect.ClassTag
 

@@ -4,11 +4,11 @@ package breeze.interpolation
  *
  * @author chrismedrela
  */
-import scala.reflect.ClassTag
-
 import breeze.linalg._
 import breeze.math.Field
 import breeze.storage.Zero
+
+import scala.reflect.ClassTag
 
 class CubicInterpolator(x_coords: Vector[Double], y_coords: Vector[Double])
     extends HandyUnivariateInterpolator[Double](x_coords, y_coords) {

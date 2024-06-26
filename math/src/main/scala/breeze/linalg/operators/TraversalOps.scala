@@ -1,11 +1,16 @@
 package breeze.linalg.operators
 
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
+import breeze.linalg.HashVector
+import breeze.linalg.SparseVector
+import breeze.linalg.Vector
 import breeze.linalg.support.CanMapValues.DenseCanMapValues
-import breeze.linalg.{DenseMatrix, DenseVector, HashVector, SparseVector, Vector}
 import breeze.linalg.support.CanTraverseValues.ValuesVisitor
-import breeze.linalg.support._
 import breeze.linalg.support.CanZipAndTraverseValues.PairValuesVisitor
-import breeze.macros.{cforRange, cforRange2}
+import breeze.linalg.support._
+import breeze.macros.cforRange
+import breeze.macros.cforRange2
 import breeze.math.Complex
 import breeze.storage.Zero
 

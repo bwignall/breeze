@@ -15,7 +15,9 @@ package breeze.stats.distributions
  limitations under the License.
  */
 
-import breeze.numerics.{lgamma, logI}
+import breeze.numerics.lgamma
+import breeze.numerics.logI
+
 import math._
 
 /**

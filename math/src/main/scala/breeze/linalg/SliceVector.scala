@@ -4,14 +4,13 @@ import breeze.linalg.operators._
 import breeze.linalg.support.CanTraverseKeyValuePairs.KeyValuePairsVisitor
 import breeze.linalg.support.CanTraverseValues.ValuesVisitor
 import breeze.linalg.support._
+import breeze.macros._
 import breeze.macros.expand
 import breeze.math.Semiring
 import breeze.storage.Zero
 
 import scala.reflect.ClassTag
 import scala.{specialized => spec}
-
-import breeze.macros._
 
 /**
  * A SliceVector is a vector that is a view of another underlying tensor. For instance:

@@ -19,8 +19,8 @@ package breeze.linalg.support
  */
 
 import breeze.generic.UFunc
-import breeze.math.Complex
 import breeze.macros.cforRange
+import breeze.math.Complex
 
 import scala.reflect.ClassTag
 import scala.{specialized => spec}

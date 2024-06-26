@@ -15,16 +15,18 @@ package breeze.linalg
  limitations under the License.
  */
 
-import support._
 import breeze.collection.mutable.Beam
 import breeze.generic.UFunc
+import breeze.linalg.operators.HasOps
+import breeze.linalg.operators.TensorLowPrio
 import breeze.math.Semiring
-import breeze.linalg.operators.{HasOps, TensorLowPrio}
 
 import scala.annotation.unchecked.uncheckedVariance
+import scala.reflect.ClassTag
 import scala.util.hashing.MurmurHash3
 import scala.{specialized => spec}
-import scala.reflect.ClassTag
+
+import support._
 
 /**
  * We occasionally need a Tensor that doesn't extend NumericOps directly. This is that tensor.

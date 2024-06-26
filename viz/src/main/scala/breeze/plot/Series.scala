@@ -1,7 +1,9 @@
 package breeze.plot
 
 import org.jfree.chart.renderer.xy.XYItemRenderer
-import java.awt.{Paint, Stroke}
+
+import java.awt.Paint
+import java.awt.Stroke
 
 /**
  * A Series is anything that can be added to a [[breeze.plot.Plot]]

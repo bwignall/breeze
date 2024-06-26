@@ -17,7 +17,8 @@ package distributions
  */
 
 import org.apache.commons.math3.distribution.{LevyDistribution => ApacheLevyDistribution}
-import org.apache.commons.math3.random.{JDKRandomGenerator, RandomGenerator}
+import org.apache.commons.math3.random.JDKRandomGenerator
+import org.apache.commons.math3.random.RandomGenerator
 
 /**
  * The Levy-distribution - ratio of two scaled chi^2 variables

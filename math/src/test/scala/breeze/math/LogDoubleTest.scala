@@ -16,12 +16,13 @@ package breeze.math
  limitations under the License.
  */
 
+import breeze.linalg.RandomInstanceSupport
+import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
-import org.scalacheck._
+
 import LogDouble._
-import breeze.linalg.RandomInstanceSupport
 
 class LogDoubleTest extends AnyFunSuite with Checkers {
 

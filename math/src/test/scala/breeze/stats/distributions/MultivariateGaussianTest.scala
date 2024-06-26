@@ -16,13 +16,13 @@ package breeze.stats.distributions
  limitations under the License.
  */
 
+import breeze.linalg._
+import breeze.numerics._
+import breeze.stats._
+import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
-import org.scalacheck._
-import breeze.numerics._
-import breeze.linalg._
-import breeze.stats._
 
 class MultivariateGaussianTest extends AnyFunSuite with Checkers {
   implicit val basis: RandBasis = RandBasis.mt0

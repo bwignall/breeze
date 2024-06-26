@@ -1,7 +1,8 @@
 package breeze.signal
 
 import breeze.generic.UFunc
-import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
 import breeze.math.Complex
 import breeze.signal.support.JTransformsSupport._
 

@@ -1,9 +1,9 @@
 package breeze.signal
 
-import org.scalatest._
-import org.scalatest.funsuite._
 import breeze.linalg._
 import breeze.signal.support.WindowFunctions
+import org.scalatest._
+import org.scalatest.funsuite._
 
 import WindowFunctions.hammingWindow
 

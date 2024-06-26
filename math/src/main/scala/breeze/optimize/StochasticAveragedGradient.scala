@@ -1,8 +1,9 @@
 package breeze.optimize
 
-import breeze.math.{MutableInnerProductModule, MutableInnerProductVectorSpace}
-import breeze.stats.distributions.Rand
 import breeze.linalg._
+import breeze.math.MutableInnerProductModule
+import breeze.math.MutableInnerProductVectorSpace
+import breeze.stats.distributions.Rand
 
 /**
  *

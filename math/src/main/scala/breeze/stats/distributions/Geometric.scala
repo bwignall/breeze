@@ -1,8 +1,9 @@
 package breeze.stats.distributions
 
-import runtime.ScalaRunTime
 import breeze.optimize.DiffFunction
 import breeze.util._
+
+import runtime.ScalaRunTime
 
 /**
  * The Geometric distribution calculates the number of trials until the first success, which

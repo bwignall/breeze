@@ -1,10 +1,12 @@
 package breeze.linalg
 
 import breeze.generic.UFunc
-import breeze.linalg.support.{CanMapKeyValuePairs, CanTraverseKeyValuePairs}
-import breeze.math.Semiring
-import scala.collection.mutable.ArrayBuffer
+import breeze.linalg.support.CanMapKeyValuePairs
+import breeze.linalg.support.CanTraverseKeyValuePairs
 import breeze.linalg.support.CanTraverseKeyValuePairs.KeyValuePairsVisitor
+import breeze.math.Semiring
+
+import scala.collection.mutable.ArrayBuffer
 
 /**
  * `where(a)` returns those indices that are non-zero

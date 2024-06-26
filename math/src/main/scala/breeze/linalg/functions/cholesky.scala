@@ -1,9 +1,9 @@
 package breeze.linalg
 
 import breeze.generic.UFunc
-import org.netlib.util.intW
-import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
 import breeze.linalg._
+import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
+import org.netlib.util.intW
 
 /**
  * Computes the cholesky decomposition A of the given real symmetric

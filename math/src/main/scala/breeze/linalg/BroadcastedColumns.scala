@@ -18,9 +18,14 @@
 
 package breeze.linalg
 
-import breeze.generic.UFunc.{InPlaceImpl, InPlaceImpl2, InPlaceImpl3, UImpl, UImpl2, UImpl3}
-import breeze.linalg.support._
+import breeze.generic.UFunc.InPlaceImpl
+import breeze.generic.UFunc.InPlaceImpl2
+import breeze.generic.UFunc.InPlaceImpl3
+import breeze.generic.UFunc.UImpl
+import breeze.generic.UFunc.UImpl2
+import breeze.generic.UFunc.UImpl3
 import breeze.linalg.operators._
+import breeze.linalg.support._
 
 /**
  * Class for classes that are broadcasting their columns.

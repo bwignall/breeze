@@ -16,10 +16,13 @@ package breeze.stats.distributions
  limitations under the License.
  */
 
+import breeze.linalg.DenseVector
+import breeze.linalg.SparseVector
+import breeze.linalg.softmax
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
-import breeze.linalg.{softmax, DenseVector, SparseVector}
+
 import math.{abs, exp}
 
 class DirichletTest extends AnyFunSuite with Checkers {

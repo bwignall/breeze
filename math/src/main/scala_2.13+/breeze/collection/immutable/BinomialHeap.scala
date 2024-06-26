@@ -18,8 +18,8 @@ package breeze.collection.immutable
 
 import breeze.util.Iterators
 
-import scala.collection.generic.CanBuildFrom
 import scala.collection._
+import scala.collection.generic.CanBuildFrom
 
 /**
  * From Okasaki's Functional Data Structures. Represents a functional heap

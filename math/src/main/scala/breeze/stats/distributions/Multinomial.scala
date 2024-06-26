@@ -16,16 +16,16 @@ package breeze.stats.distributions
  limitations under the License.
  */
 
+import breeze.compat.Scala3Compat._
+import breeze.compat._
 import breeze.linalg._
 import breeze.math._
 import breeze.numerics
 import breeze.numerics._
 import breeze.optimize.DiffFunction
 
-import scala.collection.mutable
 import scala.collection.compat._
-import breeze.compat.Scala3Compat._
-import breeze.compat._
+import scala.collection.mutable
 
 /**
  * Represents a Multinomial distribution over elements.

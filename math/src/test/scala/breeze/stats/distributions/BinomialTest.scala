@@ -16,8 +16,9 @@ package breeze.stats.distributions;
  limitations under the License.
  */
 
+import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
 import org.scalatest._
-import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
 

@@ -2,6 +2,7 @@ package breeze.stats.hypothesis
 
 import org.scalatest._
 import org.scalatest.funsuite._
+
 import matchers.should.Matchers._
 
 class TTestTest extends AnyFunSuite {

@@ -1,7 +1,12 @@
 package breeze.generic
 
-import breeze.generic.UFunc.{InPlaceImpl, InPlaceImpl2, UImpl, UImpl2}
-import breeze.linalg.operators.{GenericOps, GenericOpsLowPrio3, HasOps}
+import breeze.generic.UFunc.InPlaceImpl
+import breeze.generic.UFunc.InPlaceImpl2
+import breeze.generic.UFunc.UImpl
+import breeze.generic.UFunc.UImpl2
+import breeze.linalg.operators.GenericOps
+import breeze.linalg.operators.GenericOpsLowPrio3
+import breeze.linalg.operators.HasOps
 import breeze.linalg.support._
 
 /*

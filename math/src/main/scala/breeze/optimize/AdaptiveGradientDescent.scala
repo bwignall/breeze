@@ -1,10 +1,15 @@
 package breeze.optimize
 
 import breeze.linalg._
-import breeze.linalg.support.{CanMapValues, CanTraverseValues, CanZipMapValues}
-import breeze.math.{MutableFiniteCoordinateField, MutableVectorField, MutableVectorRing}
+import breeze.linalg.support.CanMapValues
+import breeze.linalg.support.CanTraverseValues
+import breeze.linalg.support.CanZipMapValues
+import breeze.math.MutableFiniteCoordinateField
+import breeze.math.MutableVectorField
+import breeze.math.MutableVectorRing
 import breeze.numerics._
-import breeze.stats.distributions.{Rand, RandBasis}
+import breeze.stats.distributions.Rand
+import breeze.stats.distributions.RandBasis
 
 /**
  * Implements the L2^2 and L1 updates from

@@ -1,6 +1,7 @@
 package breeze.optimize.linear
 
-import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
 
 /**
  * mixed 0-1 ILP Solver based on Branch and bound

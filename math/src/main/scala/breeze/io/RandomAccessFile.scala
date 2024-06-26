@@ -1,8 +1,12 @@
 package breeze.io
 
-import java.io.{Closeable, DataInput, DataOutput, File, IOException}
-
 import spire.math.ULong
+
+import java.io.Closeable
+import java.io.DataInput
+import java.io.DataOutput
+import java.io.File
+import java.io.IOException
 
 /** Wrapper for [[java.io.RandomAccessFile]].
  *

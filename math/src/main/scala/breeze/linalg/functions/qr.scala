@@ -1,9 +1,10 @@
 package breeze.linalg
 
 import breeze.generic.UFunc
-import org.netlib.util.intW
+import breeze.macros.cforRange
+import breeze.macros.cforRange2
 import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
-import breeze.macros.{cforRange, cforRange2}
+import org.netlib.util.intW
 
 sealed private[this] trait QRMode
 private[this] case object CompleteQR extends QRMode // Q and R have dimensions (m, m), (m, n)

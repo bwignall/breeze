@@ -15,11 +15,10 @@ package distributions
  See the License for the specific language governing permissions and
  limitations under the License.
  */
+import org.apache.commons.math3.distribution.{FDistribution => ApacheFDistribution}
+import org.apache.commons.math3.distribution.{RealDistribution => ApacheRealDistribution}
+
 import math.log
-import org.apache.commons.math3.distribution.{
-  FDistribution => ApacheFDistribution,
-  RealDistribution => ApacheRealDistribution
-}
 
 /**
  * The F-distribution - ratio of two scaled chi^2 variables

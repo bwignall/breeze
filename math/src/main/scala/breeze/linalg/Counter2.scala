@@ -16,21 +16,20 @@ package breeze.linalg
  */
 import breeze.linalg.Counter2.Curried
 import breeze.linalg.operators.Counter2Ops
+import breeze.linalg.support.CanMapValues.DenseCanMapValues
 import breeze.linalg.support.CanTraverseKeyValuePairs.KeyValuePairsVisitor
+import breeze.linalg.support._
+import breeze.math.Semiring
 import breeze.storage.Zero
+
+import scala.collection.Set
+import scala.collection.compat._
+import scala.collection.immutable
+import scala.reflect.ClassTag
 
 import collection.mutable
 import collection.mutable.HashMap
-import breeze.math.Semiring
-import breeze.linalg.support._
-
-import scala.collection.Set
-import scala.reflect.ClassTag
 import CanTraverseValues.ValuesVisitor
-import breeze.linalg.support.CanMapValues.DenseCanMapValues
-
-import scala.collection.immutable
-import scala.collection.compat._
 
 // TODO: remove the Like stuff.
 /**

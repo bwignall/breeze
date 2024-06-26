@@ -15,10 +15,11 @@ package breeze.linalg.support
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import breeze.math.Complex
-import scala.reflect.ClassTag
 import breeze.linalg.support.CanZipAndTraverseValues.PairValuesVisitor
 import breeze.macros._
+import breeze.math.Complex
+
+import scala.reflect.ClassTag
 
 /**
  * Marker for being able to traverse over the values in a pair oof collections

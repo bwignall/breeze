@@ -1,7 +1,7 @@
 package breeze.collection.mutable
 
-import scala.collection.generic.Shrinkable
 import scala.collection._
+import scala.collection.generic.Shrinkable
 
 trait IBeam[T]
     extends Iterable[T]

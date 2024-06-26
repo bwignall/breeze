@@ -1,7 +1,9 @@
 package breeze.stats.distributions
 
-import breeze.numerics.constants.{γ, Pi}
-import breeze.numerics.{exp, log}
+import breeze.numerics.constants.Pi
+import breeze.numerics.constants.γ
+import breeze.numerics.exp
+import breeze.numerics.log
 
 case class Gumbel(location: Double, scale: Double)(implicit rand: RandBasis)
     extends ContinuousDistr[Double]

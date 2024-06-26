@@ -16,20 +16,22 @@ package breeze.linalg
  */
 
 import breeze.generic._
-import breeze.linalg.Axis.{_0, _1}
+import breeze.linalg.Axis._0
+import breeze.linalg.Axis._1
 import breeze.linalg.operators._
 import breeze.linalg.support.CanTraverseValues.ValuesVisitor
 import breeze.linalg.support._
+import breeze.macros._
+import breeze.macros._
 import breeze.math._
 import breeze.storage.Zero
 import breeze.storage.Zero._
-import breeze.util.{ArrayUtil, ReflectionUtil}
-import breeze.macros._
+import breeze.util.ArrayUtil
+import breeze.util.ReflectionUtil
 
 import scala.collection.mutable.ArrayBuffer
 import scala.reflect.ClassTag
 import scala.{specialized => spec}
-import breeze.macros._
 
 /**
  * A DenseMatrix is a matrix with all elements found in an array. It is column major unless isTranspose is true,

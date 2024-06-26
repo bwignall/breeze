@@ -1,11 +1,11 @@
 package breeze.linalg
 
-import org.netlib.util.intW
-import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
 import breeze.generic.UFunc
 import breeze.math.Semiring
 import breeze.storage.Zero
 import breeze.util.ReflectionUtil
+import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
+import org.netlib.util.intW
 
 import scala.reflect.ClassTag
 

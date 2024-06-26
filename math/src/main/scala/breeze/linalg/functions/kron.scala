@@ -1,9 +1,10 @@
 package breeze.linalg
 
-import breeze.linalg.operators.OpMulScalar
-import scala.reflect.ClassTag
-import breeze.storage.Zero
 import breeze.generic.UFunc
+import breeze.linalg.operators.OpMulScalar
+import breeze.storage.Zero
+
+import scala.reflect.ClassTag
 
 /**
  * Returns the Kronecker product of two matrices a and b,

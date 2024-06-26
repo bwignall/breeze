@@ -16,13 +16,16 @@ package breeze.linalg
  limitations under the License.
  */
 
-import operators._
-import breeze.linalg.support.{CanSlice, CanSlice2, CanTranspose}
 import breeze.generic.UFunc
+import breeze.linalg.support.CanSlice
+import breeze.linalg.support.CanSlice2
+import breeze.linalg.support.CanTranspose
 import breeze.storage.Zero
 
 import scala.annotation.unchecked.uncheckedVariance
 import scala.reflect.ClassTag
+
+import operators._
 
 trait ImmutableNumericOps[+This] extends Any with HasOps {
   def repr: This

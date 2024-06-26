@@ -1,15 +1,24 @@
 package breeze.linalg.operators
 
 import breeze.generic.UFunc
-import breeze.generic.UFunc.{InPlaceImpl, InPlaceImpl2, UImpl, UImpl2}
+import breeze.generic.UFunc.InPlaceImpl
+import breeze.generic.UFunc.InPlaceImpl2
+import breeze.generic.UFunc.UImpl
+import breeze.generic.UFunc.UImpl2
 import breeze.gymnastics._
-import breeze.linalg.{scaleAdd, Matrix, Vector}
-import breeze.linalg.support.{CanCopy, CanTransformValues, CanZipMapValues, ScalarOf}
-import breeze.math.{Ring, Semiring}
+import breeze.linalg.Matrix
+import breeze.linalg.Vector
+import breeze.linalg.scaleAdd
+import breeze.linalg.support.CanCopy
+import breeze.linalg.support.CanTransformValues
+import breeze.linalg.support.CanZipMapValues
+import breeze.linalg.support.ScalarOf
+import breeze.macros._
+import breeze.math.Ring
+import breeze.math.Semiring
 import breeze.util.WideningConversion
 
 import scala.util._
-import breeze.macros._
 
 trait GenericOpsLowPrio3 {
   implicit def impl_T_S_eq_U_from_ZipMap[Tag, T, V1, VR, U](implicit

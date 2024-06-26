@@ -16,13 +16,15 @@ package breeze.polynomial
  limitations under the License.
  */
 
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
+import breeze.linalg.norm
+import breeze.macros._
 import org.scalatest.funsuite.AnyFunSuite
-import breeze.linalg.{norm, DenseMatrix, DenseVector}
+import spire.algebra._
+import spire.implicits.DoubleAlgebra
 import spire.math._
 import spire.math.poly._
-import spire.algebra._
-import breeze.macros._
-import spire.implicits.DoubleAlgebra
 
 class DensePolynomialTest extends AnyFunSuite {
 

@@ -1,10 +1,10 @@
 package breeze.linalg.constructors
 
-import org.scalatest.funsuite.AnyFunSuite
 import breeze.linalg._
-import breeze.stats.mean
 import breeze.numerics.abs
 import breeze.stats.distributions.RandBasis
+import breeze.stats.mean
+import org.scalatest.funsuite.AnyFunSuite
 
 /**
  * @author ktakagaki

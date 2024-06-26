@@ -1,8 +1,8 @@
 package breeze.linalg
 
 import breeze.linalg.operators.OpMulInner
-import org.scalatest.funsuite.AnyFunSuite
 import breeze.stats.mean
+import org.scalatest.funsuite.AnyFunSuite
 
 class BroadcastedTest extends AnyFunSuite {
   test("broadcast DenseMatrix along columns") {

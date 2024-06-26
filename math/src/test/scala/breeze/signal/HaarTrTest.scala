@@ -1,8 +1,9 @@
 package breeze.signal
 
+import breeze.linalg.DenseVector
+import breeze.linalg.norm
 import org.scalatest._
 import org.scalatest.funsuite._
-import breeze.linalg.{norm, DenseVector}
 
 /**
  * Test for correctness of the haar transform

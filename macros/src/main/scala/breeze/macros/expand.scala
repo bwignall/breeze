@@ -1,6 +1,8 @@
 package breeze.macros
 
-import scala.annotation.{compileTimeOnly, Annotation, StaticAnnotation}
+import scala.annotation.Annotation
+import scala.annotation.StaticAnnotation
+import scala.annotation.compileTimeOnly
 
 /**
  * expand is a macro annotation that is kind of like @specialized, but it's more of a templating mechanism.

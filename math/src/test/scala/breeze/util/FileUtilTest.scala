@@ -1,8 +1,8 @@
 package breeze.util
 
-import java.io.File
-
 import org.scalatest.funsuite.AnyFunSuite
+
+import java.io.File
 
 class FileUtilTest extends AnyFunSuite {
 

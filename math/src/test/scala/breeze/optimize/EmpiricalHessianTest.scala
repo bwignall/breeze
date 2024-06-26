@@ -1,6 +1,8 @@
 package breeze.optimize
 
-import breeze.linalg.{sum, DenseMatrix, DenseVector}
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
+import breeze.linalg.sum
 import breeze.numerics.exp
 import breeze.util.DoubleImplicits
 import org.scalatest.matchers.should.Matchers._

@@ -16,17 +16,19 @@ package breeze.math
  limitations under the License.
  */
 
+import breeze.compat.Scala3Compat._
+import breeze.compat._
 import breeze.generic.UFunc
-import breeze.generic.UFunc.{InPlaceImpl2, InPlaceImpl3, UImpl2}
+import breeze.generic.UFunc.InPlaceImpl2
+import breeze.generic.UFunc.InPlaceImpl3
+import breeze.generic.UFunc.UImpl2
+import breeze.linalg._
 import breeze.linalg.operators._
 import breeze.linalg.support._
-import breeze.linalg._
 import breeze.math.FloatDoubleOperatorAdaptors._
 import breeze.storage._
 
 import scala.reflect.ClassTag
-import breeze.compat._
-import breeze.compat.Scala3Compat._
 
 /**
  * Used for those vector-types that are "coordinated", meaning that t. (Possibly the coordinates

@@ -1,10 +1,10 @@
 package breeze.signal
 
 import breeze.generic.UFunc
-import breeze.macros.expand
 import breeze.linalg.DenseVector
-import breeze.numerics._
+import breeze.macros.expand
 import breeze.math.Complex
+import breeze.numerics._
 import breeze.storage.Zero
 
 import scala.reflect.ClassTag

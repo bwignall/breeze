@@ -1,9 +1,10 @@
 package breeze.util
 
-import org.scalatest.funsuite.AnyFunSuite
-import breeze.util.JavaArrayOps._
-import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
 import breeze.math._
+import breeze.util.JavaArrayOps._
+import org.scalatest.funsuite.AnyFunSuite
 
 /**
  * @author ktakagaki

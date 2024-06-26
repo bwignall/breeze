@@ -1,9 +1,9 @@
 package breeze.stats
 package distributions
 
+import org.scalacheck._
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck._
-import org.scalacheck._
 
 trait RandTestBase extends AnyFunSuite with Checkers {
   implicit val basis: RandBasis = RandBasis.mt0

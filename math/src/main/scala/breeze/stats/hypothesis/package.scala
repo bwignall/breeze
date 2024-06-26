@@ -1,10 +1,12 @@
 package breeze.stats
+import breeze.linalg.support._
+import breeze.stats.distributions._
+import breeze.stats.meanAndVariance.MeanAndVariance
+
 import scala.math.pow
 import scala.math.sqrt
-import breeze.stats.distributions._
-import breeze.linalg.support._
+
 import CanTraverseValues._
-import breeze.stats.meanAndVariance.MeanAndVariance
 
 /**
  * This package contains hypothesis tests.

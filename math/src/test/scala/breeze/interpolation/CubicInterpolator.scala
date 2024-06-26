@@ -1,10 +1,9 @@
 package breeze.interpolation
 
-import org.scalatest.funsuite.AnyFunSuite
-
-import breeze.linalg._
 import breeze.interpolation._
+import breeze.linalg._
 import breeze.numerics._
+import org.scalatest.funsuite.AnyFunSuite
 
 /**
  *

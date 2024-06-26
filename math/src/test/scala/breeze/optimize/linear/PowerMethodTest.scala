@@ -1,9 +1,9 @@
 package breeze.optimize.linear
 
+import breeze.linalg._
 import breeze.numerics.abs
 import org.scalatest._
 import org.scalatest.funsuite._
-import breeze.linalg._
 
 class PowerMethodTest extends AnyFunSuite {
   val n = 5

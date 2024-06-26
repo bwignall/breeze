@@ -1,7 +1,8 @@
 package breeze.signal
 
+import breeze.linalg.DenseVector
+import breeze.linalg.norm
 import org.scalatest.funsuite.AnyFunSuite
-import breeze.linalg.{norm, DenseVector}
 
 /**
  * @author ktakagaki

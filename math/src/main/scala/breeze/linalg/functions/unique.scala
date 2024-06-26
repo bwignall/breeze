@@ -1,9 +1,10 @@
 package breeze.linalg
 
 import breeze.generic.UFunc
-import breeze.macros.expand
-import breeze.util.{ArrayUtil, ReflectionUtil}
 import breeze.macros._
+import breeze.macros.expand
+import breeze.util.ArrayUtil
+import breeze.util.ReflectionUtil
 
 import scala.reflect.ClassTag
 

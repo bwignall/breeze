@@ -17,7 +17,8 @@ package distributions
  */
 
 import breeze.linalg._
-import breeze.numerics.{digamma, lgamma}
+import breeze.numerics.digamma
+import breeze.numerics.lgamma
 import breeze.optimize._
 import org.apache.commons.math3.distribution.BetaDistribution
 

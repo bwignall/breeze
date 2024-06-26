@@ -1,11 +1,13 @@
 package breeze.linalg
 
-import org.scalatest._
-import org.scalatest.funsuite._
 import breeze.math._
 import breeze.stats.mean
 import breeze.storage.Zero
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
+import org.scalatest._
+import org.scalatest.funsuite._
+
 import scala.reflect.ClassTag
 
 /**

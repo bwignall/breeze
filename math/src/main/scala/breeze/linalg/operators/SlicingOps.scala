@@ -1,10 +1,17 @@
 package breeze.linalg.operators
 
 import breeze.linalg._
-import breeze.linalg.support.{CanCopy, CanSlice, CanSlice2, CanTranspose}
-import breeze.math.{Complex, EntrywiseMatrixNorms, Field, MutableFiniteCoordinateField, Semiring}
-import breeze.storage.Zero
+import breeze.linalg.support.CanCopy
+import breeze.linalg.support.CanSlice
+import breeze.linalg.support.CanSlice2
+import breeze.linalg.support.CanTranspose
 import breeze.macros.require
+import breeze.math.Complex
+import breeze.math.EntrywiseMatrixNorms
+import breeze.math.Field
+import breeze.math.MutableFiniteCoordinateField
+import breeze.math.Semiring
+import breeze.storage.Zero
 
 import scala.reflect.ClassTag
 

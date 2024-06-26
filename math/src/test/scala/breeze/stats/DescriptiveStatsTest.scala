@@ -1,13 +1,13 @@
 package breeze.stats
 
-import org.scalatest.funsuite.AnyFunSuite
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.matchers.should.Matchers._
-
-import scala.util.Random
 import breeze.linalg._
 import breeze.math._
 import breeze.stats.meanAndVariance.MeanAndVariance
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers._
+import org.scalatest.wordspec.AnyWordSpec
+
+import scala.util.Random
 
 class DescriptiveStatsTest extends AnyWordSpec {
   "DescriptiveStats" should {

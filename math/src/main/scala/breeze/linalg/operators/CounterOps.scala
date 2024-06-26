@@ -1,10 +1,16 @@
 package breeze.linalg.operators
 
-import breeze.storage.Zero
-import breeze.math.{Field, Ring, Semiring}
-import breeze.linalg.support.{CanCopy, CanTransformValues, CanTraverseValues, CanZipMapKeyValues, CanZipMapValues}
 import breeze.generic.UFunc
 import breeze.linalg._
+import breeze.linalg.support.CanCopy
+import breeze.linalg.support.CanTransformValues
+import breeze.linalg.support.CanTraverseValues
+import breeze.linalg.support.CanZipMapKeyValues
+import breeze.linalg.support.CanZipMapValues
+import breeze.math.Field
+import breeze.math.Ring
+import breeze.math.Semiring
+import breeze.storage.Zero
 import breeze.util.ScalaVersion
 
 trait CounterOps {

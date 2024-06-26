@@ -1,10 +1,13 @@
 package breeze.math
 
-import breeze.linalg.operators.{OpMulInner, OpMulScalar}
+import breeze.linalg.norm
+import breeze.linalg.operators.OpMulInner
+import breeze.linalg.operators.OpMulScalar
+import breeze.linalg.sum
 import breeze.linalg.support.CanTraverseValues
 import breeze.linalg.support.CanTraverseValues.ValuesVisitor
-import breeze.linalg.{norm, sum}
-import breeze.numerics.{pow, sqrt}
+import breeze.numerics.pow
+import breeze.numerics.sqrt
 
 /**
  * breeze

@@ -2,7 +2,8 @@ package breeze.optimize
 
 import breeze.math.MutableFiniteCoordinateField
 import breeze.numerics.sqrt
-import breeze.stats.distributions.{Rand, RandBasis}
+import breeze.stats.distributions.Rand
+import breeze.stats.distributions.RandBasis
 
 /**
  * Created by jda on 3/17/15.

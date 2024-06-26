@@ -19,6 +19,7 @@ package distributions
 
 import breeze.numerics._
 import breeze.optimize.DiffFunction
+
 import math.{log1p, Pi}
 
 /**

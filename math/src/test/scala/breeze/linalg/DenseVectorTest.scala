@@ -1,17 +1,17 @@
 package breeze.linalg
 
-import breeze.numerics.{isNonfinite, sin}
+import breeze.math._
+import breeze.numerics.isNonfinite
+import breeze.numerics.sin
+import breeze.stats.distributions.RandBasis
+import breeze.stats.mean
 import org.netlib.blas.Ddot
 import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
-import breeze.math._
-import breeze.stats.mean
 
 import java.util
-import breeze.stats.distributions.RandBasis
-
 import scala.reflect.ClassTag
 
 /**

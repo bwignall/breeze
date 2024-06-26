@@ -1,7 +1,7 @@
 package breeze.stats.random
 
-import breeze.stats.distributions.Rand
 import breeze.linalg.DenseVector
+import breeze.stats.distributions.Rand
 
 /**
  * Generates a quasi-random sequence of dim-dimensional vectors

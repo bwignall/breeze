@@ -16,12 +16,11 @@ package breeze.optimize
  limitations under the License.
  */
 
+import breeze.linalg._
+import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
-import org.scalacheck._
-
-import breeze.linalg._
 
 class StochasticAveragedGradientTest extends OptimizeTestBase {
   test("optimize a simple multivariate gaussian") {

@@ -2,7 +2,9 @@ package breeze.linalg
 
 import breeze.linalg.operators.OpMulMatrix
 import breeze.linalg.support.CanTranspose
-import breeze.optimize.{DiffFunction, GradientTester, LBFGS}
+import breeze.optimize.DiffFunction
+import breeze.optimize.GradientTester
+import breeze.optimize.LBFGS
 import breeze.stats.distributions.RandBasis
 import org.scalatest.funsuite.AnyFunSuite
 

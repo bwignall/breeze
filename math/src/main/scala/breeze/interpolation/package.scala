@@ -1,9 +1,12 @@
 package breeze
 
-import breeze.generic.{MappingUFunc, UFunc, VariableUFunc}
-import scala.reflect.ClassTag
-import breeze.math.Field
+import breeze.generic.MappingUFunc
+import breeze.generic.UFunc
+import breeze.generic.VariableUFunc
 import breeze.linalg.Vector
+import breeze.math.Field
+
+import scala.reflect.ClassTag
 
 package object interpolation {
 

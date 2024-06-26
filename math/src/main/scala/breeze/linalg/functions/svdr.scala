@@ -2,10 +2,12 @@ package breeze.linalg
 
 import breeze.generic.UFunc
 import breeze.linalg._
-import breeze.linalg.svd.{DenseSVD, SVD}
-import breeze.numerics.{abs, signum}
-import breeze.stats.distributions.Rand
+import breeze.linalg.svd.DenseSVD
+import breeze.linalg.svd.SVD
 import breeze.macros._
+import breeze.numerics.abs
+import breeze.numerics.signum
+import breeze.stats.distributions.Rand
 
 /**
  * Approximate truncated randomized SVD

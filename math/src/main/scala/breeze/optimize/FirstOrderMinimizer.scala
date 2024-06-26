@@ -1,13 +1,16 @@
 package breeze.optimize
 
 import breeze.linalg.norm
-import breeze.math.{MutableEnumeratedCoordinateField, MutableFiniteCoordinateField, NormedModule}
+import breeze.macros._
+import breeze.math.MutableEnumeratedCoordinateField
+import breeze.math.MutableFiniteCoordinateField
+import breeze.math.NormedModule
 import breeze.optimize.FirstOrderMinimizer.ConvergenceCheck
-import breeze.stats.distributions.{RandBasis, ThreadLocalRandomGenerator}
+import breeze.stats.distributions.RandBasis
+import breeze.stats.distributions.ThreadLocalRandomGenerator
 import breeze.util.Implicits._
 import breeze.util.SerializableLogging
 import org.apache.commons.math3.random.MersenneTwister
-import breeze.macros._
 
 import scala.collection.mutable.ArrayBuffer
 

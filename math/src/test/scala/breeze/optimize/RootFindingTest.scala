@@ -1,7 +1,7 @@
 package breeze.optimize
 
-import org.scalatest.funsuite.AnyFunSuite
 import breeze.numerics.closeTo
+import org.scalatest.funsuite.AnyFunSuite
 
 /**
   * Tests for the RootFinding object

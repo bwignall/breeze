@@ -14,22 +14,26 @@ package breeze.linalg
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import operators._
-import support._
-import support.CanTraverseValues.ValuesVisitor
 import breeze.generic.UFunc
-import breeze.generic.UFunc.{InPlaceImpl2, UImpl, UImpl2}
+import breeze.generic.UFunc.InPlaceImpl2
+import breeze.generic.UFunc.UImpl
+import breeze.generic.UFunc.UImpl2
 import breeze.macros.expand
 import breeze.math._
 import breeze.stats.distributions.Rand
-import breeze.storage.{Storage, Zero}
+import breeze.storage.Storage
+import breeze.storage.Zero
 import breeze.util.ReflectionUtil
 
-import scala.{specialized => spec}
 import scala.annotation.unchecked.uncheckedVariance
-import scala.collection.mutable.ArrayBuilder
 import scala.collection.immutable.BitSet
+import scala.collection.mutable.ArrayBuilder
 import scala.reflect.ClassTag
+import scala.{specialized => spec}
+
+import operators._
+import support._
+import support.CanTraverseValues.ValuesVisitor
 
 /**
  * Trait for operators and such used in vectors.

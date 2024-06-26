@@ -1,7 +1,10 @@
 package breeze.plot
 
-import java.io.{File, FileOutputStream, IOException, OutputStream}
 import java.awt.Graphics2D
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
 
 /**
  * Utility functions for exporting a Graphics2D drawable to some eps, pdf,

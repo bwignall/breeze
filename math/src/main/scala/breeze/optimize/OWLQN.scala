@@ -1,10 +1,10 @@
 package breeze.optimize
 
-import breeze.util._
 import breeze.linalg._
-import breeze.numerics._
 import breeze.math._
+import breeze.numerics._
 import breeze.optimize.FirstOrderMinimizer.ConvergenceCheck
+import breeze.util._
 
 /**
  * Implements the Orthant-wise Limited Memory QuasiNewton method,

@@ -15,9 +15,10 @@ package breeze.linalg.support
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import breeze.math.Complex
-import scala.reflect.ClassTag
 import breeze.linalg.support.CanTraverseKeyValuePairs.KeyValuePairsVisitor
+import breeze.math.Complex
+
+import scala.reflect.ClassTag
 
 /**
  * Marker for being able to traverse over the values in a collection/tensor
