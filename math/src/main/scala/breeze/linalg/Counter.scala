@@ -74,7 +74,7 @@ trait CounterLike[K, V, +M <: scala.collection.mutable.Map[K, V], +This <: Count
 
   override def equals(p1: Any): Boolean = p1 match {
     case x: Counter[K, V] @unchecked => x.data == this.data
-    case _ => false
+    case _                           => false
   }
 
   override def hashCode(): Int = data.hashCode()
@@ -98,7 +98,7 @@ object Counter extends CounterOps {
   def apply[K, V: Zero: Semiring](values: TraversableOnce[(K, V)]): Counter[K, V] = {
     val rv = apply[K, V]()
     val field = implicitly[Semiring[V]]
-    values.iterator.foreach({ case (k, v) => rv(k) = field.+(v, rv(k)) })
+    values.iterator.foreach { case (k, v) => rv(k) = field.+(v, rv(k)) }
     rv
   }
 

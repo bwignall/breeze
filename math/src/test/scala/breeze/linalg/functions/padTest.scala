@@ -28,14 +28,15 @@ class padTest extends AnyFunSuite {
     assert(padRight(testDVI, 7, Reflect) == DenseVector(1, 2, 3, 4, 5, 5, 4))
 
     assert(
-      padRight(testDMI, dimensions = (7, 3), 0) == DenseMatrix(
-        (1, 0, 0),
-        (2, 0, 0),
-        (3, 0, 0),
-        (4, 0, 0),
-        (5, 0, 0),
-        (0, 0, 0),
-        (0, 0, 0)))
+      padRight(testDMI, dimensions = (7, 3), 0) == DenseMatrix((1, 0, 0),
+                                                               (2, 0, 0),
+                                                               (3, 0, 0),
+                                                               (4, 0, 0),
+                                                               (5, 0, 0),
+                                                               (0, 0, 0),
+                                                               (0, 0, 0)
+      )
+    )
     assert(padRight(testDMI, dimensions = (3, 3), 0) == DenseMatrix((1, 0, 0), (2, 0, 0), (3, 0, 0)))
 
     assert(padLeft(testDVI, dimensions = 3) == DenseVector(3, 4, 5))
@@ -50,14 +51,15 @@ class padTest extends AnyFunSuite {
     assert(padLeft(testDVI, 7, Reflect) == DenseVector(2, 1, 1, 2, 3, 4, 5))
 
     assert(
-      padLeft(testDMI, dimensions = (7, 3), 0) == DenseMatrix(
-        (0, 0, 0),
-        (0, 0, 0),
-        (0, 0, 1),
-        (0, 0, 2),
-        (0, 0, 3),
-        (0, 0, 4),
-        (0, 0, 5)))
+      padLeft(testDMI, dimensions = (7, 3), 0) == DenseMatrix((0, 0, 0),
+                                                              (0, 0, 0),
+                                                              (0, 0, 1),
+                                                              (0, 0, 2),
+                                                              (0, 0, 3),
+                                                              (0, 0, 4),
+                                                              (0, 0, 5)
+      )
+    )
     assert(padLeft(testDMI, dimensions = (3, 3), 0) == DenseMatrix((0, 0, 3), (0, 0, 4), (0, 0, 5)))
 
   }

@@ -29,7 +29,6 @@ class ThreadLocalRandomGeneratorTest extends AnyFunSuite {
     i1 should not be i2
   }
 
-
   private def serialize(generator: ThreadLocalRandomGenerator): Array[Byte] = {
     val outputStream = new ByteArrayOutputStream(512)
     val out = new ObjectOutputStream(outputStream)

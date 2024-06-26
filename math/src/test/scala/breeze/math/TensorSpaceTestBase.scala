@@ -40,7 +40,7 @@ trait TensorSpaceTestBase[V, I, S] extends MutableModuleTestBase[V, S] {
   test("norm triangle inequality") {
     check(Prop.forAll { (trip: (V, V, V)) =>
       val (a, b, c) = trip
-      ((1.0 - TOL) * norm(a + b) <= norm(b) + norm(a))
+      (1.0 - TOL) * norm(a + b) <= norm(b) + norm(a)
     })
   }
 

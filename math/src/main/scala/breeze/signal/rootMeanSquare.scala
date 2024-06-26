@@ -12,9 +12,10 @@ import breeze.linalg._
  */
 object rootMeanSquare extends UFunc {
 
-  implicit def rms1D[Vec](
-      implicit normImpl: norm.Impl2[Vec, Int, Double],
-      dimImpl: dim.Impl[Vec, Int]): rootMeanSquare.Impl[Vec, Double] = {
+  implicit def rms1D[Vec](implicit
+    normImpl: norm.Impl2[Vec, Int, Double],
+    dimImpl: dim.Impl[Vec, Int]
+  ): rootMeanSquare.Impl[Vec, Double] = {
     new rootMeanSquare.Impl[Vec, Double] {
       def apply(v: Vec): Double = {
         val n: Double = norm(v, 2)

@@ -1,6 +1,6 @@
 package breeze.optimize.proximal
 
-import breeze.linalg.{DenseVector, DenseMatrix}
+import breeze.linalg.{DenseMatrix, DenseVector}
 import breeze.stats.distributions.Rand
 
 /**

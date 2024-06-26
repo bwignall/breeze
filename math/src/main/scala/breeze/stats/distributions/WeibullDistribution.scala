@@ -24,7 +24,7 @@ import org.apache.commons.math3.distribution.{WeibullDistribution => ApacheWeibu
  * @author stucchio
  */
 case class WeibullDistribution(alpha: Double, beta: Double) extends ApacheContinuousDistribution {
-  protected final val inner = new ApacheWeibullDistribution(alpha, beta)
+  final protected val inner = new ApacheWeibullDistribution(alpha, beta)
 }
 
 object WeibullDistribution extends ContinuousDistributionUFuncProvider[Double, WeibullDistribution]

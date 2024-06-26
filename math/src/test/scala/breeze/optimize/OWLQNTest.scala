@@ -35,7 +35,7 @@ class OWLQNTest extends OptimizeTestBase {
     }
 
     val result = optimizeThis(DenseVector(-1.1053, 0.0, 0.0))
-    assert((result(0) - 2.5) < 1E-4, result)
+    assert((result(0) - 2.5) < 1e-4, result)
   }
 
   test("optimize a simple multivariate gaussian") {
@@ -44,12 +44,12 @@ class OWLQNTest extends OptimizeTestBase {
     def optimizeThis(init: DenseVector[Double]) = {
       val f = new DiffFunction[DenseVector[Double]] {
         def calculate(x: DenseVector[Double]) = {
-          ((math.pow(norm(x - 3.0, 2), 2)), (x * 2.0) - 6.0)
+          (math.pow(norm(x - 3.0, 2), 2), (x * 2.0) - 6.0)
         }
       }
 
       val result = lbfgs.minimize(f, init)
-      val closeish = norm(result - 2.5, 2) < 1E-4
+      val closeish = norm(result - 2.5, 2) < 1e-4
       if (closeish) {
         true
       } else {
@@ -67,12 +67,12 @@ class OWLQNTest extends OptimizeTestBase {
     def optimizeThis(init: SparseVector[Double]) = {
       val f = new DiffFunction[SparseVector[Double]] {
         def calculate(x: SparseVector[Double]) = {
-          ((math.pow(norm(x - 3.0, 2), 2)), (x * 2.0) - 6.0)
+          (math.pow(norm(x - 3.0, 2), 2), (x * 2.0) - 6.0)
         }
       }
 
       val result = lbfgs.minimize(f, init)
-      val closeish = norm(result - 2.5, 2) < 1E-4
+      val closeish = norm(result - 2.5, 2) < 1e-4
       if (closeish) {
         true
       } else {

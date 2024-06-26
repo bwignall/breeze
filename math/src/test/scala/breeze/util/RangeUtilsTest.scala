@@ -6,7 +6,7 @@ import org.scalatestplus.scalacheck.Checkers
 import org.scalacheck.{Arbitrary, Prop}
 
 class RangeUtilsTest extends AnyFunSuite with Checkers {
-  implicit def arbRange: Arbitrary[Range] = Arbitrary{
+  implicit def arbRange: Arbitrary[Range] = Arbitrary {
     for {
       a <- RandomInstanceSupport.genReasonableInt.arbitrary.map(_.abs)
       gap <- RandomInstanceSupport.genReasonableInt.arbitrary.map(_.abs)
@@ -17,7 +17,7 @@ class RangeUtilsTest extends AnyFunSuite with Checkers {
   }
 
   def exhaustiveCheck(a: Range, b: Range) = {
-    RangeUtils.overlaps(a, b) == (a.toSet intersect b.toSet).nonEmpty
+    RangeUtils.overlaps(a, b) == a.toSet.intersect(b.toSet).nonEmpty
   }
 
   test("overlaps") {
@@ -29,8 +29,8 @@ class RangeUtilsTest extends AnyFunSuite with Checkers {
     assert(exhaustiveCheck(443 until 1305 by 176, 421 until 1260 by 729))
     assert(exhaustiveCheck(336 until 1083 by 542, 989 until 1320 by 716))
     // scalacheck's not being thorough enough by default
-    for(i <- 0 until 10000) {
-      check(Prop.forAll(exhaustiveCheck _ ))
+    for (i <- 0 until 10000) {
+      check(Prop.forAll(exhaustiveCheck _))
     }
   }
 
@@ -40,7 +40,5 @@ class RangeUtilsTest extends AnyFunSuite with Checkers {
     assert(x == -7)
     assert(y == 10)
   }
-
-
 
 }

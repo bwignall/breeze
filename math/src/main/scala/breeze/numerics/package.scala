@@ -16,7 +16,7 @@ package breeze
  limitations under the License.
  */
 
-import breeze.generic.{ZeroPreservingUFunc, MappingUFunc, UFunc}
+import breeze.generic.{MappingUFunc, UFunc, ZeroPreservingUFunc}
 import breeze.math.Semiring
 
 import scala.math._
@@ -88,8 +88,8 @@ package object numerics {
   private val log10D = m.log(10d)
 
   object log extends MappingUFunc {
-    //ToDo: Clarify in documentation that log(b, x) is the log of x in base b (instead of log b in base x)
-    //ToDo???: extend to negative logs (but return type Double/Complex dependent on input???)
+    // ToDo: Clarify in documentation that log(b, x) is the log of x in base b (instead of log b in base x)
+    // ToDo???: extend to negative logs (but return type Double/Complex dependent on input???)
     implicit object logIntImpl extends Impl[Int, Double] {
       def apply(v: Int) = m.log(v.toDouble)
     }
@@ -331,21 +331,24 @@ package object numerics {
    */
   object sincpi extends MappingUFunc {
     implicit object sincpiIntImpl extends Impl[Int, Double] {
-      def apply(v: Int) = if (v == 0) 1d else {
+      def apply(v: Int) = if (v == 0) 1d
+      else {
         val temp = v.toDouble * m.Pi;
         m.sin(temp) / temp
       }
     }
 
     implicit object sincpiDoubleImpl extends Impl[Double, Double] {
-      def apply(v: Double) = if (v == 0) 1d else {
+      def apply(v: Double) = if (v == 0) 1d
+      else {
         val temp = v * m.Pi;
         m.sin(temp) / temp
       }
     }
 
     implicit object sincpiFloatImpl extends Impl[Float, Float] {
-      def apply(v: Float) = if (v == 0) 1f else {
+      def apply(v: Float) = if (v == 0) 1f
+      else {
         val temp = v * m.Pi;
         (m.sin(temp) / temp).toFloat
       }
@@ -792,7 +795,7 @@ package object numerics {
             ap += 1
             del *= x / ap
             sum += del
-            if (scala.math.abs(del) < scala.math.abs(sum) * 1E-7) {
+            if (scala.math.abs(del) < scala.math.abs(sum) * 1e-7) {
               result = -x + a * m.log(x) + m.log(sum)
               n = 100
             }
@@ -812,13 +815,13 @@ package object numerics {
             val an = -n * (n - a)
             b += 2.0
             d = an * d + b
-            if (scala.math.abs(d) < 1E-30) d = 1E-30
+            if (scala.math.abs(d) < 1e-30) d = 1e-30
             c = b + an / c
-            if (scala.math.abs(c) < 1E-30) c = 1E-30
+            if (scala.math.abs(c) < 1e-30) c = 1e-30
             d = 1.0 / d
             val del = d * c
             h *= del
-            if (scala.math.abs(del - 1.0) < 1E-7) n = 101
+            if (scala.math.abs(del - 1.0) < 1e-7) n = 101
           }
 
           if (n == 100) throw new ArithmeticException("Convergence failed")
@@ -874,7 +877,8 @@ package object numerics {
 
   object multiloggamma extends MappingUFunc {
     implicit object multigammalogDoubleInt extends Impl2[Double, Int, Double] {
-      def apply(a: Double, d: Int): Double = log(constants.Pi) * (d * (d - 1).toDouble / 4) + (1 to d).map(j => lgamma(a + (1 - j).toDouble / 2)).sum
+      def apply(a: Double, d: Int): Double =
+        log(constants.Pi) * (d * (d - 1).toDouble / 4) + (1 to d).map(j => lgamma(a + (1 - j).toDouble / 2)).sum
     }
   }
 
@@ -968,7 +972,7 @@ package object numerics {
             f /= n
             xx *= x2
             val del = f * xx / (2 * n + 1)
-            if (del < 1E-8) n = 101
+            if (del < 1e-8) n = 101
             y += del
           }
           y = y * 2 / m.sqrt(Pi)
@@ -1126,7 +1130,7 @@ package object numerics {
   /**
    * closeTo for Doubles.
    */
-  def closeTo(a: Double, b: Double, relDiff: Double = 1E-4) = {
+  def closeTo(a: Double, b: Double, relDiff: Double = 1e-4) = {
     a == b || (scala.math.abs(a - b) < scala.math
       .max(scala.math.max(scala.math.abs(a), scala.math.abs(b)), 1) * relDiff)
   }

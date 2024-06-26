@@ -26,12 +26,12 @@ class DirichletTest extends AnyFunSuite with Checkers {
   implicit val rand: RandBasis = RandBasis.mt0
 
   test("logDraw for small values") {
-    val g = new Dirichlet(DenseVector(1E-5, 5.0, 50.0))
+    val g = new Dirichlet(DenseVector(1e-5, 5.0, 50.0))
     assert(Array.fill(1000)(g.logDraw()).forall(_(0) > Double.NegativeInfinity))
   }
 
   test("logDraw of SparseVector") {
-    val g: Dirichlet[SparseVector[Double], Int] = new Dirichlet(SparseVector(7)(1 -> 1E-5, 3 -> 5.0, 5 -> 50.0))
+    val g: Dirichlet[SparseVector[Double], Int] = new Dirichlet(SparseVector(7)(1 -> 1e-5, 3 -> 5.0, 5 -> 50.0))
     Array.fill(1000)(g.logDraw()).foreach { (d: SparseVector[Double]) =>
       assert(d(1) > Double.NegativeInfinity)
       assert(d.activeSize == 3)

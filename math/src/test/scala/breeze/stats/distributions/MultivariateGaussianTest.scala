@@ -35,7 +35,7 @@ class MultivariateGaussianTest extends AnyFunSuite with Checkers {
 
   implicit def genMatrix: Arbitrary[DenseMatrix[Double]] = {
     Arbitrary {
-      RandomInstanceSupport.genDenseMatrix(N, N, Gen.choose(0.0, 0.2)).map{ m =>
+      RandomInstanceSupport.genDenseMatrix(N, N, Gen.choose(0.0, 0.2)).map { m =>
         m + m.t + DenseMatrix.eye[Double](N)
       }
     }
@@ -51,8 +51,7 @@ class MultivariateGaussianTest extends AnyFunSuite with Checkers {
   }
 
   test("Probability of N(0,1)(1) propto exp(-.5))") {
-    assert(
-      MultivariateGaussian(DenseVector(0.0), DenseMatrix.ones(1, 1)).unnormalizedLogPdf(DenseVector(1.0)) === -0.5)
+    assert(MultivariateGaussian(DenseVector(0.0), DenseMatrix.ones(1, 1)).unnormalizedLogPdf(DenseVector(1.0)) === -0.5)
   }
 
   implicit def arbDistr: Arbitrary[MultivariateGaussian] = Arbitrary {
@@ -65,7 +64,7 @@ class MultivariateGaussianTest extends AnyFunSuite with Checkers {
     check(Prop.forAll { (distr: MultivariateGaussian) =>
       val sample = DenseVector.horzcat(distr.sample(numSamples): _*)
       val m = mean(sample(*, ::))
-      if (norm(m - distr.mean, Double.PositiveInfinity) > 1E-1) {
+      if (norm(m - distr.mean, Double.PositiveInfinity) > 1e-1) {
         println("MExpected " + distr.mean + " but got " + m)
         false
       } else {

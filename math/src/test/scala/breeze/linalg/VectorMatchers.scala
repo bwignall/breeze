@@ -11,7 +11,7 @@ trait VectorMatchers {
       extends Matcher[DenseVector[Double]] {
 
     def apply(left: DenseVector[Double]) = {
-      val deviation = norm((left - right), normP)
+      val deviation = norm(left - right, normP)
       val failureMessageSuffix =
         s"vector $left deviates by $deviation from $right, expected deviation <= $allowedDeviation (norm = $norm)"
 

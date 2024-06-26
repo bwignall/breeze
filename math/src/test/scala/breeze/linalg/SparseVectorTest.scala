@@ -350,7 +350,8 @@ class SparseVectorTest extends AnyFunSuite {
 
     assert(
       (m * x) ===
-        m * xd)
+        m * xd
+    )
 
   }
 
@@ -359,7 +360,7 @@ class SparseVectorTest extends AnyFunSuite {
     val v2 = SparseVector(0, 1, 0, 0)
 
     // do in two stages to ensure that telling the return type doesn't change type inference
-    val r = v1.+(v2) //type mismatch; found : breeze.linalg.Vector[Int] required: breeze.linalg.DenseVector[Int]
+    val r = v1.+(v2) // type mismatch; found : breeze.linalg.Vector[Int] required: breeze.linalg.DenseVector[Int]
     val q = r: DenseVector[Int]
     assert(q == DenseVector(0, 1, 0, 0))
   }
@@ -369,7 +370,7 @@ class SparseVectorTest extends AnyFunSuite {
     val v2 = SparseVector(0, 1, 0, 0)
 
     // do in two stages to ensure that telling the return type doesn't change type inference
-    val r = v2 + v1 //type mismatch; found : breeze.linalg.Vector[Int] required: breeze.linalg.DenseVector[Int]
+    val r = v2 + v1 // type mismatch; found : breeze.linalg.Vector[Int] required: breeze.linalg.DenseVector[Int]
     val q = r: DenseVector[Int]
     assert(q == DenseVector(0, 1, 0, 0))
   }
@@ -426,7 +427,7 @@ abstract class SparseVectorPropertyTestBase[T: ClassTag: Zero: Semiring]
     extends TensorSpaceTestBase[SparseVector[T], Int, T] {
   def genScalar: Arbitrary[T]
 
-  override implicit def genSingle: Arbitrary[SparseVector[T]] = Arbitrary {
+  implicit override def genSingle: Arbitrary[SparseVector[T]] = Arbitrary {
     Gen.choose(1, 10).flatMap(RandomInstanceSupport.genSparseVector(_, genScalar.arbitrary))
   }
 
@@ -451,7 +452,7 @@ class SparseVectorOps_DoubleTest
 class SparseVectorOps_FloatTest extends SparseVectorPropertyTestBase[Float] {
   val space = SparseVector.space[Float]
 
-  override val TOL: Double = 1E-2
+  override val TOL: Double = 1e-2
   def genScalar: Arbitrary[Float] = Arbitrary { RandomInstanceSupport.genReasonableDouble.arbitrary.map(_.toFloat) }
 
 }

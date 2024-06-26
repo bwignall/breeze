@@ -56,7 +56,7 @@ class VectorBuilderTest extends AnyFunSuite with Checkers {
       val result = vb.toSparseVector(keysAlreadyUnique = true)
 
       result.activeSize === vs.length &&
-        result === SparseVector[Int](300)(vs.sorted.map(v => (v, v)):_*)
+      result === SparseVector[Int](300)(vs.sorted.map(v => (v, v)): _*)
     })
   }
 
@@ -78,23 +78,23 @@ class VectorBuilderTest extends AnyFunSuite with Checkers {
       val result = vb.toSparseVector
 
       val expectedKVs = vs.groupBy(identity).map(p => p._1 -> p._2.sum).toList.sortBy(_._1)
-      
+
       result.activeSize === vs.distinct.length &&
-        result === SparseVector[Int](300)(expectedKVs:_*)
+      result === SparseVector[Int](300)(expectedKVs: _*)
     })
   }
 
   implicit def genPair: Arbitrary[(VectorBuilder[Double], VectorBuilder[Double])] = {
     Arbitrary {
       for {
-        x <- Arbitrary.arbitrary[Double].map { _ % 1E3 }
+        x <- Arbitrary.arbitrary[Double].map { _ % 1e3 }
         xl <- Arbitrary.arbitrary[List[Int]]
-        y <- Arbitrary.arbitrary[Double].map { _ % 1E3 }
+        y <- Arbitrary.arbitrary[Double].map { _ % 1e3 }
         yl <- Arbitrary.arbitrary[List[Int]]
       } yield {
-        (
-          VectorBuilder(30)(xl.map(i => (i % 30).abs -> math.random()* x): _*),
-          VectorBuilder(30)(yl.map(i => (i % 30).abs -> math.random()* y): _*))
+        (VectorBuilder(30)(xl.map(i => (i % 30).abs -> math.random() * x): _*),
+         VectorBuilder(30)(yl.map(i => (i % 30).abs -> math.random() * y): _*)
+        )
 
       }
     }
@@ -113,12 +113,12 @@ class VectorBuilderTest extends AnyFunSuite with Checkers {
       val (vb1, vb2) = pair
       val (hv1, hv2) = (vb1.toHashVector, vb2.toHashVector)
       val sum1 = (vb1 + vb2).toHashVector
-      val sum2 = (hv1 + hv2)
+      val sum2 = hv1 + hv2
       hv1 += vb2
       hv2 += vb1
-      (norm(hv1 - hv2) < 1E-4
-      && norm(hv1 - sum1) < 1E-4
-      && norm(hv1 - sum2) < 1E-4)
+      (norm(hv1 - hv2) < 1e-4
+      && norm(hv1 - sum1) < 1e-4
+      && norm(hv1 - sum2) < 1e-4)
     })
 
   }
@@ -132,7 +132,7 @@ class VectorBuilderTest extends AnyFunSuite with Checkers {
 class VectorBuilderOpsTest extends MutableModuleTestBase[VectorBuilder[Double], Double] {
   val space: MutableModule[VectorBuilder[Double], Double] = VectorBuilder.space[Double]
 
-  override val TOL: Double = 1E-3
+  override val TOL: Double = 1e-3
 
   val N = 3
   implicit def genTriple: Arbitrary[(VectorBuilder[Double], VectorBuilder[Double], VectorBuilder[Double])] = {
@@ -149,7 +149,7 @@ class VectorBuilderOpsTest extends MutableModuleTestBase[VectorBuilder[Double], 
 
   def genScalar: Arbitrary[Double] = RandomInstanceSupport.genReasonableDouble
 
-  override implicit def genSingle: Arbitrary[VectorBuilder[Double]] = Arbitrary {
+  implicit override def genSingle: Arbitrary[VectorBuilder[Double]] = Arbitrary {
     Gen.choose(1, 10).flatMap(RandomInstanceSupport.genVectorBuilder(_, genScalar.arbitrary))
   }
 }

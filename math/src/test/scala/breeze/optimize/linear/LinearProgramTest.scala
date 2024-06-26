@@ -41,7 +41,7 @@ class LinearProgramTest extends AnyFunSuite {
 
     val result = maximize(lpp)
 
-    assert(norm(result.result - DenseVector(40.0, 17.5, 42.5), 2) < 1E-4)
+    assert(norm(result.result - DenseVector(40.0, 17.5, 42.5), 2) < 1e-4)
   }
 
   test("minimize") {
@@ -59,7 +59,7 @@ class LinearProgramTest extends AnyFunSuite {
       .subjectTo(List(x0, x1, x2, x3).map(x => x >= 0): _*)
 
     val res = minimize(lpp)
-    assert(norm(res.result - DenseVector(10.0, 0.0, 0.0, 10.0), 2) < 1E-4)
+    assert(norm(res.result - DenseVector(10.0, 0.0, 0.0, 10.0), 2) < 1e-4)
   }
 
   /*
@@ -77,7 +77,7 @@ class LinearProgramTest extends AnyFunSuite {
     assert(result.valueOf(x1) === 1)
     assert(result.valueOf(x2) === 1)
   }
- */
+   */
 
   test("maximize with solve method") {
     val lp = new LinearProgram
@@ -86,11 +86,11 @@ class LinearProgramTest extends AnyFunSuite {
     val x1 = Real()
 
     val max = maximize(x0 + x1)
-      .subjectTo(x0  <= 20)
+      .subjectTo(x0 <= 20)
       .subjectTo(x1 <= 30)
 
     val res = max.solve
-    assert(norm(res.result - DenseVector(20.0, 30.0), 2) < 1E-4)
+    assert(norm(res.result - DenseVector(20.0, 30.0), 2) < 1e-4)
 
     assertThrows[AssertionError](minimize(max))
 
@@ -103,11 +103,11 @@ class LinearProgramTest extends AnyFunSuite {
     val x1 = Real()
 
     val min = minimize(x0 + x1)
-      .subjectTo(x0  >= 20)
+      .subjectTo(x0 >= 20)
       .subjectTo(x1 >= 30)
 
     val res = min.solve
-    assert(norm(res.result - DenseVector(20.0, 30.0), 2) < 1E-4)
+    assert(norm(res.result - DenseVector(20.0, 30.0), 2) < 1e-4)
 
     assertThrows[AssertionError](maximize(min))
 

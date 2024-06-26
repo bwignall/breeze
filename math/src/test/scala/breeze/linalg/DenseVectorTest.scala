@@ -140,7 +140,11 @@ class DenseVectorTest extends AnyFunSuite with Checkers {
   test("Range") {
     assert(DenseVector.range(0, 10) == DenseVector(0, 1, 2, 3, 4, 5, 6, 7, 8, 9))
     assert(norm(DenseVector.rangeD(0, 1, 0.1) - DenseVector(0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)) < 1e-10)
-    assert(norm(DenseVector.rangeF(0f, 1f, 0.1f) - DenseVector(0.0f, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f, 0.9f)) < 1e-6)
+    assert(
+      norm(
+        DenseVector.rangeF(0f, 1f, 0.1f) - DenseVector(0.0f, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f, 0.9f)
+      ) < 1e-6
+    )
   }
 
   test("Slice") {
@@ -386,8 +390,8 @@ class DenseVectorTest extends AnyFunSuite with Checkers {
 
   test("Vector <op> Vector should ensure vectors are same size") {
     {
-      val a = Vector[Double](1D, 2D, 3D)
-      val b = Vector[Double](1D, 2D, 3D, 4D)
+      val a = Vector[Double](1d, 2d, 3d)
+      val b = Vector[Double](1d, 2d, 3d, 4d)
       intercept[IllegalArgumentException] {
         a + b
       }
@@ -432,7 +436,7 @@ class DenseVectorTest extends AnyFunSuite with Checkers {
     assert(util.Arrays.equals(a(1 until 3 by 1).toArray, Array(2, 3)))
 
     val b = DenseVector(1d * breeze.math.i, 0d * breeze.math.i, 2d * breeze.math.i).toArray
-    //assert( util.Arrays.equals( b.toArray, Array(1d*breeze.math.i, 0d, 2d)) )
+    // assert( util.Arrays.equals( b.toArray, Array(1d*breeze.math.i, 0d, 2d)) )
     assert(b(0) == Complex(0, 1))
     assert(b(1) == Complex(0, 0))
     assert(b(2) == Complex(0, 2))
@@ -519,7 +523,8 @@ class DenseVectorTest extends AnyFunSuite with Checkers {
   test("isClose") {
     check((a: DenseVector[Double]) => isClose(a, a))
     check((a: DenseVector[Double], b: DenseVector[Double]) =>
-      isClose(a, b) == zipValues(a, b).forall((a, b) => (a - b).abs < 1E-8))
+      isClose(a, b) == zipValues(a, b).forall((a, b) => (a - b).abs < 1e-8)
+    )
   }
 
   test("nonfinite") {
@@ -576,13 +581,13 @@ class DenseVectorTest extends AnyFunSuite with Checkers {
   }
 
   test("#765 overlapping spans") {
-    val a = DenseVector(1,2,3,4)
+    val a = DenseVector(1, 2, 3, 4)
     a(1 to 3) := a(0 to 2)
     assert(a == DenseVector(1, 1, 2, 3))
   }
 
   test("#723 - non-unit stride slices") {
-    val array=Array.range(0,16)
+    val array = Array.range(0, 16)
     val dv = new DenseVector[Int](array)
     for (i <- 0 until 4) {
       val fromNew = new DenseVector[Int](array, i, 4, 4)
@@ -604,7 +609,7 @@ class DenseVectorTest extends AnyFunSuite with Checkers {
 abstract class DenseVectorPropertyTestBase[T: ClassTag] extends TensorSpaceTestBase[DenseVector[T], Int, T] {
   def genScalar: Arbitrary[T]
 
-  override implicit def genSingle: Arbitrary[DenseVector[T]] = Arbitrary {
+  implicit override def genSingle: Arbitrary[DenseVector[T]] = Arbitrary {
     Gen.choose(1, 10).flatMap(RandomInstanceSupport.genDenseVector(_, genScalar.arbitrary))
   }
 
@@ -631,13 +636,11 @@ class DenseVectorOps_DoubleTest
   def genScalar: Arbitrary[Double] = RandomInstanceSupport.genReasonableDouble
 }
 
-
 class DenseVectorOps_IntTest extends DenseVectorPropertyTestBase[Int] {
   val space = DenseVector.space[Int]
 
   def genScalar: Arbitrary[Int] = Arbitrary { Gen.Choose.chooseInt.choose(-1000, 1000) }
 }
-
 
 class DenseVectorOps_ComplexTest extends DenseVectorPropertyTestBase[Complex] {
   val space = DenseVector.space[Complex]
@@ -649,10 +652,9 @@ class DenseVectorOps_ComplexTest extends DenseVectorPropertyTestBase[Complex] {
   }
 }
 
-
 class DenseVectorOps_FloatTest extends DenseVectorPropertyTestBase[Float] {
   val space = DenseVector.space[Float]
 
-  override val TOL: Double = 5E-3
+  override val TOL: Double = 5e-3
   def genScalar: Arbitrary[Float] = RandomInstanceSupport.genReasonableFloat
 }
