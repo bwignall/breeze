@@ -6,12 +6,12 @@ import breeze.generic.{MappingUFunc, UFunc}
 object MappingUfuncBenchmark extends MyRunner(classOf[MappingUfuncBenchmark])
 
 object addOne extends MappingUFunc {
-  //A custom stupid ufunc that is very fast to run
+  // A custom stupid ufunc that is very fast to run
   implicit object expDoubleImpl extends Impl[Double, Double] { def apply(v: Double) = v + 1 }
 }
 
 object harderUfunc extends MappingUFunc {
-  //A custom stupid ufunc that is very fast to run
+  // A custom stupid ufunc that is very fast to run
   implicit object expDoubleImpl extends Impl[Double, Double] { def apply(v: Double) = /*(v+1)/(1+v*v)*/ math.exp(v) }
 }
 
@@ -107,7 +107,7 @@ class MappingUfuncBenchmark extends BreezeBenchmark with BuildsRandomMatrices wi
       var i = 0
       while (i < data.length) {
         val v = data(i)
-        data(i) = math.exp(v) //(v+1)/(1+v*v)
+        data(i) = math.exp(v) // (v+1)/(1+v*v)
         i += 1
       }
       data
