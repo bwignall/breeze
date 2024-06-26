@@ -2,6 +2,20 @@
 
 Common.commonSettings
 
+ThisBuild / licenses := Seq(License.Apache2)
+
+// publish website from this branch
+ThisBuild / githubWorkflowPublishTargetBranches := Seq()
+
+// dependency tracking
+ThisBuild / tlCiDependencyGraphJob := false
+
+// generate documentation
+ThisBuild / tlCiDocCheck := true
+
+// Not currently bothering to generate/check headers
+ThisBuild / tlCiHeaderCheck := false
+
 name := "breeze-parent"
 
 lazy val root = project
