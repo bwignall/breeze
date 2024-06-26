@@ -18,6 +18,11 @@ ThisBuild / tlCiHeaderCheck := false
 
 name := "breeze-parent"
 
+val Scala213 = "2.13.13"
+val Scala3 = "3.3.3"
+ThisBuild / crossScalaVersions := Seq(Scala213) // Cannot run Scala 3 because of Spark-induced conflicts
+ThisBuild / scalaVersion := Scala213 // the default Scala
+
 lazy val root = project
   .in(file("."))
   .aggregate(math, natives, viz, macros)
