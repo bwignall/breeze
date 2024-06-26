@@ -17,3 +17,5 @@ addSbtPlugin("org.typelevel" % "sbt-typelevel-scalafix" % "0.7.0")
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.16.0")
 addSbtPlugin("org.scalameta" % "sbt-mdoc" % "2.5.2")
 //addSbtPlugin("org.scoverage" % "sbt-scoverage" % "2.0.12")
+
+addSbtPlugin("ch.epfl.scala" % "sbt-scala3-migrate" % "0.6.1")
