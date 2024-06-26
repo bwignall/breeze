@@ -45,9 +45,10 @@ object softmax extends UFunc {
     }
   }
 
-  implicit def reduceDouble[T](
-      implicit iter: CanTraverseValues[T, Double],
-      maxImpl: max.Impl[T, Double]): Impl[T, Double] = new Impl[T, Double] {
+  implicit def reduceDouble[T](implicit
+    iter: CanTraverseValues[T, Double],
+    maxImpl: max.Impl[T, Double]
+  ): Impl[T, Double] = new Impl[T, Double] {
     def apply(v: T): Double = {
 
       val max = if (!iter.isTraversableAgain(v)) 0.0 else maxImpl(v)

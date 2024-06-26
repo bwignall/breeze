@@ -80,7 +80,7 @@ class LinearProgram {
     override def toString: String = {
       val _goal = goal match {
         case Some(g) => g.name().toLowerCase()
-        case _ => "problem "
+        case _       => "problem "
       }
 
       val beg = "\nsubject to"
@@ -326,9 +326,9 @@ object LinearProgram {
     def maximize(lp: LinearProgram)(objective: lp.Problem): lp.Result = {
       import lp._
 
-      val obj = new LinearObjectiveFunction(
-        objective.objective.coefficients.toDenseVector.data,
-        objective.objective.scalarComponent)
+      val obj = new LinearObjectiveFunction(objective.objective.coefficients.toDenseVector.data,
+                                            objective.objective.scalarComponent
+      )
 
       val constraintSet = buildConstraints(lp)(objective)
 
@@ -340,9 +340,9 @@ object LinearProgram {
     def minimize(lp: LinearProgram)(objective: lp.Problem): lp.Result = {
       import lp._
 
-      val obj = new LinearObjectiveFunction(
-        objective.objective.coefficients.toDenseVector.data,
-        objective.objective.scalarComponent)
+      val obj = new LinearObjectiveFunction(objective.objective.coefficients.toDenseVector.data,
+                                            objective.objective.scalarComponent
+      )
 
       val constraintSet = buildConstraints(lp)(objective)
 
@@ -357,7 +357,7 @@ object LinearProgram {
       def relationToConstraintType(r: Relation) = r match {
         case LTE => Relationship.LEQ
         case GTE => Relationship.GEQ
-        case EQ => Relationship.EQ
+        case EQ  => Relationship.EQ
       }
 
       for (v <- variables)
@@ -366,10 +366,10 @@ object LinearProgram {
 
       val constraints = for (c: Constraint <- objective.constraints) yield {
         val cs = c.standardize
-        new LinearConstraint(
-          cs.lhs.coefficients.toDenseVector.data,
-          relationToConstraintType(c.relation),
-          cs.rhs.scalarComponent)
+        new LinearConstraint(cs.lhs.coefficients.toDenseVector.data,
+                             relationToConstraintType(c.relation),
+                             cs.rhs.scalarComponent
+        )
       }
       new LinearConstraintSet(constraints.asJava)
     }
@@ -446,7 +446,7 @@ object LinearProgram {
       case _ => "Unknown"
     }
   }
- */
+   */
 }
 
 case class InfeasibleProblem(prob: LinearProgram#Problem) extends RuntimeException

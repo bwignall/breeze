@@ -9,7 +9,7 @@ import scala.reflect.ClassTag
 
 // https://en.wikipedia.org/wiki/Circular_buffer
 class RingBuffer[A](val capacity: Int)
-  extends AbstractBuffer[A]
+    extends AbstractBuffer[A]
     with IndexedBuffer[A]
     with IndexedSeqOps[A, RingBuffer, RingBuffer[A]]
     with StrictOptimizedSeqOps[A, RingBuffer, RingBuffer[A]]
@@ -179,7 +179,8 @@ class RingBuffer[A](val capacity: Int)
   override def empty: RingBuffer[A] = new RingBuffer(capacity)
 
   override def iterableFactory: SeqFactory[RingBuffer] = new SeqFactory[RingBuffer] {
-    override def newBuilder[T]: mutable.Builder[T, RingBuffer[T]] = RingBuffer.canBuildFrom[A, T].newBuilder(RingBuffer.this)
+    override def newBuilder[T]: mutable.Builder[T, RingBuffer[T]] =
+      RingBuffer.canBuildFrom[A, T].newBuilder(RingBuffer.this)
 
     override def empty[A]: RingBuffer[A] = newBuilder[A].result()
     override def from[T](f: IterableOnce[T]): RingBuffer[T] = (newBuilder[T] ++= f).result()

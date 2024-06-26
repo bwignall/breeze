@@ -35,13 +35,13 @@ import scala.{specialized => spec}
 trait CanMapValues[From, @specialized(Int, Float, Long, Double) V, @specialized(Int, Float, Long, Double) V2, +To] {
 //  def apply(from: From, fn: V=>V2): To = map(from, fn)
   def map(from: From, fn: V => V2): To
-  def mapActive(from: From, fn: V=>V2): To
+  def mapActive(from: From, fn: V => V2): To
 }
 
 object CanMapValues extends CanMapValuesLowPrio {
 
   trait DenseCanMapValues[From, V, V2, To] extends CanMapValues[From, V, V2, To] {
-    final def mapActive(from: From, fn: V=>V2): To = map(from, fn)
+    final def mapActive(from: From, fn: V => V2): To = map(from, fn)
   }
 
   implicit def canMapSelfDouble[V2]: CanMapValues[Double, Double, V2, V2] = canMapSelf[Double, V2]
@@ -57,7 +57,7 @@ object CanMapValues extends CanMapValuesLowPrio {
   //
 
   class OpArray[@spec(Double, Int, Float, Long) A, @spec(Double, Int, Float, Long) B: ClassTag]
-    extends CanMapValues[Array[A], A, B, Array[B]] {
+      extends CanMapValues[Array[A], A, B, Array[B]] {
 
     /**Maps all values from the given collection. */
     def map(from: Array[A], fn: (A) => B): Array[B] = {

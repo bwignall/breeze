@@ -283,7 +283,7 @@ object Index {
 @SerialVersionUID(1L)
 class EitherIndex[L, R](left: Index[L], right: Index[R]) extends Index[Either[L, R]] {
   def apply(t: Either[L, R]) = t match {
-    case Left(l) => left(l)
+    case Left(l)  => left(l)
     case Right(r) => right(r) + rightOffset
   }
 
@@ -299,8 +299,8 @@ class EitherIndex[L, R](left: Index[L], right: Index[R]) extends Index[Either[L,
     else Some(Right(right.get(i - left.size)))
   }
 
-  def pairs = left.pairs.map { case (l, i) => Left(l) -> i } ++ right.pairs.map {
-    case (r, i) => Right(r) -> (i + left.size)
+  def pairs = left.pairs.map { case (l, i) => Left(l) -> i } ++ right.pairs.map { case (r, i) =>
+    Right(r) -> (i + left.size)
   }
 
   def iterator = left.iterator.map { Left(_) } ++ right.map { Right(_) }
@@ -317,7 +317,7 @@ class EitherIndex[L, R](left: Index[L], right: Index[R]) extends Index[Either[L,
 class OptionIndex[T](inner: Index[T]) extends Index[Option[T]] {
   def apply(t: Option[T]) = t match {
     case Some(l) => inner(l)
-    case None => inner.size
+    case None    => inner.size
   }
 
   def unapply(i: Int) = {
@@ -382,18 +382,16 @@ final class CompositeIndex[U](indices: Index[_ <: U]*) extends Index[(Int, U)] {
   }
 
   def pairs =
-    indices.iterator.zipWithIndex.flatMap {
-      case (index, i) =>
-        index.iterator.map { t =>
-          (i, t: U)
-        }
+    indices.iterator.zipWithIndex.flatMap { case (index, i) =>
+      index.iterator.map { t =>
+        (i, t: U)
+      }
     }.zipWithIndex
 
-  def iterator = indices.iterator.zipWithIndex.flatMap {
-    case (index, i) =>
-      index.iterator.map { t =>
-        (i -> t)
-      }
+  def iterator = indices.iterator.zipWithIndex.flatMap { case (index, i) =>
+    index.iterator.map { t =>
+      i -> t
+    }
   }
 
   override def size: Int = offsets(offsets.length - 1)

@@ -33,11 +33,11 @@ package object integrate {
    */
 
   def ode45(
-      f: (DenseVector[Double], Double) => DenseVector[Double],
-      y0: DenseVector[Double],
-      t: Array[Double],
-      relTol: DenseVector[Double] = null,
-      absTol: DenseVector[Double] = null
+    f: (DenseVector[Double], Double) => DenseVector[Double],
+    y0: DenseVector[Double],
+    t: Array[Double],
+    relTol: DenseVector[Double] = null,
+    absTol: DenseVector[Double] = null
   ): Array[DenseVector[Double]] = {
 
     val integrator = new DormandPrince54Integrator(0.0, 1.0, relTol, absTol)

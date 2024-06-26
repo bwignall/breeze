@@ -45,7 +45,7 @@ final class TriangularArray[T: ClassTag](val dimension: Int) extends Serializabl
   private def slice(r: Int): Seq[T] = new Seq[T] {
     def apply(c: Int) = outer.apply(r, c)
     def update(c: Int, t: T) = outer.update(r, c, t)
-    def length = (dimension - r)
+    def length = dimension - r
     def iterator = Iterator.range(r, dimension).map(apply _)
   }
 
@@ -87,7 +87,7 @@ object TriangularArray {
   @inline
   def index(r: Int, c: Int) = {
     if (r > c) require(r <= c, "row must be less than column!")
-    (c * (c + 1) / 2 + r)
+    c * (c + 1) / 2 + r
   }
 
   def raw[T: ClassTag](dim: Int, fill: => T) = {

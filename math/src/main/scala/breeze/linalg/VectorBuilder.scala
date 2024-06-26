@@ -44,11 +44,11 @@ import breeze.generic.UFunc.{InPlaceImpl2, UImpl2}
  * @author dlwh
  */
 @SerialVersionUID(1)
-class VectorBuilder[@spec(Double, Int, Float, Long) E](
-    private var _index: Array[Int],
-    private var _data: Array[E],
-    private var used: Int,
-    var length: Int)(implicit ring: Semiring[E])
+class VectorBuilder[@spec(Double, Int, Float, Long) E](private var _index: Array[Int],
+                                                       private var _data: Array[E],
+                                                       private var used: Int,
+                                                       var length: Int
+)(implicit ring: Semiring[E])
     extends NumericOps[VectorBuilder[E]]
     with Serializable {
 

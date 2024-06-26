@@ -27,9 +27,9 @@ trait IBeam[T]
     this
   }
 
-  protected override def fromSpecific(coll: IterableOnce[T]): IBeam[T] = ???
+  override protected def fromSpecific(coll: IterableOnce[T]): IBeam[T] = ???
 
-  protected override def newSpecificBuilder: scala.collection.mutable.Builder[T, IBeam[T]] = ???
+  override protected def newSpecificBuilder: scala.collection.mutable.Builder[T, IBeam[T]] = ???
 
   override def empty: IBeam[T] = ???
 }

@@ -1,6 +1,6 @@
 package breeze.stats.distributions
 
-import breeze.numerics.constants.{Pi, γ}
+import breeze.numerics.constants.{γ, Pi}
 import breeze.numerics.{expm1, log, sqrt}
 
 case class Rayleigh(scale: Double)(implicit rand: RandBasis)

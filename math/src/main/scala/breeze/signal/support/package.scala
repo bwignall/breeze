@@ -1,6 +1,6 @@
 package breeze.signal
 
-import breeze.numerics.{log, ceil, pow}
+import breeze.numerics.{ceil, log, pow}
 
 /**
  * @author ktakagaki

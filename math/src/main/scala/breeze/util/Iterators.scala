@@ -46,10 +46,10 @@ object Iterators {
           (headA: (Option[T], Int), headB: (Option[T], Int)) =>
             (headA, headB) match {
               case ((Some(a), i), (Some(b), j)) => if (compare(a, b) <= 0) headA else headB
-              case ((Some(a), i), (None, j)) => headA
-              case ((None, i), (Some(b), j)) => headB
-              case ((None, i), (None, j)) => headA
-              case x: Any => throw new IllegalStateException(x.toString)
+              case ((Some(a), i), (None, j))    => headA
+              case ((None, i), (Some(b), j))    => headB
+              case ((None, i), (None, j))       => headA
+              case x: Any                       => throw new IllegalStateException(x.toString)
             }
         }
 

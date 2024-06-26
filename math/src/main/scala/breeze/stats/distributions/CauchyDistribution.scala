@@ -28,7 +28,7 @@ case class CauchyDistribution(median: Double, scale: Double)(implicit rand: Rand
     extends ApacheContinuousDistribution {
   val rng: RandomGenerator = rand.generator
   val inverseCumAccuracy: Double = ApacheCauchyDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY
-  protected final val inner = new ApacheCauchyDistribution(rng, median, scale, inverseCumAccuracy)
+  final protected val inner = new ApacheCauchyDistribution(rng, median, scale, inverseCumAccuracy)
 }
 
 object CauchyDistribution extends ContinuousDistributionUFuncProvider[Double, CauchyDistribution]

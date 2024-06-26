@@ -83,9 +83,9 @@ case class Complex(real: Double, imag: Double) {
 
   def /(that: Complex) = {
     val denom = that.real * that.real + that.imag * that.imag
-    Complex(
-      (this.real * that.real + this.imag * that.imag) / denom,
-      (this.imag * that.real - this.real * that.imag) / denom)
+    Complex((this.real * that.real + this.imag * that.imag) / denom,
+            (this.imag * that.real - this.real * that.imag) / denom
+    )
   }
 
   def /(that: Int) =
@@ -139,12 +139,12 @@ case class Complex(real: Double, imag: Double) {
 
   override def equals(that: Any) = that match {
     case that: Complex => this.real == that.real && this.imag == that.imag
-    case real: Double => this.real == real && this.imag == 0
-    case real: Int => this.real == real && this.imag == 0
-    case real: Short => this.real == real && this.imag == 0
-    case real: Long => this.real == real && this.imag == 0
-    case real: Float => this.real == real && this.imag == 0
-    case _ => false
+    case real: Double  => this.real == real && this.imag == 0
+    case real: Int     => this.real == real && this.imag == 0
+    case real: Short   => this.real == real && this.imag == 0
+    case real: Long    => this.real == real && this.imag == 0
+    case real: Float   => this.real == real && this.imag == 0
+    case _             => false
   }
 
   // ensure hashcode contract is maintained for comparison to non-Complex numbers
@@ -182,16 +182,16 @@ object Complex { outer =>
     def !=(a: Complex, b: Complex) = a != b
 
     def >(a: Complex, b: Complex) =
-      (a.real > b.real || (a.real == b.real && a.imag > b.imag))
+      a.real > b.real || (a.real == b.real && a.imag > b.imag)
 
     def >=(a: Complex, b: Complex) =
-      (a.real >= b.real || (a.real == b.real && a.imag >= b.imag))
+      a.real >= b.real || (a.real == b.real && a.imag >= b.imag)
 
     def <(a: Complex, b: Complex) =
-      (a.real < b.real || (a.real == b.real && a.imag < b.imag))
+      a.real < b.real || (a.real == b.real && a.imag < b.imag)
 
     def <=(a: Complex, b: Complex) =
-      (a.real <= b.real || (a.real == b.real && a.imag <= b.imag))
+      a.real <= b.real || (a.real == b.real && a.imag <= b.imag)
 
     def +(a: Complex, b: Complex) = a + b
 
@@ -229,7 +229,7 @@ object Complex { outer =>
     def apply(v1: Complex): Double = v1.abs
   }
 
-  implicit val ComplexZero : Zero[Complex] = Zero(Complex.zero)
+  implicit val ComplexZero: Zero[Complex] = Zero(Complex.zero)
 
   //
   // neg
@@ -332,7 +332,6 @@ object Complex { outer =>
   implicit object PowCC extends OpPow.Impl2[Complex, Complex, Complex] { def apply(a: Complex, b: Complex) = a.pow(b) }
 
   // scala.math.Numeric and scala.math.Fractional
-
 
   /** `Complex` as `scala.math.Numeric` trait.
    * Conversions to `Int`, `Float` and `Double` are only performed

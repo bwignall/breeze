@@ -36,13 +36,17 @@ object KuhnMunkres extends BipartiteMatching {
     val (costs2: Seq[Seq[Double]], inverted: Boolean) =
       if (costs.length > costs(0).length) {
         val newCosts = Array.fill(costs(0).length, costs.length)(0.0)
-        for (i <- 0 until costs.length;
-          j <- 0 until costs(0).length) {
+        for (
+          i <- 0 until costs.length;
+          j <- 0 until costs(0).length
+        ) {
           newCosts(j)(i) = costs(i)(j)
         }
         (newCosts.map { row =>
-          row.toSeq
-        }.toSeq, true)
+           row.toSeq
+         }.toSeq,
+         true
+        )
       } else {
         (costs, false)
       }

@@ -10,14 +10,14 @@ import breeze.math.Complex
  */
 object Options {
 
-  //Options for CanPad
+  // Options for CanPad
 
   // <editor-fold defaultstate="collapsed" desc=" OptPadDimensions ">
 
   sealed abstract class OptPadDimensions extends Opt
-  //This option class specifies a 1 dimensional padding result
+  // This option class specifies a 1 dimensional padding result
   case class Dimensions1(n1: Int) extends OptPadDimensions
-  //This option class specifies a 2 dimensional padding result
+  // This option class specifies a 2 dimensional padding result
   case class Dimensions2(n1: Int, n2: Int) extends OptPadDimensions
 
   implicit def intToDimensions1(n: Int): Dimensions1 = Dimensions1(n)

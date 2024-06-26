@@ -82,7 +82,7 @@ trait BatchDiffFunction[T] extends DiffFunction[T] with ((T, IndexedSeq[Int]) =>
     /**
      * The full size of the data
      */
-    def fullRange: IndexedSeq[Int] = (0 until groups.length)
+    def fullRange: IndexedSeq[Int] = 0 until groups.length
   }
 
   override def throughLens[U](implicit l: Isomorphism[T, U]): BatchDiffFunction[U] = new BatchDiffFunction[U] {

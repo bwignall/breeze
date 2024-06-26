@@ -17,7 +17,7 @@ package breeze.stats.distributions
  */
 
 import breeze.numerics._
-import math.{Pi, log1p}
+import math.{log1p, Pi}
 import breeze.linalg._
 import scala.runtime.ScalaRunTime
 
@@ -26,8 +26,7 @@ import scala.runtime.ScalaRunTime
  *
  * @author dlwh
  */
-case class MultivariateGaussian(mean: DenseVector[Double], covariance: DenseMatrix[Double])(
-    implicit rand: RandBasis)
+case class MultivariateGaussian(mean: DenseVector[Double], covariance: DenseMatrix[Double])(implicit rand: RandBasis)
     extends ContinuousDistr[DenseVector[Double]]
     with Moments[DenseVector[Double], DenseMatrix[Double]] {
   def draw() = {

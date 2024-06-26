@@ -29,7 +29,7 @@ import scala.collection.compat._
  *
  * @author dlwh
  */
-trait Multimethod[Method, A <: AnyRef, R] extends MMRegistry1[Method] {  self: Method =>
+trait Multimethod[Method, A <: AnyRef, R] extends MMRegistry1[Method] { self: Method =>
 
   protected def bindingMissing(a: A): R = throw new UnsupportedOperationException("Types not found!")
   protected def multipleOptions(a: A, m: Map[Class[_], Method]) = {
@@ -211,10 +211,13 @@ trait MMRegistry3[R] {
     var bestCandidates = Set[(Class[_], Class[_], Class[_])]()
     for (pair @ (aa, bb, cc) <- options.keys) {
       // if there is no option (aaa,bbb) s.t. aaa <: aa && bbb <: bb, then add it to the list
-      if (!bestCandidates.exists(pair => aa.isAssignableFrom(pair._1) && bb.isAssignableFrom(pair._2)) && cc
-          .isAssignableFrom(pair._3)) {
+      if (
+        !bestCandidates.exists(pair => aa.isAssignableFrom(pair._1) && bb.isAssignableFrom(pair._2)) && cc
+          .isAssignableFrom(pair._3)
+      ) {
         bestCandidates = bestCandidates.filterNot(pair =>
-          pair._1.isAssignableFrom(aa) && pair._2.isAssignableFrom(bb) && pair._3.isAssignableFrom(cc))
+          pair._1.isAssignableFrom(aa) && pair._2.isAssignableFrom(bb) && pair._3.isAssignableFrom(cc)
+        )
         bestCandidates += pair
       }
     }

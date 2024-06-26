@@ -27,8 +27,9 @@ trait ApproximateLineSearch extends MinimizingLineSearch {
 }
 
 object LineSearch {
-  def functionFromSearchDirection[T, I](f: DiffFunction[T], x: T, direction: T)(
-      implicit prod: MutableInnerProductModule[T, Double]): DiffFunction[Double] = new DiffFunction[Double] {
+  def functionFromSearchDirection[T, I](f: DiffFunction[T], x: T, direction: T)(implicit
+    prod: MutableInnerProductModule[T, Double]
+  ): DiffFunction[Double] = new DiffFunction[Double] {
     import prod._
 
     /** calculates the value at a point */

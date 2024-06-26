@@ -16,7 +16,7 @@ package breeze.linalg.operators
  limitations under the License.
  */
 
-import breeze.generic.{MMRegistry3, UFunc, MMRegistry2}
+import breeze.generic.{MMRegistry2, MMRegistry3, UFunc}
 import breeze.generic.UFunc.InPlaceImpl3
 
 import scala.reflect.ClassTag
@@ -33,11 +33,11 @@ trait TernaryUpdateRegistry[A, B, C, Op]
     with MMRegistry3[UFunc.InPlaceImpl3[Op, _ <: A, _ <: B, _ <: C]] {
   protected def bindingMissing(a: A, b: B, c: C): Unit =
     throw new UnsupportedOperationException("Types not found!" + a + b + " " + ops)
-  protected def multipleOptions(
-      a: A,
-      b: B,
-      c: C,
-      m: Map[(Class[_], Class[_], Class[_]), UFunc.InPlaceImpl3[Op, _ <: A, _ <: B, _ <: C]]): Unit = {
+  protected def multipleOptions(a: A,
+                                b: B,
+                                c: C,
+                                m: Map[(Class[_], Class[_], Class[_]), UFunc.InPlaceImpl3[Op, _ <: A, _ <: B, _ <: C]]
+  ): Unit = {
     throw new RuntimeException("Multiple bindings for method: " + m)
   }
 
@@ -77,7 +77,8 @@ trait TernaryUpdateRegistry[A, B, C, Op]
   }
 
   def register[AA <: A, BB <: B, CC <: C](
-      op: InPlaceImpl3[Op, AA, BB, CC])(implicit manA: ClassTag[AA], manB: ClassTag[BB], manC: ClassTag[CC]): Unit = {
+    op: InPlaceImpl3[Op, AA, BB, CC]
+  )(implicit manA: ClassTag[AA], manB: ClassTag[BB], manC: ClassTag[CC]): Unit = {
     super.register(manA.runtimeClass, manB.runtimeClass, manC.runtimeClass, op)
   }
 }

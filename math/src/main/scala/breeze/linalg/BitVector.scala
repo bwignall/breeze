@@ -76,7 +76,7 @@ class BitVector(val data: java.util.BitSet, val length: Int, val enforceLength: 
     else
       other match {
         case x: BitVector => !x.enforceLength || x.length == length
-        case _ => other.length == length
+        case _            => other.length == length
       }
   }
 
@@ -169,9 +169,10 @@ object BitVector {
       }
     }
 
-  implicit def canMapPairs[V2](
-      implicit man: ClassTag[V2],
-      zero: Zero[V2]): CanMapKeyValuePairs[BitVector, Int, Boolean, V2, DenseVector[V2]] =
+  implicit def canMapPairs[V2](implicit
+    man: ClassTag[V2],
+    zero: Zero[V2]
+  ): CanMapKeyValuePairs[BitVector, Int, Boolean, V2, DenseVector[V2]] =
     new CanMapKeyValuePairs[BitVector, Int, Boolean, V2, DenseVector[V2]] {
       def map(from: BitVector, fn: (Int, Boolean) => V2): DenseVector[V2] = {
         DenseVector.tabulate(from.length)(i => fn(i, from(i)))

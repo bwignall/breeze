@@ -3,7 +3,7 @@ package breeze.signal.support
 /**
  * @author ktakagaki
  */
-import breeze.linalg.{DenseVector}
+import breeze.linalg.DenseVector
 import breeze.signal._
 
 /**
@@ -33,11 +33,11 @@ object CanFilter {
    */
   implicit val dvDouble1DFilter: CanFilter[DenseVector[Double], FIRKernel1D[Double], DenseVector[Double]] = {
     new CanFilter[DenseVector[Double], FIRKernel1D[Double], DenseVector[Double]] {
-      def apply(
-          data: DenseVector[Double],
-          kernel: FIRKernel1D[Double],
-          overhang: OptOverhang,
-          padding: OptPadding): DenseVector[Double] = {
+      def apply(data: DenseVector[Double],
+                kernel: FIRKernel1D[Double],
+                overhang: OptOverhang,
+                padding: OptPadding
+      ): DenseVector[Double] = {
         convolve(data, kernel.kernel, OptRange.All, overhang, padding)
       }
     }
@@ -48,11 +48,11 @@ object CanFilter {
    */
   implicit val dvInt1DFilter: CanFilter[DenseVector[Int], FIRKernel1D[Int], DenseVector[Int]] = {
     new CanFilter[DenseVector[Int], FIRKernel1D[Int], DenseVector[Int]] {
-      def apply(
-          data: DenseVector[Int],
-          kernel: FIRKernel1D[Int],
-          overhang: OptOverhang,
-          padding: OptPadding): DenseVector[Int] = {
+      def apply(data: DenseVector[Int],
+                kernel: FIRKernel1D[Int],
+                overhang: OptOverhang,
+                padding: OptPadding
+      ): DenseVector[Int] = {
         convolve(data, kernel.kernel, OptRange.All, overhang, padding)
       }
     }
@@ -64,11 +64,11 @@ object CanFilter {
   implicit val dvDouble1DFilterVectorKernel
     : CanFilter[DenseVector[Double], DenseVector[Double], DenseVector[Double]] = {
     new CanFilter[DenseVector[Double], DenseVector[Double], DenseVector[Double]] {
-      def apply(
-          data: DenseVector[Double],
-          kernel: DenseVector[Double],
-          overhang: OptOverhang,
-          padding: OptPadding): DenseVector[Double] = {
+      def apply(data: DenseVector[Double],
+                kernel: DenseVector[Double],
+                overhang: OptOverhang,
+                padding: OptPadding
+      ): DenseVector[Double] = {
         convolve(data, kernel, /*new FIRKernel1D(kernel, "User-specified kernel"),*/ OptRange.All, overhang, padding)
       }
     }

@@ -31,20 +31,22 @@ import breeze.storage.{ConfigurableDefault, Storage, Zero}
  */
 @SerialVersionUID(1L)
 final class OpenAddressHashArray[@specialized(Int, Float, Long, Double) V] private[mutable] (
-    private[mutable] var _index: Array[Int],
-    private[mutable] var _data: Array[V],
-    private[mutable] var load: Int,
-    val size: Int,
-    val default: ConfigurableDefault[V] = ConfigurableDefault.default[V])(
-    implicit protected val manElem: ClassTag[V],
-    val zero: Zero[V])
+  private[mutable] var _index: Array[Int],
+  private[mutable] var _data: Array[V],
+  private[mutable] var load: Int,
+  val size: Int,
+  val default: ConfigurableDefault[V] = ConfigurableDefault.default[V]
+)(implicit protected val manElem: ClassTag[V], val zero: Zero[V])
     extends Storage[V]
     with SparseArrayLike[V]
     with Serializable {
 
   require(size > 0, "Size must be positive, but got " + size)
 
-  def this(size: Int, default: ConfigurableDefault[V], initialSize: Int)(implicit manElem: ClassTag[V], zero: Zero[V]) = {
+  def this(size: Int,
+           default: ConfigurableDefault[V],
+           initialSize: Int
+  )(implicit manElem: ClassTag[V], zero: Zero[V]) = {
     this(
       OpenAddressHashArray.emptyIndexArray(OpenAddressHashArray.calculateSize(initialSize)),
       default.makeArray(OpenAddressHashArray.calculateSize(initialSize)),
@@ -164,12 +166,12 @@ final class OpenAddressHashArray[@specialized(Int, Float, Long, Double) V] priva
   override def toString: String = activeIterator.mkString("OpenAddressHashArray(", ", ", ")")
 
   def copy: OpenAddressHashArray[V] = {
-    new OpenAddressHashArray[V](
-      util.Arrays.copyOf(_index, _index.length),
-      breeze.util.ArrayUtil.copyOf(_data, _data.length),
-      load,
-      size,
-      default)
+    new OpenAddressHashArray[V](util.Arrays.copyOf(_index, _index.length),
+                                breeze.util.ArrayUtil.copyOf(_data, _data.length),
+                                load,
+                                size,
+                                default
+    )
   }
 
   def copyTo(other: OpenAddressHashArray[V]): Unit = {
@@ -193,21 +195,20 @@ final class OpenAddressHashArray[@specialized(Int, Float, Long, Double) V] priva
   override def equals(that: Any): Boolean = that match {
     case that: OpenAddressHashArray[V @unchecked] =>
       (this eq that) ||
-        (this.size == that.size) && {
-          try {
-            this.iterator.forall {
-              case (k, v) =>
-                that(k) match {
-                  case `v` =>
-                    true
-                  case _ => false
-                }
+      (this.size == that.size) && {
+        try {
+          this.iterator.forall { case (k, v) =>
+            that(k) match {
+              case `v` =>
+                true
+              case _ => false
             }
-          } catch {
-            case ex: ClassCastException =>
-              false
           }
+        } catch {
+          case ex: ClassCastException =>
+            false
         }
+      }
     case _ =>
       false
   }

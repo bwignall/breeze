@@ -3,14 +3,14 @@ package breeze.optimize.proximal
 import breeze.linalg._
 import breeze.util.SerializableLogging
 import scala.math.sqrt
-import breeze.optimize.{LBFGS, OWLQN, DiffFunction}
+import breeze.optimize.{DiffFunction, LBFGS, OWLQN}
 import org.netlib.util.intW
 import breeze.optimize.proximal.Constraint._
 import scala.math.abs
 import breeze.numerics._
 import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
 import dev.ludovic.netlib.blas.BLAS.{getInstance => blas}
-import breeze.optimize.linear.{PowerMethod, NNLS, ConjugateGradient}
+import breeze.optimize.linear.{ConjugateGradient, NNLS, PowerMethod}
 import breeze.stats.distributions.Rand
 import breeze.macros._
 
@@ -42,33 +42,32 @@ import breeze.macros._
  * @param alpha over-relaxation parameter default 1.0 1.5 - 1.8 can improve convergence
  * @author debasish83
  */
-class QuadraticMinimizer(
-    nGram: Int,
-    proximal: Proximal = null,
-    Aeq: DenseMatrix[Double] = null,
-    beq: DenseVector[Double] = null,
-    maxIters: Int = -1,
-    abstol: Double = 1e-6,
-    reltol: Double = 1e-4,
-    alpha: Double = 1.0)
-    extends SerializableLogging {
+class QuadraticMinimizer(nGram: Int,
+                         proximal: Proximal = null,
+                         Aeq: DenseMatrix[Double] = null,
+                         beq: DenseVector[Double] = null,
+                         maxIters: Int = -1,
+                         abstol: Double = 1e-6,
+                         reltol: Double = 1e-4,
+                         alpha: Double = 1.0
+) extends SerializableLogging {
 
   type BDM = DenseMatrix[Double]
   type BDV = DenseVector[Double]
 
-  case class State private[QuadraticMinimizer] (
-      x: BDV,
-      u: BDV,
-      z: BDV,
-      scale: BDV,
-      R: BDM,
-      pivot: Array[Int],
-      xHat: BDV,
-      zOld: BDV,
-      residual: BDV,
-      s: BDV,
-      iter: Int,
-      converged: Boolean) {}
+  case class State private[QuadraticMinimizer] (x: BDV,
+                                                u: BDV,
+                                                z: BDV,
+                                                scale: BDV,
+                                                R: BDM,
+                                                pivot: Array[Int],
+                                                xHat: BDV,
+                                                zOld: BDV,
+                                                residual: BDV,
+                                                s: BDV,
+                                                iter: Int,
+                                                converged: Boolean
+  ) {}
 
   val linearEquality = if (Aeq != null) Aeq.rows else 0
 
@@ -191,19 +190,19 @@ class QuadraticMinimizer(
     }
   }
 
-  //u is the lagrange multiplier
-  //z is for the proximal operator application
+  // u is the lagrange multiplier
+  // z is for the proximal operator application
   private def reset(q: DenseVector[Double], state: State) = {
     import state._
     val nlinear = q.length
     val info = new intW(0)
 
-    //TO DO : Mutate wsH and put the factors in it, the arraycopy is not required
+    // TO DO : Mutate wsH and put the factors in it, the arraycopy is not required
     if (linearEquality > 0) {
       val equality = nlinear + beq.length
-      require(
-        wsH.rows == equality && wsH.cols == equality,
-        s"QuadraticMinimizer:reset quasi definite and linear size mismatch")
+      require(wsH.rows == equality && wsH.cols == equality,
+              s"QuadraticMinimizer:reset quasi definite and linear size mismatch"
+      )
       // TO DO : Use LDL' for symmetric quasi definite matrix lapack.dsytrf
       lapack.dgetrf(n, n, wsH.data, scala.math.max(1, n), pivot, info)
     } else {
@@ -219,7 +218,7 @@ class QuadraticMinimizer(
   }
 
   private def updatePrimal(q: BDV, x: BDV, u: BDV, z: BDV, scale: BDV, rho: Double, R: BDM, pivot: Array[Int]) = {
-    //scale = rho*(z - u) - q
+    // scale = rho*(z - u) - q
     cforRange(0 until z.length) { i =>
       val entryScale = rho * (z(i) - u(i)) - q(i)
       scale.update(i, entryScale)
@@ -256,11 +255,11 @@ class QuadraticMinimizer(
    * @param resetState use true if you want to hot start based on the provided state
    * @return converged state from ADMM algorithm
    */
-  def minimizeAndReturnState(
-      q: DenseVector[Double],
-      rho: Double,
-      initialState: State,
-      resetState: Boolean = true): State = {
+  def minimizeAndReturnState(q: DenseVector[Double],
+                             rho: Double,
+                             initialState: State,
+                             resetState: Boolean = true
+  ): State = {
     val startState = if (resetState) reset(q, initialState) else initialState
     import startState._
 
@@ -272,18 +271,18 @@ class QuadraticMinimizer(
       return State(x, u, z, scale, R, pivot, xHat, zOld, residual, s, 1, true)
     }
 
-    //scale will hold q + linearEqualities
+    // scale will hold q + linearEqualities
     val convergenceScale = sqrt(n)
 
     var nextIter = 0
     while (nextIter <= admmIters) {
-      //primal update
+      // primal update
       updatePrimal(q, x, u, z, scale, rho, R, pivot)
 
-      //proximal z-update with relaxation
+      // proximal z-update with relaxation
 
-      //zold = (1-alpha)*z
-      //x_hat = alpha*x + zold
+      // zold = (1-alpha)*z
+      // x_hat = alpha*x + zold
       zOld := z
       zOld *= 1 - alpha
 
@@ -291,29 +290,29 @@ class QuadraticMinimizer(
       xHat *= alpha
       xHat += zOld
 
-      //zold = z
+      // zold = z
       zOld := z
 
-      //z = xHat + u
+      // z = xHat + u
       z := xHat
       z += u
 
-      //Apply proximal operator
+      // Apply proximal operator
       proximal.prox(z, rho)
 
-      //z has proximal(x_hat)
+      // z has proximal(x_hat)
 
-      //Dual (u) update
+      // Dual (u) update
       xHat -= z
       u += xHat
 
-      //Convergence checks
-      //history.r_norm(k)  = norm(x - z)
+      // Convergence checks
+      // history.r_norm(k)  = norm(x - z)
       residual := x
       residual -= z
       val residualNorm = norm(residual, 2)
 
-      //history.s_norm(k)  = norm(-rho*(z - zold))
+      // history.s_norm(k)  = norm(-rho*(z - zold))
       s := z
       s -= zOld
       s *= -rho
@@ -322,7 +321,7 @@ class QuadraticMinimizer(
       residual := z
       residual *= -1.0
 
-      //s = rho*u
+      // s = rho*u
       s := u
       s *= rho
 
@@ -346,10 +345,10 @@ class QuadraticMinimizer(
 
   private def computeRho(H: DenseMatrix[Double]): Double = {
     proximal match {
-      case null => 0.0
-      case ProximalL1(lambda: Double) => computeRhoSparse(H)
+      case null                                      => 0.0
+      case ProximalL1(lambda: Double)                => computeRhoSparse(H)
       case ProjectProbabilitySimplex(lambda: Double) => computeRhoSparse(H)
-      case _ => sqrt(QuadraticMinimizer.normColumn(H))
+      case _                                         => sqrt(QuadraticMinimizer.normColumn(H))
     }
   }
 
@@ -447,12 +446,12 @@ object QuadraticMinimizer {
    * y := alpha * A * x + beta * y
    * For `DenseMatrix` A.
    */
-  def gemv(
-      alpha: Double,
-      A: DenseMatrix[Double],
-      x: DenseVector[Double],
-      beta: Double,
-      y: DenseVector[Double]): Unit = {
+  def gemv(alpha: Double,
+           A: DenseMatrix[Double],
+           x: DenseVector[Double],
+           beta: Double,
+           y: DenseVector[Double]
+  ): Unit = {
     val tStrA = if (A.isTranspose) "T" else "N"
     val mA = if (!A.isTranspose) A.rows else A.cols
     val nA = if (!A.isTranspose) A.rows else A.cols
@@ -492,7 +491,7 @@ object QuadraticMinimizer {
     if (info.`val` > 0) throw new LapackException("DPOTRS : Leading minor of order i of A is not positive definite.")
   }
 
-  //upper bound on max eigen value
+  // upper bound on max eigen value
   def normColumn(H: DenseMatrix[Double]): Double = {
     var absColSum = 0.0
     var maxColSum = 0.0
@@ -506,14 +505,14 @@ object QuadraticMinimizer {
     maxColSum
   }
 
-  //approximate max eigen using inverse power method
+  // approximate max eigen using inverse power method
   def approximateMaxEigen(H: DenseMatrix[Double]): Double = {
     val pm = new PowerMethod()
     val init = DenseVector.rand[Double](H.rows, Rand.gaussian(0, 1))
     pm.eigen(H, init)
   }
 
-  //approximate min eigen using inverse power method
+  // approximate min eigen using inverse power method
   def approximateMinEigen(H: DenseMatrix[Double]): Double = {
     val R = cholesky(H).t
     val pmInv = PowerMethod.inverse()
@@ -523,10 +522,10 @@ object QuadraticMinimizer {
 
   def apply(rank: Int, constraint: Constraint, lambda: Double = 1.0): QuadraticMinimizer = {
     constraint match {
-      case SMOOTH => new QuadraticMinimizer(rank)
+      case SMOOTH   => new QuadraticMinimizer(rank)
       case POSITIVE => new QuadraticMinimizer(rank, ProjectPos())
       case BOX => {
-        //Direct QP with bounds
+        // Direct QP with bounds
         val lb = DenseVector.zeros[Double](rank)
         val ub = DenseVector.ones[Double](rank)
         new QuadraticMinimizer(rank, ProjectBox(lb, ub))
@@ -535,7 +534,7 @@ object QuadraticMinimizer {
         new QuadraticMinimizer(rank, ProjectProbabilitySimplex(lambda))
       }
       case EQUALITY => {
-        //Direct QP with equality and positivity constraint
+        // Direct QP with equality and positivity constraint
         val Aeq = DenseMatrix.ones[Double](1, rank)
         val beq = DenseVector.ones[Double](1)
         new QuadraticMinimizer(rank, ProjectPos(), Aeq, beq)
@@ -565,7 +564,8 @@ object QuadraticMinimizer {
     if (args.length < 4) {
       println("Usage: QpSolver n m lambda beta")
       println(
-        "Test QpSolver with a simple quadratic function of dimension n and m equalities lambda beta for elasticNet")
+        "Test QpSolver with a simple quadratic function of dimension n and m equalities lambda beta for elasticNet"
+      )
       sys.exit(1)
     }
 
@@ -579,16 +579,17 @@ object QuadraticMinimizer {
     val (aeq, b, bl, bu, q, h) = QpGenerator(problemSize, nequalities)
 
     println(
-      s"Test QuadraticMinimizer, CG , BFGS and OWLQN with $problemSize variables and $nequalities equality constraints")
+      s"Test QuadraticMinimizer, CG , BFGS and OWLQN with $problemSize variables and $nequalities equality constraints"
+    )
 
     val luStart = System.nanoTime()
-    val luResult = h \ q *:* (-1.0)
+    val luResult = h \ q *:* -1.0
     val luTime = System.nanoTime() - luStart
 
     val cg = new ConjugateGradient[DenseVector[Double], DenseMatrix[Double]]()
 
     val startCg = System.nanoTime()
-    val cgResult = cg.minimize(q *:* (-1.0), h)
+    val cgResult = cg.minimize(q *:* -1.0, h)
     val cgTime = System.nanoTime() - startCg
 
     val qpSolver = new QuadraticMinimizer(problemSize)
@@ -611,7 +612,8 @@ object QuadraticMinimizer {
     println(s"Objective lu $luObj bfgs $bfgsObj qp $qpObj")
 
     println(
-      s"dim ${problemSize} lu ${luTime / 1e6} ms qp ${qpTime / 1e6} ms cg ${cgTime / 1e6} ms bfgs ${bfgsTime / 1e6} ms")
+      s"dim ${problemSize} lu ${luTime / 1e6} ms qp ${qpTime / 1e6} ms cg ${cgTime / 1e6} ms bfgs ${bfgsTime / 1e6} ms"
+    )
 
     val lambdaL1 = lambda * beta
     val lambdaL2 = lambda * (1 - beta)
@@ -630,9 +632,11 @@ object QuadraticMinimizer {
     val owlqnTime = System.nanoTime() - startOWLQN
 
     println(
-      s"||owlqn - sparseqp|| norm ${norm(owlqnResult.x - sparseQpResult.x, 2)} inf-norm ${norm(owlqnResult.x - sparseQpResult.x, inf)}")
+      s"||owlqn - sparseqp|| norm ${norm(owlqnResult.x - sparseQpResult.x, 2)} inf-norm ${norm(owlqnResult.x - sparseQpResult.x, inf)}"
+    )
     println(
-      s"sparseQp ${sparseQpTime / 1e6} ms iters ${sparseQpResult.iter} owlqn ${owlqnTime / 1e6} ms iters ${owlqnResult.iter}")
+      s"sparseQp ${sparseQpTime / 1e6} ms iters ${sparseQpResult.iter} owlqn ${owlqnTime / 1e6} ms iters ${owlqnResult.iter}"
+    )
 
     val posQp = QuadraticMinimizer(h.rows, POSITIVE, 0.0)
     val posQpStart = System.nanoTime()
@@ -659,6 +663,7 @@ object QuadraticMinimizer {
     val qpEqualityTime = System.nanoTime() - qpEqualityStart
 
     println(
-      s"Qp Equality ${qpEqualityTime / 1e6} ms iters ${qpEqualityResult.iter} converged ${qpEqualityResult.converged}")
+      s"Qp Equality ${qpEqualityTime / 1e6} ms iters ${qpEqualityResult.iter} converged ${qpEqualityResult.converged}"
+    )
   }
 }

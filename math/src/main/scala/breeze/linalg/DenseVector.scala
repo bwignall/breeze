@@ -15,7 +15,6 @@ package breeze.linalg
  limitations under the License.
  */
 
-
 import scala.{specialized => spec}
 import breeze.generic._
 import breeze.linalg.support._
@@ -54,12 +53,11 @@ import breeze.macros._
  * @param length number of elements
  */
 @SerialVersionUID(1L)
-class DenseVector[@spec(Double, Int, Float, Long) V](
-    val data: Array[V],
-    val offset: Int,
-    val stride: Int,
-    val length: Int)
-    extends StorageVector[V]
+class DenseVector[@spec(Double, Int, Float, Long) V](val data: Array[V],
+                                                     val offset: Int,
+                                                     val stride: Int,
+                                                     val length: Int
+) extends StorageVector[V]
     with VectorLike[V, DenseVector[V]]
     with Serializable {
   def this(data: Array[V]) = this(data, 0, 1, data.length)
@@ -247,7 +245,8 @@ class DenseVector[@spec(Double, Int, Float, Long) V](
   }
 
   /** Returns true if this overlaps any content with the other vector */
-  private[linalg] def overlaps(other: DenseVector[V]): Boolean = (this.data eq other.data) && RangeUtils.overlaps(footprint, other.footprint)
+  private[linalg] def overlaps(other: DenseVector[V]): Boolean =
+    (this.data eq other.data) && RangeUtils.overlaps(footprint, other.footprint)
 
   private def footprint: Range = {
     if (length == 0) {
@@ -276,10 +275,10 @@ object DenseVector extends VectorConstructors[DenseVector] {
     // ensure we get specialized implementations even from non-specialized calls
     (values: AnyRef) match {
       case v: Array[Double] => new DenseVector(v).asInstanceOf[DenseVector[V]]
-      case v: Array[Float] => new DenseVector(v).asInstanceOf[DenseVector[V]]
-      case v: Array[Int] => new DenseVector(v).asInstanceOf[DenseVector[V]]
-      case v: Array[Long] => new DenseVector(v).asInstanceOf[DenseVector[V]]
-      case _ => new DenseVector(values)
+      case v: Array[Float]  => new DenseVector(v).asInstanceOf[DenseVector[V]]
+      case v: Array[Int]    => new DenseVector(v).asInstanceOf[DenseVector[V]]
+      case v: Array[Long]   => new DenseVector(v).asInstanceOf[DenseVector[V]]
+      case _                => new DenseVector(values)
     }
   }
 
@@ -383,10 +382,11 @@ object DenseVector extends VectorConstructors[DenseVector] {
   /**
    * Vertical concatenation of two or more column vectors into one large vector.
    */
-  def vertcat[V](vectors: DenseVector[V]*)(
-      implicit canSet: OpSet.InPlaceImpl2[DenseVector[V], DenseVector[V]],
-      vman: ClassTag[V],
-      zero: Zero[V]): DenseVector[V] = {
+  def vertcat[V](vectors: DenseVector[V]*)(implicit
+    canSet: OpSet.InPlaceImpl2[DenseVector[V], DenseVector[V]],
+    vman: ClassTag[V],
+    zero: Zero[V]
+  ): DenseVector[V] = {
     val size = vectors.foldLeft(0)(_ + _.size)
     val result = zeros[V](size)
     var offset = 0
@@ -408,8 +408,9 @@ object DenseVector extends VectorConstructors[DenseVector] {
 
   implicit def canCopyDenseVector[V: ClassTag]: CanCopy[DenseVector[V]] = DenseVectorDeps.canCopyDenseVector[V]
 
-  implicit def DV_canMapValues[@specialized(Int, Float, Double) V, @specialized(Int, Float, Double) V2](
-      implicit man: ClassTag[V2]): CanMapValues[DenseVector[V], V, V2, DenseVector[V2]] = {
+  implicit def DV_canMapValues[@specialized(Int, Float, Double) V, @specialized(Int, Float, Double) V2](implicit
+    man: ClassTag[V2]
+  ): CanMapValues[DenseVector[V], V, V2, DenseVector[V2]] = {
     new DenseCanMapValues[DenseVector[V], V, V2, DenseVector[V2]] {
 
       /**Maps all key-value pairs from the given collection. */
@@ -501,7 +502,6 @@ object DenseVector extends VectorConstructors[DenseVector] {
 
   implicit def DV_scalarOf[T]: ScalarOf[DenseVector[T], T] = ScalarOf.dummy
 
-
   class CanZipMapValuesDenseVector[@spec(Double, Int, Float, Long) V, @spec(Int, Double) RV: ClassTag]
       extends CanZipMapValues[DenseVector[V], V, RV, DenseVector[RV]] {
     def create(length: Int) = DenseVector(new Array[RV](length))
@@ -540,18 +540,18 @@ object DenseVector extends VectorConstructors[DenseVector] {
       result
     }
 
-    override def mapActive(from: DenseVector[V], from2: DenseVector[V], fn: ((Int), V, V) => RV): DenseVector[RV] = {
+    override def mapActive(from: DenseVector[V], from2: DenseVector[V], fn: (Int, V, V) => RV): DenseVector[RV] = {
       map(from, from2, fn)
     }
   }
 
   implicit def zipMapKV[V, R: ClassTag]: CanZipMapKeyValuesDenseVector[V, R] = new CanZipMapKeyValuesDenseVector[V, R]
 
-
   // this produces bad spaces for builtins (inefficient because of bad implicit lookup)
-  implicit def space[E](
-      implicit field: Field[E],
-      man: ClassTag[E]): MutableFiniteCoordinateField[DenseVector[E], Int, E] = {
+  implicit def space[E](implicit
+    field: Field[E],
+    man: ClassTag[E]
+  ): MutableFiniteCoordinateField[DenseVector[E], Int, E] = {
     import field._
     implicit val cmv: CanMapValues[DenseVector[E], E, E, DenseVector[E]] = DenseVector.DV_canMapValues[E, E]
     MutableFiniteCoordinateField.make[DenseVector[E], Int, E]
@@ -597,15 +597,15 @@ object DenseVector extends VectorConstructors[DenseVector] {
 
     @throws(classOf[ObjectStreamException])
     def readResolve(): Object = {
-      data match { //switch to make specialized happy
-        case x: Array[Int] => new DenseVector(x, offset, stride, length)
-        case x: Array[Long] => new DenseVector(x, offset, stride, length)
+      data match { // switch to make specialized happy
+        case x: Array[Int]    => new DenseVector(x, offset, stride, length)
+        case x: Array[Long]   => new DenseVector(x, offset, stride, length)
         case x: Array[Double] => new DenseVector(x, offset, stride, length)
-        case x: Array[Float] => new DenseVector(x, offset, stride, length)
-        case x: Array[Short] => new DenseVector(x, offset, stride, length)
-        case x: Array[Byte] => new DenseVector(x, offset, stride, length)
-        case x: Array[Char] => new DenseVector(x, offset, stride, length)
-        case x: Array[_] => new DenseVector(x, offset, stride, length)
+        case x: Array[Float]  => new DenseVector(x, offset, stride, length)
+        case x: Array[Short]  => new DenseVector(x, offset, stride, length)
+        case x: Array[Byte]   => new DenseVector(x, offset, stride, length)
+        case x: Array[Char]   => new DenseVector(x, offset, stride, length)
+        case x: Array[_]      => new DenseVector(x, offset, stride, length)
       }
 
     }

@@ -38,7 +38,7 @@ object CanZipAndTraverseValues {
       if (arr.length != arr2.length) {
         throw new IllegalArgumentException("Arrays to be visited must have same size")
       }
-      cforRange (0 until arr.length) { i =>
+      cforRange(0 until arr.length) { i =>
         visit(arr(i), arr2(i))
       }
     }

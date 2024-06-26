@@ -6,6 +6,6 @@ object Scala3Compat {
 
   def Conversion[T, U](f: T => U): Conversion[T, U] = f
 
-  def given_Conversion_T_U[T, U](implicit ev: T<:<U): Conversion[T, U] = ev
+  def given_Conversion_T_U[T, U](implicit ev: T <:< U): Conversion[T, U] = ev
 
 }

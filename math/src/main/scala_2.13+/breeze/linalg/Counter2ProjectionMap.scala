@@ -1,8 +1,9 @@
 package breeze.linalg
 
-private class Counter2ProjectionMap[K1, K2, V](counter: Counter2[K1, K2, V], col: K2) extends scala.collection.mutable.Map[K1, V] {
+private class Counter2ProjectionMap[K1, K2, V](counter: Counter2[K1, K2, V], col: K2)
+    extends scala.collection.mutable.Map[K1, V] {
   def addOne(elem: (K1, V)) = {
-    counter.data(elem._1)(col) = (elem._2)
+    counter.data(elem._1)(col) = elem._2
     this
   }
   override def iterator = for ((k1, map) <- counter.data.iterator; v <- map.get(col)) yield (k1, v)

@@ -52,7 +52,7 @@ package object polynomial {
         var result = DenseMatrix.eye[Double](n) * coeffs(i)
         while (i > 0) {
           i -= 1
-          result = result * v //WILDLY INEFFICIENT, FIGURE OUT IN PLACE MULTIPLY
+          result = result * v // WILDLY INEFFICIENT, FIGURE OUT IN PLACE MULTIPLY
           val c = coeffs(i)
           cforRange(0 until n)(i => {
             result.update(i, i, result(i, i) + c)

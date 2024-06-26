@@ -19,7 +19,7 @@ package distributions
 
 import breeze.numerics._
 import breeze.optimize.DiffFunction
-import math.{Pi, log1p}
+import math.{log1p, Pi}
 
 /**
  * Represents a Gaussian distribution over a single real variable.
@@ -132,7 +132,7 @@ object Gaussian extends ExponentialFamily[Gaussian, Double] with ContinuousDistr
         val gradientSig = n * (-(variance + mean * mean) / sigma2 / sigma2 / 2
           + mean * mu / sigma2 / sigma2
           - mu * mu / sigma2 / sigma2 / 2
-          + .5 / (sigma2))
+          + .5 / sigma2)
         (objective, (gradientMu, gradientSig))
       }
     }
