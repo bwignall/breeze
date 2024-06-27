@@ -18,9 +18,8 @@
 
 package breeze.linalg
 
-import breeze.benchmark.{MyRunner, BreezeBenchmark}
+import breeze.benchmark.{BreezeBenchmark, MyRunner}
 import breeze.macros._
-import breeze.linalg.DenseVector
 
 /**
  * Created by dlwh on 8/14/15.
@@ -31,9 +30,8 @@ class DenseMulScalarBenchmark extends BreezeBenchmark {
   val dv, dv2 = DenseVector.rand[Double](10000)
 
   def timeSmallDVMulScalar(reps: Int): DenseVector[Double] = {
-    var sum = 0.0
     var q = dv2
-    cforRange(0 until reps) { rep =>
+    cforRange(0 until reps) { _ =>
       q = dv *:* q
     }
     q
@@ -42,7 +40,7 @@ class DenseMulScalarBenchmark extends BreezeBenchmark {
   def timeSmallDVInlineRange(reps: Int): DenseVector[Double] = {
     var result = new Array[Double](dv.length)
     var b = dv2
-    cforRange(0 until reps) { rep =>
+    cforRange(0 until reps) { _ =>
       val ad = dv.data
       val bd = b.data
       cforRange(0 until dv.length) { i =>
@@ -58,7 +56,7 @@ class DenseMulScalarBenchmark extends BreezeBenchmark {
     val dv = this.dv.data
     var dv2 = this.dv2.data
     var result = new Array[Double](dv.length)
-    cforRange(0 until reps) { rep =>
+    cforRange(0 until reps) { _ =>
       result = new Array[Double](dv.length)
       result(0) += dv2(0) * dv(0)
       result(1) += dv2(1) * dv(1)
