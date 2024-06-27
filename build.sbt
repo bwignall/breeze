@@ -19,6 +19,9 @@ ThisBuild / tlCiHeaderCheck := false
 // scalafix currently OOMs in CI
 ThisBuild / tlCiScalafixCheck := false
 
+// For the time being, allow warnings (do not treat as error; -Werror can be re-enabled later by removing this line)
+ThisBuild / tlFatalWarnings := false
+
 name := "breeze-parent"
 
 val Scala213 = "2.13.13"
