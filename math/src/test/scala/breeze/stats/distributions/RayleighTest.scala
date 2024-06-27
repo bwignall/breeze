@@ -20,6 +20,8 @@ import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
+import breeze.stats.distributions.Rayleigh
+import org.scalacheck.Arbitrary
 
 class RayleighTest
     extends AnyFunSuite
@@ -35,7 +37,7 @@ class RayleighTest
 
   def fromDouble(x: Double) = x
 
-  implicit def arbDistr = Arbitrary {
+  implicit def arbDistr: Arbitrary[Rayleigh] = Arbitrary {
     for (
       scale <- arbitrary[Double].map { x =>
         math.abs(x) % 8.0 + 1.0

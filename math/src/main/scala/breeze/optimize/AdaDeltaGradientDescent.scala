@@ -49,11 +49,11 @@ class AdaDeltaGradientDescent[T](rho: Double,
     state.x + delta
   }
 
-  override def determineStepSize(state: State, f: StochasticDiffFunction[T], dir: T) = {
+  override def determineStepSize(state: State, f: StochasticDiffFunction[T], dir: T): Double = {
     defaultStepSize
   }
 
-  override protected def adjust(newX: T, newGrad: T, newVal: Double) = {
+  override protected def adjust(newX: T, newGrad: T, newVal: Double): (Double, T) = {
     newVal -> newGrad
   }
 

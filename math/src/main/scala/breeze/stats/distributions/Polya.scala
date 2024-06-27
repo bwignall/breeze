@@ -36,13 +36,13 @@ class Polya[T, @specialized(Int) I](params: T)(implicit
 ) extends DiscreteDistr[I] {
   import space._
   private val innerDirichlet = new Dirichlet(params)
-  def draw() = {
+  def draw(): I = {
     Multinomial(innerDirichlet.draw()).draw()
   }
 
-  lazy val logNormalizer = -lbeta(params)
+  lazy val logNormalizer: Double = -lbeta(params)
 
-  def probabilityOf(x: I) = math.exp(lbeta(sum(params), 1.0) - lbeta(params(x), 1.0))
+  def probabilityOf(x: I): Double = math.exp(lbeta(sum(params), 1.0) - lbeta(params(x), 1.0))
 
 //  def probabilityOf(x: T) = math.exp(logProbabilityOf(x))
 //  def logProbabilityOf(x: T) = {
@@ -61,7 +61,7 @@ object Polya {
   /**
    * Creates a new symmetric Polya of dimension k
    */
-  def sym(alpha: Double, k: Int)(implicit rand: RandBasis) = this(ArrayUtil.fillNewArray(k, alpha))
+  def sym(alpha: Double, k: Int)(implicit rand: RandBasis): Polya[DenseVector[Double],Int] = this(ArrayUtil.fillNewArray(k, alpha))
 
   /**
    * Creates a new Polya of dimension k with the given parameters

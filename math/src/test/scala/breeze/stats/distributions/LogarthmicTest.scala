@@ -32,7 +32,7 @@ class LogarthmicTest extends AnyFunSuite with Checkers with MomentsTestBase[Int]
 
   override def numFailures: Int = 4
 
-  def paramsClose(p: Double, q: Double) = {
+  def paramsClose(p: Double, q: Double): Boolean = {
     (p - q).abs / (p.abs / 2 + q.abs / 2 + 1) < 1e-1
   }
 

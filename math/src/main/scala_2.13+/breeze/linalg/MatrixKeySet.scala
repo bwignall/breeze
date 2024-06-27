@@ -8,5 +8,5 @@ private class MatrixKeySet(rows: Int, cols: Int) extends Set[(Int, Int)] {
 
   def iterator: Iterator[(Int, Int)] = for { j <- Iterator.range(0, cols); i <- Iterator.range(0, rows) } yield (i, j)
 
-  override def size = rows * cols
+  override def size: Int = rows * cols
 }

@@ -45,14 +45,14 @@ object Implicits extends DoubleImplicits with IteratorImplicits {
 
 trait DoubleImplicits {
   implicit class RichDouble(x: Double) {
-    def closeTo(y: Double, tol: Double = 1e-5) = {
+    def closeTo(y: Double, tol: Double = 1e-5): Boolean = {
       math.abs(x - y) / (math.abs(x) + math.abs(y) + 1e-10) < tol;
     }
-    def isDangerous = x.isNaN || x.isInfinite
+    def isDangerous: Boolean = x.isNaN || x.isInfinite
   }
 
   implicit class RichFloat(x: Float) {
-    def closeTo(y: Float, tol: Double = 1e-5) = {
+    def closeTo(y: Float, tol: Double = 1e-5): Boolean = {
       math.abs(x - y) / (math.abs(x) + math.abs(y) + 1e-10) < tol;
     }
     def isDangerous: Boolean = x.isNaN || x.isInfinite
@@ -63,7 +63,7 @@ trait IteratorImplicits {
   class RichIterator[T](iter: Iterator[T]) {
     def tee(f: T => Unit): Iterator[T] = new Iterator[T] {
       def next(): T = {
-        val n = iter.next;
+        val n = iter.next();
         f(n);
         n
       }
@@ -77,7 +77,7 @@ trait IteratorImplicits {
       var done = false
       def next(): T = {
         if (done) throw new NoSuchElementException()
-        val n = iter.next;
+        val n = iter.next();
         done = f(n)
         n
       }

@@ -26,9 +26,9 @@ import matchers.should.Matchers._
 class MultinomialTest extends AnyFunSuite with Checkers {
   // can't use the standard moment tester tools for a categorial distribution, so let's just roll our ownkj
 
-  def TestDist = DenseVector[Double](0.2, 0.5, 0.3)
-  def TestParams = TestDist * 2.0
-  def NSamples = 1e7.toInt
+  def TestDist: DenseVector[Double] = DenseVector[Double](0.2, 0.5, 0.3)
+  def TestParams: DenseVector[Double] = TestDist * 2.0
+  def NSamples: Int = 1e7.toInt
   implicit val randBasis: RandBasis = RandBasis.mt0
 
   test("multinomial with naive sampling") {

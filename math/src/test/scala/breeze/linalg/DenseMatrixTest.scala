@@ -677,7 +677,7 @@ class DenseMatrixTest extends AnyFunSuite with Checkers with DoubleImplicits wit
 
     val sl2t = area.t(0 until area.cols, 1 until area.rows)
     assert(sl2t.offset === area.offset + area.majorStride,
-           sl2t.data(area.offset + area.majorStride) + " " + area.offset
+           "" + (sl2t.data(area.offset + area.majorStride)) + " " + area.offset
     )
     assert(sl2t.t === DenseMatrix((3, 4, 5, 6, 7), (3, 4, 5, 6, 7)))
 

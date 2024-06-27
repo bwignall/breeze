@@ -463,7 +463,7 @@ object MutablizingAdaptor {
 
   case class Ref[T](var value: T) extends NumericOps[Ref[T]] {
     def repr: Ref[T] = this
-    def map[U](f: T => U) = Ref(f(value))
+    def map[U](f: T => U): Ref[U] = Ref(f(value))
   }
 
   case class VectorRingAdaptor[V, S](val underlying: VectorRing[V, S])(implicit

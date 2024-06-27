@@ -58,12 +58,12 @@ class FourierTrTest extends AnyFunSuite {
 
   val testNormThreshold = 1e-12
 
-  val test16 = DenseVector[Double](0.814723686393179, 0.905791937075619, 0.126986816293506, 0.913375856139019,
+  val test16: DenseVector[Double] = DenseVector[Double](0.814723686393179, 0.905791937075619, 0.126986816293506, 0.913375856139019,
                                    0.63235924622541, 0.0975404049994095, 0.278498218867048, 0.546881519204984,
                                    0.957506835434298, 0.964888535199277, 0.157613081677548, 0.970592781760616,
                                    0.957166948242946, 0.485375648722841, 0.8002804688888, 0.141886338627215)
 
-  val test16C = DenseVector[Complex](
+  val test16C: DenseVector[Complex] = DenseVector[Complex](
     Complex(0.814723686393179, 0),
     Complex(0.905791937075619, 0),
     Complex(0.126986816293506, 0),
@@ -82,7 +82,7 @@ class FourierTrTest extends AnyFunSuite {
     Complex(0.141886338627215, 0)
   )
 
-  val test16fftC = DenseVector[Complex](
+  val test16fftC: DenseVector[Complex] = DenseVector[Complex](
     Complex(9.75146832375171, 0),
     Complex(-0.0977261644584599, 0.994224442620027),
     Complex(0.248156703823313, -0.961542739609668),
@@ -101,7 +101,7 @@ class FourierTrTest extends AnyFunSuite {
     Complex(-0.0977261644584599, -0.994224442620027)
   )
 
-  val test16ifftC = DenseVector[Complex](
+  val test16ifftC: DenseVector[Complex] = DenseVector[Complex](
     Complex(0.609466770234482, 0),
     Complex(-0.00610788527865374, -0.0621390276637517),
     Complex(0.0155097939889571, 0.0600964212256043),
@@ -120,7 +120,7 @@ class FourierTrTest extends AnyFunSuite {
     Complex(-0.00610788527865374, 0.0621390276637517)
   )
 
-  val test5x5 = DenseMatrix(
+  val test5x5: DenseMatrix[Double] = DenseMatrix(
     (0.498364051982143, 0.959743958516081, 0.340385726666133, 0.585267750979777, 0.223811939491137),
     (0.751267059305653, 0.255095115459269, 0.505957051665142, 0.699076722656686, 0.890903252535799),
     (0.959291425205444, 0.547215529963803, 0.138624442828679, 0.149294005559057, 0.257508254123736),
@@ -128,7 +128,7 @@ class FourierTrTest extends AnyFunSuite {
     (0.349983765984809, 0.196595250431208, 0.251083857976031, 0.616044676146639, 0.473288848902729)
   )
 
-  val test5x5C = DenseVector[Complex](
+  val test5x5C: DenseMatrix[Complex] = DenseVector[Complex](
     Complex(0.498364051982143, 0),
     Complex(0.959743958516081, 0),
     Complex(0.340385726666133, 0),
@@ -156,7 +156,7 @@ class FourierTrTest extends AnyFunSuite {
     Complex(0.473288848902729, 0)
   ).t.reshape(5, 5).t
 
-  val test5x5fftC = DenseVector[Complex](
+  val test5x5fftC: DenseMatrix[Complex] = DenseVector[Complex](
     Complex(12.7308755393162, 0),
     Complex(1.42690914298293, 0.677101996312365),
     Complex(0.706711983513261, 0.0992583432580891),
@@ -184,7 +184,7 @@ class FourierTrTest extends AnyFunSuite {
     Complex(-1.07125334159435, 0.84510117240179)
   ).t.reshape(5, 5).t
 
-  val test5x5ifftC = DenseVector[Complex](
+  val test5x5ifftC: DenseMatrix[Complex] = DenseVector[Complex](
     Complex(0.509235021572647, 0),
     Complex(0.057076365719317, -0.0270840798524946),
     Complex(0.0282684793405304, -0.00397033373032357),
@@ -220,8 +220,8 @@ class FourierTrTest extends AnyFunSuite {
   }
 
   test("fourierShift/iFourierShift") {
-    val dvOdd = DenseVector.tabulate(5)((i: Int) => i)
-    val dvEven = DenseVector.tabulate(6)((i: Int) => i)
+    val dvOdd = DenseVector.tabulate(5)(((i: Int)) => i)
+    val dvEven = DenseVector.tabulate(6)(((i: Int)) => i)
     assert(fourierShift(dvOdd) == DenseVector(3, 4, 0, 1, 2))
     assert(iFourierShift(dvOdd) == DenseVector(2, 3, 4, 0, 1))
     assert(fourierShift(dvEven) == DenseVector(3, 4, 5, 0, 1, 2))

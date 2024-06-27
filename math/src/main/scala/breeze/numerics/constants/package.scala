@@ -136,7 +136,7 @@ package object constants {
 
   /** ALIAS FOR [[PlanckConstant]]/(2Pi)
    */
-  lazy val hBar = PlanckConstant / 2d / Pi
+  lazy val hBar: Double = PlanckConstant / 2d / Pi
 
   /** [C]
    * @see <a href="http://physics.nist.gov/cgi-bin/cuu/Value?e">http://physics.nist.gov/cgi-bin/cuu/Value?e</a>
@@ -253,28 +253,28 @@ package object constants {
   // <editor-fold defaultstate="collapsed" desc=" Binary Prefixes ">
 
   /**Binary prefix for pow(2, 10)*/
-  val kibi = pow(2.0, 10d)
+  val kibi: Double = pow(2.0, 10d)
 
   /**Binary prefix for pow(2, 20)*/
-  val mebi = pow(2.0, 20d)
+  val mebi: Double = pow(2.0, 20d)
 
   /**Binary prefix for pow(2, 30)*/
-  val gibi = pow(2.0, 30d)
+  val gibi: Double = pow(2.0, 30d)
 
   /**Binary prefix for pow(2, 40)*/
-  val tebi = pow(2.0, 40d)
+  val tebi: Double = pow(2.0, 40d)
 
   /**Binary prefix for pow(2, 50)*/
-  val pebi = pow(2.0, 50d)
+  val pebi: Double = pow(2.0, 50d)
 
   /**Binary prefix for pow(2, 60)*/
-  val exbi = pow(2.0, 60d)
+  val exbi: Double = pow(2.0, 60d)
 
   /**Binary prefix for pow(2, 70)*/
-  val zebi = pow(2.0, 70d)
+  val zebi: Double = pow(2.0, 70d)
 
   /**Binary prefix for pow(2, 80)*/
-  val yobi = pow(2.0, 80d)
+  val yobi: Double = pow(2.0, 80d)
 
   // </editor-fold>
 

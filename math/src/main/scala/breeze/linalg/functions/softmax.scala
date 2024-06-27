@@ -31,7 +31,7 @@ object softmax extends UFunc {
    * @param length
    * @return
    */
-  def array(arr: Array[Double], length: Int) = {
+  def array(arr: Array[Double], length: Int): Double = {
     val m = max.array(arr, length)
     if (m.isInfinite) {
       m

@@ -42,7 +42,7 @@ class GaussianTest
     } yield (mean, std)
   }
 
-  def paramsClose(p: (Double, Double), b: (Double, Double)) = {
+  def paramsClose(p: (Double, Double), b: (Double, Double)): Boolean = {
     val y1 = (p._1 - b._1).abs / (p._1.abs / 2 + b._1.abs / 2 + 1) < 1e-1
     val y2 = (p._2 - b._2).abs / (p._2.abs / 2 + b._2.abs / 2 + 1) < 1e-1
     y1 && y2
@@ -60,7 +60,7 @@ class GaussianTest
   test("#295, cdf/inverseCdf broken") {
     val gaussian = Gaussian(0, 1)
     assert((gaussian.cdf(gaussian.inverseCdf(0.1)) - 0.1).abs <= 1e-3,
-           gaussian.cdf(gaussian.inverseCdf(0.1)) + " was not close to " + 0.1
+           "" + (gaussian.cdf(gaussian.inverseCdf(0.1))) + " was not close to " + 0.1
     )
   }
 

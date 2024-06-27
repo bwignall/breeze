@@ -39,7 +39,7 @@ case class Beta(a: Double, b: Double)(implicit rand: RandBasis)
   require(a > 0.0)
   require(b > 0.0)
 
-  override def unnormalizedLogPdf(x: Double) = {
+  override def unnormalizedLogPdf(x: Double): Double = {
     require(x >= 0)
     require(x <= 1)
     (a - 1) * log(x) + (b - 1) * log(1 - x)
@@ -65,7 +65,7 @@ case class Beta(a: Double, b: Double)(implicit rand: RandBasis)
     new BetaDistribution(a, b).probability(x, y)
   }
 
-  lazy val logNormalizer = lgamma(a) + lgamma(b) - lgamma(a + b)
+  lazy val logNormalizer: Double = lgamma(a) + lgamma(b) - lgamma(a + b)
 
   private val aGamma = new Gamma(a, 1)(rand)
   private val bGamma = new Gamma(b, 1)(rand)
@@ -117,10 +117,10 @@ case class Beta(a: Double, b: Double)(implicit rand: RandBasis)
     }
   }
 
-  def mean = a / (a + b)
-  def variance = (a * b) / ((a + b) * (a + b) * (a + b + 1))
-  def mode = (a - 1) / (a + b - 2)
-  def entropy = logNormalizer - (a - 1) * digamma(a) - (b - 1) * digamma(b) + (a + b - 2) * digamma(a + b)
+  def mean: Double = a / (a + b)
+  def variance: Double = (a * b) / ((a + b) * (a + b) * (a + b + 1))
+  def mode: Double = (a - 1) / (a + b - 2)
+  def entropy: Double = logNormalizer - (a - 1) * digamma(a) - (b - 1) * digamma(b) + (a + b - 2) * digamma(a + b)
 
   // Probability that x < a <= Y
   override def cdf(x: Double): Double = {
@@ -146,9 +146,9 @@ object Beta extends ExponentialFamily[Beta, Double] with ContinuousDistributionU
     }
   }
 
-  def emptySufficientStatistic = SufficientStatistic(0, 0, 0)
+  def emptySufficientStatistic: SufficientStatistic = SufficientStatistic(0, 0, 0)
 
-  def sufficientStatisticFor(t: Double) = SufficientStatistic(1, math.log(t), math.log1p(-t))
+  def sufficientStatisticFor(t: Double): SufficientStatistic = SufficientStatistic(1, math.log(t), math.log1p(-t))
 
   def mle(stats: SufficientStatistic): (Double, Double) = {
     import breeze.linalg.DenseVector.TupleIsomorphisms._

@@ -497,7 +497,7 @@ object ArrayBuilder {
       this
     }
 
-    def result() = {
+    def result(): Array[Unit] = {
       val ans = new Array[Unit](size)
       var i = 0
       while (i < size) { ans(i) = (); i += 1 }

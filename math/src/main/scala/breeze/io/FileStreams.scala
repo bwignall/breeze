@@ -35,7 +35,7 @@ import java.util.zip.GZIPOutputStream;
 object FileStreams {
 
   /** Use a 16k buffer size. */
-  val BUFFER_SIZE = 16 * 1024;
+  val BUFFER_SIZE: Int = 16 * 1024;
 
   /**
    * Gets an input stream with proper buffering (minimum 16k) for the given

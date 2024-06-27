@@ -20,6 +20,8 @@ import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
+import breeze.stats.distributions.Uniform
+import org.scalacheck.Arbitrary
 
 class UniformTest
     extends AnyFunSuite
@@ -34,7 +36,7 @@ class UniformTest
 
   def fromDouble(x: Double) = x
 
-  implicit def arbDistr = Arbitrary {
+  implicit def arbDistr: Arbitrary[Uniform] = Arbitrary {
     for (
       a <- arbitrary[Double].map { _.abs % 10000.0 };
       b <- arbitrary[Double].map { _.abs % 10000.0 }

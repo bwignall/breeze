@@ -17,7 +17,7 @@ class RangeUtilsTest extends AnyFunSuite with Checkers {
     }
   }
 
-  def exhaustiveCheck(a: Range, b: Range) = {
+  def exhaustiveCheck(a: Range, b: Range): Boolean = {
     RangeUtils.overlaps(a, b) == a.toSet.intersect(b.toSet).nonEmpty
   }
 

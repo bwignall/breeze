@@ -21,7 +21,7 @@ sealed trait RandomAccessFileTest extends AnyFunSuite {
 
   type RAF = RandomAccessFile
 
-  def getResource(fileNameHead: String) = File.createTempFile(fileNameHead, ".bin")
+  def getResource(fileNameHead: String): File = File.createTempFile(fileNameHead, ".bin")
 
   //// Writing
 

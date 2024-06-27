@@ -468,7 +468,7 @@ final class SparseArray[@specialized(Double, Int, Float, Long) V](var index: Arr
 }
 
 object SparseArray {
-  def apply[@specialized(Int, Float, Double) T: ClassTag: Zero](values: T*) = {
+  def apply[@specialized(Int, Float, Double) T: ClassTag: Zero](values: T*): SparseArray[T] = {
     val rv = new SparseArray[T](Array.range(0, values.length),
                                 values.toArray,
                                 values.length,

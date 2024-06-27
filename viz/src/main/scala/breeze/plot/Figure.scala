@@ -22,13 +22,13 @@ import collection.mutable.ArrayBuffer
  */
 class Figure(name: String, private var rows_ : Int = 1, private var cols_ : Int = 1) {
 
-  protected val plots = ArrayBuffer[Option[Plot]]()
+  protected val plots: ArrayBuffer[Option[Plot]] = ArrayBuffer[Option[Plot]]()
 
   private var width_ = 600
   private var height_ = 400
 
   /**Selects the given subplot.  */
-  def subplot(i: Int) = selectPlot(i)
+  def subplot(i: Int): Plot = selectPlot(i)
 
   def clearPlot(i: Int): Unit = {
     if (i < plots.length) plots(i) = None
@@ -112,7 +112,7 @@ class Figure(name: String, private var rows_ : Int = 1, private var cols_ : Int 
   }
 
   /** Redraws the figure */
-  def refresh() = {
+  def refresh(): Unit = {
     while (plots.length < rows * cols) {
       plots += None
     }

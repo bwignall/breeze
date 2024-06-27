@@ -19,7 +19,7 @@ class ApproximateGradientFunctionTest extends OptimizeTestBase {
     }
     val approxF = new ApproximateGradientFunction[Int, DenseVector[Double]](f)
 
-    check(Prop.forAll { (x: DenseVector[Double]) =>
+    check(Prop.forAll { ((x: DenseVector[Double])) =>
       val ap = approxF.gradientAt(x)
       val tr = f.gradientAt(x)
       assert(norm(ap - tr, 2) < 1e-4 * math.max(norm(ap, 2), 1), ap.toString + " " + tr)

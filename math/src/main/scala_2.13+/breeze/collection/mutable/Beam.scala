@@ -43,7 +43,7 @@ class Beam[T](val maxSize: Int)(implicit override protected val ordering: Orderi
 
   override def size = queue.size
 
-  def min = {
+  def min: T = {
     if (queue.isEmpty) {
       throw new NoSuchElementException
     } else {

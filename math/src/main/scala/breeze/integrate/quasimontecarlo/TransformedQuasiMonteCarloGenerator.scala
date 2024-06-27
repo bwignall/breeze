@@ -21,7 +21,7 @@ import breeze.stats.distributions.RandBasis
 
 trait ProvidesTransformedQuasiMonteCarlo {
 
-  def quasiMonteCarloIntegrate(f: Array[Double] => Double)(variables: QuasiRandomVariableSpec*)(numSamples: Long) = {
+  def quasiMonteCarloIntegrate(f: Array[Double] => Double)(variables: QuasiRandomVariableSpec*)(numSamples: Long): Double = {
     val generator = new TransformedQuasiMonteCarloGenerator(variables: _*)
     var fSum: Double = 0
 
@@ -62,7 +62,7 @@ trait ProvidesTransformedQuasiMonteCarlo {
       extends TransformingQuasiRandomVariableSpec {
     val numInputs = 1
     def transform(x: Array[Double], position: Int): Double = icdfProvider.inverseCdf(x(position))
-    def copy = DistributionRandomVariableSpec(icdfProvider)
+    def copy: QuasiRandomVariableSpec = DistributionRandomVariableSpec(icdfProvider)
   }
 
   trait RejectionSampledGammaQuasiRandomVariable extends RejectionQuasiRandomVariableSpec
@@ -109,7 +109,7 @@ trait ProvidesTransformedQuasiMonteCarlo {
 
     def compute(rvs: Array[Double], position: Int): Double = theta * x
 
-    def copy = GammaQuasiRandomVariableSpecAlphaLeq1(alpha, theta)
+    def copy: QuasiRandomVariableSpec = GammaQuasiRandomVariableSpecAlphaLeq1(alpha, theta)
   }
 
   case class GammaQuasiRandomVariableSpecAlphaGeq1(alpha: Double, theta: Double)
@@ -141,16 +141,16 @@ trait ProvidesTransformedQuasiMonteCarlo {
 
     def compute(rvs: Array[Double], position: Int): Double = theta * x
 
-    def copy = GammaQuasiRandomVariableSpecAlphaGeq1(alpha, theta)
+    def copy: QuasiRandomVariableSpec = GammaQuasiRandomVariableSpecAlphaGeq1(alpha, theta)
   }
 
   class TransformedQuasiMonteCarloGenerator(val inVariables: List[QuasiRandomVariableSpec])
       extends QuasiMonteCarloGenerator {
     def this(inVariables: QuasiRandomVariableSpec*) = this(inVariables.toList)
-    val variables = inVariables.map(x => x.copy).toArray
+    val variables: Array[QuasiRandomVariableSpec] = inVariables.map(x => x.copy).toArray
 
     val dimension = variables.size
-    val inputDimension = variables.map(x => x.numInputs).sum
+    val inputDimension: Int = variables.map(x => x.numInputs).sum
     private val baseGenerator = new BaseUniformHaltonGenerator(inputDimension)
 
     private val currentValue: Array[Double] = new Array[Double](dimension)
@@ -162,7 +162,7 @@ trait ProvidesTransformedQuasiMonteCarlo {
     def numRejections: Long = rejectedCount.sum
     def numRejectionsByVariable: Array[Long] = rejectedCount.clone
 
-    def getNextUnsafe = {
+    def getNextUnsafe: Array[Double] = {
       var accepted = false
       while (!accepted) {
         accepted = true

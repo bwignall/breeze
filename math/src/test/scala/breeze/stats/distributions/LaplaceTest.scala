@@ -21,6 +21,8 @@ import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
+import breeze.stats.distributions.Laplace
+import org.scalacheck.Arbitrary
 
 class LaplaceTest
     extends AnyFunSuite
@@ -36,7 +38,7 @@ class LaplaceTest
 
   def fromDouble(x: Double) = x
 
-  implicit def arbDistr = Arbitrary {
+  implicit def arbDistr: Arbitrary[Laplace] = Arbitrary {
     for (
       location <- arbitrary[Double].map { x =>
         math.abs(x) % 1000.0 + 1.1

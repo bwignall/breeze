@@ -36,8 +36,8 @@ object Halton {
     nums.map(x => x.toInt).toArray
   }
 
-  lazy val PRIMES = readClasspathFileToIntArray("primes.txt")
-  lazy val EA_PERMS = readClasspathFileToIntArray("quasimontecarlo_halton_ea_perms.txt")
+  lazy val PRIMES: Array[Int] = readClasspathFileToIntArray("primes.txt")
+  lazy val EA_PERMS: Array[Int] = readClasspathFileToIntArray("quasimontecarlo_halton_ea_perms.txt")
 
   def integrate(func: Array[Double] => Double)(dimension: Int, numSamples: Long): Double = {
     val gen = new BaseUniformHaltonGenerator(dimension)
@@ -85,7 +85,7 @@ class BaseUniformHaltonGenerator(val dimension: Int) extends QuasiMonteCarloGene
   private var generatedCount: Long = 0
   def numGenerated: Long = generatedCount
 
-  def getNextUnsafe = {
+  def getNextUnsafe: Array[Double] = {
     cforRange(0 until dimension) { j =>
       var lIndex: Int = 0
       while ((lIndex < counters(j).size()) && (counters(j).get(lIndex) == (bases(j) - 1))) {
@@ -122,7 +122,7 @@ class BaseUniformHaltonGenerator(val dimension: Int) extends QuasiMonteCarloGene
     private var storage: Array[Int] = new Array[Int](initialSize)
     private var actualSize: Int = 0
 
-    def add(x: Int) = {
+    def add(x: Int): Unit = {
       if (actualSize == storage.size) {
         val oldStorage = storage
         storage = new Array[Int](oldStorage.size * 2)
@@ -135,7 +135,7 @@ class BaseUniformHaltonGenerator(val dimension: Int) extends QuasiMonteCarloGene
 
     def get(i: Int): Int = storage(i)
 
-    def set(i: Int, x: Int) = {
+    def set(i: Int, x: Int): Unit = {
       storage(i) = x
     }
   }

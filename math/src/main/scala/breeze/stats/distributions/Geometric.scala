@@ -14,7 +14,7 @@ case class Geometric(p: Double)(implicit rand: RandBasis) extends DiscreteDistr[
   require(p >= 0)
   require(p <= 1)
 
-  def draw() = {
+  def draw(): Int = {
     // from "Random Number Generation and Monte Carlo Methods"
     if (p < 1.0 / 3.0) math.ceil(math.log(rand.uniform.draw()) / math.log(1 - p)).toInt
     else {
@@ -27,16 +27,16 @@ case class Geometric(p: Double)(implicit rand: RandBasis) extends DiscreteDistr[
     }
   }
 
-  def probabilityOf(x: Int) = math.pow(1 - p, x) * p
+  def probabilityOf(x: Int): Double = math.pow(1 - p, x) * p
 
-  def mean = 1 / p
+  def mean: Double = 1 / p
 
-  def variance = (1 - p) / (p * p)
+  def variance: Double = (1 - p) / (p * p)
 
   def mode = 1
-  def entropy = (-(1 - p) * math.log(1 - p) - p * math.log(p)) / p
+  def entropy: Double = (-(1 - p) * math.log(1 - p) - p * math.log(p)) / p
 
-  override def toString() = ScalaRunTime._toString(this)
+  override def toString(): String = ScalaRunTime._toString(this)
 }
 
 object Geometric extends ExponentialFamily[Geometric, Int] with HasConjugatePrior[Geometric, Int] {
@@ -48,13 +48,13 @@ object Geometric extends ExponentialFamily[Geometric, Int] with HasConjugatePrio
     def *(weight: Double) = SufficientStatistic(sum * weight, n * weight)
   }
 
-  def emptySufficientStatistic = SufficientStatistic(0, 0)
+  def emptySufficientStatistic: SufficientStatistic = SufficientStatistic(0, 0)
 
-  def sufficientStatisticFor(t: Int) = SufficientStatistic(t, 1)
+  def sufficientStatisticFor(t: Int): SufficientStatistic = SufficientStatistic(t, 1)
 
-  def mle(stats: SufficientStatistic) = stats.n / stats.sum
+  def mle(stats: SufficientStatistic): Parameter = stats.n / stats.sum
 
-  def likelihoodFunction(stats: SufficientStatistic) = new DiffFunction[Geometric.Parameter] {
+  def likelihoodFunction(stats: SufficientStatistic): DiffFunction[Parameter] = new DiffFunction[Geometric.Parameter] {
     def calculate(p: Geometric.Parameter) = {
       val obj = stats.n * math.log(p) + stats.sum * math.log(1 - p)
       val grad = stats.n / p - stats.sum / (1 - p)
@@ -70,7 +70,7 @@ object Geometric extends ExponentialFamily[Geometric, Int] with HasConjugatePrio
 
   def predictive(parameter: conjugateFamily.Parameter)(implicit basis: RandBasis) = ???
 
-  def posterior(prior: conjugateFamily.Parameter, evidence: TraversableOnce[Int]) = {
+  def posterior(prior: conjugateFamily.Parameter, evidence: TraversableOnce[Int]): (Double, Double) = {
     evidence.foldLeft(prior) { (acc, x) =>
       (acc._1 + 1, acc._2 + x)
     }

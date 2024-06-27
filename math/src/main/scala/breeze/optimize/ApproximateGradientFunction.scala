@@ -16,7 +16,7 @@ class ApproximateGradientFunction[K, T](f: T => Double, epsilon: Double = 1e-5)(
   view: T <:< Tensor[K, Double],
   copy: CanCopy[T]
 ) extends DiffFunction[T] {
-  override def valueAt(x: T) = f(x)
+  override def valueAt(x: T): Double = f(x)
 
   def calculate(x: T): (Double, T) = {
     val fx = f(x)
@@ -30,7 +30,7 @@ class ApproximateGradientFunction[K, T](f: T => Double, epsilon: Double = 1e-5)(
     (fx, grad)
   }
 
-  def calculateAndPrint(x: T, trueGrad: T) = {
+  def calculateAndPrint(x: T, trueGrad: T): (Double, T) = {
     val fx = f(x)
     val grad = zeros(x)
     val xx = copy(x)

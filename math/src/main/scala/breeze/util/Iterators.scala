@@ -59,7 +59,7 @@ object Iterators {
       }
 
       def get(iter: Iterator[T]): Option[T] =
-        if (iter.hasNext) Some(iter.next) else None
+        if (iter.hasNext) Some(iter.next()) else None
     }
 
 }

@@ -20,6 +20,8 @@ import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
+import breeze.stats.distributions.StudentsT
+import org.scalacheck.Arbitrary
 
 class StudentsTTest
     extends AnyFunSuite
@@ -35,7 +37,7 @@ class StudentsTTest
 
   def fromDouble(x: Double) = x
 
-  implicit def arbDistr = Arbitrary {
+  implicit def arbDistr: Arbitrary[StudentsT] = Arbitrary {
     for (
       dof <- arbitrary[Double].map { x =>
         math.abs(x) % 1000.0 + 3.0

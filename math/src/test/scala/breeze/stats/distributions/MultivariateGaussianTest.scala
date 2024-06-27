@@ -61,7 +61,7 @@ class MultivariateGaussianTest extends AnyFunSuite with Checkers {
   val numSamples = 5000
 
   test("mean") {
-    check(Prop.forAll { (distr: MultivariateGaussian) =>
+    check(Prop.forAll { ((distr: MultivariateGaussian)) =>
       val sample = DenseVector.horzcat(distr.sample(numSamples): _*)
       val m = mean(sample(*, ::))
       if (norm(m - distr.mean, Double.PositiveInfinity) > 1e-1) {
@@ -76,7 +76,7 @@ class MultivariateGaussianTest extends AnyFunSuite with Checkers {
 
   val VARIANCE_TOLERANCE = 0.1
   test("variance") {
-    check(Prop.forAll { (distr: MultivariateGaussian) =>
+    check(Prop.forAll { ((distr: MultivariateGaussian)) =>
       // try twice, and only fail if both fail.
       // just a little more robustness...
       Iterator.range(0, 2).exists { _ =>

@@ -156,8 +156,8 @@ class DescriptiveStatsTest2 extends AnyFunSuite {
     val data = Array.fill(100000)(r.nextGaussian())
     val mav = meanAndVariance(data)
     val mav2 = meanAndVariance(data.iterator)
-    assert(breeze.numerics.closeTo(mav.mean, 0.0, 1e-2), mav.mean + " should be 0")
-    assert(breeze.numerics.closeTo(mav.variance, 1.0, 1e-2), mav.variance + " should be 1")
+    assert(breeze.numerics.closeTo(mav.mean, 0.0, 1e-2), "" + mav.mean + " should be 0")
+    assert(breeze.numerics.closeTo(mav.variance, 1.0, 1e-2), "" + mav.variance + " should be 1")
     assert(mav == mav2)
   }
 

@@ -180,7 +180,7 @@ object NonlinearMinimizer {
 
     import space._
 
-    override def calculate(x: T) = {
+    override def calculate(x: T): (Double, T) = {
       val (f, g) = primal.calculate(x)
       val scale = x - z + u
       val proxObj = f + 0.5 * rho * pow(norm(scale), 2)

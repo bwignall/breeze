@@ -21,7 +21,7 @@ class PowerMethod(maxIters: Int = 10, tolerance: Double = 1e-5) extends Serializ
   case class State private[PowerMethod] (eigenValue: Double, eigenVector: BDV, ay: BDV, iter: Int, converged: Boolean)
 
   // memory allocation for the eigen vector result
-  def normalize(ynorm: BDV, y: BDV) = {
+  def normalize(ynorm: BDV, y: BDV): DenseVector[Double] = {
     val normInit = norm(y)
     ynorm := y
     ynorm *= 1.0 / normInit
@@ -43,7 +43,7 @@ class PowerMethod(maxIters: Int = 10, tolerance: Double = 1e-5) extends Serializ
   }
 
   // in-place modification of eigen vector
-  def nextEigen(eigenVector: BDV, ay: BDV) = {
+  def nextEigen(eigenVector: BDV, ay: BDV): Double = {
     val lambda = eigenVector.dot(ay)
     eigenVector := ay
     val norm1 = norm(ay)

@@ -21,7 +21,7 @@ import scala.math.sin
  */
 abstract class FilterKernel[T] {
   val designText: String
-  override def toString = this.getClass.getSimpleName + "(): " + designText
+  override def toString: String = this.getClass.getSimpleName + "(): " + designText
 //  def toLong(): FilterKernel[Long]
 //  def toInt(): FilterKernel[Int]
 //  def toDouble(): FilterKernel[Double]
@@ -47,17 +47,17 @@ class FIRKernel1D[T](val kernel: DenseVector[T], override val multiplier: Double
   lazy val length = kernel.length
 
   /**Amount of overhang to prepend for convolution, to conserve output length.*/
-  lazy val overhangPre = (length - 1) / 2
+  lazy val overhangPre: Int = (length - 1) / 2
 
   /**Amount of overhang to append for convolution, to conserve output length.*/
-  lazy val overhangPost = length - 1 - overhangPre
+  lazy val overhangPost: Int = length - 1 - overhangPre
 
 //  override def toLong(): FIRKernel1D[Long] = FIRKernel1D[Long]( kernel.map(_.toLong), designText )
 //  override def toInt(): FIRKernel1D[Int] = FIRKernel1D[Int]( kernel.map(_.toInt), designText )
 //  override def toFloat(): FIRKernel1D[Float] = FIRKernel1D[Float]( kernel.map(_.toFloat), designText )
 //  override def toDouble(): FIRKernel1D[Double] = FIRKernel1D[Double]( kernel.map(_.toDouble), designText )
 
-  override def toString() = this.getClass.toString + " multiplier: " + multiplier + ": " + designText
+  override def toString(): String = this.getClass.toString + " multiplier: " + multiplier + ": " + designText
 }
 
 /**This immutable class will encapsulate 1D IIR kernels. Not implemented yet.*/

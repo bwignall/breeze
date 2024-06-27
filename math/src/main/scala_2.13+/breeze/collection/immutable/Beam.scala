@@ -33,7 +33,7 @@ class Beam[T](val maxSize: Int, xs: T*)(implicit o: Ordering[T])
     with StrictOptimizedIterableOps[T, Iterable, Beam[T]] {
   outer =>
   assert(maxSize >= 0)
-  val heap = trim(BinomialHeap(xs: _*))
+  val heap: BinomialHeap[T] = trim(BinomialHeap(xs: _*))
 
   override def size = heap.size
   def this(maxSize: Int)(implicit o: Ordering[T]) = this(maxSize, Nil: _*)(o)
@@ -57,15 +57,15 @@ class Beam[T](val maxSize: Int, xs: T*)(implicit o: Ordering[T])
   }
 
   def iterator = heap.iterator
-  override def toString() = iterator.mkString("Beam(", ",", ")")
+  override def toString(): String = iterator.mkString("Beam(", ",", ")")
 
-  override def equals(other: Any) = other match {
+  override def equals(other: Any): Boolean = other match {
     case b: Beam[T @unchecked] => (maxSize == b.maxSize) && this.iterator.sameElements(b.iterator)
     case _                     => false
   }
 
   def min = heap.head
-  def best = heap.reduceOption(o.max(_, _))
+  def best: Option[T] = heap.reduceOption(o.max(_, _))
 
   // TODO: make this a "real" 2.13 collection
 

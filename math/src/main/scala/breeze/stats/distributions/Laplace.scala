@@ -43,7 +43,7 @@ case class Laplace(location: Double, scale: Double)(implicit rand: RandBasis)
     cdf(y) - cdf(x)
   }
 
-  def cdf(x: Double) = x match {
+  def cdf(x: Double): Double = x match {
     case Double.NegativeInfinity => 0.0
     case Double.PositiveInfinity => 1.0
     case x if x < location =>

@@ -9,9 +9,9 @@ import org.scalatest.funsuite.AnyFunSuite
  */
 class maxTest extends AnyFunSuite {
 
-  val testDV = DenseVector(1, 10000000, 30, -500, 6)
+  val testDV: DenseVector[Int] = DenseVector(1, 10000000, 30, -500, 6)
 
-  val testDM = DenseMatrix((1, 10000000, 30, -500, 6), (1, 100, 30, -500, 6), (1, 10000000, 30, -500, 6))
+  val testDM: DenseMatrix[Int] = DenseMatrix((1, 10000000, 30, -500, 6), (1, 100, 30, -500, 6), (1, 10000000, 30, -500, 6))
 
   test("max, min, minMax, ptp") {
     assert(max(-1, 10) == 10)

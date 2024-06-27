@@ -8,6 +8,6 @@ package breeze.linalg
  **/
 final case class Transpose[+T](inner: T) extends NumericOps[Transpose[T]] {
 
-  def repr = this
+  def repr: Transpose[T] = this
 
 }

@@ -83,7 +83,7 @@ class NumericsTest extends AnyFunSuite with Checkers {
   }
 
   test("exp(digamma(x)) ≈ x - .5, x >= 12") {
-    check(Prop.forAll { (a: Double) =>
+    check(Prop.forAll { ((a: Double)) =>
       a.abs < 12 || a.abs > Double.MaxValue / 2 || exp(breeze.numerics.digamma(a.abs)) =~= (a.abs - .5)
     })
   }
@@ -221,7 +221,7 @@ class NumericsTest extends AnyFunSuite with Checkers {
 
 class AAA {
 
-  def foo() = {
+  def foo(): Unit = {
     import breeze.numerics.{lgamma => lg}
     val a1 = lg(DenseVector(3.0, 3.0), 4.0)
     val a2 = DenseVector(lg(3.0, 4.0), lg(3.0, 4.0))

@@ -22,7 +22,7 @@ object all extends UFunc {
   ): Impl2[F, T, Boolean] = {
     new Impl2[F, T, Boolean] {
       override def apply(v: F, v2: T): Boolean = {
-        all((x: S) => base(x), v2)
+        all(((x: S)) => base(x), v2)
       }
     }
   }

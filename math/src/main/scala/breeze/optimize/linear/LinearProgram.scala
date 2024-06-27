@@ -66,7 +66,7 @@ class LinearProgram {
       }
     }
 
-    def solve(implicit solver: LinearProgram.Solver) = {
+    def solve(implicit solver: LinearProgram.Solver): Result = {
       val _goal = goal.getOrElse(throw new IllegalArgumentException("Goal is not defined."))
 
       if (_goal == GoalType.MAXIMIZE) {
@@ -102,7 +102,7 @@ class LinearProgram {
   sealed trait Expression extends Problem { outer =>
     def coefficients: Vector[Double]
     def scalarComponent: Double = 0
-    def objective = this
+    def objective: Expression = this
 
     def constraints: IndexedSeq[Constraint] = IndexedSeq.empty
 
@@ -219,7 +219,7 @@ class LinearProgram {
     def rhs: Expression
     def relation: Relation
 
-    override def toString() = s"$lhs ${relation.operator} $rhs"
+    override def toString(): String = s"$lhs ${relation.operator} $rhs"
 
     def standardize: Constraint = new Constraint {
 
@@ -248,7 +248,7 @@ class LinearProgram {
     val id = variables.length
     variables += this
 
-    def coefficients = {
+    def coefficients: Vector[Double] = {
       val v = SparseVector.zeros[Double](variables.length)
       for (i <- 0 until size) v(id + i) = 1.0
       v
@@ -259,7 +259,7 @@ class LinearProgram {
     val id = variables.length
     variables += this
 
-    def coefficients = {
+    def coefficients: Vector[Double] = {
       val v = SparseVector.zeros[Double](variables.length)
       for (i <- 0 until size) v(id + i) = 1.0
       v
@@ -270,7 +270,7 @@ class LinearProgram {
     val id = variables.length
     variables += this
 
-    def coefficients = {
+    def coefficients: Vector[Double] = {
       val v = SparseVector.zeros[Double](variables.length)
       for (i <- 0 until size) v(id + i) = 1.0
       v
@@ -294,15 +294,15 @@ class LinearProgram {
 
   case class Result(result: DenseVector[Double], problem: Problem) {
     def valueOf(x: Expression): Double = { (result.dot(x.coefficients)) + x.scalarComponent }
-    def value = valueOf(problem.objective)
+    def value: Double = valueOf(problem.objective)
   }
 
-  def maximize(objective: Problem)(implicit solver: LinearProgram.Solver) = {
+  def maximize(objective: Problem)(implicit solver: LinearProgram.Solver): Result = {
     assume(!objective.goal.contains(GoalType.MINIMIZE), "Cannot call maximize on a minimization problem")
     solver.maximize(this)(objective)
   }
 
-  def minimize(objective: Problem)(implicit solver: LinearProgram.Solver) = {
+  def minimize(objective: Problem)(implicit solver: LinearProgram.Solver): Result = {
     assume(!objective.goal.contains(GoalType.MAXIMIZE), "Cannot call minimize on a maximization problem")
     solver.minimize(this)(objective)
   }

@@ -21,9 +21,9 @@ trait Vector_TraversalOps {
   // TODO There's a bizarre error specializing float's here.
   class CanZipMapValuesVector[@specialized(Int, Double) V, @specialized(Int, Double) RV: ClassTag]
       extends CanZipMapValues[Vector[V], V, RV, Vector[RV]] {
-    def create(length: Int) = DenseVector(new Array[RV](length))
+    def create(length: Int): DenseVector[RV] = DenseVector(new Array[RV](length))
 
-    def map(from: Vector[V], from2: Vector[V], fn: (V, V) => RV) = {
+    def map(from: Vector[V], from2: Vector[V], fn: (V, V) => RV): Vector[RV] = {
       require(from.length == from2.length, "Vector lengths must match!")
       val result = create(from.length)
       cforRange(0 until from.length) { i =>
@@ -56,7 +56,7 @@ trait Vector_TraversalOps {
 
   class CanZipMapKeyValuesVector[@specialized(Double, Int, Float, Long) V, @specialized(Int, Double) RV: ClassTag]
       extends CanZipMapKeyValues[Vector[V], Int, V, RV, Vector[RV]] {
-    def create(length: Int) = DenseVector(new Array[RV](length))
+    def create(length: Int): DenseVector[RV] = DenseVector(new Array[RV](length))
 
     def map(from: Vector[V], from2: Vector[V], fn: (Int, V, V) => RV): Vector[RV] = {
       require(from.length == from2.length, "Vector lengths must match!")
@@ -135,7 +135,7 @@ trait DenseVector_TraversalOps extends Vector_TraversalOps {
       def traverse(from: DenseVector[V], fn: CanTraverseKeyValuePairs.KeyValuePairsVisitor[Int, V]): Unit = {
         import from._
 
-        fn.visitArray((ind: Int) => (ind - offset) / stride, data, offset, length, stride)
+        fn.visitArray(((ind: Int)) => (ind - offset) / stride, data, offset, length, stride)
       }
 
     }
@@ -371,6 +371,6 @@ trait DenseMatrix_TraversalOps extends TensorLowPrio {
     }
   }
 
-  implicit def canCopy_DM[V: ClassTag]: CanCopy[DenseMatrix[V]] = (v1: DenseMatrix[V]) => v1.copy
+  implicit def canCopy_DM[V: ClassTag]: CanCopy[DenseMatrix[V]] = ((v1: DenseMatrix[V])) => v1.copy
 
 }

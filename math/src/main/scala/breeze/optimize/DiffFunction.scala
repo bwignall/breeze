@@ -36,7 +36,7 @@ trait DiffFunction[T] extends StochasticDiffFunction[T] with NumericOps[DiffFunc
 
   override def repr: DiffFunction[T] = this
 
-  def cached(implicit copy: CanCopy[T]) = {
+  def cached(implicit copy: CanCopy[T]): DiffFunction[T] = {
     if (this.isInstanceOf[CachedDiffFunction[_]]) {
       this
     } else {
@@ -54,7 +54,7 @@ trait DiffFunction[T] extends StochasticDiffFunction[T] with NumericOps[DiffFunc
 }
 
 object DiffFunction extends DiffFunctionOpImplicits {
-  def withL2Regularization[T, I](d: DiffFunction[T], weight: Double)(implicit space: InnerProductModule[T, Double]) =
+  def withL2Regularization[T, I](d: DiffFunction[T], weight: Double)(implicit space: InnerProductModule[T, Double]): DiffFunction[T] =
     new DiffFunction[T] {
       import space._
       override def gradientAt(x: T): T = {

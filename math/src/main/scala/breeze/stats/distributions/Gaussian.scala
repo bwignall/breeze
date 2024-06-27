@@ -33,9 +33,9 @@ case class Gaussian(mu: Double, sigma: Double)(implicit rand: RandBasis)
     with HasCdf
     with HasInverseCdf {
   private val inner = rand.gaussian(mu, sigma)
-  def draw() = inner.get()
+  def draw(): Double = inner.get()
 
-  override def toString() = "Gaussian(" + mu + ", " + sigma + ")"
+  override def toString(): String = "Gaussian(" + mu + ", " + sigma + ")"
 
   /**
    * Computes the probability that a Gaussian variable Z is within the interval [x, y].
@@ -55,7 +55,7 @@ case class Gaussian(mu: Double, sigma: Double)(implicit rand: RandBasis)
    * @param p: a probability in [0,1]
    * @return x s.t. cdf(x) = numYes
    */
-  def inverseCdf(p: Double) = {
+  def inverseCdf(p: Double): Double = {
     require(p >= 0)
     require(p <= 1)
 
@@ -65,20 +65,20 @@ case class Gaussian(mu: Double, sigma: Double)(implicit rand: RandBasis)
   /**
    * Computes the cumulative density function of the value x.
    */
-  def cdf(x: Double) = .5 * (1 + erf((x - mu) / (Gaussian.sqrt2 * sigma)))
+  def cdf(x: Double): Double = .5 * (1 + erf((x - mu) / (Gaussian.sqrt2 * sigma)))
 
-  override def unnormalizedLogPdf(t: Double) = {
+  override def unnormalizedLogPdf(t: Double): Double = {
     val d = (t - mu) / sigma
     -d * d / 2.0
   }
 
-  override lazy val normalizer = 1.0 / sqrt(2 * Pi) / sigma
-  lazy val logNormalizer = log(sqrt(2 * Pi)) + log(sigma)
+  override lazy val normalizer: Double = 1.0 / sqrt(2 * Pi) / sigma
+  lazy val logNormalizer: Double = log(sqrt(2 * Pi)) + log(sigma)
 
   def mean = mu
-  def variance = sigma * sigma
+  def variance: Double = sigma * sigma
   def mode = mean
-  def entropy = log(sigma) + .5 * log1p(log(math.Pi * 2))
+  def entropy: Double = log(sigma) + .5 * log1p(log(math.Pi * 2))
 }
 
 object Gaussian extends ExponentialFamily[Gaussian, Double] with ContinuousDistributionUFuncProvider[Double, Gaussian] {
@@ -104,16 +104,16 @@ object Gaussian extends ExponentialFamily[Gaussian, Double] with ContinuousDistr
       SufficientStatistic(t.n + n, newMean, newM2)
     }
 
-    def variance = M2 / n
+    def variance: Double = M2 / n
   }
 
-  val emptySufficientStatistic = SufficientStatistic(0, 0, 0)
+  val emptySufficientStatistic: SufficientStatistic = SufficientStatistic(0, 0, 0)
 
-  def sufficientStatisticFor(t: Double) = {
+  def sufficientStatisticFor(t: Double): SufficientStatistic = {
     SufficientStatistic(1, t, 0)
   }
 
-  def mle(stats: SufficientStatistic) = (stats.mean, stats.variance)
+  def mle(stats: SufficientStatistic): Parameter = (stats.mean, stats.variance)
 
   override def distribution(p: (Double, Double))(implicit rand: RandBasis) = new Gaussian(p._1, math.sqrt(p._2))
 

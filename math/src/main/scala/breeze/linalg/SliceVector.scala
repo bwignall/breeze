@@ -46,7 +46,7 @@ class SliceVector[@spec(Int) K, @spec(Double, Int, Float, Long) V: ClassTag](val
 
   def activeValuesIterator: Iterator[V] = valuesIterator
 
-  override def toString = {
+  override def toString: String = {
     valuesIterator.mkString("SliceVector(", ", ", ")")
   }
 }

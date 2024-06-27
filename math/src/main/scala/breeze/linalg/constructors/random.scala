@@ -27,7 +27,7 @@ object randomDouble extends RandomGeneratorUFunc[Double] {
   }
 
   protected val _classTag: ClassTag[Double] = scala.reflect.classTag[Double]
-  protected val _zero = Zero[Double](0.0)
+  protected val _zero: Zero[Double] = Zero[Double](0.0)
 
 }
 
@@ -50,7 +50,7 @@ object randomInt extends RandomGeneratorUFunc[Int] {
   }
 
   protected val _classTag: ClassTag[Int] = scala.reflect.classTag[Int]
-  protected val _zero = Zero[Int](0)
+  protected val _zero: Zero[Int] = Zero[Int](0)
 
 }
 
@@ -79,7 +79,7 @@ trait RandomGeneratorUFunc[T] extends UFunc {
   implicit protected val _classTag: ClassTag[T]
   implicit protected val _zero: Zero[T]
 
-  def apply()(implicit basis: RandBasis) = gen(basis).draw()
+  def apply()(implicit basis: RandBasis): T = gen(basis).draw()
 
   implicit def implRandomT_1D(implicit basis: RandBasis): Impl[Int, DenseVector[T]] =
     new Impl[Int, DenseVector[T]] {

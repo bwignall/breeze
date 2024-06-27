@@ -14,7 +14,7 @@ import scala.reflect.ClassTag
  */
 class VectorTest extends AnyFunSuite {
 
-  val dvTest = DenseVector(1, 2, 3, 4)
+  val dvTest: DenseVector[Int] = DenseVector(1, 2, 3, 4)
   // val dmTest = DenseMatrix((1,2,3,4), (5,6,7,8))
 
   test("scan") {
@@ -92,12 +92,12 @@ abstract class VectorPropertyTestBase[T: ClassTag: Zero: Semiring] extends Tenso
 class VectorOps_DoubleTest
     extends VectorPropertyTestBase[Double]
     with DoubleValuedTensorSpaceTestBase[Vector[Double], Int] {
-  val space = Vector.space[Double]
+  val space: MutableEnumeratedCoordinateField[Vector[Double],Int,Double] = Vector.space[Double]
   def genScalar: Arbitrary[Double] = RandomInstanceSupport.genReasonableDouble
 }
 
 class VectorOps_FloatTest extends VectorPropertyTestBase[Float] {
-  val space = Vector.space[Float]
+  val space: MutableEnumeratedCoordinateField[Vector[Float],Int,Float] = Vector.space[Float]
 
   override val TOL: Double = 1e-2
   def genScalar: Arbitrary[Float] = RandomInstanceSupport.genReasonableFloat
@@ -105,6 +105,6 @@ class VectorOps_FloatTest extends VectorPropertyTestBase[Float] {
 }
 
 class VectorOps_IntTest extends VectorPropertyTestBase[Int] {
-  val space = Vector.space[Int]
+  val space: MutableEnumeratedCoordinateField[Vector[Int],Int,Int] = Vector.space[Int]
   def genScalar: Arbitrary[Int] = RandomInstanceSupport.genReasonableInt
 }

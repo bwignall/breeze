@@ -10,7 +10,7 @@ import breeze.stats.distributions.Rand
  */
 object LinearGenerator {
   case class Cost(data: DenseMatrix[Double], labels: DenseVector[Double]) extends DiffFunction[DenseVector[Double]] {
-    def calculate(x: DenseVector[Double]) = {
+    def calculate(x: DenseVector[Double]): (Double, DenseVector[Double]) = {
       val cumGradient = DenseVector.zeros[Double](x.length)
       var cumLoss = 0.0
       var i = 0

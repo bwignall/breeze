@@ -105,7 +105,7 @@ class DenseVector[@spec(Double, Int, Float, Long) V](val data: Array[V],
 
   def activeKeysIterator: Iterator[Int] = keysIterator
 
-  override def equals(p1: Any) = p1 match {
+  override def equals(p1: Any): Boolean = p1 match {
     case y: DenseVector[_] =>
       y.length == length && ArrayUtil
         .nonstupidEquals(data, offset, stride, length, y.data, y.offset, y.stride, y.length)
@@ -117,7 +117,7 @@ class DenseVector[@spec(Double, Int, Float, Long) V](val data: Array[V],
    **/
   override def hashCode(): Int = ArrayUtil.zeroSkippingHashCode(data, offset, stride, length)
 
-  override def toString = {
+  override def toString: String = {
     valuesIterator.mkString("DenseVector(", ", ", ")")
   }
 
@@ -297,7 +297,7 @@ object DenseVector extends VectorConstructors[DenseVector] {
       i += 1
     }
 
-    apply(b.result)
+    apply(b.result())
   }
 
   /**
@@ -314,7 +314,7 @@ object DenseVector extends VectorConstructors[DenseVector] {
       b += f(range(i))
       i += 1
     }
-    apply(b.result)
+    apply(b.result())
   }
 
   /**
@@ -503,7 +503,7 @@ object DenseVector extends VectorConstructors[DenseVector] {
 
   class CanZipMapValuesDenseVector[@spec(Double, Int, Float, Long) V, @spec(Int, Double) RV: ClassTag]
       extends CanZipMapValues[DenseVector[V], V, RV, DenseVector[RV]] {
-    def create(length: Int) = DenseVector(new Array[RV](length))
+    def create(length: Int): DenseVector[RV] = DenseVector(new Array[RV](length))
 
     /**Maps all corresponding values from the two collection. */
     def map(from: DenseVector[V], from2: DenseVector[V], fn: (V, V) => RV): DenseVector[RV] = {
@@ -525,7 +525,7 @@ object DenseVector extends VectorConstructors[DenseVector] {
 
   class CanZipMapKeyValuesDenseVector[@spec(Double, Int, Float, Long) V, @spec(Int, Double) RV: ClassTag]
       extends CanZipMapKeyValues[DenseVector[V], Int, V, RV, DenseVector[RV]] {
-    def create(length: Int) = DenseVector(new Array[RV](length))
+    def create(length: Int): DenseVector[RV] = DenseVector(new Array[RV](length))
 
     /**Maps all corresponding values from the two collection. */
     def map(from: DenseVector[V], from2: DenseVector[V], fn: (Int, V, V) => RV): DenseVector[RV] = {
@@ -574,13 +574,13 @@ object DenseVector extends VectorConstructors[DenseVector] {
 
   object TupleIsomorphisms {
     implicit object doubleIsVector extends Isomorphism[Double, DenseVector[Double]] {
-      def forward(t: Double) = DenseVector(t)
-      def backward(t: DenseVector[Double]) = { assert(t.size == 1); t(0) }
+      def forward(t: Double): DenseVector[Double] = DenseVector(t)
+      def backward(t: DenseVector[Double]): Double = { assert(t.size == 1); t(0) }
     }
 
     implicit object pdoubleIsVector extends Isomorphism[(Double, Double), DenseVector[Double]] {
-      def forward(t: (Double, Double)) = DenseVector(t._1, t._2)
-      def backward(t: DenseVector[Double]) = { assert(t.size == 2); (t(0), t(1)) }
+      def forward(t: (Double, Double)): DenseVector[Double] = DenseVector(t._1, t._2)
+      def backward(t: DenseVector[Double]): (Double, Double) = { assert(t.size == 2); (t(0), t(1)) }
     }
   }
 

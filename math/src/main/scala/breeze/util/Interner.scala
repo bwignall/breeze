@@ -33,24 +33,24 @@ import scala.reflect.ClassTag
  */
 @SerialVersionUID(1L)
 class Interner[T] extends (T => T) with Serializable {
-  override def apply(t: T) = intern(t)
+  override def apply(t: T): T = intern(t)
 
   def intern(t: T): T = synchronized {
     inner.getOrElseUpdate(t, new WeakReference[T](t)).get
   }
 
-  def clear() = inner.clear()
+  def clear(): Unit = inner.clear()
   def size = inner.size
 
-  def internAll(c: List[T]) = c.map(apply)
-  def internAll(c: Array[T])(implicit ct: ClassTag[T]) = c.map(apply)
-  def internAll(c: Set[T]) = c.map(apply)
+  def internAll(c: List[T]): List[T] = c.map(apply)
+  def internAll(c: Array[T])(implicit ct: ClassTag[T]): Array[T] = c.map(apply)
+  def internAll(c: Set[T]): Set[T] = c.map(apply)
 
-  def internKeys[V](c: scala.collection.Map[T, V]) = {
+  def internKeys[V](c: scala.collection.Map[T, V]): Map[T,V] = {
     Map[T, V]() ++ c.map { case (k, v) => (intern(k), v) }
   }
 
-  def internValues[K](c: scala.collection.Map[K, T]) = {
+  def internValues[K](c: scala.collection.Map[K, T]): Map[K,T] = {
     Map[K, T]() ++ c.map { case (k, v) => (k, intern(v)) }
   }
 
@@ -73,7 +73,7 @@ class Interner[T] extends (T => T) with Serializable {
 object Interner {
   private val typedInterners = AutoUpdater[Class[_], Interner[_]](new Interner[Any]())
 
-  def apply[T: ClassTag] = forClass[T](implicitly[ClassTag[T]].runtimeClass.asInstanceOf[Class[T]])
+  def apply[T: ClassTag]: Interner[T] = forClass[T](implicitly[ClassTag[T]].runtimeClass.asInstanceOf[Class[T]])
 
-  def forClass[T](c: Class[T]) = typedInterners(c).asInstanceOf[Interner[T]]
+  def forClass[T](c: Class[T]): Interner[T] = typedInterners(c).asInstanceOf[Interner[T]]
 }

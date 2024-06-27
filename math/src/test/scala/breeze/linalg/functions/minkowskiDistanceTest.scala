@@ -1,6 +1,7 @@
 package breeze.linalg
 
 import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.Assertion
 
 class minkowskiDistanceTest extends AnyFunSuite {
 
@@ -22,7 +23,7 @@ class minkowskiDistanceTest extends AnyFunSuite {
     assertClose(minkowskiDistance(v1, v2, 3.0), 11.477587096634332)
   }
 
-  def assertClose(a: Double, b: Double) =
+  def assertClose(a: Double, b: Double): Assertion =
     assert(math.abs(a - b) < 1e-8)
 
   /* Not robust to gc pauses, etc.

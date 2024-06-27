@@ -49,7 +49,7 @@ object CanZipMapValues {
       extends Op[Array[V], V, RV, Array[RV]] {
 
     /**Maps all values from the given collection. */
-    def map(from: Array[V], from2: Array[V], fn: (V, V) => RV) = {
+    def map(from: Array[V], from2: Array[V], fn: (V, V) => RV): Array[RV] = {
       require(from.length == from2.length, "Array lengths don't match!")
       val arr = new Array[RV](from.length)
       for (i <- 0 until from.length) {

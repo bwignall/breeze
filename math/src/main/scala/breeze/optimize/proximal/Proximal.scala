@@ -32,7 +32,7 @@ case class ProjectIdentity() extends Proximal {
 //2. Implement randomized O(n) algorithm from Duchi et al's paper Efficient Projections onto the l1-Ball for Learning in High Dimensions
 case class ProjectProbabilitySimplex(s: Double) extends Proximal {
   require(s > 0, s"Proximal:ProjectProbabilitySimplex Radius s must be strictly positive")
-  def prox(x: DenseVector[Double], rho: Double = 1.0) = {
+  def prox(x: DenseVector[Double], rho: Double = 1.0): Unit = {
     val sorted = x.data.sorted(Ordering[Double].reverse)
     val cum = sorted.scanLeft(0.0)(_ + _).slice(1, x.length + 1)
     val cs = DenseVector(cum.zipWithIndex.map { elem =>
@@ -49,7 +49,7 @@ case class ProjectProbabilitySimplex(s: Double) extends Proximal {
  * Projection formula from Duchi et al's paper Efficient Projections onto the l1-Ball for Learning in High Dimensions
  * */
 case class ProjectL1(s: Double) extends Proximal {
-  val projectSimplex = ProjectProbabilitySimplex(s)
+  val projectSimplex: ProjectProbabilitySimplex = ProjectProbabilitySimplex(s)
 
   def prox(x: DenseVector[Double], rho: Double = 1.0): Unit = {
     val u = breeze.numerics.abs(x)
@@ -61,7 +61,7 @@ case class ProjectL1(s: Double) extends Proximal {
 }
 
 case class ProjectBox(l: DenseVector[Double], u: DenseVector[Double]) extends Proximal {
-  def prox(x: DenseVector[Double], rho: Double = 0.0) = {
+  def prox(x: DenseVector[Double], rho: Double = 0.0): Unit = {
     cforRange(0 until x.length) { i =>
       x.update(i, max(l(i), min(x(i), u(i))))
     }
@@ -69,7 +69,7 @@ case class ProjectBox(l: DenseVector[Double], u: DenseVector[Double]) extends Pr
 }
 
 case class ProjectPos() extends Proximal {
-  def prox(x: DenseVector[Double], rho: Double = 0.0) = {
+  def prox(x: DenseVector[Double], rho: Double = 0.0): Unit = {
     cforRange(0 until x.length) { i =>
       x.update(i, max(0, x(i)))
     }
@@ -77,7 +77,7 @@ case class ProjectPos() extends Proximal {
 }
 
 case class ProjectSoc() extends Proximal {
-  def prox(x: DenseVector[Double], rho: Double = 0.0) = {
+  def prox(x: DenseVector[Double], rho: Double = 0.0): Unit = {
     var nx: Double = 0.0
     val n = x.length
     cforRange(1 until n) { i =>
@@ -105,8 +105,8 @@ case class ProjectSoc() extends Proximal {
 //Let C = { x \in R^{n} | Ax = b } where A \in R^{m x n}
 //If A is full rank matrix then the projection is given by v - A'(Av - b) where A' is the cached Moore-Penrose pseudo-inverse of A
 case class ProjectEquality(Aeq: DenseMatrix[Double], beq: DenseVector[Double]) extends Proximal {
-  val invAeq = pinv(Aeq)
-  def prox(x: DenseVector[Double], rho: Double = 0.0) = {
+  val invAeq: DenseMatrix[Double] = pinv(Aeq)
+  def prox(x: DenseVector[Double], rho: Double = 0.0): Unit = {
     val Av = Aeq * x
     Av -= beq
     x += invAeq * Av
@@ -118,7 +118,7 @@ case class ProjectEquality(Aeq: DenseMatrix[Double], beq: DenseVector[Double]) e
 case class ProjectHyperPlane(a: DenseVector[Double], b: Double) extends Proximal {
   val at = a.t
 
-  def prox(x: DenseVector[Double], rho: Double = 0.0) = {
+  def prox(x: DenseVector[Double], rho: Double = 0.0): Unit = {
     val atx = at * x
     val anorm = norm(a, 2)
     val scale = (b - atx) / (anorm * anorm)
@@ -129,18 +129,18 @@ case class ProjectHyperPlane(a: DenseVector[Double], b: Double) extends Proximal
 
 case class ProximalL1(var lambda: Double = 1.0) extends Proximal {
 
-  def setLambda(lambda: Double) = {
+  def setLambda(lambda: Double): ProximalL1 = {
     this.lambda = lambda
     this
   }
 
-  def prox(x: DenseVector[Double], rho: Double) = {
+  def prox(x: DenseVector[Double], rho: Double): Unit = {
     cforRange(0 until x.length) { i =>
       x.update(i, max(0, x(i) - lambda / rho) - max(0, -x(i) - lambda / rho))
     }
   }
 
-  override def valueAt(x: DenseVector[Double]) = {
+  override def valueAt(x: DenseVector[Double]): Double = {
     lambda * x.foldLeft(0.0) { (agg, entry) =>
       agg + abs(entry)
     }
@@ -148,7 +148,7 @@ case class ProximalL1(var lambda: Double = 1.0) extends Proximal {
 }
 
 case class ProximalL2() extends Proximal {
-  def prox(x: DenseVector[Double], rho: Double) = {
+  def prox(x: DenseVector[Double], rho: Double): Unit = {
     val xnorm = norm(x)
     cforRange(0 until x.length) { i =>
       if (xnorm >= 1 / rho) x.update(i, x(i) * (1 - 1 / (rho * xnorm)))
@@ -159,7 +159,7 @@ case class ProximalL2() extends Proximal {
 
 // f = (1/2)||.||_2^2
 case class ProximalSumSquare() extends Proximal {
-  def prox(x: DenseVector[Double], rho: Double) = {
+  def prox(x: DenseVector[Double], rho: Double): Unit = {
     cforRange(0 until x.length) { i =>
       x.update(i, x(i) * (rho / (1 + rho)))
     }
@@ -168,7 +168,7 @@ case class ProximalSumSquare() extends Proximal {
 
 // f = -sum(log(x))
 case class ProximalLogBarrier() extends Proximal {
-  def prox(x: DenseVector[Double], rho: Double) = {
+  def prox(x: DenseVector[Double], rho: Double): Unit = {
     cforRange(0 until x.length) { i =>
       x.update(i, 0.5 * (x(i) + sqrt(x(i) * x(i) + 4 / rho)))
     }
@@ -204,7 +204,7 @@ case class ProximalHuber() extends Proximal {
     x
   }
 
-  def proxSeparable(x: DenseVector[Double], rho: Double, oracle: Double => Double, l: Double, u: Double) = {
+  def proxSeparable(x: DenseVector[Double], rho: Double, oracle: Double => Double, l: Double, u: Double): Unit = {
     x.map(proxScalar(_, rho, oracle, l, u, 0))
     cforRange(0 until x.length) { i =>
       x.update(i, proxScalar(x(i), rho, oracle, l, u, 0))
@@ -220,14 +220,14 @@ case class ProximalHuber() extends Proximal {
     }
   }
 
-  def prox(x: DenseVector[Double], rho: Double) = {
+  def prox(x: DenseVector[Double], rho: Double): Unit = {
     proxSeparable(x, rho, subgradHuber, NegativeInfinity, PositiveInfinity)
   }
 }
 
 // f = c'*x
 case class ProximalLinear(c: DenseVector[Double]) extends Proximal {
-  def prox(x: DenseVector[Double], rho: Double) = {
+  def prox(x: DenseVector[Double], rho: Double): Unit = {
     cforRange(0 until x.length) { i =>
       x.update(i, x(i) - c(i) / rho)
     }
@@ -236,7 +236,7 @@ case class ProximalLinear(c: DenseVector[Double]) extends Proximal {
 
 // f = c'*x + I(x >= 0)
 case class ProximalLp(c: DenseVector[Double]) extends Proximal {
-  def prox(x: DenseVector[Double], rho: Double) = {
+  def prox(x: DenseVector[Double], rho: Double): Unit = {
     cforRange(0 until x.length) { i =>
       x.update(i, max(0, x(i) - c(i) / rho))
     }

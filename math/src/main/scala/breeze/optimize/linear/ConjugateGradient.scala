@@ -30,7 +30,7 @@ class ConjugateGradient[T, M](maxNormValue: Double = Double.PositiveInfinity,
                                                iter: Int,
                                                converged: Boolean
   ) {
-    lazy val rtr = residual.dot(residual)
+    lazy val rtr: Double = residual.dot(residual)
   }
 
   /**

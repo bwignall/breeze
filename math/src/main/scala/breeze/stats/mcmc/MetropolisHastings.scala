@@ -70,7 +70,7 @@ abstract class BaseMetropolisHastings[T](logLikelihoodFunc: T => Double, init: T
   private var totalCount: Long = 0
   private var acceptanceAboveOne: Long = 0
 
-  def logLikelihood(x: T) = logLikelihoodFunc(x)
+  def logLikelihood(x: T): Double = logLikelihoodFunc(x)
 
   def aboveOneCount = acceptanceAboveOne
   def total = totalCount
@@ -121,10 +121,10 @@ case class ArbitraryMetropolisHastings[T](logLikelihood: T => Double,
                                           dropCount: Int = 0
 )(implicit rand: RandBasis)
     extends BaseMetropolisHastings[T](logLikelihood, init, burnIn, dropCount)(rand) {
-  def proposalDraw(x: T) = proposal(x).draw()
+  def proposalDraw(x: T): T = proposal(x).draw()
   def logTransitionProbability(start: T, end: T): Double = logProposalDensity(start, end)
 
-  def observe(x: T) = this.copy(burnIn = 0, init = x)
+  def observe(x: T): Process[T] = this.copy(burnIn = 0, init = x)
 }
 
 case class AffineStepMetropolisHastings[T](logLikelihood: T => Double,
@@ -144,7 +144,7 @@ case class AffineStepMetropolisHastings[T](logLikelihood: T => Double,
    */
   def proposalDraw(x: T): T = vectorSpace.addVV(proposalStep.draw(), x)
 
-  def observe(x: T) = this.copy(burnIn = 0, init = x)
+  def observe(x: T): Process[T] = this.copy(burnIn = 0, init = x)
 }
 
 case class ThreadedBufferedRand[T](wrapped: Rand[T], bufferSize: Int = 1024 * 8)(implicit m: ClassTag[T])
@@ -178,7 +178,7 @@ case class ThreadedBufferedRand[T](wrapped: Rand[T], bufferSize: Int = 1024 * 8)
   private var buffer: Array[T] = newArrayQueue.take()
   private var position: Int = 0
 
-  def stop() = { // In order to allow this class to be garbage collected, you must set this to true.
+  def stop(): Unit = { // In order to allow this class to be garbage collected, you must set this to true.
     stopWorker = true
   }
 

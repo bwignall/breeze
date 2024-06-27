@@ -20,12 +20,12 @@ trait MutableModuleTestBase[V, S] extends AnyFunSuite with Checkers {
   val TOL = 1e-3
 
   test("Addition is Associative") {
-    check(Prop.forAll { (trip: (V, V, V)) =>
+    check(Prop.forAll { ((trip: (V, V, V))) =>
       val (a, b, c) = trip
       close((a + b) + c, a + (b + c), TOL)
     })
 
-    check(Prop.forAll { (trip: (V, V, V)) =>
+    check(Prop.forAll { ((trip: (V, V, V))) =>
       val (a, b, c) = trip
       val ab = a + b
       val bc = b + c
@@ -36,12 +36,12 @@ trait MutableModuleTestBase[V, S] extends AnyFunSuite with Checkers {
   }
 
   test("Addition Commutes") {
-    check(Prop.forAll { (trip: (V, V, V)) =>
+    check(Prop.forAll { ((trip: (V, V, V))) =>
       val (a, b, _) = trip
       close(a + b, b + a, TOL)
     })
 
-    check(Prop.forAll { (trip: (V, V, V)) =>
+    check(Prop.forAll { ((trip: (V, V, V))) =>
       val (a, b, _) = trip
       val ab = copy(a)
       ab += b
@@ -52,12 +52,12 @@ trait MutableModuleTestBase[V, S] extends AnyFunSuite with Checkers {
   }
 
   test("Zero is Zero") {
-    check(Prop.forAll { (a: V) =>
+    check(Prop.forAll { ((a: V)) =>
       val z = zeroLike(a)
       close(a +:+ z, a, TOL)
     })
 
-    check(Prop.forAll { (a: V) =>
+    check(Prop.forAll { ((a: V)) =>
       val ab = copy(a)
       val z = zeroLike(a)
       ab :+= z
@@ -66,24 +66,24 @@ trait MutableModuleTestBase[V, S] extends AnyFunSuite with Checkers {
   }
 
   test("a - a == 0") {
-    check(Prop.forAll { (a: V) =>
+    check(Prop.forAll { ((a: V)) =>
       val z = zeroLike(a)
       close(a - a, z, TOL)
     })
 
-    check(Prop.forAll { (a: V) =>
+    check(Prop.forAll { ((a: V)) =>
       val z = zeroLike(a)
       a -= a
       close(a, z, TOL)
     })
 
-    check(Prop.forAll { (a: V) =>
+    check(Prop.forAll { ((a: V)) =>
       val z = zeroLike(a)
       a :-= a
       close(a, z, TOL)
     })
 
-    check(Prop.forAll { (trip: (V, V, V)) =>
+    check(Prop.forAll { ((trip: (V, V, V))) =>
       val (a, b, _) = trip
       val z = zeroLike(a)
       val ab = a -:- b
@@ -165,7 +165,7 @@ trait MutableModuleTestBase[V, S] extends AnyFunSuite with Checkers {
   }
 
   test("op set works") {
-    check(Prop.forAll { (trip: (V, V, V)) =>
+    check(Prop.forAll { ((trip: (V, V, V))) =>
       val (a, b, _) = trip
       val ab = copy(a)
       ab := b
@@ -174,11 +174,11 @@ trait MutableModuleTestBase[V, S] extends AnyFunSuite with Checkers {
   }
 
   test("1 is 1") {
-    check(Prop.forAll { (a: V) =>
+    check(Prop.forAll { ((a: V)) =>
       close(a *:* scalars.one, a, TOL)
     })
 
-    check(Prop.forAll { (a: V) =>
+    check(Prop.forAll { ((a: V)) =>
       val ab = copy(a)
       ab *= scalars.one
       close(a, ab, TOL)

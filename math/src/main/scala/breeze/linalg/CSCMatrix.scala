@@ -161,7 +161,7 @@ class CSCMatrix[@spec(Double, Int, Float, Long) V: Zero](private var _data: Arra
     util.Arrays.binarySearch(rowIndices, start, end, row)
   }
 
-  def zero = implicitly[Zero[V]].zero
+  def zero: V = implicitly[Zero[V]].zero
 
   override def toString(maxLines: Int, maxWidth: Int): String = {
     val buf = new StringBuilder()
@@ -284,7 +284,7 @@ class CSCMatrix[@spec(Double, Int, Float, Long) V: Zero](private var _data: Arra
 }
 
 object CSCMatrix extends MatrixConstructors[CSCMatrix] {
-  def zeros[@specialized(Int, Float, Double) V: ClassTag: Zero](rows: Int, cols: Int, initialNonzero: Int) = {
+  def zeros[@specialized(Int, Float, Double) V: ClassTag: Zero](rows: Int, cols: Int, initialNonzero: Int): CSCMatrix[V] = {
     new CSCMatrix[V](new Array(initialNonzero), rows, cols, new Array(cols + 1), 0, new Array(initialNonzero))
   }
 

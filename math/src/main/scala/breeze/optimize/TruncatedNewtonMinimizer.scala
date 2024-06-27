@@ -37,7 +37,7 @@ class TruncatedNewtonMinimizer[T, H](maxIterations: Int = -1,
                    accept: Boolean,
                    history: History
   ) {
-    def converged =
+    def converged: Boolean =
       (iter >= maxIterations && maxIterations > 0 && accept == true) || norm(
         adjGrad
       ) <= tolerance * initialGNorm || stop
@@ -64,7 +64,7 @@ class TruncatedNewtonMinimizer[T, H](maxIterations: Int = -1,
   private val sigma3 = 4.0
 
   def iterations(f: SecondOrderFunction[T, H], initial: T): Iterator[State] = {
-    Iterator.iterate(initialState(f, initial)) { (state: State) =>
+    Iterator.iterate(initialState(f, initial)) { ((state: State)) =>
       import state._
       val cg = new ConjugateGradient[T, H](maxNormValue = delta,
                                            tolerance = .1 * norm(adjGrad),

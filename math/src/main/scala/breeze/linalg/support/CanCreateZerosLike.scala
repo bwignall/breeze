@@ -33,7 +33,7 @@ trait CanCreateZerosLike[From, +To] {
 object CanCreateZerosLike {
 
   class OpArray[@specialized V: ClassTag: Semiring] extends CanCreateZerosLike[Array[V], Array[V]] {
-    override def apply(from: Array[V]) = {
+    override def apply(from: Array[V]): Array[V] = {
       ArrayUtil.fillNewArrayLike(from, from.length, implicitly[Semiring[V]].zero)
     }
   }

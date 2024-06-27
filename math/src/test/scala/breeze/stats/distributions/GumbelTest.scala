@@ -36,7 +36,7 @@ class GumbelTest
 
   def fromDouble(x: Double) = x
 
-  implicit def arbDistr = Arbitrary {
+  implicit def arbDistr: Arbitrary[Distr] = Arbitrary {
     for (
       location <- arbitrary[Double].map { x =>
         math.abs(x) % 1000.0 + 1.1

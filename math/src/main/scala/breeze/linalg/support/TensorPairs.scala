@@ -7,18 +7,18 @@ package support
  */
 class TensorPairs[K, V, +This](private val tensor: This,
                                active: Boolean,
-                               f: ((K, V)) => Boolean = { (x: (K, V)) =>
+                               f: ((K, V)) => Boolean = { ((x: (K, V))) =>
                                  true
                                }
 )(implicit ev: This <:< Tensor[K, V]) {
   def size = tensor.size
 
-  def iterator = { if (active) tensor.activeIterator else tensor.iterator }.filter(f)
+  def iterator: Iterator[(K, V)] = { if (active) tensor.activeIterator else tensor.iterator }.filter(f)
 
-  def foreach[U](fn: ((K, V)) => U) = iterator.foreach(fn)
-  def foreach[U](fn: (K, V) => U) = iterator.foreach { case (a, b) => fn(a, b) }
+  def foreach[U](fn: ((K, V)) => U): Unit = iterator.foreach(fn)
+  def foreach[U](fn: (K, V) => U): Unit = iterator.foreach { case (a, b) => fn(a, b) }
 
-  def filter(p: ((K, V)) => Boolean) = withFilter(p)
+  def filter(p: ((K, V)) => Boolean): TensorPairs[K,V,This] = withFilter(p)
 
   def withFilter(p: ((K, V)) => Boolean): TensorPairs[K, V, This] = {
     new TensorPairs[K, V, This](tensor,
@@ -29,9 +29,9 @@ class TensorPairs[K, V, +This](private val tensor: This,
     )(ev)
   }
 
-  override def toString = iterator.mkString("TensorKeys(", ",", ")")
+  override def toString: String = iterator.mkString("TensorKeys(", ",", ")")
 
-  override def equals(p1: Any) = p1 match {
+  override def equals(p1: Any): Boolean = p1 match {
     case x: TensorPairs[_, _, _] => x.eq(this) || iterator.sameElements(x.iterator)
     case _                       => false
   }

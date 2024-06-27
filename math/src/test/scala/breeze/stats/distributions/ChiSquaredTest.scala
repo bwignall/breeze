@@ -21,6 +21,8 @@ import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
+import breeze.stats.distributions.ChiSquared
+import org.scalacheck.Arbitrary
 
 class ChiSquaredTest
     extends AnyFunSuite
@@ -40,13 +42,13 @@ class ChiSquaredTest
     for (shape <- arbitrary[Double].map { _.abs % 200.0 + 4.2 }) yield shape
   }
 
-  def paramsClose(p: Double, b: Double) = breeze.numerics.closeTo(p, b, 5e-2)
+  def paramsClose(p: Double, b: Double): Boolean = breeze.numerics.closeTo(p, b, 5e-2)
 
   def asDouble(x: Double) = x
 
   def fromDouble(x: Double) = x
 
-  implicit def arbDistr = Arbitrary {
+  implicit def arbDistr: Arbitrary[ChiSquared] = Arbitrary {
     for (
       shape <- arbitrary[Double].map { x =>
         math.abs(x) % 1000.0 + 4.2

@@ -20,7 +20,7 @@ case class Logarthmic(p: Double)(implicit rand: RandBasis) extends DiscreteDistr
   // from Efficient Generation of Logarithmically Distributed Pseudo-Random Variables
   private val h = log1p(-p)
 
-  def draw() = {
+  def draw(): Int = {
 
     val u2 = rand.uniform.draw()
 
@@ -40,13 +40,13 @@ case class Logarthmic(p: Double)(implicit rand: RandBasis) extends DiscreteDistr
 
   }
 
-  def probabilityOf(x: Int) = {
+  def probabilityOf(x: Int): Double = {
     -1.0 / log1p(-p) * math.pow(p, x) / x
   }
 
-  def mean = -1.0 / log1p(-p) * (p / (1 - p))
+  def mean: Double = -1.0 / log1p(-p) * (p / (1 - p))
 
-  def variance = {
+  def variance: Double = {
     val l1p = log1p(-p)
     val onemp = 1 - p
     val denompart = onemp * l1p
@@ -56,6 +56,6 @@ case class Logarthmic(p: Double)(implicit rand: RandBasis) extends DiscreteDistr
   def mode = 1
   def entropy = ???
 
-  override def toString() = ScalaRunTime._toString(this)
+  override def toString(): String = ScalaRunTime._toString(this)
 
 }

@@ -70,7 +70,7 @@ class SparseVector[@spec(Double, Int, Float, Long) V](val array: SparseArray[V])
 
   def repr: SparseVector[V] = this
 
-  def contains(i: Int) = array.contains(i)
+  def contains(i: Int): Boolean = array.contains(i)
 
   def apply(i: Int): V = {
     if (i < 0 || i >= size) throw new IndexOutOfBoundsException(s"$i not in [0,$size)")
@@ -97,7 +97,7 @@ class SparseVector[@spec(Double, Int, Float, Long) V](val array: SparseArray[V])
   /** This is always assumed to be equal to 0, for now. */
   def default: V = zero.zero
 
-  override def equals(other: Any) = other match {
+  override def equals(other: Any): Boolean = other match {
     case x: SparseVector[_] => this.array == x.array
     case x: Vector[_] =>
       this.length == x.length &&
@@ -110,9 +110,9 @@ class SparseVector[@spec(Double, Int, Float, Long) V](val array: SparseArray[V])
    **/
   override def hashCode = array.hashCode
 
-  def isActive(rawIndex: Int) = array.isActive(rawIndex)
+  def isActive(rawIndex: Int): Boolean = array.isActive(rawIndex)
 
-  override def toString = {
+  override def toString: String = {
     activeIterator.mkString(s"SparseVector($length)(", ", ", ")")
   }
 
@@ -169,7 +169,7 @@ class SparseVector[@spec(Double, Int, Float, Long) V](val array: SparseArray[V])
     else {
       var ii = 0
       val nIndex =
-        Array.tabulate[Int](length + 1)((cp: Int) =>
+        Array.tabulate[Int](length + 1)(((cp: Int)) =>
           if (ii < used && cp == index(ii)) { ii += 1; ii - 1 }
           else ii
         )
@@ -242,7 +242,7 @@ object SparseVector {
 
   // implicits
   class CanCopySparseVector[@spec(Double, Int, Float, Long) V: ClassTag: Zero] extends CanCopy[SparseVector[V]] {
-    def apply(v1: SparseVector[V]) = {
+    def apply(v1: SparseVector[V]): SparseVector[V] = {
       v1.copy
     }
   }

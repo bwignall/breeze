@@ -18,6 +18,6 @@ object BranchAndBound {
                c: DenseVector[Double],
                x0: DenseVector[Double],
                integers: Seq[Int]
-  ) = {}
+  ): Unit = {}
 
 }

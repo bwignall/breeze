@@ -20,6 +20,8 @@ import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
+import breeze.stats.distributions.Gamma
+import org.scalacheck.Arbitrary
 
 class GammaTest
     extends AnyFunSuite
@@ -42,7 +44,7 @@ class GammaTest
     ) yield (shape, scale);
   }
 
-  def paramsClose(p: (Double, Double), b: (Double, Double)) = {
+  def paramsClose(p: (Double, Double), b: (Double, Double)): Boolean = {
     val y1 = (p._1 - b._1).abs / (p._1.abs / 2 + b._1.abs / 2 + 1) < 2e-1
     val y2 = (p._2 - b._2).abs / (p._2.abs / 2 + b._2.abs / 2 + 1) < 2e-1
     y1 && y2
@@ -52,7 +54,7 @@ class GammaTest
 
   def fromDouble(x: Double) = x
 
-  implicit def arbDistr = Arbitrary {
+  implicit def arbDistr: Arbitrary[Gamma] = Arbitrary {
     for (
       shape <- arbitrary[Double].map { x =>
         math.abs(x) % 1000.0 + 1.1

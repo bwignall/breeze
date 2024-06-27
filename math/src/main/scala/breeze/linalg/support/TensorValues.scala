@@ -22,15 +22,15 @@ package support
  */
 class TensorValues[K, V, +This](private val tensor: This,
                                 active: Boolean = false,
-                                f: (V) => Boolean = { (x: Any) =>
+                                f: (V) => Boolean = { ((x: Any)) =>
                                   true
                                 }
 )(implicit ev: This <:< Tensor[K, V]) {
   def size = tensor.size
 
-  def iterator = { if (active) tensor.activeValuesIterator else tensor.valuesIterator }.filter(f)
+  def iterator: Iterator[V] = { if (active) tensor.activeValuesIterator else tensor.valuesIterator }.filter(f)
 
-  def foreach[U](fn: V => U) = iterator.foreach(fn)
+  def foreach[U](fn: V => U): Unit = iterator.foreach(fn)
 
 //  def filter(p: V => Boolean) = withFilter(p)
 //
@@ -38,9 +38,9 @@ class TensorValues[K, V, +This](private val tensor: This,
 //    new TensorValues[K, V, This](tensor, active, { a => f(a) && p(a) })(ev)
 //  }
 
-  override def toString = iterator.mkString("TensorValues(", ",", ")")
+  override def toString: String = iterator.mkString("TensorValues(", ",", ")")
 
-  override def equals(p1: Any) = p1 match {
+  override def equals(p1: Any): Boolean = p1 match {
     case x: TensorValues[_, _, _] => x.eq(this) || iterator.sameElements(x.iterator)
     case _                        => false
   }
@@ -49,7 +49,7 @@ class TensorValues[K, V, +This](private val tensor: This,
     tensor.mapValues(fn)(bf.asInstanceOf[CanMapValues[Tensor[K, V], V, O, That]])
   }
 
-  def exists(f: V => Boolean) = iterator.exists(f)
-  def forall(f: V => Boolean) = iterator.forall(f)
+  def exists(f: V => Boolean): Boolean = iterator.exists(f)
+  def forall(f: V => Boolean): Boolean = iterator.forall(f)
 
 }

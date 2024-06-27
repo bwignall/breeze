@@ -26,7 +26,7 @@ import breeze.numerics
  */
 trait Field[@specialized(Int, Short, Long, Float, Double) V] extends Ring[V] {
   def /(a: V, b: V): V
-  def inverse(a: V) = /(one, a)
+  def inverse(a: V): V = /(one, a)
   def pow(a: V, b: V): V
 }
 
@@ -44,7 +44,7 @@ object Field {
     def *(a: Int, b: Int) = a * b
     def /(a: Int, b: Int) = a / b
     def %(a: Int, b: Int) = a % b
-    def pow(a: Int, b: Int) = math.pow(a, b).toInt
+    def pow(a: Int, b: Int): Int = math.pow(a, b).toInt
 
     implicit val normImpl: norm.Impl[Int, Double] = new norm.Impl[Int, Double] {
       def apply(v: Int) = math.abs(v).toDouble
@@ -54,8 +54,8 @@ object Field {
   /** Not a field, but whatever. */
   @SerialVersionUID(1L)
   implicit object fieldShort extends Field[Short] with Serializable {
-    def zero = 0.asInstanceOf[Short]
-    def one = 1.asInstanceOf[Short]
+    def zero: Short = 0.asInstanceOf[Short]
+    def one: Short = 1.asInstanceOf[Short]
     def ==(a: Short, b: Short) = a == b
     def !=(a: Short, b: Short) = a != b
     def +(a: Short, b: Short) = (a + b).asInstanceOf[Short]
@@ -63,7 +63,7 @@ object Field {
     def *(a: Short, b: Short) = (a * b).asInstanceOf[Short]
     def /(a: Short, b: Short) = (a / b).asInstanceOf[Short]
     def %(a: Short, b: Short) = (a % b).asInstanceOf[Short]
-    def pow(a: Short, b: Short) = math.pow(a, b).toShort
+    def pow(a: Short, b: Short): Short = math.pow(a, b).toShort
 
     implicit val normImpl: norm.Impl[Short, Double] = new norm.Impl[Short, Double] {
       def apply(v: Short) = math.abs(v).toDouble
@@ -83,7 +83,7 @@ object Field {
     def /(a: Long, b: Long) = a / b
     def %(a: Long, b: Long) = a % b.toLong
     // TODO: bad idea?
-    def pow(a: Long, b: Long) = math.pow(a.toDouble, b.toDouble).toLong
+    def pow(a: Long, b: Long): Long = math.pow(a.toDouble, b.toDouble).toLong
 
     implicit val normImpl: norm.Impl[Long, Double] = new norm.Impl[Long, Double] {
       def apply(v: Long) = math.abs(v).toDouble
@@ -142,10 +142,10 @@ object Field {
     def *(a: Float, b: Float) = a * b
     def /(a: Float, b: Float) = a / b
     def %(a: Float, b: Float) = a % b
-    def pow(a: Float, b: Float) = numerics.pow(a, b)
+    def pow(a: Float, b: Float): Float = numerics.pow(a, b)
 
     // http://floating-point-gui.de/errors/comparison/
-    override def close(a: Float, b: Float, tolerance: Double) = {
+    override def close(a: Float, b: Float, tolerance: Double): Boolean = {
       val diff = math.abs(a - b)
       a == b || (diff <= math.max(a.abs,
                                   b.abs
@@ -170,7 +170,7 @@ object Field {
     def %(a: Double, b: Double): Double = a % b
     def pow(a: Double, b: Double): Double = math.pow(a, b)
 
-    override def close(a: Double, b: Double, tolerance: Double) = {
+    override def close(a: Double, b: Double, tolerance: Double): Boolean = {
       val diff = math.abs(a - b)
       a == b || (diff <= tolerance) || (diff <= math.max(a.abs,
                                                          b.abs

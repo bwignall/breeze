@@ -37,7 +37,7 @@ trait MatrixInnerProduct[M, S] extends MatrixNorms[M, S] {
 }
 
 object EntrywiseMatrixNorms {
-  def make[M, S](implicit field: Field[S], hadamard: OpMulScalar.Impl2[M, M, M], iter: CanTraverseValues[M, S]) =
+  def make[M, S](implicit field: Field[S], hadamard: OpMulScalar.Impl2[M, M, M], iter: CanTraverseValues[M, S]): MatrixInnerProduct[M,S] =
     new MatrixInnerProduct[M, S] {
 
       override def innerProduct(m1: M, m2: M): S = sum(hadamard(m1, m2))
@@ -49,27 +49,27 @@ object EntrywiseMatrixNorms {
             class NormVisitor extends ValuesVisitor[Int] {
               var agg: Double = 0.0
               val (op, opEnd) =
-                if (n == 1) ((v: Int) => agg += v.abs.toDouble, identity[Double] _)
+                if (n == 1) (((v: Int)) => agg += v.abs.toDouble, identity[Double] _)
                 else if (n == 2)
-                  ((v: Int) => {
+                  (((v: Int)) => {
                      val nn = v.abs.toDouble
                      agg += nn * nn
                    },
-                   (e: Double) => sqrt(e)
+                   ((e: Double)) => sqrt(e)
                   )
                 else if (n == Int.MaxValue) {
-                  ((v: Int) => {
+                  (((v: Int)) => {
                      val nn = v.abs.toDouble
                      if (nn > agg) agg = nn
                    },
                    identity[Double] _
                   )
                 } else {
-                  ((v: Int) => {
+                  (((v: Int)) => {
                      val nn = v.abs.toDouble
                      agg += pow(v, n)
                    },
-                   (e: Double) => pow(e, 1.0 / n)
+                   ((e: Double)) => pow(e, 1.0 / n)
                   )
                 }
 
@@ -93,27 +93,27 @@ object EntrywiseMatrixNorms {
             class NormVisitor extends ValuesVisitor[Float] {
               var agg: Double = 0.0
               val (op, opEnd) =
-                if (n == 1) ((v: Float) => agg += v.abs.toDouble, identity[Double] _)
+                if (n == 1) (((v: Float)) => agg += v.abs.toDouble, identity[Double] _)
                 else if (n == 2)
-                  ((v: Float) => {
+                  (((v: Float)) => {
                      val nn = v.abs.toDouble
                      agg += nn * nn
                    },
-                   (e: Double) => sqrt(e)
+                   ((e: Double)) => sqrt(e)
                   )
                 else if (n == Float.PositiveInfinity) {
-                  ((v: Float) => {
+                  (((v: Float)) => {
                      val nn = v.abs.toDouble
                      if (nn > agg) agg = nn
                    },
                    identity[Double] _
                   )
                 } else {
-                  ((v: Float) => {
+                  (((v: Float)) => {
                      val nn = v.abs.toDouble
                      agg += pow(v, n)
                    },
-                   (e: Double) => pow(e, 1.0 / n)
+                   ((e: Double)) => pow(e, 1.0 / n)
                   )
                 }
 
@@ -137,27 +137,27 @@ object EntrywiseMatrixNorms {
             class NormVisitor extends ValuesVisitor[Double] {
               var agg: Double = 0.0
               val (op, opEnd) =
-                if (n == 1) ((v: Double) => agg += v.abs, identity[Double] _)
+                if (n == 1) (((v: Double)) => agg += v.abs, identity[Double] _)
                 else if (n == 2)
-                  ((v: Double) => {
+                  (((v: Double)) => {
                      val nn = v.abs
                      agg += nn * nn
                    },
-                   (e: Double) => sqrt(e)
+                   ((e: Double)) => sqrt(e)
                   )
                 else if (n == Double.PositiveInfinity) {
-                  ((v: Double) => {
+                  (((v: Double)) => {
                      val nn = v.abs
                      if (nn > agg) agg = nn
                    },
                    identity[Double] _
                   )
                 } else {
-                  ((v: Double) => {
+                  (((v: Double)) => {
                      val nn = v.abs
                      agg += pow(v, n)
                    },
-                   (e: Double) => pow(e, 1.0 / n)
+                   ((e: Double)) => pow(e, 1.0 / n)
                   )
                 }
 
@@ -181,27 +181,27 @@ object EntrywiseMatrixNorms {
             class NormVisitor extends ValuesVisitor[S] {
               var agg: Double = 0.0
               val (op, opEnd) =
-                if (n == 1) ((v: S) => agg += field.sNorm(v), identity[Double] _)
+                if (n == 1) (((v: S)) => agg += field.sNorm(v), identity[Double] _)
                 else if (n == 2)
-                  ((v: S) => {
+                  (((v: S)) => {
                      val nn = field.sNorm(v)
                      agg += nn * nn
                    },
-                   (e: Double) => sqrt(e)
+                   ((e: Double)) => sqrt(e)
                   )
                 else if (n == Double.PositiveInfinity) {
-                  ((v: S) => {
+                  (((v: S)) => {
                      val nn = field.sNorm(v)
                      if (nn > agg) agg = nn
                    },
                    identity[Double] _
                   )
                 } else {
-                  ((v: S) => {
+                  (((v: S)) => {
                      val nn = field.sNorm(v)
                      agg += pow(nn, n)
                    },
-                   (e: Double) => pow(e, 1.0 / n)
+                   ((e: Double)) => pow(e, 1.0 / n)
                   )
                 }
 

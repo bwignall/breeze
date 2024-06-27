@@ -9,7 +9,7 @@ import org.scalatestplus.scalacheck.Checkers
  */
 class argsortTest extends AnyFunSuite with Checkers {
   test("argsort dv") {
-    check(Prop.forAll { (array: Array[Double]) =>
+    check(Prop.forAll { ((array: Array[Double])) =>
       val ax = argsort(new DenseVector(array))
       ax.toIndexedSeq.map(array) == array.sorted.toIndexedSeq
     })

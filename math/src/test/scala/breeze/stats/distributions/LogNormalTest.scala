@@ -20,6 +20,8 @@ import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
+import breeze.stats.distributions.LogNormal
+import org.scalacheck.Arbitrary
 
 class LogNormalTest
     extends AnyFunSuite
@@ -31,7 +33,7 @@ class LogNormalTest
   import Arbitrary.arbitrary
   val expFam: LogNormal.type = LogNormal
 
-  def arbParameter = Arbitrary {
+  def arbParameter: Arbitrary[(Double, Double)] = Arbitrary {
     for (
       mean <- arbitrary[Double].map { _ % 10.0 };
       std <- arbitrary[Double].map { x =>
@@ -40,7 +42,7 @@ class LogNormalTest
     ) yield (mean, std)
   }
 
-  def paramsClose(p: (Double, Double), b: (Double, Double)) = {
+  def paramsClose(p: (Double, Double), b: (Double, Double)): Boolean = {
     val y1 = (p._1 - b._1).abs / (p._1.abs / 2 + b._1.abs / 2 + 1) < 1e-1
     val y2 = (p._2 - b._2).abs / (p._2.abs / 2 + b._2.abs / 2 + 1) < 1e-1
     y1 && y2
@@ -50,7 +52,7 @@ class LogNormalTest
 
   type Distr = LogNormal
 
-  implicit def arbDistr = Arbitrary {
+  implicit def arbDistr: Arbitrary[LogNormal] = Arbitrary {
     // make scala 2 happy
     implicit val basis: RandBasis = RandBasis.mt0
     for (

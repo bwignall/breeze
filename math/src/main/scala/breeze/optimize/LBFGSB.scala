@@ -129,7 +129,7 @@ class LBFGSB(lowerBounds: DenseVector[Double],
     wolfeRuleSearch.minimizeWithBound(ff, 1.0, minStepBound)
   }
 
-  override protected def takeStep(state: State, dir: DenseVector[Double], stepSize: Double) = {
+  override protected def takeStep(state: State, dir: DenseVector[Double], stepSize: Double): DenseVector[Double] = {
     val newX = state.x + dir *:* stepSize
     adjustWithinBound(newX)
     newX
@@ -167,7 +167,7 @@ class LBFGSB(lowerBounds: DenseVector[Double],
     )
   }
 
-  protected def getGeneralizedCauchyPoint(history: History, x: DenseVector[Double], g: DenseVector[Double]) = {
+  protected def getGeneralizedCauchyPoint(history: History, x: DenseVector[Double], g: DenseVector[Double]): (DenseVector[Double], DenseVector[Double]) = {
     import history._
     // Algorithm CP:Computation of generalized Cauchy point
     val n = x.length
@@ -243,7 +243,7 @@ class LBFGSB(lowerBounds: DenseVector[Double],
    * @param freeVarIndex
    * @return starAlpha = max{a : a <= 1 and  l_i-xc_i <= a*d_i <= u_i-xc_i}
    */
-  protected def findAlpha(xCauchy: DenseVector[Double], du: Vector[Double], freeVarIndex: Array[Int]) = {
+  protected def findAlpha(xCauchy: DenseVector[Double], du: Vector[Double], freeVarIndex: Array[Int]): Double = {
     var starAlpha = 1.0
     for ((vIdx, i) <- freeVarIndex.zipWithIndex) {
       if (0 < du(i)) {
@@ -262,7 +262,7 @@ class LBFGSB(lowerBounds: DenseVector[Double],
                                      x: DenseVector[Double],
                                      c: DenseVector[Double],
                                      g: DenseVector[Double]
-  ) = {
+  ): DenseVector[Double] = {
     import history._
     val invTheta = 1.0 / theta
 
@@ -309,7 +309,7 @@ class LBFGSB(lowerBounds: DenseVector[Double],
     subspaceMinX
   }
 
-  protected def updateSkYkHessianApproxMat(history: History, newS: DenseVector[Double], newY: DenseVector[Double]) = {
+  protected def updateSkYkHessianApproxMat(history: History, newS: DenseVector[Double], newY: DenseVector[Double]): History = {
     val newHistory = {
       import history._
       if (0 == yHistory.cols) { // yHistory.cols means update times
@@ -360,7 +360,7 @@ object LBFGSB {
                               upperBounds: DenseVector[Double],
                               tolerance: Double,
                               maxIter: Int
-  ) = {
+  ): ConvergenceCheck[DenseVector[Double]] = {
     bfgsbConvergenceTest(lowerBounds, upperBounds) || FirstOrderMinimizer.defaultConvergenceCheck(maxIter, tolerance)
   }
 

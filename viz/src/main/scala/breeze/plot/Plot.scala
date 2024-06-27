@@ -18,6 +18,9 @@ import java.lang
 
 import collection.mutable.ArrayBuffer
 import collection.mutable
+import java.awt.geom.GeneralPath
+import org.jfree.chart.axis.TickUnits
+import org.jfree.chart.plot.XYPlot
 
 /**
  * Maintains a set of series (or more strictly, the data from those series)
@@ -93,7 +96,7 @@ class Plot() {
   def xlim_=(lowerUpper: (Double, Double)): Unit = {
     xlim(lowerUpper._1, lowerUpper._2)
   }
-  def xlim = plot.getDomainAxis.getLowerBound -> plot.getDomainAxis.getUpperBound()
+  def xlim: (Double, Double) = plot.getDomainAxis.getLowerBound -> plot.getDomainAxis.getUpperBound()
 
   /** Sets the lower and upper bounds of the current plot. */
   def xlim(lower: Double, upper: Double): Unit = {
@@ -104,7 +107,7 @@ class Plot() {
   def ylim_=(lowerUpper: (Double, Double)): Unit = {
     ylim(lowerUpper._1, lowerUpper._2)
   }
-  def ylim = plot.getRangeAxis.getLowerBound -> plot.getRangeAxis.getUpperBound()
+  def ylim: (Double, Double) = plot.getRangeAxis.getLowerBound -> plot.getRangeAxis.getUpperBound()
   def ylim(lower: Double, upper: Double): Unit = {
     plot.getRangeAxis.setLowerBound(lower)
     plot.getRangeAxis.setUpperBound(upper)
@@ -116,8 +119,8 @@ class Plot() {
   private var _xaxis: NumberAxis = new NumberAxis(null)
   private var _yaxis: NumberAxis = new NumberAxis(null)
 
-  def logScaleX = xaxis.isInstanceOf[LogarithmicAxis]
-  def logScaleY = yaxis.isInstanceOf[LogarithmicAxis]
+  def logScaleX: Boolean = xaxis.isInstanceOf[LogarithmicAxis]
+  def logScaleY: Boolean = yaxis.isInstanceOf[LogarithmicAxis]
 
   def logScaleX_=(value: Boolean): Unit = {
     if (value != logScaleX) {
@@ -171,7 +174,7 @@ class Plot() {
   })
 
   /** The JFreeChart plot object. */
-  lazy val plot = {
+  lazy val plot: XYPlot = {
     val rv = new org.jfree.chart.plot.XYPlot()
     rv.setDomainAxis(xaxis)
     rv.setRangeAxis(yaxis)
@@ -210,7 +213,7 @@ class Plot() {
   def legend: Boolean = _legend
 
   /** The JFreeChart for this plot */
-  lazy val chart = {
+  lazy val chart: JFreeChart = {
     val rv = new JFreeChart(null, JFreeChart.DEFAULT_TITLE_FONT, plot, false)
     rv.setBackgroundPaint(Plot.transparent)
     rv.setPadding(new RectangleInsets(5, 0, 0, 0))
@@ -229,7 +232,7 @@ object Plot {
     def refresh(pl: Plot): Unit
   }
 
-  val integerTickUnits = {
+  val integerTickUnits: TickUnits = {
     val units = new TickUnits()
     val df = new java.text.DecimalFormat("0")
     for (b <- Seq(1, 2, 5); e <- Seq(0, 1, 2, 3, 4, 5, 6, 7, 8)) {
@@ -241,27 +244,27 @@ object Plot {
   // color cycle ignoring bright colors
   val paints: Array[Paint] = PaintScale.Category20.values.asInstanceOf[Array[Paint]]
 
-  def paint(series: Int) =
+  def paint(series: Int): Paint =
     paints(series % paints.length)
 
   val shapes = DefaultDrawingSupplier.DEFAULT_SHAPE_SEQUENCE
-  def shape(series: Int) =
+  def shape(series: Int): Shape =
     shapes(series % shapes.length)
 
   val strokes = DefaultDrawingSupplier.DEFAULT_STROKE_SEQUENCE
-  def stroke(series: Int) =
+  def stroke(series: Int): Stroke =
     strokes(series % strokes.length)
 
   val fillPaints = paints; // DefaultDrawingSupplier.DEFAULT_FILL_PAINT_SEQUENCE
-  def fillPaint(series: Int) =
+  def fillPaint(series: Int): Paint =
     fillPaints(series % fillPaints.length)
 
   val outlinePaints = paints; // DefaultDrawingSupplier.DEFAULT_OUTLINE_PAINT_SEQUENCE
-  def outlinePaint(series: Int) =
+  def outlinePaint(series: Int): Paint =
     outlinePaints(series % outlinePaints.length)
 
   val outlineStrokes = DefaultDrawingSupplier.DEFAULT_OUTLINE_STROKE_SEQUENCE
-  def outlineStroke(series: Int) =
+  def outlineStroke(series: Int): Stroke =
     outlineStrokes(series % outlineStrokes.length)
 
   val transparent = new Color(255, 255, 255, 0)
@@ -273,7 +276,7 @@ object Plot {
   val dot =
     new java.awt.geom.Ellipse2D.Double(-1, -1, 2, 2)
 
-  val plus = {
+  val plus: GeneralPath = {
     val shape = new java.awt.geom.GeneralPath()
     shape.moveTo(-3, 0)
     shape.lineTo(3, 0)

@@ -33,18 +33,18 @@ import scala.collection.compat._
 case class Bernoulli(p: Double)(implicit rand: RandBasis) extends DiscreteDistr[Boolean] with Moments[Double, Double] {
   require(p >= 0.0)
   require(p <= 1.0)
-  def probabilityOf(b: Boolean) = if (b) p else 1 - p
+  def probabilityOf(b: Boolean): Double = if (b) p else 1 - p
 
-  override def draw() = {
+  override def draw(): Boolean = {
     rand.uniform.draw() < p
   }
 
-  override def toString() = "Bernoulli(" + p + ")"
+  override def toString(): String = "Bernoulli(" + p + ")"
 
   def mean = p
-  def variance = p * (1 - p)
-  def mode = I(p >= 0.5)
-  def entropy = -p * math.log(p) - (1 - p) * math.log1p(-p)
+  def variance: Double = p * (1 - p)
+  def mode: Double = I(p >= 0.5)
+  def entropy: Double = -p * math.log(p) - (1 - p) * math.log1p(-p)
 }
 
 object Bernoulli extends ExponentialFamily[Bernoulli, Boolean] with HasConjugatePrior[Bernoulli, Boolean] {
@@ -55,7 +55,7 @@ object Bernoulli extends ExponentialFamily[Bernoulli, Boolean] with HasConjugate
     Counter(true -> parameter._1, false -> parameter._2)
   )
 
-  override def posterior(prior: Beta.Parameter, evidence: IterableOnce[Boolean]) = {
+  override def posterior(prior: Beta.Parameter, evidence: IterableOnce[Boolean]): (Double, Double) = {
     evidence.foldLeft(prior) { (acc, ev) =>
       if (ev) acc.copy(_1 = acc._1 + 1)
       else acc.copy(_2 = acc._2 + 1)
@@ -69,15 +69,15 @@ object Bernoulli extends ExponentialFamily[Bernoulli, Boolean] with HasConjugate
     def +(t: SufficientStatistic) = SufficientStatistic(numYes + t.numYes, n + t.n)
   }
 
-  def emptySufficientStatistic = SufficientStatistic(0, 0)
+  def emptySufficientStatistic: SufficientStatistic = SufficientStatistic(0, 0)
 
-  def sufficientStatisticFor(t: Boolean) = SufficientStatistic(I(t), 1)
+  def sufficientStatisticFor(t: Boolean): SufficientStatistic = SufficientStatistic(I(t), 1)
 
-  def mle(stats: SufficientStatistic) = stats.numYes / stats.n
+  def mle(stats: SufficientStatistic): Parameter = stats.numYes / stats.n
 
   override def distribution(p: Double)(implicit rand: RandBasis) = new Bernoulli(p)
 
-  def likelihoodFunction(stats: SufficientStatistic) = new DiffFunction[Double] {
+  def likelihoodFunction(stats: SufficientStatistic): DiffFunction[Parameter] = new DiffFunction[Double] {
     val SufficientStatistic(yes, num) = stats
     val no = num - yes
     def calculate(p: Double) = {

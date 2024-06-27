@@ -17,42 +17,42 @@ object Database {
   /** Look up the value of a specific entry.
    * Name must be an exact match with the entry.
    */
-  def value(string: String) = databaseHM(string)._1
+  def value(string: String): Double = databaseHM(string)._1
 
   /** Look up the value of entries with name matching the given regex expression.
    *
    * @param regex enter a regex object (i.e. """regex expression""".r)
    * @return returns a vector of (String, Double) objects, which contain the full entry name (String) and the value (Double)
    */
-  def value(regex: Regex) = databaseHM.collect {
+  def value(regex: Regex): HashMap[String,Double] = databaseHM.collect {
     case (key: String, (value: Double, _, _)) if regex.findFirstIn(key).nonEmpty => (key, value)
   }
 
   /** Look up the uncertainty of a specific entry.
    * Name must be an exact match with the entry.
    */
-  def uncertainty(string: String) = databaseHM(string)._2
+  def uncertainty(string: String): Double = databaseHM(string)._2
 
   /** Look up the uncertainty of entries with name matching the given regex expression.
    *
    * @param regex enter a regex object (i.e. """regex expression""".r)
    * @return returns a vector of (String, Double) objects, which contain the full entry name (String) and the uncertainty (Double)
    */
-  def uncertainty(regex: Regex) = databaseHM.collect {
+  def uncertainty(regex: Regex): HashMap[String,Double] = databaseHM.collect {
     case (key: String, (_, uncert: Double, _)) if regex.findFirstIn(key).nonEmpty => (key, uncert)
   }
 
   /** Look up the unit of a specific entry.
    * Name must be an exact match with the entry.
    */
-  def unit(string: String) = databaseHM(string)._3
+  def unit(string: String): String = databaseHM(string)._3
 
   /** Look up the unit of entries with name matching the given regex expression.
    *
    * @param regex enter a regex object (i.e. """regex expression""".r)
    * @return returns a vector of (String, Double) objects, which contain the full entry name (String) and the uncertainty (Double)
    */
-  def unit(regex: Regex) = databaseHM.collect {
+  def unit(regex: Regex): HashMap[String,String] = databaseHM.collect {
     case (key: String, (_, _, unit: String)) if regex.findFirstIn(key).nonEmpty => (key, unit)
   }
 

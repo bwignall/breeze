@@ -22,7 +22,7 @@ abstract class CubicLineSearch extends SerializableLogging with MinimizingLineSe
    * This is additionally "safe-guarded" whereby steps too close to
    * either side of the interval will not be selected.
    */
-  def interp(l: Bracket, r: Bracket) = {
+  def interp(l: Bracket, r: Bracket): Double = {
     // See N&W p57 actual for an explanation of the math
     val d1 = l.dd + r.dd - 3 * (l.fval - r.fval) / (l.t - r.t)
     val d2 = sqrt(d1 * d1 - l.dd * r.dd)

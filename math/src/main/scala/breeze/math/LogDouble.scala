@@ -29,7 +29,7 @@ import scala.math._
  * @author dlwh
  */
 class LogDouble(val logValue: Double) {
-  def value = exp(logValue)
+  def value: Double = exp(logValue)
 
   def *(other: LogDouble) = new LogDouble(logValue + other.logValue)
 
@@ -47,9 +47,9 @@ class LogDouble(val logValue: Double) {
 
   def -(d: Double) = new LogDouble(logDiff(logValue, log(d)))
 
-  override def toString = "LogDouble(" + logValue + ")"
+  override def toString: String = "LogDouble(" + logValue + ")"
 
-  override def equals(o: Any) = o match {
+  override def equals(o: Any): Boolean = o match {
     case ld: LogDouble => logValue == ld.logValue
     case _             => false
   }
@@ -70,7 +70,7 @@ object LogDouble {
      */
     def toLogDouble = new LogDouble(scala.math.log(d))
 
-    def logValue = scala.math.log(d)
+    def logValue: Double = scala.math.log(d)
 
     // Operations assume the Double is in "Normal" space
     def *(o: LogDouble) = new LogDouble(o.logValue + scala.math.log(d))

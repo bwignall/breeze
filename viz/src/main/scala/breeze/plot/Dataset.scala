@@ -30,16 +30,16 @@ import scala.collection.mutable.ArrayBuffer;
  */
 class XYDataset[Item](x: Item => Number, y: Item => Number, label: Item => String, tip: Item => String)
     extends org.jfree.data.xy.AbstractXYDataset {
-  val names = ArrayBuffer[String]();
-  val items = ArrayBuffer[IndexedSeq[Item]]();
+  val names: ArrayBuffer[String] = ArrayBuffer[String]();
+  val items: ArrayBuffer[IndexedSeq[Item]] = ArrayBuffer[IndexedSeq[Item]]();
 
-  override def getSeriesKey(series: Int) =
+  override def getSeriesKey(series: Int): Comparable[_ <: Object] =
     names(series)
 
   override def getSeriesCount =
     names.length
 
-  override def getItemCount(series: Int) =
+  override def getItemCount(series: Int): Int =
     items(series).length
 
   override def getX(series: Int, item: Int): Number =
@@ -84,16 +84,16 @@ class XYZDataset[Item](x: Item => Number,
                        label: Item => String,
                        tip: Item => String
 ) extends org.jfree.data.xy.AbstractXYZDataset {
-  val names = ArrayBuffer[String]();
-  val items = ArrayBuffer[IndexedSeq[Item]]();
+  val names: ArrayBuffer[String] = ArrayBuffer[String]();
+  val items: ArrayBuffer[IndexedSeq[Item]] = ArrayBuffer[IndexedSeq[Item]]();
 
-  override def getSeriesKey(series: Int) =
+  override def getSeriesKey(series: Int): Comparable[_ <: Object] =
     names(series);
 
   override def getSeriesCount =
     names.length;
 
-  override def getItemCount(series: Int) =
+  override def getItemCount(series: Int): Int =
     items(series).length;
 
   override def getX(series: Int, item: Int): Number =

@@ -41,22 +41,22 @@ trait CounterLike[K, V, +M <: scala.collection.mutable.Map[K, V], +This <: Count
 
   def keySet: Set[K] = data.keySet
 
-  def repr = this.asInstanceOf[This]
+  def repr: This = this.asInstanceOf[This]
 
   override def size = data.size
   def activeSize = data.size
 
   def isEmpty = data.isEmpty
 
-  def contains(k: K) = data.contains(k)
+  def contains(k: K): Boolean = data.contains(k)
 
-  override def apply(k: K) = {
+  override def apply(k: K): V = {
     data.getOrElse(k, default)
   }
 
   def update(k: K, v: V): Unit = { data(k) = v }
 
-  def get(k: K) = data.get(k)
+  def get(k: K): Option[V] = data.get(k)
 
   override def keysIterator = data.keysIterator
 

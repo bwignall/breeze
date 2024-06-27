@@ -73,7 +73,7 @@ trait DenseVector_DoubleOps extends DenseVectorExpandOps {
     .register(impl_OpSub_DV_DV_eq_DV_Double)
 
   implicit object canDotD extends OpMulInner.Impl2[DenseVector[Double], DenseVector[Double], Double] {
-    def apply(a: DenseVector[Double], b: DenseVector[Double]) = {
+    def apply(a: DenseVector[Double], b: DenseVector[Double]): Double = {
       require(a.length == b.length, s"Vectors must have same length")
       if (
         a.noOffsetOrStride && b.noOffsetOrStride && a.length < DenseVectorSupportMethods.MAX_SMALL_DOT_PRODUCT_LENGTH

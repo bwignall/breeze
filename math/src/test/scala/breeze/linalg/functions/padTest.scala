@@ -8,9 +8,9 @@ import org.scalatest.funsuite.AnyFunSuite
  */
 class padTest extends AnyFunSuite {
 
-  val testDVI = DenseVector(1, 2, 3, 4, 5)
-  val testDMI = DenseMatrix(1, 2, 3, 4, 5)
-  val testDVD = DenseVector(1d, 2d, 3d, 4d, 5d)
+  val testDVI: DenseVector[Int] = DenseVector(1, 2, 3, 4, 5)
+  val testDMI: DenseMatrix[Int] = DenseMatrix(1, 2, 3, 4, 5)
+  val testDVD: DenseVector[Double] = DenseVector(1d, 2d, 3d, 4d, 5d)
 
   test("padRight") {
 

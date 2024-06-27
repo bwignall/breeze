@@ -32,14 +32,14 @@ class MultimethodTest extends AnyFunSuite with Checkers {
   class MMPrim extends BinaryRegistry[T, Double, Tag, String]
   class MMDouble extends BinaryRegistry[Double, Double, Tag, String]
 
-  val t = new T {}
-  val v = new V {}
-  val dv = new DV {}
-  val sv = new SV {}
-  val m = new M {}
-  val dm = new DM {}
+  val t: T = new T {}
+  val v: V = new V {}
+  val dv: DV = new DV {}
+  val sv: SV = new SV {}
+  val m: M = new M {}
+  val dm: DM = new DM {}
 
-  val all = Set(t, v, dv, sv, m, dm)
+  val all: Set[T] = Set(t, v, dv, sv, m, dm)
 
   private def ufunc[T1, T2, R](f: (T1, T2) => R): UFunc.UImpl2[Tag, T1, T2, R] = (t1, t2) => f(t1, t2)
 

@@ -24,13 +24,13 @@ import org.apache.commons.math3.distribution.{FDistribution => ApacheFDistributi
 trait ApacheContinuousDistribution extends ContinuousDistr[Double] with HasCdf with HasInverseCdf {
   protected val inner: ApacheRealDistribution
 
-  def unnormalizedLogPdf(x: Double) = math.log(inner.density(x))
-  override def pdf(x: Double) = inner.density(x)
+  def unnormalizedLogPdf(x: Double): Double = math.log(inner.density(x))
+  override def pdf(x: Double): Double = inner.density(x)
   lazy val logNormalizer = 1.0
-  def draw() = inner.sample()
+  def draw(): Double = inner.sample()
   def drawMany(n: Int): Array[Double] = inner.sample(n)
-  def probability(x: Double, y: Double) = inner.probability(x, y)
-  def inverseCdf(p: Double) = inner.inverseCumulativeProbability(p)
+  def probability(x: Double, y: Double): Double = inner.probability(x, y)
+  def inverseCdf(p: Double): Double = inner.inverseCumulativeProbability(p)
   def mean: Double = inner.getNumericalMean()
   def variance: Double = inner.getNumericalVariance()
 
@@ -39,7 +39,7 @@ trait ApacheContinuousDistribution extends ContinuousDistr[Double] with HasCdf w
 
 trait ApacheDiscreteDistribution extends DiscreteDistr[Int] {
   protected val inner: ApacheIntegerDistribution
-  def probabilityOf(x: Int) = inner.probability(x)
-  def draw() = inner.sample()
+  def probabilityOf(x: Int): Double = inner.probability(x)
+  def draw(): Int = inner.sample()
   def drawMany(n: Int): Array[Int] = inner.sample(n)
 }

@@ -9,19 +9,19 @@ import breeze.numerics.IntMath
  **/
 object PowImplicits {
   implicit class DoublePow(x: Double) {
-    def pow(y: Double) = math.pow(x, y)
+    def pow(y: Double): Double = math.pow(x, y)
   }
 
   implicit class FloatPow(x: Float) {
-    def pow(y: Float) = math.pow(x, y).toFloat
+    def pow(y: Float): Float = math.pow(x, y).toFloat
   }
 
   implicit class IntPow(x: Int) {
-    def pow(y: Int) = IntMath.ipow(x, y)
+    def pow(y: Int): Int = IntMath.ipow(x, y)
   }
 
   implicit class LongPow(x: Long) {
-    def pow(y: Long) = IntMath.ipow(x, y)
+    def pow(y: Long): Long = IntMath.ipow(x, y)
   }
 
 }

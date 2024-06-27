@@ -13,13 +13,13 @@ class ThreadLocalRandomGenerator(genThunk: => RandomGenerator) extends RandomGen
   @transient private lazy val genTL = new ThreadLocal[RandomGenerator] with Serializable {
     override def initialValue(): RandomGenerator = genThunk
   }
-  def nextBytes(bytes: Array[Byte]) = genTL.get().nextBytes(bytes)
+  def nextBytes(bytes: Array[Byte]): Unit = genTL.get().nextBytes(bytes)
 
-  def setSeed(seed: Long) = genTL.get().setSeed(seed)
+  def setSeed(seed: Long): Unit = genTL.get().setSeed(seed)
 
-  def setSeed(seed: Array[Int]) = genTL.get().setSeed(seed)
+  def setSeed(seed: Array[Int]): Unit = genTL.get().setSeed(seed)
 
-  def setSeed(seed: Int) = genTL.get().setSeed(seed)
+  def setSeed(seed: Int): Unit = genTL.get().setSeed(seed)
 
   def nextInt(): Int = genTL.get().nextInt()
 

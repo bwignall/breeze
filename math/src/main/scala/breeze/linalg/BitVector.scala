@@ -8,6 +8,7 @@ import breeze.storage.Zero
 
 import java.util
 import scala.reflect.ClassTag
+import breeze.linalg.BitVector
 
 /**
  * A BitVector is a Vector of Booleans backed by a [[java.util.Bitset]]. Much better memory usage
@@ -80,7 +81,7 @@ class BitVector(val data: java.util.BitSet, val length: Int, val enforceLength: 
       }
   }
 
-  override def toString = {
+  override def toString: String = {
     activeKeysIterator.mkString("BitVector(", ", ", ")")
   }
 
@@ -88,7 +89,7 @@ class BitVector(val data: java.util.BitSet, val length: Int, val enforceLength: 
 
 object BitVector {
 
-  def apply(bools: Boolean*) = {
+  def apply(bools: Boolean*): BitVector = {
     val bs = new util.BitSet
     for (i <- 0 until bools.length if bools(i)) {
       bs.set(i)
@@ -97,7 +98,7 @@ object BitVector {
     new BitVector(bs, bools.length)
   }
 
-  def apply(length: Int, enforceLength: Boolean = true)(trues: Int*) = {
+  def apply(length: Int, enforceLength: Boolean = true)(trues: Int*): BitVector = {
     val bs = new util.BitSet
     for (i <- trues) {
       if (enforceLength && i >= length)
@@ -110,7 +111,7 @@ object BitVector {
   def zeros(length: Int, enforceLength: Boolean = true): BitVector =
     new BitVector(new util.BitSet(), length, enforceLength)
 
-  def ones(length: Int, enforceLength: Boolean = true) = {
+  def ones(length: Int, enforceLength: Boolean = true): BitVector = {
     val bs = new java.util.BitSet(length)
     bs.set(0, length)
     new BitVector(bs, length, enforceLength)

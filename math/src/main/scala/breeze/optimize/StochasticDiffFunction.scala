@@ -17,7 +17,7 @@ trait StochasticDiffFunction[T] extends (T => Double) with NumericOps[Stochastic
   /** calculates the value at a point */
   def valueAt(x: T): Double = calculate(x)._1
 
-  final def apply(x: T) = valueAt(x)
+  final def apply(x: T): Double = valueAt(x)
 
   /** Calculates both the value and the gradient at a point */
   def calculate(x: T): (Double, T)

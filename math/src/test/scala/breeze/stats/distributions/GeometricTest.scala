@@ -20,6 +20,8 @@ import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
+import breeze.stats.distributions.Geometric
+import org.scalacheck.Arbitrary
 
 class GeometricTest extends AnyFunSuite with Checkers with MomentsTestBase[Int] with ExpFamTest[Geometric, Int] {
   import org.scalacheck.Arbitrary.arbitrary
@@ -29,11 +31,11 @@ class GeometricTest extends AnyFunSuite with Checkers with MomentsTestBase[Int] 
 
   override val VARIANCE_TOLERANCE: Double = 1e-1
 
-  def paramsClose(p: Double, q: Double) = {
+  def paramsClose(p: Double, q: Double): Boolean = {
     (p - q).abs / (p.abs / 2 + q.abs / 2 + 1) < 1e-1
   }
 
-  def arbParameter = Arbitrary {
+  def arbParameter: Arbitrary[Double] = Arbitrary {
     for (
       p <- arbitrary[Double].map { m =>
         (math.abs(m) % 1.0) + 1e-3
@@ -41,7 +43,7 @@ class GeometricTest extends AnyFunSuite with Checkers with MomentsTestBase[Int] 
     ) yield p
   }
 
-  def arbDistr = Arbitrary {
+  def arbDistr: Arbitrary[Geometric] = Arbitrary {
     for (
       p <- arbitrary[Double].map { m =>
         (math.abs(m) % 1.0) + 1e-3
