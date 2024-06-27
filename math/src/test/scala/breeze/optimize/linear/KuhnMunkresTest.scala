@@ -1,9 +1,9 @@
 package breeze.optimize.linear
 
+import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
-import org.scalacheck._
 
 class KuhnMunkresTest extends AnyFunSuite with Checkers {
 

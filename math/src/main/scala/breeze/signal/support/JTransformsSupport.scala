@@ -1,9 +1,11 @@
 package breeze.signal.support
 
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
 import breeze.macros._
-import breeze.linalg.{DenseMatrix, DenseVector}
 import breeze.math.Complex
-import org.jtransforms.fft.{DoubleFFT_1D, DoubleFFT_2D}
+import org.jtransforms.fft.DoubleFFT_1D
+import org.jtransforms.fft.DoubleFFT_2D
 
 /** This class encapsulates convenience methods to use the JTransforms package.
  *
@@ -15,7 +17,7 @@ import org.jtransforms.fft.{DoubleFFT_1D, DoubleFFT_2D}
  */
 object JTransformsSupport {
 
-  //maintain instance of transform to eliminate repeated initialization
+  // maintain instance of transform to eliminate repeated initialization
   private val fft_instD1D = new ThreadLocal[(Int, DoubleFFT_1D)]
 
   def getD1DInstance(length: Int): DoubleFFT_1D = {

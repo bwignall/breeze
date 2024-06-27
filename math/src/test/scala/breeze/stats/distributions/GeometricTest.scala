@@ -16,6 +16,8 @@ package breeze.stats.distributions
  limitations under the License.
  */
 
+import breeze.stats.distributions.Geometric
+import org.scalacheck.Arbitrary
 import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
@@ -27,22 +29,26 @@ class GeometricTest extends AnyFunSuite with Checkers with MomentsTestBase[Int] 
 
   override val numSamples = 10000
 
-  override val VARIANCE_TOLERANCE: Double = 1E-1
+  override val VARIANCE_TOLERANCE: Double = 1e-1
 
-  def paramsClose(p: Double, q: Double) = {
-    (p - q).abs / (p.abs / 2 + q.abs / 2 + 1) < 1E-1
+  def paramsClose(p: Double, q: Double): Boolean = {
+    (p - q).abs / (p.abs / 2 + q.abs / 2 + 1) < 1e-1
   }
 
-  def arbParameter = Arbitrary {
-    for (p <- arbitrary[Double].map { m =>
-        (math.abs(m) % 1.0) + 1E-3
-      }) yield p
+  def arbParameter: Arbitrary[Double] = Arbitrary {
+    for (
+      p <- arbitrary[Double].map { m =>
+        (math.abs(m) % 1.0) + 1e-3
+      }
+    ) yield p
   }
 
-  def arbDistr = Arbitrary {
-    for (p <- arbitrary[Double].map { m =>
-        (math.abs(m) % 1.0) + 1E-3
-      }) yield new Geometric(p)(RandBasis.mt0)
+  def arbDistr: Arbitrary[Geometric] = Arbitrary {
+    for (
+      p <- arbitrary[Double].map { m =>
+        (math.abs(m) % 1.0) + 1e-3
+      }
+    ) yield new Geometric(p)(RandBasis.mt0)
   }
 
   def asDouble(x: Int) = x.toDouble

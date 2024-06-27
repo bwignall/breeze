@@ -1,6 +1,5 @@
 package breeze.linalg
 
-
 import org.scalatest.funsuite.AnyFunSuite
 
 class tanimotoDistanceTest extends AnyFunSuite {

@@ -1,28 +1,29 @@
 package breeze.optimize
 
-import breeze.math.{MutableInnerProductModule, MutableInnerProductVectorSpace}
-import breeze.stats.distributions.Rand
 import breeze.linalg._
+import breeze.math.MutableInnerProductModule
+import breeze.math.MutableInnerProductVectorSpace
+import breeze.stats.distributions.Rand
 
 /**
  *
  *
  * @author dlwh
  */
-class StochasticAveragedGradient[T](
-    maxIter: Int = -1,
-    initialStepSize: Double = 0.25,
-    tuneStepFrequency: Int = 10,
-    l2Regularization: Double = 0.0)(implicit vs: MutableInnerProductModule[T, Double])
+class StochasticAveragedGradient[T](maxIter: Int = -1,
+                                    initialStepSize: Double = 0.25,
+                                    tuneStepFrequency: Int = 10,
+                                    l2Regularization: Double = 0.0
+)(implicit vs: MutableInnerProductModule[T, Double])
     extends FirstOrderMinimizer[T, BatchDiffFunction[T]](maxIter) {
   import vs._
 
-  case class History(
-      stepSize: Double,
-      range: IndexedSeq[Int],
-      currentSum: T,
-      previousGradients: IndexedSeq[T],
-      nextPos: Int)
+  case class History(stepSize: Double,
+                     range: IndexedSeq[Int],
+                     currentSum: T,
+                     previousGradients: IndexedSeq[T],
+                     nextPos: Int
+  )
 
   protected def initialHistory(f: BatchDiffFunction[T], init: T): History = {
     val zero = zeroLike(init)
@@ -42,7 +43,7 @@ class StochasticAveragedGradient[T](
   override protected def adjust(newX: T, newGrad: T, newVal: Double) = {
     val av = newVal + (newX.dot(newX)) * l2Regularization / 2.0
     val ag = newGrad + newX * l2Regularization
-    (av -> ag)
+    av -> ag
   }
 
   protected def takeStep(state: State, dir: T, stepSize: Double): T = {
@@ -51,18 +52,22 @@ class StochasticAveragedGradient[T](
     newx
   }
 
-  protected def updateHistory(
-      newX: T,
-      newGrad: T,
-      newVal: Double,
-      f: BatchDiffFunction[T],
-      oldState: State): History = {
+  protected def updateHistory(newX: T,
+                              newGrad: T,
+                              newVal: Double,
+                              f: BatchDiffFunction[T],
+                              oldState: State
+  ): History = {
     import oldState.history._
     val d = currentSum - previousGradients(nextPos)
     val newStepSize = if (tuneStepFrequency > 0 && (oldState.iter % tuneStepFrequency) == 0) {
       val xdiff = newX - oldState.x
-      if ((f.valueAt(newX, IndexedSeq(nextPos)) + l2Regularization / 2 * norm(newX) - oldState.adjustedValue) > (oldState.adjustedGradient
-          .dot(xdiff)) + (xdiff.dot(xdiff)) / (2 * stepSize)) {
+      if (
+        (f.valueAt(newX, IndexedSeq(nextPos)) + l2Regularization / 2 * norm(
+          newX
+        ) - oldState.adjustedValue) > (oldState.adjustedGradient
+          .dot(xdiff)) + (xdiff.dot(xdiff)) / (2 * stepSize)
+      ) {
         stepSize / 2
       } else {
         stepSize * 1.5

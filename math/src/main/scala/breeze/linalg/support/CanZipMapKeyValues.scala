@@ -34,15 +34,21 @@ package breeze.linalg.support
  limitations under the License.
  */
 import breeze.math.Complex
-import scala.{specialized => spec}
+
 import scala.reflect.ClassTag
+import scala.{specialized => spec}
 
 /**
  * Marker for being able to zip two collection objects (From[V]) and map the values to a new collection (To[Vout]).
  *
  * @author dlwh
  */
-trait CanZipMapKeyValues[From, @spec(Int) K, @spec(Double, Int, Float, Long) V, @spec(Double, Int, Float, Long) RV, +To] {
+trait CanZipMapKeyValues[From,
+                         @spec(Int) K,
+                         @spec(Double, Int, Float, Long) V,
+                         @spec(Double, Int, Float, Long) RV,
+                         +To
+] {
 
   /** Maps all corresponding values from the two collections. */
   def map(from: From, from2: From, fn: (K, V, V) => RV): To

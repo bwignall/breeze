@@ -1,6 +1,8 @@
 package breeze.optimize
 
-import breeze.linalg.{DenseMatrix, DenseVector, sum}
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
+import breeze.linalg.sum
 import breeze.numerics.exp
 import breeze.util.DoubleImplicits
 import org.scalatest.matchers.should.Matchers._
@@ -30,12 +32,12 @@ class EmpiricalHessianTest extends OptimizeTestBase with DoubleImplicits {
 
   test("hessian matrix of an exponential function") {
     val x = DenseVector(3.56, -1.09, -0.31, 1.12, -1.52)
-    val A = DenseMatrix(
-      (35.1632d, 0d, 0d, 0d, 0d),
-      (0d, 0.3362165d, 0d, 0d, 0d),
-      (0d, 0d, 0.733447d, 0d, 0d),
-      (0d, 0d, 0d, 3.064854d, 0d),
-      (0d, 0d, 0d, 0d, 0.2187119d))
+    val A = DenseMatrix((35.1632d, 0d, 0d, 0d, 0d),
+                        (0d, 0.3362165d, 0d, 0d, 0d),
+                        (0d, 0d, 0.733447d, 0d, 0d),
+                        (0d, 0d, 0d, 3.064854d, 0d),
+                        (0d, 0d, 0d, 0d, 0.2187119d)
+    )
 
     val f = new DiffFunction[DenseVector[Double]] {
       def calculate(x: DenseVector[Double]) = {

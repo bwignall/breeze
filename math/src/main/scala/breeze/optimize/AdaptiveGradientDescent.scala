@@ -1,10 +1,15 @@
 package breeze.optimize
 
 import breeze.linalg._
-import breeze.linalg.support.{CanMapValues, CanZipMapValues, CanTraverseValues}
-import breeze.math.{MutableFiniteCoordinateField, MutableVectorRing, MutableVectorField}
+import breeze.linalg.support.CanMapValues
+import breeze.linalg.support.CanTraverseValues
+import breeze.linalg.support.CanZipMapValues
+import breeze.math.MutableFiniteCoordinateField
+import breeze.math.MutableVectorField
+import breeze.math.MutableVectorRing
 import breeze.numerics._
-import breeze.stats.distributions.{Rand, RandBasis}
+import breeze.stats.distributions.Rand
+import breeze.stats.distributions.RandBasis
 
 /**
  * Implements the L2^2 and L1 updates from
@@ -26,17 +31,15 @@ object AdaptiveGradientDescent {
    *
    * where g_ti is the gradient and s_ti = \sqrt(\sum_t'^{t} g_ti^2)
    */
-  class L2Regularization[T](
-      val regularizationConstant: Double = 1.0,
-      stepSize: Double,
-      maxIter: Int,
-      tolerance: Double = 1E-8,
-      minImprovementWindow: Int = 50)(
-      implicit vspace: MutableFiniteCoordinateField[T, _, Double],
-      rand: RandBasis)
+  class L2Regularization[T](val regularizationConstant: Double = 1.0,
+                            stepSize: Double,
+                            maxIter: Int,
+                            tolerance: Double = 1e-8,
+                            minImprovementWindow: Int = 50
+  )(implicit vspace: MutableFiniteCoordinateField[T, _, Double], rand: RandBasis)
       extends StochasticGradientDescent[T](stepSize, maxIter, tolerance, minImprovementWindow) {
 
-    val delta = 1E-4
+    val delta = 1e-4
     import vspace._
 
     case class History(sumOfSquaredGradients: T)
@@ -44,7 +47,7 @@ object AdaptiveGradientDescent {
 
     override def updateHistory(newX: T, newGrad: T, newValue: Double, f: StochasticDiffFunction[T], oldState: State) = {
       val oldHistory = oldState.history
-      val newG = (oldState.grad *:* oldState.grad)
+      val newG = oldState.grad *:* oldState.grad
       val maxAge = 1000.0
       if (oldState.iter > maxAge) {
         newG *= 1 / maxAge
@@ -72,7 +75,7 @@ object AdaptiveGradientDescent {
     override protected def adjust(newX: T, newGrad: T, newVal: Double) = {
       val av = newVal + (newX.dot(newX)) * regularizationConstant / 2.0
       val ag = newGrad + newX * regularizationConstant
-      (av -> ag)
+      av -> ag
     }
 
   }
@@ -86,10 +89,11 @@ object AdaptiveGradientDescent {
    *
    * where g_ti is the gradient and s_ti = \sqrt(\sum_t'^{t} g_ti^2)
    */
-  class L1Regularization[T](val lambda: Double = 1.0, delta: Double = 1E-5, eta: Double = 4, maxIter: Int = 100)(
-      implicit space: MutableFiniteCoordinateField[T, _, Double],
-      rand: RandBasis)
-      extends StochasticGradientDescent[T](eta, maxIter) {
+  class L1Regularization[T](val lambda: Double = 1.0, delta: Double = 1e-5, eta: Double = 4, maxIter: Int = 100)(
+    implicit
+    space: MutableFiniteCoordinateField[T, _, Double],
+    rand: RandBasis
+  ) extends StochasticGradientDescent[T](eta, maxIter) {
 
     import space._
     case class History(sumOfSquaredGradients: T)
@@ -104,7 +108,7 @@ object AdaptiveGradientDescent {
 
     override def updateHistory(newX: T, newGrad: T, newValue: Double, f: StochasticDiffFunction[T], oldState: State) = {
       val oldHistory = oldState.history
-      val newG = (oldState.grad *:* oldState.grad)
+      val newG = oldState.grad *:* oldState.grad
       val maxAge = 200.0
       if (oldState.iter > maxAge) {
         newG *= (1 / maxAge)
@@ -120,14 +124,16 @@ object AdaptiveGradientDescent {
       val s: T = sqrt(state.history.sumOfSquaredGradients +:+ (grad *:* grad) +:+ delta)
       val res: T = x + (dir *:* stepSize /:/ s)
       val tlambda = lambda * stepSize
-      space.zipMapValues.map(res, s, {
-        case (x_half, s_i) =>
-          if (x_half.abs < tlambda / s_i) {
-            0.0
-          } else {
-            (x_half - math.signum(x_half) * tlambda / s_i)
-          }
-      })
+      space.zipMapValues.map(res,
+                             s,
+                             { case (x_half, s_i) =>
+                               if (x_half.abs < tlambda / s_i) {
+                                 0.0
+                               } else {
+                                 x_half - math.signum(x_half) * tlambda / s_i
+                               }
+                             }
+      )
     }
 
     override def determineStepSize(state: State, f: StochasticDiffFunction[T], dir: T) = {
@@ -137,7 +143,7 @@ object AdaptiveGradientDescent {
     override protected def adjust(newX: T, newGrad: T, newVal: Double) = {
       val av = newVal + norm(newX, 1.0) * lambda
       val ag = newGrad + (signum(newX) *:* lambda)
-      (av -> ag)
+      av -> ag
     }
 
   }

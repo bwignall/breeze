@@ -1,7 +1,7 @@
 package breeze.numerics
 
-import org.scalatest.funsuite.AnyFunSuite
 import breeze.numerics.constants._
+import org.scalatest.funsuite.AnyFunSuite
 
 /**
  * @author ktakagaki

@@ -16,16 +16,15 @@ package breeze.collection.mutable
  limitations under the License.
  */
 
-import java.util.Comparator
-
-import breeze.collection.mutable.Beam.{BeamResult, NotAdded}
+import breeze.collection.mutable.Beam.BeamResult
+import breeze.collection.mutable.Beam.NotAdded
 import breeze.linalg.clip
 
-import scala.jdk.CollectionConverters._
+import java.util.Comparator
+import scala.collection._
 import scala.collection.generic._
 import scala.collection.mutable.ArrayBuffer
-import scala.collection._
-
+import scala.jdk.CollectionConverters._
 
 /**
  * Represents a beam, which is essentially a priority queue
@@ -44,7 +43,7 @@ class Beam[T](val maxSize: Int)(implicit override protected val ordering: Orderi
 
   override def size = queue.size
 
-  def min = {
+  def min: T = {
     if (queue.isEmpty) {
       throw new NoSuchElementException
     } else {
@@ -100,7 +99,7 @@ class Beam[T](val maxSize: Int)(implicit override protected val ordering: Orderi
 
   override def equals(obj: Any): Boolean = obj match {
     case x: Beam[T @unchecked] => maxSize == x.maxSize && iterator.sameElements(x.iterator)
-    case _ => false
+    case _                     => false
   }
 
   override def clone(): Beam[T] = new Beam[T](maxSize) ++= this.iterator
@@ -109,7 +108,7 @@ class Beam[T](val maxSize: Int)(implicit override protected val ordering: Orderi
     Beam.canBuildFrom[T, T].newBuilder(this)
   }
 
-  protected override def fromSpecific(coll: IterableOnce[T]): Beam[T] = {
+  override protected def fromSpecific(coll: IterableOnce[T]): Beam[T] = {
     Beam.canBuildFrom[T, T].fromSpecific(this)(coll)
   }
 

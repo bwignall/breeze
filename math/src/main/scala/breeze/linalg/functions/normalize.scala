@@ -9,9 +9,10 @@ import breeze.linalg.support.ScalarOf
  * Returns value if value's norm is 0.
  */
 object normalize extends UFunc with normalizeLowPrio {
-  implicit def normalizeDoubleImpl[T, U >: T](
-      implicit div: OpDiv.Impl2[T, Double, U],
-      canNorm: norm.Impl2[T, Double, Double]): Impl2[T, Double, U] = {
+  implicit def normalizeDoubleImpl[T, U >: T](implicit
+    div: OpDiv.Impl2[T, Double, U],
+    canNorm: norm.Impl2[T, Double, Double]
+  ): Impl2[T, Double, U] = {
     new Impl2[T, Double, U] {
       def apply(t: T, n: Double): U = {
         val norm = canNorm(t, n)
@@ -21,11 +22,11 @@ object normalize extends UFunc with normalizeLowPrio {
     }
   }
 
-  implicit def normalizeFloatImpl[T, U >: T](
-      implicit
-      scalarOf: ScalarOf[T, Float],
-      div: OpDiv.Impl2[T, Float, U],
-      canNorm: norm.Impl2[T, Double, Double]): Impl2[T, Float, U] = {
+  implicit def normalizeFloatImpl[T, U >: T](implicit
+    scalarOf: ScalarOf[T, Float],
+    div: OpDiv.Impl2[T, Float, U],
+    canNorm: norm.Impl2[T, Double, Double]
+  ): Impl2[T, Float, U] = {
     new Impl2[T, Float, U] {
       def apply(t: T, n: Float): U = {
         val norm = canNorm(t, n)
@@ -35,9 +36,10 @@ object normalize extends UFunc with normalizeLowPrio {
     }
   }
 
-  implicit def normalizeInPlaceDoubleImpl[T, U >: T](
-      implicit div: OpDiv.InPlaceImpl2[T, Double],
-      canNorm: norm.Impl2[T, Double, Double]): InPlaceImpl2[T, Double] = {
+  implicit def normalizeInPlaceDoubleImpl[T, U >: T](implicit
+    div: OpDiv.InPlaceImpl2[T, Double],
+    canNorm: norm.Impl2[T, Double, Double]
+  ): InPlaceImpl2[T, Double] = {
     new InPlaceImpl2[T, Double] {
       def apply(t: T, n: Double): Unit = {
         val norm = canNorm(t, n)
@@ -47,9 +49,10 @@ object normalize extends UFunc with normalizeLowPrio {
     }
   }
 
-  implicit def normalizeInPlaceFloatImpl[T, U >: T](
-      implicit div: OpDiv.InPlaceImpl2[T, Float],
-      canNorm: norm.Impl2[T, Float, Float]): InPlaceImpl2[T, Float] = {
+  implicit def normalizeInPlaceFloatImpl[T, U >: T](implicit
+    div: OpDiv.InPlaceImpl2[T, Float],
+    canNorm: norm.Impl2[T, Float, Float]
+  ): InPlaceImpl2[T, Float] = {
     new InPlaceImpl2[T, Float] {
       def apply(t: T, n: Float): Unit = {
         val norm = canNorm(t, n)
@@ -74,7 +77,7 @@ object normalize extends UFunc with normalizeLowPrio {
   }
 }
 
-sealed trait normalizeLowPrio {  self: normalize.type =>
+sealed trait normalizeLowPrio { self: normalize.type =>
   implicit def normalizeImplForFloat[T, U >: T](implicit impl: Impl2[T, Float, U]): Impl[T, U] = {
     new Impl[T, U] {
       def apply(v: T): U = impl(v, 2.0f)

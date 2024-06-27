@@ -15,7 +15,8 @@ package breeze.linalg.operators
  limitations under the License.
  */
 
-import breeze.generic.{UFunc, MMRegistry2}
+import breeze.generic.MMRegistry2
+import breeze.generic.UFunc
 import breeze.generic.UFunc.InPlaceImpl2
 
 import scala.reflect.ClassTag
@@ -32,10 +33,10 @@ trait BinaryUpdateRegistry[A <: AnyRef, B, Op <: OpType]
     with MMRegistry2[UFunc.InPlaceImpl2[Op, _ <: A, _ <: B]] {
   protected def bindingMissing(a: A, b: B): Unit =
     throw new UnsupportedOperationException("Types not found!" + a + b + " " + ops)
-  protected def multipleOptions(
-      a: A,
-      b: B,
-      m: Map[(Class[_], Class[_]), UFunc.InPlaceImpl2[Op, _ <: A, _ <: B]]): Unit = {
+  protected def multipleOptions(a: A,
+                                b: B,
+                                m: Map[(Class[_], Class[_]), UFunc.InPlaceImpl2[Op, _ <: A, _ <: B]]
+  ): Unit = {
     throw new RuntimeException("Multiple bindings for method: " + m)
   }
 
@@ -73,7 +74,9 @@ trait BinaryUpdateRegistry[A <: AnyRef, B, Op <: OpType]
     }
   }
 
-  def register[AA <: A, BB <: B](op: InPlaceImpl2[Op, AA, BB])(implicit cA: ClassTag[AA], cB: ClassTag[BB]) = {
+  def register[AA <: A, BB <: B](
+    op: InPlaceImpl2[Op, AA, BB]
+  )(implicit cA: ClassTag[AA], cB: ClassTag[BB]): InPlaceImpl2[Op, AA, BB] = {
     super.register(cA.runtimeClass, cB.runtimeClass, op)
     op
   }

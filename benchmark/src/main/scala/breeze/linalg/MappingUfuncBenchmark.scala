@@ -1,36 +1,42 @@
 package breeze.linalg
 
 import breeze.benchmark._
-import breeze.generic.{MappingUFunc, UFunc}
+import breeze.generic.MappingUFunc
+import breeze.generic.UFunc
+import breeze.stats.distributions.RandBasis
 
 object MappingUfuncBenchmark extends MyRunner(classOf[MappingUfuncBenchmark])
 
 object addOne extends MappingUFunc {
-  //A custom stupid ufunc that is very fast to run
-  implicit object expDoubleImpl extends Impl[Double, Double] { def apply(v: Double) = v + 1 }
+  // A custom stupid ufunc that is very fast to run
+  implicit object expDoubleImpl extends Impl[Double, Double] { def apply(v: Double): Double = v + 1 }
 }
 
 object harderUfunc extends MappingUFunc {
-  //A custom stupid ufunc that is very fast to run
-  implicit object expDoubleImpl extends Impl[Double, Double] { def apply(v: Double) = /*(v+1)/(1+v*v)*/ math.exp(v) }
+  // A custom stupid ufunc that is very fast to run
+  implicit object expDoubleImpl extends Impl[Double, Double] {
+    def apply(v: Double): Double = /*(v+1)/(1+v*v)*/ math.exp(v)
+  }
 }
 
 class MappingUfuncBenchmark extends BreezeBenchmark with BuildsRandomMatrices with BuildsRandomVectors {
+  implicit override val randBasis: RandBasis = RandBasis.mt0
+
   // these should be roughly similar:
   // Group 1
-  def timeMappingUfuncDenseMat(reps: Int) =
+  def timeMappingUfuncDenseMat(reps: Int): DenseMatrix[Double] =
     runWith(reps, { randomMatrix(2048, 2048) })((mat: DenseMatrix[Double]) => {
       addOne(mat)
     })
 
-  def timeMappingUfuncDenseVec(reps: Int) =
+  def timeMappingUfuncDenseVec(reps: Int): DenseVector[Double] =
     runWith(reps, { randomArray(2048 * 2048) })((arr: DenseVector[Double]) => {
       addOne(arr)
     })
 
   // Group1 appendix: slower, but that's ok
 
-  def timeMappingUfuncDenseMatWithStride(reps: Int) =
+  def timeMappingUfuncDenseMatWithStride(reps: Int): DenseMatrix[Double] =
     runWith(reps, { randomMatrix(2048, 2048 * 2) })((mat: DenseMatrix[Double]) => {
       val newMat = new DenseMatrix(2048, 2048, mat.data, offset = 0, majorStride = 2048)
       addOne(newMat)
@@ -38,12 +44,12 @@ class MappingUfuncBenchmark extends BreezeBenchmark with BuildsRandomMatrices wi
 
   // Group 2: easy in place
 
-  def timeMappingUfuncDenseVecInPlace(reps: Int) =
+  def timeMappingUfuncDenseVecInPlace(reps: Int): DenseVector[Double] =
     runWith(reps, { randomArray(2048 * 2048) })((arr: DenseVector[Double]) => {
       addOne.inPlace(arr)
     })
 
-  def timeMappingUfuncArrayInPlace(reps: Int) =
+  def timeMappingUfuncArrayInPlace(reps: Int): Array[Double] =
     runWith(reps, { randomArray(2048 * 2048) })((arr: DenseVector[Double]) => {
       val data = arr.data
       var i = 0
@@ -54,14 +60,14 @@ class MappingUfuncBenchmark extends BreezeBenchmark with BuildsRandomMatrices wi
       data
     })
 
-  def timeMappingUfuncDenseMatInPlace(reps: Int) =
+  def timeMappingUfuncDenseMatInPlace(reps: Int): DenseMatrix[Double] =
     runWith(reps, { randomMatrix(2048, 2048) })((mat: DenseMatrix[Double]) => {
       addOne.inPlace(mat)
     })
 
   // Group 3: harder
 
-  def timeMappingUfuncArrayHarder(reps: Int) =
+  def timeMappingUfuncArrayHarder(reps: Int): Array[Double] =
     runWith(reps, { randomArray(2048 * 2048) })((arr: DenseVector[Double]) => {
       val data = arr.data
       val nd = new Array[Double](data.length)
@@ -73,57 +79,57 @@ class MappingUfuncBenchmark extends BreezeBenchmark with BuildsRandomMatrices wi
       nd
     })
 
-  def timeMappingUfuncDenseVecHarder(reps: Int) =
+  def timeMappingUfuncDenseVecHarder(reps: Int): DenseVector[Double] =
     runWith(reps, { randomArray(2048 * 2048) })((arr: DenseVector[Double]) => {
       harderUfunc(arr)
     })
 
-  def timeMappingUfuncDenseMatHarder(reps: Int) =
+  def timeMappingUfuncDenseMatHarder(reps: Int): DenseMatrix[Double] =
     runWith(reps, { randomMatrix(2048, 2048) })((mat: DenseMatrix[Double]) => {
       harderUfunc(mat)
     })
 
-  def timeMappingUfuncDenseMatHarderWithStride(reps: Int) =
+  def timeMappingUfuncDenseMatHarderWithStride(reps: Int): DenseMatrix[Double] =
     runWith(reps, { randomMatrix(2048, 2048 * 2) })((mat: DenseMatrix[Double]) => {
       val newMat = new DenseMatrix(2048, 2048, mat.data, offset = 0, majorStride = 2048)
       harderUfunc(newMat)
     })
 
-  def timeMappingUfuncDenseVecHarderMapValues(reps: Int) =
+  def timeMappingUfuncDenseVecHarderMapValues(reps: Int): DenseVector[Double] =
     runWith(reps, { randomArray(2048 * 2048) })((arr: DenseVector[Double]) => {
       arr.mapValues(harderUfunc(_))
     })
 
-  def timeMappingUfuncDenseMatHarderMapValues(reps: Int) =
+  def timeMappingUfuncDenseMatHarderMapValues(reps: Int): DenseMatrix[Double] =
     runWith(reps, { randomMatrix(2048, 2048) })((mat: DenseMatrix[Double]) => {
       mat.mapValues(harderUfunc(_))
     })
 
   // Group 4: harder inplace
 
-  def timeMappingUfuncArrayHarderInlineInPlace(reps: Int) =
+  def timeMappingUfuncArrayHarderInlineInPlace(reps: Int): Array[Double] =
     runWith(reps, { randomArray(2048 * 2048) })((arr: DenseVector[Double]) => {
       val data = arr.data
       var i = 0
       while (i < data.length) {
         val v = data(i)
-        data(i) = math.exp(v) //(v+1)/(1+v*v)
+        data(i) = math.exp(v) // (v+1)/(1+v*v)
         i += 1
       }
       data
     })
 
-  def timeMappingUfuncDenseMatHarderInPlace(reps: Int) =
+  def timeMappingUfuncDenseMatHarderInPlace(reps: Int): DenseMatrix[Double] =
     runWith(reps, { randomMatrix(2048, 2048) })((mat: DenseMatrix[Double]) => {
       harderUfunc.inPlace(mat)
     })
 
-  def timeMappingUfuncDenseVecHarderInPlace(reps: Int) =
+  def timeMappingUfuncDenseVecHarderInPlace(reps: Int): DenseVector[Double] =
     runWith(reps, { randomArray(2048 * 2048) })((arr: DenseVector[Double]) => {
       harderUfunc.inPlace(arr)
     })
 
-  def timeMappingUfuncArrayHarderInPlace(reps: Int) =
+  def timeMappingUfuncArrayHarderInPlace(reps: Int): Array[Double] =
     runWith(reps, { randomArray(2048 * 2048) })((arr: DenseVector[Double]) => {
       val data = arr.data
       var i = 0

@@ -39,5 +39,5 @@ object Terminal {
   val terminalWidth: Int = 80
   val terminalHeight: Int = 80
 
-  val newline = "\n" //System.getProperty("line.separator")
+  val newline = "\n" // System.getProperty("line.separator")
 }

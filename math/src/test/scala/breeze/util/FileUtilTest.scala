@@ -1,12 +1,12 @@
 package breeze.util
 
-import java.io.File
-
 import org.scalatest.funsuite.AnyFunSuite
+
+import java.io.File
 
 class FileUtilTest extends AnyFunSuite {
 
-  val testPath = System.getProperty("java.io.tmpdir")
+  val testPath: String = System.getProperty("java.io.tmpdir")
 
   test("Is equal to string path value") {
     assert(file"$testPath" === new File(testPath))

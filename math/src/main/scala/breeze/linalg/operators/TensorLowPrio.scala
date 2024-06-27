@@ -1,15 +1,21 @@
 package breeze.linalg.operators
 
 import breeze.generic.UFunc
-import breeze.linalg.support.{CanSlice, CanSlice2, CanTranspose}
-import breeze.linalg.{SliceMatrix, SliceVector, Tensor, Transpose}
+import breeze.linalg.SliceMatrix
+import breeze.linalg.SliceVector
+import breeze.linalg.Tensor
+import breeze.linalg.Transpose
+import breeze.linalg.support.CanSlice
+import breeze.linalg.support.CanSlice2
+import breeze.linalg.support.CanTranspose
 import breeze.math.Semiring
 
 import scala.reflect.ClassTag
 
 trait TensorLowPrio extends GenericOps {
-  implicit def canSliceTensor_Seq_to_2[K, V, Res](
-      implicit seqSlice: CanSlice[Tensor[K, V], Seq[K], Res]): CanSlice2[Tensor[K, V], K, K, Res] = {
+  implicit def canSliceTensor_Seq_to_2[K, V, Res](implicit
+    seqSlice: CanSlice[Tensor[K, V], Seq[K], Res]
+  ): CanSlice2[Tensor[K, V], K, K, Res] = {
     new CanSlice2[Tensor[K, V], K, K, Res] {
       def apply(from: Tensor[K, V], slice: K, slice2: K): Res = {
         seqSlice(from, Seq(slice, slice2))
@@ -17,8 +23,6 @@ trait TensorLowPrio extends GenericOps {
     }
   }
 
-
-  
   implicit def canSliceTensor[K, V: ClassTag]: CanSlice[Tensor[K, V], Seq[K], SliceVector[K, V]] =
     new CanSlice[Tensor[K, V], Seq[K], SliceVector[K, V]] {
       def apply(from: Tensor[K, V], slice: Seq[K]): SliceVector[K, V] = new SliceVector(from, slice.toIndexedSeq)

@@ -16,9 +16,9 @@ package breeze.optimize.linear
  limitations under the License.
  */
 
+import breeze.linalg._
 import org.scalatest._
 import org.scalatest.funsuite._
-import breeze.linalg._
 
 class InteriorPointTest extends AnyFunSuite {
   // from: http://en.wikipedia.org/wiki/Karmarkar's_algorithm
@@ -36,9 +36,9 @@ class InteriorPointTest extends AnyFunSuite {
     }
 
     val x = InteriorPoint.minimize(A = A, b = b, c = c, x0 = x0)
-    assert((A * x - b).activeValuesIterator.forall(_ < 1E-4), (A * x))
-    assert((x(0) - 0.5).abs < 1E-3, x(0))
-    assert((x(1) - 0.75).abs < 1E-3, x(1))
+    assert((A * x - b).activeValuesIterator.forall(_ < 1e-4), A * x)
+    assert((x(0) - 0.5).abs < 1e-3, x(0))
+    assert((x(1) - 0.75).abs < 1e-3, x(1))
   }
 
 }

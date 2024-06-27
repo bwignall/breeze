@@ -1,21 +1,22 @@
 package breeze.linalg
 
 import breeze.generic.UFunc
-import breeze.linalg.operators.{HasOps, OpAdd}
-import org.scalatest.funsuite.AnyFunSuite
 import breeze.gymnastics._
+import breeze.linalg.operators.HasOps
+import breeze.linalg.operators.OpAdd
+import org.scalatest.funsuite.AnyFunSuite
 
 /**
  *
  * @author dlwh
  */
 class SliceMatrixTest extends AnyFunSuite {
-  val originalMatrix = DenseMatrix.tabulate[Int](5, 5) { (i, j) =>
+  val originalMatrix: DenseMatrix[Int] = DenseMatrix.tabulate[Int](5, 5) { (i, j) =>
     5 * i + j + 1
   }
 
   // first matrix with the 4th row and 3rd column removed
-  val sliceMatrix = originalMatrix(Seq(0, 1, 2, 4), Seq(0, 1, 3, 4))
+  val sliceMatrix: SliceMatrix[Int, Int, Int] = originalMatrix(Seq(0, 1, 2, 4), Seq(0, 1, 3, 4))
 
   test("basic slices of a counter2") {
     val ctr = Counter2(("a", 0, 1), ("b", 1, 10), ("a", 1, 6))
@@ -68,14 +69,14 @@ class SliceMatrixTest extends AnyFunSuite {
     assert(sliceMatrix(::, 1) == DenseVector(2, 7, 12, 22), "Failed> b(::, 1) = " + sliceMatrix(::, 1))
 
     // check arb row slice
-    assert(
-      sliceMatrix(Seq(1, 3), ::) == DenseMatrix.create(2, 4, Array(6, 7, 9, 10, 21, 22, 24, 25), 0, 4, true),
-      "Failed> b(Seq(1, 3), ::) = " + sliceMatrix(Seq(1, 3), ::))
+    assert(sliceMatrix(Seq(1, 3), ::) == DenseMatrix.create(2, 4, Array(6, 7, 9, 10, 21, 22, 24, 25), 0, 4, true),
+           "Failed> b(Seq(1, 3), ::) = " + sliceMatrix(Seq(1, 3), ::)
+    )
 
     // check arb col slice
-    assert(
-      sliceMatrix(::, Seq(1, 3)) == DenseMatrix.create(4, 2, Array(2, 7, 12, 22, 5, 10, 15, 25), 0, 4, false),
-      "Failed> b(::, Seq(1,3) = " + sliceMatrix(Seq(1, 3), ::))
+    assert(sliceMatrix(::, Seq(1, 3)) == DenseMatrix.create(4, 2, Array(2, 7, 12, 22, 5, 10, 15, 25), 0, 4, false),
+           "Failed> b(::, Seq(1,3) = " + sliceMatrix(Seq(1, 3), ::)
+    )
   }
 
   test("canSliceRow") {
@@ -86,18 +87,18 @@ class SliceMatrixTest extends AnyFunSuite {
   }
 
   test("canSliceRowAndWeirdCols") {
-    assert(
-      sliceMatrix(0, Seq(0, 2)) == DenseVector(1, 4).t,
-      "Failed> sliceMatrix(0, ::) = " + sliceMatrix(0, Seq(0, 2)))
-    assert(
-      sliceMatrix(1, Seq(0, 2)) == DenseVector(6, 9).t,
-      "Failed> sliceMatrix(1, ::) = " + sliceMatrix(1, Seq(0, 2)))
-    assert(
-      sliceMatrix(2, Seq(0, 2)) == DenseVector(11, 14).t,
-      "Failed> sliceMatrix(2, ::) = " + sliceMatrix(2, Seq(0, 2)))
-    assert(
-      sliceMatrix(3, Seq(0, 2)) == DenseVector(21, 24).t,
-      "Failed> sliceMatrix(3, ::) = " + sliceMatrix(3, Seq(0, 2)))
+    assert(sliceMatrix(0, Seq(0, 2)) == DenseVector(1, 4).t,
+           "Failed> sliceMatrix(0, ::) = " + sliceMatrix(0, Seq(0, 2))
+    )
+    assert(sliceMatrix(1, Seq(0, 2)) == DenseVector(6, 9).t,
+           "Failed> sliceMatrix(1, ::) = " + sliceMatrix(1, Seq(0, 2))
+    )
+    assert(sliceMatrix(2, Seq(0, 2)) == DenseVector(11, 14).t,
+           "Failed> sliceMatrix(2, ::) = " + sliceMatrix(2, Seq(0, 2))
+    )
+    assert(sliceMatrix(3, Seq(0, 2)) == DenseVector(21, 24).t,
+           "Failed> sliceMatrix(3, ::) = " + sliceMatrix(3, Seq(0, 2))
+    )
   }
 
   test("canSliceCol") {

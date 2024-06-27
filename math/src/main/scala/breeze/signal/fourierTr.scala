@@ -1,12 +1,15 @@
 package breeze.signal
 
-import breeze.linalg._
-import breeze.linalg.{sum, DenseMatrix, DenseVector}
 import breeze.generic.UFunc
-import breeze.math.Complex
-import breeze.signal.support.JTransformsSupport._
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
+import breeze.linalg._
+import breeze.linalg.sum
 import breeze.macros.expand
-import breeze.numerics.{sin, cos}
+import breeze.math.Complex
+import breeze.numerics.cos
+import breeze.numerics.sin
+import breeze.signal.support.JTransformsSupport._
 
 /**
  * Returns the discrete fourier transform of a DenseVector or DenseMatrix. Currently,
@@ -26,14 +29,14 @@ object fourierTr extends UFunc {
   implicit val dvDouble1DFFT: fourierTr.Impl[DenseVector[Double], DenseVector[Complex]] = {
     new fourierTr.Impl[DenseVector[Double], DenseVector[Complex]] {
       def apply(v: DenseVector[Double]) = {
-        //reformat for input: note difference in format for input to complex fft
+        // reformat for input: note difference in format for input to complex fft
         val tempArr = denseVectorDToTemp(v)
 
-        //actual action
+        // actual action
         val fft_instance = getD1DInstance(v.length)
-        fft_instance.realForwardFull(tempArr) //does operation in place
+        fft_instance.realForwardFull(tempArr) // does operation in place
 
-        //reformat for output
+        // reformat for output
         tempToDenseVector(tempArr)
       }
     }
@@ -60,14 +63,14 @@ object fourierTr extends UFunc {
   implicit val dvComplex1DFFT: fourierTr.Impl[DenseVector[Complex], DenseVector[Complex]] = {
     new fourierTr.Impl[DenseVector[Complex], DenseVector[Complex]] {
       def apply(v: DenseVector[Complex]) = {
-        //reformat for input: note difference in format for input to real fft
+        // reformat for input: note difference in format for input to real fft
         val tempArr = denseVectorCToTemp(v)
 
-        //actual action
+        // actual action
         val fft_instance = getD1DInstance(v.length)
-        fft_instance.complexForward(tempArr) //does operation in place
+        fft_instance.complexForward(tempArr) // does operation in place
 
-        //reformat for output
+        // reformat for output
         tempToDenseVector(tempArr)
       }
     }
@@ -76,14 +79,14 @@ object fourierTr extends UFunc {
   implicit val dmComplex2DFFT: fourierTr.Impl[DenseMatrix[Complex], DenseMatrix[Complex]] = {
     new fourierTr.Impl[DenseMatrix[Complex], DenseMatrix[Complex]] {
       def apply(v: DenseMatrix[Complex]) = {
-        //reformat for input: note difference in format for input to real fft
+        // reformat for input: note difference in format for input to real fft
         val tempMat = denseMatrixCToTemp(v)
 
-        //actual action
+        // actual action
         val fft_instance = getD2DInstance(v.rows, v.cols)
-        fft_instance.complexForward(tempMat) //does operation in place
+        fft_instance.complexForward(tempMat) // does operation in place
 
-        //reformat for output
+        // reformat for output
         tempToDenseMatrix(tempMat, v.rows, v.cols)
       }
     }
@@ -92,15 +95,15 @@ object fourierTr extends UFunc {
   implicit val dmDouble2DFFT: fourierTr.Impl[DenseMatrix[Double], DenseMatrix[Complex]] = {
     new fourierTr.Impl[DenseMatrix[Double], DenseMatrix[Complex]] {
       def apply(v: DenseMatrix[Double]) = {
-        //reformat for input
+        // reformat for input
         val tempMat = denseMatrixDToTemp(v)
 
-        //actual action
+        // actual action
         val fft_instance = getD2DInstance(v.rows, v.cols)
-        fft_instance.complexForward(tempMat) //does operation in place
-        //ToDo this could be optimized to use realFullForward for speed, but only if the indexes are powers of two
+        fft_instance.complexForward(tempMat) // does operation in place
+        // ToDo this could be optimized to use realFullForward for speed, but only if the indexes are powers of two
 
-        //reformat for output
+        // reformat for output
         tempToDenseMatrix(tempMat, v.rows, v.cols)
       }
     }
@@ -111,7 +114,7 @@ object fourierTr extends UFunc {
       def apply(v: DenseVector[Double], rangeNegative: Range): DenseVector[Complex] = {
 
         val range = rangeNegative.getRangeWithoutNegativeIndexes(v.length)
-        //ToDo check lengths and throw errors
+        // ToDo check lengths and throw errors
 
         val tempret =
           for (k <- range) yield {

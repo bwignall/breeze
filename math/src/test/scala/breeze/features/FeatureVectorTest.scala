@@ -1,8 +1,8 @@
 package breeze.features
 
+import breeze.linalg.DenseVector
 import breeze.linalg._
 import org.scalatest.funsuite.AnyFunSuite
-import breeze.linalg.DenseVector
 
 class FeatureVectorTest extends AnyFunSuite {
   test("axpy fv dv") {

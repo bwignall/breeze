@@ -16,10 +16,12 @@ package breeze.stats.distributions
  limitations under the License.
  */
 
+import breeze.stats.distributions.Uniform
+import org.scalacheck.Arbitrary
+import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
-import org.scalacheck._
 
 class UniformTest
     extends AnyFunSuite
@@ -34,10 +36,12 @@ class UniformTest
 
   def fromDouble(x: Double) = x
 
-  implicit def arbDistr = Arbitrary {
-    for (a <- arbitrary[Double].map { _.abs % 10000.0 };
+  implicit def arbDistr: Arbitrary[Uniform] = Arbitrary {
+    for (
+      a <- arbitrary[Double].map { _.abs % 10000.0 };
       b <- arbitrary[Double].map { _.abs % 10000.0 }
-      if a != b) yield new Uniform(a.min(b), a.max(b))
+      if a != b
+    ) yield new Uniform(a.min(b), a.max(b))
   }
 
   test("pdf outside range should be 0.0") {

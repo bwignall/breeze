@@ -58,18 +58,18 @@ trait SparseArrayLike[V] {
    * @tparam U
    */
   // TODO: maybe make this iterate all elements?
-  def foreach[U](f: (V) => U) = valuesIterator.foreach(f)
+  def foreach[U](f: (V) => U): Unit = valuesIterator.foreach(f)
 
   /**
    * Only iterates "active" elements
    */
-  def iterator = keysIterator.zip(valuesIterator)
+  def iterator: Iterator[(Int, V)] = keysIterator.zip(valuesIterator)
 
-  def toArray[U >: V: ClassTag] = Array.tabulate[U](length)(apply)
+  def toArray[U >: V: ClassTag]: Array[U] = Array.tabulate[U](length)(apply)
 
-  def toList = List.tabulate(length)(apply)
+  def toList: List[V] = List.tabulate(length)(apply)
 
-  def toIndexedSeq = List.tabulate(length)(apply)
+  def toIndexedSeq: List[V] = List.tabulate(length)(apply)
 
-  def toMap = keysIterator.zip(valuesIterator).toMap
+  def toMap: Map[Int, V] = keysIterator.zip(valuesIterator).toMap
 }

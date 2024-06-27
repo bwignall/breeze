@@ -16,22 +16,20 @@ package breeze.linalg
  */
 import breeze.linalg.Counter2.Curried
 import breeze.linalg.operators.Counter2Ops
+import breeze.linalg.support.CanMapValues.DenseCanMapValues
 import breeze.linalg.support.CanTraverseKeyValuePairs.KeyValuePairsVisitor
+import breeze.linalg.support._
+import breeze.math.Semiring
 import breeze.storage.Zero
+
+import scala.collection.Set
+import scala.collection.compat._
+import scala.collection.immutable
+import scala.reflect.ClassTag
 
 import collection.mutable
 import collection.mutable.HashMap
-import breeze.math.Semiring
-import breeze.linalg.support._
-
-import scala.collection.Set
-import scala.reflect.ClassTag
 import CanTraverseValues.ValuesVisitor
-import breeze.linalg.support.CanMapValues.DenseCanMapValues
-
-import scala.collection.immutable
-import scala.collection.compat._
-
 
 // TODO: remove the Like stuff.
 /**
@@ -40,13 +38,8 @@ import scala.collection.compat._
  *
  * @author dlwh
  */
-trait Counter2Like[
-    K1,
-    K2,
-    V,
-    T <: Counter[K2, V],
-    +This <: Counter2[K1, K2, V]]
-    extends TensorLike[(K1, K2), V, This] { self =>
+trait Counter2Like[K1, K2, V, T <: Counter[K2, V], +This <: Counter2[K1, K2, V]] extends TensorLike[(K1, K2), V, This] {
+  self =>
 
   def data: mutable.Map[K1, T]
 
@@ -103,9 +96,7 @@ trait Counter2Like[
 
 }
 
-trait Counter2[K1, K2, V]
-    extends Tensor[(K1, K2), V]
-    with Counter2Like[K1, K2, V, Counter[K2, V], Counter2[K1, K2, V]]
+trait Counter2[K1, K2, V] extends Tensor[(K1, K2), V] with Counter2Like[K1, K2, V, Counter[K2, V], Counter2[K1, K2, V]]
 
 object Counter2 extends LowPriorityCounter2 with Counter2Ops {
 
@@ -135,14 +126,14 @@ object Counter2 extends LowPriorityCounter2 with Counter2Ops {
   /** Aggregates the counts in the given items. */
   def apply[K1, K2, V: Semiring: Zero](values: TraversableOnce[(K1, K2, V)]): Counter2[K1, K2, V] = {
     val rv = apply[K1, K2, V]()
-    values.iterator.foreach({ case (k1, k2, v) => rv(k1, k2) = implicitly[Semiring[V]].+(rv(k1, k2), v) })
+    values.iterator.foreach { case (k1, k2, v) => rv(k1, k2) = implicitly[Semiring[V]].+(rv(k1, k2), v) }
     rv
   }
 
   /** Counts the given elements. */
   def count[K1, K2](values: TraversableOnce[(K1, K2)]): Counter2[K1, K2, Int] = {
     val rv = apply[K1, K2, Int]()
-    values.iterator.foreach({ case (k1, k2) => rv(k1, k2) += 1; })
+    values.iterator.foreach { case (k1, k2) => rv(k1, k2) += 1; }
     rv
   }
 
@@ -212,7 +203,8 @@ object Counter2 extends LowPriorityCounter2 with Counter2Ops {
     : CanCollapseAxis[Counter2[K1, K2, V], Axis._0.type, Counter[K1, V], Counter[K1, R], Counter2[K1, K2, R]] = {
     new CanCollapseAxis[Counter2[K1, K2, V], Axis._0.type, Counter[K1, V], Counter[K1, R], Counter2[K1, K2, R]] {
       def apply(from: Counter2[K1, K2, V], axis: Axis._0.type)(
-          f: (Counter[K1, V]) => Counter[K1, R]): Counter2[K1, K2, R] = {
+        f: (Counter[K1, V]) => Counter[K1, R]
+      ): Counter2[K1, K2, R] = {
         val result = Counter2[K1, K2, R]()
         for (dom <- from.keySet.map(_._2)) {
           result(::, dom) := f(from(::, dom))
@@ -236,7 +228,8 @@ object Counter2 extends LowPriorityCounter2 with Counter2Ops {
     : CanCollapseAxis[Counter2[K1, K2, V], Axis._1.type, Counter[K2, V], Counter[K2, R], Counter2[K1, K2, R]] =
     new CanCollapseAxis[Counter2[K1, K2, V], Axis._1.type, Counter[K2, V], Counter[K2, R], Counter2[K1, K2, R]] {
       def apply(from: Counter2[K1, K2, V], axis: Axis._1.type)(
-          f: (Counter[K2, V]) => Counter[K2, R]): Counter2[K1, K2, R] = {
+        f: (Counter[K2, V]) => Counter[K2, R]
+      ): Counter2[K1, K2, R] = {
         val result = Counter2[K1, K2, R]()
         for ((dom, c) <- from.data) {
           result(dom, ::) := f(c)

@@ -1,25 +1,27 @@
 package breeze.optimize.linear
 
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
+import breeze.linalg.norm
 import breeze.numerics.abs
 import breeze.optimize.proximal.QuadraticMinimizer
-import breeze.util.SerializableLogging
-import breeze.linalg.{DenseMatrix, DenseVector, norm}
 import breeze.util.Implicits._
+import breeze.util.SerializableLogging
 
 /**
  * Power Method to compute maximum eigen value and companion object to
  * compute minimum eigen value through inverse power iterations
  * @author debasish83
  */
-class PowerMethod(maxIters: Int = 10, tolerance: Double = 1E-5) extends SerializableLogging {
+class PowerMethod(maxIters: Int = 10, tolerance: Double = 1e-5) extends SerializableLogging {
 
   import PowerMethod.BDM
   import PowerMethod.BDV
 
   case class State private[PowerMethod] (eigenValue: Double, eigenVector: BDV, ay: BDV, iter: Int, converged: Boolean)
 
-  //memory allocation for the eigen vector result
-  def normalize(ynorm: BDV, y: BDV) = {
+  // memory allocation for the eigen vector result
+  def normalize(ynorm: BDV, y: BDV): DenseVector[Double] = {
     val normInit = norm(y)
     ynorm := y
     ynorm *= 1.0 / normInit
@@ -40,8 +42,8 @@ class PowerMethod(maxIters: Int = 10, tolerance: Double = 1E-5) extends Serializ
     State(lambda, eigenVector, ay, 0, false)
   }
 
-  //in-place modification of eigen vector
-  def nextEigen(eigenVector: BDV, ay: BDV) = {
+  // in-place modification of eigen vector
+  def nextEigen(eigenVector: BDV, ay: BDV): Double = {
     val lambda = eigenVector.dot(ay)
     eigenVector := ay
     val norm1 = norm(ay)
@@ -81,7 +83,7 @@ object PowerMethod {
   type BDV = DenseVector[Double]
   type BDM = DenseMatrix[Double]
 
-  def inverse(maxIters: Int = 10, tolerance: Double = 1E-5): PowerMethod = {
+  def inverse(maxIters: Int = 10, tolerance: Double = 1e-5): PowerMethod = {
     new PowerMethod(maxIters, tolerance) {
       override def reset(A: BDM, y: BDV, init: State): State = {
         import init._

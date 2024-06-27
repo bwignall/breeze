@@ -1,9 +1,9 @@
 package breeze.stats.distributions
 
+import breeze.linalg.isClose
 import org.scalacheck.Arbitrary
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.Checkers
-import breeze.linalg.isClose
 
 /**
  * Created by kokorins
@@ -11,7 +11,9 @@ import breeze.linalg.isClose
 class ExponentialTest
     extends AnyFunSuite
     with Checkers
-    with MomentsTestBase[Double] /*with UnivariateContinuousDistrTestBase with ExpFamTest[Exponential, Double] with HasCdfTestBase*/ {
+    with MomentsTestBase[
+      Double
+    ] /*with UnivariateContinuousDistrTestBase with ExpFamTest[Exponential, Double] with HasCdfTestBase*/ {
   type Distr = Exponential
 
   import org.scalacheck.Arbitrary.arbitrary
@@ -35,9 +37,9 @@ class ExponentialTest
   }
 
   test("#799 - exponential rate/mean mixup") {
-    val exp = Exponential(1.0/4)
+    val exp = Exponential(1.0 / 4)
 
     val cdfAt5 = exp.cdf(5)
-    assert(isClose(cdfAt5, 0.713495, 1E-5), cdfAt5.toString)
+    assert(isClose(cdfAt5, 0.713495, 1e-5), cdfAt5.toString)
   }
 }

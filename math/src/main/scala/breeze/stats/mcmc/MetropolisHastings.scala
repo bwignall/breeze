@@ -16,9 +16,10 @@ package breeze.stats.mcmc
  limitations under the License.
  */
 
-import breeze.stats.distributions._
-import breeze.math._
 import breeze.macros.cforRange
+import breeze.math._
+import breeze.stats.distributions._
+
 import scala.reflect.ClassTag
 
 trait MetropolisHastings[T] extends Rand[T] {
@@ -30,17 +31,17 @@ trait MetropolisHastings[T] extends Rand[T] {
   def likelihood(x: T): Double = math.exp(logLikelihood(x))
   def likelihoodRatio(start: T, end: T): Double = math.exp(logLikelihoodRatio(start, end))
   def logLikelihoodRatio(start: T, end: T): Double =
-    (logLikelihood(end) - logLikelihood(start) - logTransitionProbability(start, end) + logTransitionProbability(
-      end,
-      start))
+    logLikelihood(end) - logLikelihood(start) - logTransitionProbability(start, end) + logTransitionProbability(end,
+                                                                                                                start
+    )
   def rand: RandBasis
 
-  protected def nextDouble: Double = this.rand.generator.nextDouble //uniform random variable
+  protected def nextDouble: Double = this.rand.generator.nextDouble // uniform random variable
 }
 
 trait SymmetricMetropolisHastings[T] extends MetropolisHastings[T] {
   def logTransitionProbability(start: T, end: T): Double = 0.0
-  override def logLikelihoodRatio(start: T, end: T): Double = (logLikelihood(end) - logLikelihood(start))
+  override def logLikelihoodRatio(start: T, end: T): Double = logLikelihood(end) - logLikelihood(start)
 }
 
 trait TracksStatistics { self: MetropolisHastings[_] =>
@@ -58,18 +59,18 @@ trait TracksStatistics { self: MetropolisHastings[_] =>
 }
 
 abstract class BaseMetropolisHastings[T](logLikelihoodFunc: T => Double, init: T, burnIn: Int = 0, dropCount: Int = 0)(
-    implicit val rand: RandBasis)
-    extends MetropolisHastings[T]
+  implicit val rand: RandBasis
+) extends MetropolisHastings[T]
     with Process[T]
     with TracksStatistics {
-  //Everything but the proposalDraw is implemented
+  // Everything but the proposalDraw is implemented
 
   private var last: T = init
   private var acceptances: Long = 0
   private var totalCount: Long = 0
   private var acceptanceAboveOne: Long = 0
 
-  def logLikelihood(x: T) = logLikelihoodFunc(x)
+  def logLikelihood(x: T): Double = logLikelihoodFunc(x)
 
   def aboveOneCount = acceptanceAboveOne
   def total = totalCount
@@ -79,7 +80,7 @@ abstract class BaseMetropolisHastings[T](logLikelihoodFunc: T => Double, init: T
     totalCount += 1
     val maybeNext = proposalDraw(last)
     val logAcceptanceRatio = logLikelihoodRatio(last, maybeNext)
-    if (logAcceptanceRatio > 0.0) { //This is logically unnecessary, but allows us to skip a call to nextDouble
+    if (logAcceptanceRatio > 0.0) { // This is logically unnecessary, but allows us to skip a call to nextDouble
       last = maybeNext
       acceptanceAboveOne += 1
       maybeNext
@@ -112,26 +113,26 @@ abstract class BaseMetropolisHastings[T](logLikelihoodFunc: T => Double, init: T
   }
 }
 
-case class ArbitraryMetropolisHastings[T](
-    logLikelihood: T => Double,
-    val proposal: T => Rand[T],
-    val logProposalDensity: (T, T) => Double,
-    init: T,
-    burnIn: Int = 0,
-    dropCount: Int = 0)(implicit rand: RandBasis)
+case class ArbitraryMetropolisHastings[T](logLikelihood: T => Double,
+                                          val proposal: T => Rand[T],
+                                          val logProposalDensity: (T, T) => Double,
+                                          init: T,
+                                          burnIn: Int = 0,
+                                          dropCount: Int = 0
+)(implicit rand: RandBasis)
     extends BaseMetropolisHastings[T](logLikelihood, init, burnIn, dropCount)(rand) {
-  def proposalDraw(x: T) = proposal(x).draw()
+  def proposalDraw(x: T): T = proposal(x).draw()
   def logTransitionProbability(start: T, end: T): Double = logProposalDensity(start, end)
 
-  def observe(x: T) = this.copy(burnIn = 0, init = x)
+  def observe(x: T): Process[T] = this.copy(burnIn = 0, init = x)
 }
 
-case class AffineStepMetropolisHastings[T](
-    logLikelihood: T => Double,
-    val proposalStep: Rand[T],
-    init: T,
-    burnIn: Int = 0,
-    dropCount: Int = 0)(implicit rand: RandBasis = Rand, vectorSpace: VectorSpace[T, _])
+case class AffineStepMetropolisHastings[T](logLikelihood: T => Double,
+                                           val proposalStep: Rand[T],
+                                           init: T,
+                                           burnIn: Int = 0,
+                                           dropCount: Int = 0
+)(implicit rand: RandBasis = Rand, vectorSpace: VectorSpace[T, _])
     extends BaseMetropolisHastings[T](logLikelihood, init, burnIn, dropCount)(rand)
     with SymmetricMetropolisHastings[T] {
   /*
@@ -143,7 +144,7 @@ case class AffineStepMetropolisHastings[T](
    */
   def proposalDraw(x: T): T = vectorSpace.addVV(proposalStep.draw(), x)
 
-  def observe(x: T) = this.copy(burnIn = 0, init = x)
+  def observe(x: T): Process[T] = this.copy(burnIn = 0, init = x)
 }
 
 case class ThreadedBufferedRand[T](wrapped: Rand[T], bufferSize: Int = 1024 * 8)(implicit m: ClassTag[T])
@@ -177,7 +178,7 @@ case class ThreadedBufferedRand[T](wrapped: Rand[T], bufferSize: Int = 1024 * 8)
   private var buffer: Array[T] = newArrayQueue.take()
   private var position: Int = 0
 
-  def stop() = { //In order to allow this class to be garbage collected, you must set this to true.
+  def stop(): Unit = { // In order to allow this class to be garbage collected, you must set this to true.
     stopWorker = true
   }
 

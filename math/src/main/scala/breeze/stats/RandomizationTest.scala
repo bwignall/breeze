@@ -17,6 +17,7 @@ package breeze.stats
  */
 
 import scala.collection.mutable.{Seq => _, _}
+
 import distributions._
 
 /** Implements statistical significance testing for the output of two systems by randomization.
@@ -31,8 +32,8 @@ class RandomizationTest[L](val numSamples: Int, val errorMeasure: Seq[L] => Doub
     extends ((Seq[L], Seq[L]) => Double) {
   def this(errorMeasure: Seq[L] => Double) = this(5000, errorMeasure)
 
-  def diff(l1: Seq[L], l2: Seq[L]) = math.abs(errorMeasure(l1) - errorMeasure(l2))
-  def apply(labeling1: Seq[L], labeling2: Seq[L]) = {
+  def diff(l1: Seq[L], l2: Seq[L]): Double = math.abs(errorMeasure(l1) - errorMeasure(l2))
+  def apply(labeling1: Seq[L], labeling2: Seq[L]): Double = {
     assume(labeling1.length == labeling2.length)
     // git rid of any overlapping labels
     val lpairs = labeling1.iterator.zip(labeling2.iterator).filter(a => a._1 != a._2).toStream

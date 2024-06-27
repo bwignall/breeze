@@ -1,11 +1,16 @@
 package breeze.linalg.operators
 
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
+import breeze.linalg.HashVector
+import breeze.linalg.SparseVector
+import breeze.linalg.Vector
 import breeze.linalg.support.CanMapValues.DenseCanMapValues
-import breeze.linalg.{DenseMatrix, DenseVector, HashVector, SparseVector, Vector}
 import breeze.linalg.support.CanTraverseValues.ValuesVisitor
-import breeze.linalg.support._
 import breeze.linalg.support.CanZipAndTraverseValues.PairValuesVisitor
-import breeze.macros.{cforRange, cforRange2}
+import breeze.linalg.support._
+import breeze.macros.cforRange
+import breeze.macros.cforRange2
 import breeze.math.Complex
 import breeze.storage.Zero
 
@@ -15,13 +20,13 @@ trait Vector_TraversalOps {
 
   // TODO There's a bizarre error specializing float's here.
   class CanZipMapValuesVector[@specialized(Int, Double) V, @specialized(Int, Double) RV: ClassTag]
-    extends CanZipMapValues[Vector[V], V, RV, Vector[RV]] {
-    def create(length: Int) = DenseVector(new Array[RV](length))
+      extends CanZipMapValues[Vector[V], V, RV, Vector[RV]] {
+    def create(length: Int): DenseVector[RV] = DenseVector(new Array[RV](length))
 
-    def map(from: Vector[V], from2: Vector[V], fn: (V, V) => RV) = {
+    def map(from: Vector[V], from2: Vector[V], fn: (V, V) => RV): Vector[RV] = {
       require(from.length == from2.length, "Vector lengths must match!")
       val result = create(from.length)
-      cforRange (0 until from.length) { i =>
+      cforRange(0 until from.length) { i =>
         result.data(i) = fn(from(i), from2(i))
       }
       result
@@ -33,16 +38,16 @@ trait Vector_TraversalOps {
     new CanMapValues[Vector[V], V, V2, Vector[V2]] {
       def map(from: Vector[V], fn: (V) => V2): Vector[V2] = from match {
         case sv: SparseVector[V] => sv.mapValues(fn)(SparseVector.canMapValues)
-        case hv: HashVector[V] => hv.mapValues(fn)
-        case dv: DenseVector[V] => dv.mapValues(fn)
-        case _ => DenseVector.tabulate(from.length)(i => fn(from(i)))
+        case hv: HashVector[V]   => hv.mapValues(fn)
+        case dv: DenseVector[V]  => dv.mapValues(fn)
+        case _                   => DenseVector.tabulate(from.length)(i => fn(from(i)))
       }
 
       def mapActive(from: Vector[V], fn: (V) => V2): Vector[V2] = from match {
         case sv: SparseVector[V] => sv.mapActiveValues(fn)
-        case hv: HashVector[V] => hv.mapActiveValues(fn)
-        case dv: DenseVector[V] => dv.mapActiveValues(fn)
-        case _ => DenseVector.tabulate(from.length)(i => fn(from(i)))
+        case hv: HashVector[V]   => hv.mapActiveValues(fn)
+        case dv: DenseVector[V]  => dv.mapActiveValues(fn)
+        case _                   => DenseVector.tabulate(from.length)(i => fn(from(i)))
       }
     }
   }
@@ -50,8 +55,8 @@ trait Vector_TraversalOps {
   implicit def canZipMapValues_V[V, R: ClassTag]: CanZipMapValuesVector[V, R] = new CanZipMapValuesVector[V, R]
 
   class CanZipMapKeyValuesVector[@specialized(Double, Int, Float, Long) V, @specialized(Int, Double) RV: ClassTag]
-    extends CanZipMapKeyValues[Vector[V], Int, V, RV, Vector[RV]] {
-    def create(length: Int) = DenseVector(new Array[RV](length))
+      extends CanZipMapKeyValues[Vector[V], Int, V, RV, Vector[RV]] {
+    def create(length: Int): DenseVector[RV] = DenseVector(new Array[RV](length))
 
     def map(from: Vector[V], from2: Vector[V], fn: (Int, V, V) => RV): Vector[RV] = {
       require(from.length == from2.length, "Vector lengths must match!")
@@ -166,8 +171,9 @@ trait DenseVector_TraversalOps extends Vector_TraversalOps {
       }
     }
 
-  implicit def canMapPairs[V, V2](
-                                   implicit man: ClassTag[V2]): CanMapKeyValuePairs[DenseVector[V], Int, V, V2, DenseVector[V2]] =
+  implicit def canMapPairs[V, V2](implicit
+    man: ClassTag[V2]
+  ): CanMapKeyValuePairs[DenseVector[V], Int, V, V2, DenseVector[V2]] =
     new CanMapKeyValuePairs[DenseVector[V], Int, V, V2, DenseVector[V2]] {
 
       /**Maps all key-value pairs from the given collection. */
@@ -212,7 +218,6 @@ trait SparseVector_TraversalOps extends Vector_TraversalOps {
   }
 }
 
-
 trait DenseMatrix_TraversalOps extends TensorLowPrio {
 
   implicit def canTraverseValues[V]: CanTraverseValues[DenseMatrix[V], V] = {
@@ -227,7 +232,7 @@ trait DenseMatrix_TraversalOps extends TensorLowPrio {
         if (majorStride == idealMajorStride) {
           fn.visitArray(data, offset, rows * cols, 1)
         } else {
-          cforRange (0 until from.majorSize) { j =>
+          cforRange(0 until from.majorSize) { j =>
             fn.visitArray(data, offset + j * majorStride, minorSize, 1)
           }
         }
@@ -261,11 +266,11 @@ trait DenseMatrix_TraversalOps extends TensorLowPrio {
           fn.visitArray(from.rowColumnFromLinearIndex, data, offset, rows * cols, 1)
         } else if (!from.isTranspose) {
           // TODO: make this work for isTranspose too
-          cforRange (0 until from.cols) { j =>
+          cforRange(0 until from.cols) { j =>
             fn.visitArray(from.rowColumnFromLinearIndex, data, offset + j * majorStride, rows, 1)
           }
         } else {
-          cforRange2 (0 until from.rows, 0 until from.cols) { (i, j) =>
+          cforRange2(0 until from.rows, 0 until from.cols) { (i, j) =>
             fn.visit((i, j), from(i, j))
           }
         }
@@ -290,8 +295,8 @@ trait DenseMatrix_TraversalOps extends TensorLowPrio {
       private def slowPath(from: DenseMatrix[V], fn: (V) => V): Unit = {
         var off = from.offset
         val d = from.data
-        cforRange (0 until from.majorSize) { big =>
-          cforRange (off until off + from.minorSize) { pos =>
+        cforRange(0 until from.majorSize) { big =>
+          cforRange(off until off + from.minorSize) { pos =>
             d(pos) = fn(d(pos))
           }
           off += from.majorStride
@@ -304,13 +309,14 @@ trait DenseMatrix_TraversalOps extends TensorLowPrio {
     }
   }
 
-  implicit def canMapKeyValuePairs_DM[V, R: ClassTag]: CanMapKeyValuePairs[DenseMatrix[V], (Int, Int), V, R, DenseMatrix[R]] = {
+  implicit def canMapKeyValuePairs_DM[V, R: ClassTag]
+    : CanMapKeyValuePairs[DenseMatrix[V], (Int, Int), V, R, DenseMatrix[R]] = {
     new CanMapKeyValuePairs[DenseMatrix[V], (Int, Int), V, R, DenseMatrix[R]] {
       override def map(from: DenseMatrix[V], fn: (((Int, Int), V) => R)) = {
         val data = new Array[R](from.data.length)
         var off = 0
-        cforRange (0 until from.cols) { j =>
-          cforRange (0 until from.rows) { i =>
+        cforRange(0 until from.cols) { j =>
+          cforRange(0 until from.rows) { i =>
             data(off) = fn(i -> j, from(i, j))
             off += 1
           }
@@ -323,7 +329,8 @@ trait DenseMatrix_TraversalOps extends TensorLowPrio {
     }
   }
 
-  implicit def canMapValues_DM[@specialized(Int, Float, Double) V, @specialized(Int, Float, Double) R: ClassTag]: CanMapValues[DenseMatrix[V], V, R, DenseMatrix[R]] = {
+  implicit def canMapValues_DM[@specialized(Int, Float, Double) V, @specialized(Int, Float, Double) R: ClassTag]
+    : CanMapValues[DenseMatrix[V], V, R, DenseMatrix[R]] = {
     new DenseCanMapValues[DenseMatrix[V], V, R, DenseMatrix[R]] {
 
       override def map(from: DenseMatrix[V], fn: (V => R)): DenseMatrix[R] = {
@@ -363,7 +370,6 @@ trait DenseMatrix_TraversalOps extends TensorLowPrio {
       }
     }
   }
-
 
   implicit def canCopy_DM[V: ClassTag]: CanCopy[DenseMatrix[V]] = (v1: DenseMatrix[V]) => v1.copy
 

@@ -16,11 +16,13 @@ package breeze.stats.distributions
  limitations under the License.
  */
 
+import breeze.stats.distributions.ChiSquared
+import org.apache.commons.math3.random.MersenneTwister
+import org.scalacheck.Arbitrary
+import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
-import org.scalacheck._
-import org.apache.commons.math3.random.MersenneTwister
 
 class ChiSquaredTest
     extends AnyFunSuite
@@ -40,19 +42,21 @@ class ChiSquaredTest
     for (shape <- arbitrary[Double].map { _.abs % 200.0 + 4.2 }) yield shape
   }
 
-  def paramsClose(p: Double, b: Double) = breeze.numerics.closeTo(p, b, 5E-2)
+  def paramsClose(p: Double, b: Double): Boolean = breeze.numerics.closeTo(p, b, 5e-2)
 
   def asDouble(x: Double) = x
 
   def fromDouble(x: Double) = x
 
-  implicit def arbDistr = Arbitrary {
-    for (shape <- arbitrary[Double].map { x =>
+  implicit def arbDistr: Arbitrary[ChiSquared] = Arbitrary {
+    for (
+      shape <- arbitrary[Double].map { x =>
         math.abs(x) % 1000.0 + 4.2
-      }) yield new ChiSquared(shape)(new RandBasis(new MersenneTwister(0)))
+      }
+    ) yield new ChiSquared(shape)(new RandBasis(new MersenneTwister(0)))
   }
 
-  override val VARIANCE_TOLERANCE: Double = 1E-2
+  override val VARIANCE_TOLERANCE: Double = 1e-2
 
   test("endpoint, k > 2") {
     val g = new ChiSquared(3)

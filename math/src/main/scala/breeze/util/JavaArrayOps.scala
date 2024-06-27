@@ -1,8 +1,9 @@
 package breeze.util
 
 import breeze.linalg._
-import scala.reflect.ClassTag
 import breeze.math.Complex
+
+import scala.reflect.ClassTag
 
 /**This utility class facilitates transparent access of breeze data objects from plain Java without Scala-related Generic complications.
  * @author ktakagaki
@@ -69,7 +70,7 @@ object JavaArrayOps {
     var rowIndex = 0
     var tempretIndex = 0
     while (rowIndex < tempRows) {
-      //raggedness check
+      // raggedness check
       require(values(rowIndex).length == tempCols, "Input Array[Array[V]] is ragged!")
       rowIndex += 1
     }

@@ -19,11 +19,14 @@
 package breeze.linalg
 
 import breeze.benchmark._
+import breeze.stats.distributions.RandBasis
 
 object SparseVectorBenchmark extends MyRunner(classOf[SparseVectorBenchmark])
 
 class SparseVectorBenchmark extends BreezeBenchmark with BuildsRandomVectors {
-  def timeAllocate(reps: Int) = run(reps): Unit = {
+  implicit override val randBasis: RandBasis = RandBasis.mt0
+
+  def timeAllocate(reps: Int): SparseVector[Double] = run(reps) {
     SparseVector.zeros[Double](1024)
   }
 
@@ -32,9 +35,8 @@ class SparseVectorBenchmark extends BreezeBenchmark with BuildsRandomVectors {
   }
 
   def dotProductBench(reps: Int, size: Int, sparsity1: Double, sparsity2: Double): Double = {
-    runWith(reps, { (randomSparseVector(size, sparsity1), randomSparseVector(size, sparsity2)) }) {
-      case (a, b) =>
-        a.dot(b)
+    runWith(reps, { (randomSparseVector(size, sparsity1), randomSparseVector(size, sparsity2)) }) { case (a, b) =>
+      a.dot(b)
     }
   }
 

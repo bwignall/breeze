@@ -1,7 +1,8 @@
 package breeze.linalg
 
-import java.io.File
 import org.scalatest.funsuite.AnyFunSuite
+
+import java.io.File
 
 /**
  * Created by Luca Puggini: lucapuggio@gmail.com on 19/02/16.

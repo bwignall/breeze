@@ -28,12 +28,12 @@ import scala.collection.mutable.Builder
  * @author dlwh
  */
 class Beam[T](val maxSize: Int, xs: T*)(implicit o: Ordering[T])
-  extends Iterable[T]
+    extends Iterable[T]
     with IterableOps[T, Iterable, Beam[T]]
     with StrictOptimizedIterableOps[T, Iterable, Beam[T]] {
   outer =>
   assert(maxSize >= 0)
-  val heap = trim(BinomialHeap(xs: _*))
+  val heap: BinomialHeap[T] = trim(BinomialHeap(xs: _*))
 
   override def size = heap.size
   def this(maxSize: Int)(implicit o: Ordering[T]) = this(maxSize, Nil: _*)(o)
@@ -57,15 +57,15 @@ class Beam[T](val maxSize: Int, xs: T*)(implicit o: Ordering[T])
   }
 
   def iterator = heap.iterator
-  override def toString() = iterator.mkString("Beam(", ",", ")")
+  override def toString(): String = iterator.mkString("Beam(", ",", ")")
 
-  override def equals(other: Any) = other match {
+  override def equals(other: Any): Boolean = other match {
     case b: Beam[T @unchecked] => (maxSize == b.maxSize) && this.iterator.sameElements(b.iterator)
-    case _ => false
+    case _                     => false
   }
 
   def min = heap.head
-  def best = heap.reduceOption(o.max(_, _))
+  def best: Option[T] = heap.reduceOption(o.max(_, _))
 
   // TODO: make this a "real" 2.13 collection
 
@@ -84,11 +84,11 @@ class Beam[T](val maxSize: Int, xs: T*)(implicit o: Ordering[T])
 
   protected def newBuilder: mutable.Builder[T, Beam[T]] = Beam.canBuildFrom[T, T].newBuilder(this)
 
-  protected override def fromSpecific(coll: IterableOnce[T]): Beam[T] = {
+  override protected def fromSpecific(coll: IterableOnce[T]): Beam[T] = {
     (newBuilder ++= coll).result()
   }
 
-  override def newSpecificBuilder: scala.collection.mutable.Builder[T,breeze.collection.immutable.Beam[T]] = {
+  override def newSpecificBuilder: scala.collection.mutable.Builder[T, breeze.collection.immutable.Beam[T]] = {
     Beam.canBuildFrom[T, T].newBuilder(this)
   }
 
@@ -101,6 +101,8 @@ object Beam {
   implicit def canBuildFrom[T, U: Ordering]: BuildFrom[Beam[T], U, Beam[U]] = new BuildFrom[Beam[T], U, Beam[U]] {
     def fromSpecific(from: Beam[T])(it: IterableOnce[U]): Beam[U] = (newBuilder(from) ++= it).result()
     def newBuilder(from: Beam[T]): mutable.Builder[U, Beam[U]] =
-      new mutable.GrowableBuilder(new breeze.collection.mutable.Beam[U](from.maxSize)).mapResult(b => new Beam[U](b.maxSize) ++ b)
+      new mutable.GrowableBuilder(new breeze.collection.mutable.Beam[U](from.maxSize)).mapResult(b =>
+        new Beam[U](b.maxSize) ++ b
+      )
   }
 }

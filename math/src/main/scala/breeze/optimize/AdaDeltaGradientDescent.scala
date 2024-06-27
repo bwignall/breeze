@@ -2,17 +2,18 @@ package breeze.optimize
 
 import breeze.math.MutableFiniteCoordinateField
 import breeze.numerics.sqrt
-import breeze.stats.distributions.{Rand, RandBasis}
+import breeze.stats.distributions.Rand
+import breeze.stats.distributions.RandBasis
 
 /**
  * Created by jda on 3/17/15.
  */
-class AdaDeltaGradientDescent[T](
-    rho: Double,
-    maxIter: Int,
-    tolerance: Double = 1e-5,
-    improvementTolerance: Double = 1e-4,
-    minImprovementWindow: Int = 50)(implicit vspace: MutableFiniteCoordinateField[T, _, Double], rand: RandBasis)
+class AdaDeltaGradientDescent[T](rho: Double,
+                                 maxIter: Int,
+                                 tolerance: Double = 1e-5,
+                                 improvementTolerance: Double = 1e-4,
+                                 minImprovementWindow: Int = 50
+)(implicit vspace: MutableFiniteCoordinateField[T, _, Double], rand: RandBasis)
     extends StochasticGradientDescent[T](1d, maxIter, tolerance, minImprovementWindow) {
 
   val epsilon = 1e-6
@@ -24,12 +25,12 @@ class AdaDeltaGradientDescent[T](
     History(zeroLike(init), zeroLike(init))
   }
 
-  override protected def updateHistory(
-      newX: T,
-      newGrad: T,
-      newVal: Double,
-      f: StochasticDiffFunction[T],
-      oldState: State): History = {
+  override protected def updateHistory(newX: T,
+                                       newGrad: T,
+                                       newVal: Double,
+                                       f: StochasticDiffFunction[T],
+                                       oldState: State
+  ): History = {
     val oldAvgSqGradient = oldState.history.avgSqGradient
     val newAvgSqGradient = (oldAvgSqGradient * rho) + ((newGrad *:* newGrad) * (1 - rho))
 
@@ -48,11 +49,11 @@ class AdaDeltaGradientDescent[T](
     state.x + delta
   }
 
-  override def determineStepSize(state: State, f: StochasticDiffFunction[T], dir: T) = {
+  override def determineStepSize(state: State, f: StochasticDiffFunction[T], dir: T): Double = {
     defaultStepSize
   }
 
-  override protected def adjust(newX: T, newGrad: T, newVal: Double) = {
+  override protected def adjust(newX: T, newGrad: T, newVal: Double): (Double, T) = {
     newVal -> newGrad
   }
 

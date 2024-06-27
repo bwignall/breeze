@@ -22,7 +22,8 @@ import breeze.linalg.operators.OpAdd
 import breeze.math.Semiring
 import breeze.numerics.abs
 import breeze.storage.Zero
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
 
 import scala.reflect.ClassTag
 
@@ -34,7 +35,7 @@ import scala.reflect.ClassTag
 object RandomInstanceSupport {
 
   // relative errors get really screwy for small and big values
-  def reasonableClamp(v: Double, lower: Double = 1E-4, upper: Double = 1E3): Double = {
+  def reasonableClamp(v: Double, lower: Double = 1e-4, upper: Double = 1e3): Double = {
     if (v == 0) 0
     else if (v.abs < lower) v + math.signum(v) * lower
     else if (v.abs > upper) reasonableClamp(v % upper)
@@ -45,10 +46,10 @@ object RandomInstanceSupport {
     Arbitrary(Arbitrary.arbitrary[Double].map(reasonableClamp(_, lower, upper)))
   }
 
-  val genReasonableDouble: Arbitrary[Double] = reasonableDouble(lower=1E-4, upper=1E2)
+  val genReasonableDouble: Arbitrary[Double] = reasonableDouble(lower = 1e-4, upper = 1e2)
 
   val genReasonableFloat: Arbitrary[Float] = Arbitrary {
-    Arbitrary.arbitrary[Double].map(reasonableClamp(_, 1E-4, 1E2).toFloat)
+    Arbitrary.arbitrary[Double].map(reasonableClamp(_, 1e-4, 1e2).toFloat)
   }
 
   val genReasonableInt: Arbitrary[Int] = Arbitrary {
@@ -98,9 +99,9 @@ object RandomInstanceSupport {
 
   def genPositiveDefiniteMatrix(dim: Int): Gen[DenseMatrix[Double]] = {
     for {
-      m <- genDenseMatrix(dim, dim, reasonableDouble(lower=1E-4, upper=1).arbitrary)
+      m <- genDenseMatrix(dim, dim, reasonableDouble(lower = 1e-4, upper = 1).arbitrary)
     } yield {
-      val m2 = (m + m.t)/ 2.0
+      val m2 = (m + m.t) / 2.0
       diag(m2) += (dim * 1.0)
       m2
     }

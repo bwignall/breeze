@@ -15,16 +15,16 @@ package breeze.collection.mutable
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import breeze.storage.{ConfigurableDefault, Storage, Zero}
-
-import breeze.util.ArrayUtil
-import java.util
-
 import breeze.macros._
-
-import scala.reflect.ClassTag
 import breeze.macros.cforRange
+import breeze.storage.ConfigurableDefault
+import breeze.storage.Storage
+import breeze.storage.Zero
+import breeze.util.ArrayUtil
+
 import java.io.Serializable
+import java.util
+import scala.reflect.ClassTag
 
 /**
  * A SparseArray is a sparse representation of an array using a two-array binary-search approach.
@@ -36,13 +36,12 @@ import java.io.Serializable
  * @author dlwh, dramage
  */
 @SerialVersionUID(1L)
-final class SparseArray[@specialized(Double, Int, Float, Long) V](
-    var index: Array[Int],
-    var data: Array[V],
-    private var used: Int,
-    val size: Int,
-    val default: V)
-    extends SparseArrayLike[V]
+final class SparseArray[@specialized(Double, Int, Float, Long) V](var index: Array[Int],
+                                                                  var data: Array[V],
+                                                                  private var used: Int,
+                                                                  val size: Int,
+                                                                  val default: V
+) extends SparseArrayLike[V]
     with Storage[V]
     with Serializable {
 
@@ -188,7 +187,7 @@ final class SparseArray[@specialized(Double, Int, Float, Long) V](
    * index.  If the requested index is not found, the  value is
    * negative and can be converted into an insertion point with ~rv.
    */
-  protected final def findOffset(i: Int): Int = {
+  final protected def findOffset(i: Int): Int = {
     if (i < 0 || i >= size)
       throw new IndexOutOfBoundsException("Index " + i + " out of bounds [0," + used + ")")
 
@@ -316,11 +315,15 @@ final class SparseArray[@specialized(Double, Int, Float, Long) V](
       if (used > data.length) {
         // need to grow array
         val newLength = {
-          if (data.length == 0) { 4 } else if (data.length < 0x0400) { data.length * 2 } else if (data.length < 0x0800) {
+          if (data.length == 0) { 4 }
+          else if (data.length < 0x0400) { data.length * 2 }
+          else if (data.length < 0x0800) {
             data.length + 0x0400
-          } else if (data.length < 0x1000) { data.length + 0x0800 } else if (data.length < 0x2000) {
+          } else if (data.length < 0x1000) { data.length + 0x0800 }
+          else if (data.length < 0x2000) {
             data.length + 0x1000
-          } else if (data.length < 0x4000) { data.length + 0x2000 } else { data.length + 0x4000 }
+          } else if (data.length < 0x4000) { data.length + 0x2000 }
+          else { data.length + 0x4000 }
         }
 
         // allocate new arrays
@@ -352,7 +355,7 @@ final class SparseArray[@specialized(Double, Int, Float, Long) V](
 
   /** Compacts the array by removing all stored default values. */
   def compact(): Unit = {
-    //ToDo 3: will require changes if non-zero defaults are implemented
+    // ToDo 3: will require changes if non-zero defaults are implemented
     val nz = { // number of non-zeros
       var _nz = 0
       var i = 0
@@ -465,13 +468,13 @@ final class SparseArray[@specialized(Double, Int, Float, Long) V](
 }
 
 object SparseArray {
-  def apply[@specialized(Int, Float, Double) T: ClassTag: Zero](values: T*) = {
-    val rv = new SparseArray[T](
-      Array.range(0, values.length),
-      values.toArray,
-      values.length,
-      values.length,
-      implicitly[Zero[T]].zero)
+  def apply[@specialized(Int, Float, Double) T: ClassTag: Zero](values: T*): SparseArray[T] = {
+    val rv = new SparseArray[T](Array.range(0, values.length),
+                                values.toArray,
+                                values.length,
+                                values.length,
+                                implicitly[Zero[T]].zero
+    )
     rv.compact()
     rv
   }

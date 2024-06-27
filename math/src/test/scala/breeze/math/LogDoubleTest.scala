@@ -16,12 +16,13 @@ package breeze.math
  limitations under the License.
  */
 
+import breeze.linalg.RandomInstanceSupport
+import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
-import org.scalacheck._
+
 import LogDouble._
-import breeze.linalg.RandomInstanceSupport
 
 class LogDoubleTest extends AnyFunSuite with Checkers {
 
@@ -30,7 +31,7 @@ class LogDoubleTest extends AnyFunSuite with Checkers {
   )
 
   implicit class ae(x: Double) {
-    def =~=(y: Double) = (x == 0.0 && y.abs < 1E-6) || math.abs(x - y) / math.max(x.abs,y.abs) < 1E-6
+    def =~=(y: Double) = (x == 0.0 && y.abs < 1e-6) || math.abs(x - y) / math.max(x.abs, y.abs) < 1e-6
   }
 
   test("addition") {

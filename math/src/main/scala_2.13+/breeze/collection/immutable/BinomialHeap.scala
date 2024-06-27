@@ -18,8 +18,8 @@ package breeze.collection.immutable
 
 import breeze.util.Iterators
 
-import scala.collection.generic.CanBuildFrom
 import scala.collection._
+import scala.collection.generic.CanBuildFrom
 
 /**
  * From Okasaki's Functional Data Structures. Represents a functional heap
@@ -27,7 +27,7 @@ import scala.collection._
  * @author dlwh
  */
 class BinomialHeap[T]()(implicit ord: Ordering[T])
-  extends Iterable[T]
+    extends Iterable[T]
     with IterableOps[T, Iterable, BinomialHeap[T]]
     with StrictOptimizedIterableOps[T, Iterable, BinomialHeap[T]]
     with Serializable {
@@ -56,7 +56,7 @@ class BinomialHeap[T]()(implicit ord: Ordering[T])
 
   def min = minOpt.get
 
-  lazy val minOpt = if (trees.isEmpty) None else Some(findMin(trees))
+  lazy val minOpt: Option[T] = if (trees.isEmpty) None else Some(findMin(trees))
 
   private def findMin(trees: List[Node[T]]): T = {
     trees match {
@@ -117,7 +117,7 @@ class BinomialHeap[T]()(implicit ord: Ordering[T])
 object BinomialHeap {
   protected case class Node[T](rank: Int, x: T, children: List[Node[T]])(implicit ord: Ordering[T]) {
     import ord.mkOrderingOps
-    def link(n: Node[T]) = {
+    def link(n: Node[T]): Node[T] = {
       if (x <= n.x) Node(rank + 1, x, n :: children) else Node(rank + 1, n.x, this :: n.children)
     }
   }

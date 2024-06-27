@@ -16,10 +16,11 @@ package breeze.stats.distributions
  limitations under the License.
  */
 
-import breeze.numerics.Bessel
-import math._
-import breeze.optimize._
 import breeze.linalg.DenseVector
+import breeze.numerics.Bessel
+import breeze.optimize._
+
+import math._
 
 /**
  * Represents a Von Mises distribution, which is
@@ -36,8 +37,8 @@ case class VonMises(mu: Double, k: Double)(implicit rand: RandBasis)
   require(k >= 0, "K must be positive")
   require(mu <= math.Pi * 2 && mu >= 0, "Mu must be in the range [0,2pi]")
 
-  override def unnormalizedLogPdf(theta: Double) = cos(theta - mu) * k
-  lazy val logNormalizer = math.log(Bessel.i0(k) * 2 * Pi)
+  override def unnormalizedLogPdf(theta: Double): Double = cos(theta - mu) * k
+  lazy val logNormalizer: Double = math.log(Bessel.i0(k) * 2 * Pi)
 
   private val r = {
     val tau = 1.0 + sqrt(1.0 + 4.0 * k * k)
@@ -58,14 +59,14 @@ case class VonMises(mu: Double, k: Double)(implicit rand: RandBasis)
     theta = if (choice > 0.5) mu + acos(w) else mu - acos(w)
   } yield theta
 
-  def draw() = myRandom.draw()
+  def draw(): Double = myRandom.draw()
 
-  override lazy val toString = "VonMises(mu=" + mu + ", k=" + k + ")"
+  override lazy val toString: String = "VonMises(mu=" + mu + ", k=" + k + ")"
 
   def mean = mu
   def mode = mean
-  def variance = 1 - Bessel.i1(k) / Bessel.i0(k)
-  def entropy = -k * Bessel.i1(k) / Bessel.i0(k) + math.log(2 * math.Pi * Bessel.i0(k))
+  def variance: Double = 1 - Bessel.i1(k) / Bessel.i0(k)
+  def entropy: Double = -k * Bessel.i1(k) / Bessel.i0(k) + math.log(2 * math.Pi * Bessel.i0(k))
 }
 
 object VonMises extends ExponentialFamily[VonMises, Double] {
@@ -77,9 +78,9 @@ object VonMises extends ExponentialFamily[VonMises, Double] {
     def *(weight: Double) = SufficientStatistic(weight * n, weight * sines, weight * cosines)
   }
 
-  def emptySufficientStatistic = SufficientStatistic(0, 0, 0)
+  def emptySufficientStatistic: SufficientStatistic = SufficientStatistic(0, 0, 0)
 
-  def sufficientStatisticFor(t: Double) = SufficientStatistic(1, sin(t), cos(t))
+  def sufficientStatisticFor(t: Double): SufficientStatistic = SufficientStatistic(1, sin(t), cos(t))
   override def distribution(p: Parameter)(implicit rand: RandBasis) = new VonMises(p._1, p._2)
 
   def mle(stats: SufficientStatistic): (Double, Double) = {
@@ -109,7 +110,7 @@ object VonMises extends ExponentialFamily[VonMises, Double] {
 
     val kx = {
       if (t < 0.53) t * (2 + t * t * (1 + 5 * t * t / 6))
-      else if (t < 0.85) -0.4 + 1.39 * t + (0.43) / (1 - t)
+      else if (t < 0.85) -0.4 + 1.39 * t + 0.43 / (1 - t)
       else 1 / (t * (3 + t * (-4 + t)))
     }
     val result = minimize(lensed, DenseVector(mu, kx))
@@ -117,9 +118,9 @@ object VonMises extends ExponentialFamily[VonMises, Double] {
     res
   }
 
-  def likelihoodFunction(stats: SufficientStatistic) = new DiffFunction[(Double, Double)] {
+  def likelihoodFunction(stats: SufficientStatistic): DiffFunction[Parameter] = new DiffFunction[(Double, Double)] {
     def calculate(x: (Double, Double)) = {
-      val DELTA = 1E-5
+      val DELTA = 1e-5
       val (mu, k) = x
       if (mu < 0 || mu > 2 * Pi || k < 0) (Double.PositiveInfinity, (0.0, 0.0))
       else {
@@ -138,9 +139,9 @@ object VonMises extends ExponentialFamily[VonMises, Double] {
   /*
 
   /**
- * Returns the maximum likelihood estimate of this distribution
- * For the given observations with (possibly pseudo-)counts
- */
+   * Returns the maximum likelihood estimate of this distribution
+   * For the given observations with (possibly pseudo-)counts
+   */
 
   def mle(obs: Counter[Double,Double]) = {
     val sufStats = for {
@@ -168,5 +169,5 @@ object VonMises extends ExponentialFamily[VonMises, Double] {
     } */
     VonMises(mu,k)
   }
- */
+   */
 }

@@ -16,9 +16,8 @@ package breeze.numerics.financial
  limitations under the License.
  */
 
-import org.scalatest.funsuite.AnyFunSuite
-
 import breeze.linalg._
+import org.scalatest.funsuite.AnyFunSuite
 
 /**
  *
@@ -26,7 +25,7 @@ import breeze.linalg._
  */
 class FinancialTest extends AnyFunSuite {
 
-  val DOUBLE_ROUND5_MIN = 1E-5;
+  val DOUBLE_ROUND5_MIN = 1e-5;
 
   test("NetPresentValue") {
     assert(netPresentValue(1.0, Seq(1)) == 1.0)
@@ -51,11 +50,11 @@ class FinancialTest extends AnyFunSuite {
     val (principal, interest, remainingPrincipal) = principalInterest(0.0824 / 12, 12, 2500.0)
 
     val expectedRemainingPrincipal = DenseVector[Double](2299.42, 2097.46, 1894.11, 1689.37, 1483.22, 1275.66, 1066.67,
-      856.25, 644.38, 431.05, 216.26, -0.00)
+                                                         856.25, 644.38, 431.05, 216.26, -0.00)
     val expectedInterestPayment =
       DenseVector[Double](-17.17, -15.79, -14.40, -13.01, -11.60, -10.18, -8.76, -7.32, -5.88, -4.42, -2.96, -1.49)
     val expectedPrincipalPayment = DenseVector[Double](-200.58, -201.96, -203.35, -204.74, -206.15, -207.56, -208.99,
-      -210.42, -211.87, -213.32, -214.79, -216.26)
+                                                       -210.42, -211.87, -213.32, -214.79, -216.26)
 
     assert(norm(expectedRemainingPrincipal - remainingPrincipal) < 2e-1)
     assert(norm(expectedPrincipalPayment - principal) < 1e-1)
@@ -64,13 +63,13 @@ class FinancialTest extends AnyFunSuite {
 
   test("IRR vs MIRR") {
 
-    //Some(0.2809484211599611)
+    // Some(0.2809484211599611)
     var expectNormalIRR = DenseVector[Double](-100, 39, 59, 55, 20);
     assert(math.abs(interalRateReturn(expectNormalIRR).get - 0.2809484211599611) < DOUBLE_ROUND5_MIN)
-    //Some(0.08859833852775578)
+    // Some(0.08859833852775578)
     expectNormalIRR = DenseVector[Double](-5, 10.5, 1, -8, 1);
     assert(math.abs(interalRateReturn(expectNormalIRR).get - 0.08859833852775578) < DOUBLE_ROUND5_MIN)
-    //Some(-0.09549583034897258)
+    // Some(-0.09549583034897258)
     val expectNegativeIRR = DenseVector[Double](-100, 0, 0, 74)
     assert(math.abs(interalRateReturn(expectNegativeIRR).get + 0.09549583034897258) < DOUBLE_ROUND5_MIN)
 
@@ -87,11 +86,11 @@ class FinancialTest extends AnyFunSuite {
 
   test("number periodic vs solve rate of annuity") {
 
-    val normalRate = 0.07 / 12 //~0.00583191332402286
+    val normalRate = 0.07 / 12 // ~0.00583191332402286
     val expectNormal = numberPeriodicPayments(normalRate, -150, 8000)
-    //expect 64.07335
+    // expect 64.07335
     assert(math.abs(expectNormal - 64.07335) < DOUBLE_ROUND5_MIN)
-    //expect -53.33333
+    // expect -53.33333
     val testZeroRate = numberPeriodicPayments(0, -150, 8000)
     assert(math.abs(testZeroRate - -53.33333) < DOUBLE_ROUND5_MIN)
 

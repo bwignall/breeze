@@ -18,6 +18,6 @@ package breeze.integrate
 
 package object quasimontecarlo extends ProvidesTransformedQuasiMonteCarlo {
   implicit class ToQuasi(val icdfProvider: breeze.stats.distributions.HasInverseCdf) extends AnyVal {
-    def toQuasi = DistributionRandomVariableSpec(icdfProvider)
+    def toQuasi: DistributionRandomVariableSpec = DistributionRandomVariableSpec(icdfProvider)
   }
 }

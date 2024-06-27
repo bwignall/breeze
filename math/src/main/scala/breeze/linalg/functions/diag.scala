@@ -2,9 +2,10 @@ package breeze.linalg
 
 import breeze.generic.UFunc
 import breeze.math.Semiring
+import breeze.storage.Zero
+
 import scala.collection.mutable
 import scala.reflect.ClassTag
-import breeze.storage.Zero
 
 /**
  * returns a vector along the diagonal of v.
@@ -49,17 +50,13 @@ object diag extends UFunc with diagLowPrio2 {
     new diag.Impl[SparseVector[V], CSCMatrix[V]] {
       def apply(t: SparseVector[V]): CSCMatrix[V] = {
         val r = new CSCMatrix.Builder[V](t.length, t.length)
-        t.activeIterator.foreach((iv) => r.add(iv._1, iv._1, iv._2))
+        t.activeIterator.foreach(iv => r.add(iv._1, iv._1, iv._2))
         r.result(true, true)
       }
     }
 
 }
 
-trait diagLowPrio extends UFunc {  self: UFunc =>
+trait diagLowPrio extends UFunc { self: UFunc => }
 
-}
-
-trait diagLowPrio2 extends UFunc with diagLowPrio {  self: UFunc =>
-
-}
+trait diagLowPrio2 extends UFunc with diagLowPrio { self: UFunc => }

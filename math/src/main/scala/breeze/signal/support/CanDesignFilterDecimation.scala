@@ -1,19 +1,20 @@
 package breeze.signal.support
 
+import breeze.linalg.DenseVector
+import breeze.linalg.convert
 import breeze.signal._
-import breeze.linalg.{convert, DenseVector}
 
 /**
  * @author ktakagaki
  * @date 2/4/14.
  */
 trait CanDesignFilterDecimation[Output] {
-  def apply(
-      factor: Int,
-      multiplier: Double,
-      optDesignMethod: OptDesignMethod,
-      optWindow: OptWindowFunction,
-      optFilterOrder: OptFilterTaps): Output
+  def apply(factor: Int,
+            multiplier: Double,
+            optDesignMethod: OptDesignMethod,
+            optWindow: OptWindowFunction,
+            optFilterOrder: OptFilterTaps
+  ): Output
 }
 
 /**
@@ -31,29 +32,29 @@ object CanDesignFilterDecimation {
    */
   implicit def decimationFilterDouble: CanDesignFilterDecimation[FIRKernel1D[Double]] = {
     new CanDesignFilterDecimation[FIRKernel1D[Double]] {
-      def apply(
-          factor: Int,
-          multiplier: Double,
-          optDesignMethod: OptDesignMethod,
-          optWindow: OptWindowFunction,
-          optFilterOrder: OptFilterTaps): FIRKernel1D[Double] = {
+      def apply(factor: Int,
+                multiplier: Double,
+                optDesignMethod: OptDesignMethod,
+                optWindow: OptWindowFunction,
+                optFilterOrder: OptFilterTaps
+      ): FIRKernel1D[Double] = {
 
         optDesignMethod match {
           case OptDesignMethod.Firwin => {
             import OptFilterTaps._
             val realOrder = optFilterOrder match {
-              case Automatic => 31
+              case Automatic   => 31
               case IntOpt(ord) => ord
             }
-            //cannot use parameter-by-name for optWindow, given duplicate variable name
-            designFilterFirwin(
-              realOrder,
-              DenseVector(1d / factor.toDouble),
-              nyquist = 1d,
-              zeroPass = true,
-              scale = true,
-              multiplier,
-              optWindow)
+            // cannot use parameter-by-name for optWindow, given duplicate variable name
+            designFilterFirwin(realOrder,
+                               DenseVector(1d / factor.toDouble),
+                               nyquist = 1d,
+                               zeroPass = true,
+                               scale = true,
+                               multiplier,
+                               optWindow
+            )
           }
           case meth: OptDesignMethod =>
             throw new IllegalArgumentException("Design method " + meth + "is not supported yet!")
@@ -67,12 +68,12 @@ object CanDesignFilterDecimation {
    */
   implicit def decimationFilterLong: CanDesignFilterDecimation[FIRKernel1D[Long]] = {
     new CanDesignFilterDecimation[FIRKernel1D[Long]] {
-      def apply(
-          factor: Int,
-          multiplier: Double,
-          optDesignMethod: OptDesignMethod,
-          optWindow: OptWindowFunction,
-          optFilterOrder: OptFilterTaps): FIRKernel1D[Long] = {
+      def apply(factor: Int,
+                multiplier: Double,
+                optDesignMethod: OptDesignMethod,
+                optWindow: OptWindowFunction,
+                optFilterOrder: OptFilterTaps
+      ): FIRKernel1D[Long] = {
         val temp: FIRKernel1D[Double] =
           designFilterDecimation[FIRKernel1D[Double]](factor, multiplier, optDesignMethod, optWindow, optFilterOrder)
         new FIRKernel1D[Long](convert(temp.kernel, Long), temp.multiplier.toLong, temp.designText)

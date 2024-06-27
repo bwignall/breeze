@@ -16,30 +16,31 @@ package breeze.stats.distributions
  limitations under the License.
  */
 
-import breeze.numerics._
-import math.{Pi, log1p}
 import breeze.linalg._
+import breeze.numerics._
+
 import scala.runtime.ScalaRunTime
+
+import math.{log1p, Pi}
 
 /**
  * Represents a Gaussian distribution over a single real variable.
  *
  * @author dlwh
  */
-case class MultivariateGaussian(mean: DenseVector[Double], covariance: DenseMatrix[Double])(
-    implicit rand: RandBasis)
+case class MultivariateGaussian(mean: DenseVector[Double], covariance: DenseMatrix[Double])(implicit rand: RandBasis)
     extends ContinuousDistr[DenseVector[Double]]
     with Moments[DenseVector[Double], DenseMatrix[Double]] {
-  def draw() = {
+  def draw(): DenseVector[Double] = {
     val z: DenseVector[Double] = DenseVector.rand(mean.length, rand.gaussian(0, 1))
     root * z += mean
   }
 
   private val root: DenseMatrix[Double] = cholesky(covariance)
 
-  override def toString() = ScalaRunTime._toString(this)
+  override def toString(): String = ScalaRunTime._toString(this)
 
-  override def unnormalizedLogPdf(t: DenseVector[Double]) = {
+  override def unnormalizedLogPdf(t: DenseVector[Double]): Double = {
     val centered = t - mean
     val slv = covariance \ centered
 
@@ -47,7 +48,7 @@ case class MultivariateGaussian(mean: DenseVector[Double], covariance: DenseMatr
 
   }
 
-  override lazy val logNormalizer = {
+  override lazy val logNormalizer: Double = {
     // determinant of the cholesky decomp is the sqrt of the determinant of the cov matrix
     // this is the log det of the cholesky decomp
     val det = sum(log(diag(root)))
@@ -56,7 +57,7 @@ case class MultivariateGaussian(mean: DenseVector[Double], covariance: DenseMatr
 
   def variance = covariance
   def mode = mean
-  lazy val entropy = {
+  lazy val entropy: Double = {
     mean.length * log1p(2 * Pi) + sum(log(diag(root)))
   }
 }

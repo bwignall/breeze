@@ -1,7 +1,7 @@
 package breeze.stats.random
 
-import breeze.stats.distributions.Rand
 import breeze.linalg.DenseVector
+import breeze.stats.distributions.Rand
 
 /**
  * Generates a quasi-random sequence of dim-dimensional vectors
@@ -11,11 +11,11 @@ class HaltonSequence(dim: Int) extends Rand[DenseVector[Double]] {
   require(dim > 0, "dim must be positive!")
 
   private var count = 0
-  val primes = Array.iterate(2L, dim) { last =>
+  val primes: Array[Long] = Array.iterate(2L, dim) { last =>
     new java.math.BigInteger(last.toString).nextProbablePrime().longValue()
   }
 
-  def draw() = {
+  def draw(): DenseVector[Double] = {
     count += 1
     val arr = primes.map { prime =>
       var h = 0.0

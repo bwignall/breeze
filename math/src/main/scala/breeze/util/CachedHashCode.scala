@@ -8,6 +8,6 @@ import scala.runtime.ScalaRunTime
  *
  * @author dlwh
  */
-trait CachedHashCode {  self: Product =>
-  override lazy val hashCode = ScalaRunTime._hashCode(this);
+trait CachedHashCode { self: Product =>
+  override lazy val hashCode: Int = ScalaRunTime._hashCode(this);
 }

@@ -1,6 +1,5 @@
 package breeze.linalg
 
-
 /**
  * Represents the Transpose of an instance of a type. The most common use is for Transpose[DenseVector[T]] to
  * represent row vectors
@@ -9,7 +8,6 @@ package breeze.linalg
  **/
 final case class Transpose[+T](inner: T) extends NumericOps[Transpose[T]] {
 
-  def repr = this
+  def repr: Transpose[T] = this
 
 }
-

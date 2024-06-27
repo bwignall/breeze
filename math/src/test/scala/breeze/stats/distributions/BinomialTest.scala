@@ -16,8 +16,9 @@ package breeze.stats.distributions;
  limitations under the License.
  */
 
+import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
 import org.scalatest._
-import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
 
@@ -26,7 +27,7 @@ class BinomialTest extends AnyFunSuite with Checkers with MomentsTestBase[Int] {
   import org.scalacheck.Arbitrary.arbitrary;
 
   override val numSamples: Int = 1000
-  override val VARIANCE_TOLERANCE: Double = 1E-1
+  override val VARIANCE_TOLERANCE: Double = 1e-1
 
   def arbDistr: Arbitrary[Binomial] = Arbitrary {
     for {

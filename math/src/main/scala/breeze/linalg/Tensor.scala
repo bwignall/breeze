@@ -15,16 +15,18 @@ package breeze.linalg
  limitations under the License.
  */
 
-import support._
 import breeze.collection.mutable.Beam
 import breeze.generic.UFunc
+import breeze.linalg.operators.HasOps
+import breeze.linalg.operators.TensorLowPrio
 import breeze.math.Semiring
-import breeze.linalg.operators.{HasOps, TensorLowPrio}
 
 import scala.annotation.unchecked.uncheckedVariance
+import scala.reflect.ClassTag
 import scala.util.hashing.MurmurHash3
 import scala.{specialized => spec}
-import scala.reflect.ClassTag
+
+import support._
 
 /**
  * We occasionally need a Tensor that doesn't extend NumericOps directly. This is that tensor.
@@ -101,8 +103,9 @@ trait TensorLike[@spec(Int) K, @spec(Double, Int, Float, Long) V, +This <: Tenso
    * Method for slicing that is tuned for Matrices.
    * @return
    */
-  def apply[Slice1, Slice2, Result](slice1: Slice1, slice2: Slice2)(
-      implicit canSlice: CanSlice2[This, Slice1, Slice2, Result]): Result = {
+  def apply[Slice1, Slice2, Result](slice1: Slice1, slice2: Slice2)(implicit
+    canSlice: CanSlice2[This, Slice1, Slice2, Result]
+  ): Result = {
     canSlice(repr, slice1, slice2)
   }
 
@@ -149,7 +152,6 @@ trait TensorLike[@spec(Int) K, @spec(Double, Int, Float, Long) V, +This <: Tenso
     true
   }
 
-
   /** Returns true if and only if the given predicate is true for all elements. */
   def forall(fn: V => Boolean): Boolean = {
     foreachValue(v => if (!fn(v)) return false)
@@ -165,9 +167,4 @@ trait TensorLike[@spec(Int) K, @spec(Double, Int, Float, Long) V, +This <: Tenso
  */
 trait Tensor[@spec(Int) K, @spec(Double, Int, Float, Long) V] extends TensorLike[K, V, Tensor[K, V]]
 
-object Tensor {
-
-
-}
-
-
+object Tensor {}

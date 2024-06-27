@@ -1,8 +1,9 @@
 package breeze.util
 
-import breeze.linalg._
 import breeze.collection.mutable._
+import breeze.linalg._
 import breeze.storage._
+
 import java.util
 import scala.reflect.ClassTag
 
@@ -62,7 +63,8 @@ trait Encoder[T] {
     val vec = mkDenseVector()
     for ((k, v) <- c.active.pairs) {
       val ki = index(k)
-      if (ki < 0) { if (!ignoreOutOfIndex) throw new RuntimeException("Error, not in index: " + k) } else vec(ki) = v
+      if (ki < 0) { if (!ignoreOutOfIndex) throw new RuntimeException("Error, not in index: " + k) }
+      else vec(ki) = v
     }
     vec
   }
@@ -76,7 +78,8 @@ trait Encoder[T] {
     vec.reserve(c.activeSize)
     for ((k, v) <- c.active.pairs) {
       val ki = index(k)
-      if (ki < 0) { if (!ignoreOutOfIndex) throw new RuntimeException("Error, not in index: " + k) } else vec.add(ki, v)
+      if (ki < 0) { if (!ignoreOutOfIndex) throw new RuntimeException("Error, not in index: " + k) }
+      else vec.add(ki, v)
     }
     vec.toSparseVector
   }
@@ -89,7 +92,8 @@ trait Encoder[T] {
     val vec = mkVector()
     for ((k, v) <- c.active.pairs) {
       val ki = index(k)
-      if (ki < 0) { if (!ignoreOutOfIndex) throw new RuntimeException("Error, not in index: " + k) } else vec(ki) = v
+      if (ki < 0) { if (!ignoreOutOfIndex) throw new RuntimeException("Error, not in index: " + k) }
+      else vec(ki) = v
     }
     vec
   }

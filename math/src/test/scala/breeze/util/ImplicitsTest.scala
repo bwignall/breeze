@@ -20,8 +20,8 @@ package breeze.util
 
 import org.scalatest.funsuite.AnyFunSuite
 
-import scala.collection.mutable.ArrayBuffer
 import scala.collection.compat._
+import scala.collection.mutable.ArrayBuffer
 
 class ImplicitsTest extends AnyFunSuite {
 
@@ -41,7 +41,8 @@ class ImplicitsTest extends AnyFunSuite {
   test("Array#toMultiMap") {
     assert(
       Array((1, 2), (1, 3), (1, 2), (2, 4)).toMultiMap.mapValues(_.to(ArrayBuffer)).toMap
-        === Map(1 -> Array(2, 3, 2), 2 -> Array(4)).mapValues(_.to(ArrayBuffer)).toMap)
+        === Map(1 -> Array(2, 3, 2), 2 -> Array(4)).mapValues(_.to(ArrayBuffer)).toMap
+    )
   }
 
 }

@@ -1,6 +1,7 @@
 package breeze.optimize.proximal
 
-import breeze.linalg.{DenseVector, DenseMatrix}
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
 import breeze.stats.distributions.Rand
 
 /**
@@ -23,7 +24,7 @@ import breeze.stats.distributions.Rand
  * @return H is the quadratic representation of the function
  */
 object QpGenerator {
-  def getGram(nGram: Int) = {
+  def getGram(nGram: Int): DenseMatrix[Double] = {
     val hrand = DenseMatrix.rand[Double](nGram, nGram, Rand.gaussian(0, 1))
     val hrandt = hrand.t
     val hposdef = hrandt * hrand
@@ -31,7 +32,13 @@ object QpGenerator {
     H
   }
 
-  def apply(nGram: Int, nEqualities: Int) = {
+  def apply(nGram: Int, nEqualities: Int): (DenseMatrix[Double],
+                                            DenseVector[Double],
+                                            DenseVector[Double],
+                                            DenseVector[Double],
+                                            DenseVector[Double],
+                                            DenseMatrix[Double]
+  ) = {
     val en = DenseVector.ones[Double](nGram)
     val zn = DenseVector.zeros[Double](nGram)
 

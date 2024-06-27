@@ -16,13 +16,16 @@ package breeze.linalg
  limitations under the License.
  */
 
-import operators._
-import breeze.linalg.support.{CanSlice, CanSlice2, CanTranspose}
 import breeze.generic.UFunc
+import breeze.linalg.support.CanSlice
+import breeze.linalg.support.CanSlice2
+import breeze.linalg.support.CanTranspose
 import breeze.storage.Zero
 
 import scala.annotation.unchecked.uncheckedVariance
 import scala.reflect.ClassTag
+
+import operators._
 
 trait ImmutableNumericOps[+This] extends Any with HasOps {
   def repr: This
@@ -128,14 +131,16 @@ trait ImmutableNumericOps[+This] extends Any with HasOps {
     op.apply(repr, b)
 
   /** A transposed view of this object, followed by a slice. Sadly frequently necessary. */
-  final def t[That, Slice1, Slice2, Result](a: Slice1, b: Slice2)(
-      implicit op: CanTranspose[This @uncheckedVariance, That],
-      canSlice: CanSlice2[That, Slice1, Slice2, Result]): Result =
+  final def t[That, Slice1, Slice2, Result](a: Slice1, b: Slice2)(implicit
+    op: CanTranspose[This @uncheckedVariance, That],
+    canSlice: CanSlice2[That, Slice1, Slice2, Result]
+  ): Result =
     canSlice(op.apply(repr), a, b)
 
   /** A transposed view of this object, followed by a slice. Sadly frequently necessary. */
   final def t[That, Slice1, Result](
-      a: Slice1)(implicit op: CanTranspose[This @uncheckedVariance, That], canSlice: CanSlice[That, Slice1, Result]): Result =
+    a: Slice1
+  )(implicit op: CanTranspose[This @uncheckedVariance, That], canSlice: CanSlice[That, Slice1, Result]): Result =
     canSlice(op.apply(repr), a)
 
 }
@@ -270,8 +275,6 @@ trait NumericOps[+This] extends ImmutableNumericOps[This] {
     op(repr, b)
     repr
   }
-  
-  
 
 }
 
@@ -293,8 +296,9 @@ object NumericOps {
     }
 
     // TODO these two really shouldn't be necessary, but there's interference(?) from any2StringAdd, or something.
-    implicit def binaryOpFromDVOp2Add[V](implicit op: OpAdd.Impl2[DenseVector[V], DenseVector[V], DenseVector[V]])
-      : OpAdd.Impl2[Array[V], Array[V], Array[V]] = {
+    implicit def binaryOpFromDVOp2Add[V](implicit
+      op: OpAdd.Impl2[DenseVector[V], DenseVector[V], DenseVector[V]]
+    ): OpAdd.Impl2[Array[V], Array[V], Array[V]] = {
       new OpAdd.Impl2[Array[V], Array[V], Array[V]] {
         def apply(a: Array[V], b: Array[V]): Array[V] = {
           val r = op(DenseVector(a), DenseVector[V](b))
@@ -307,7 +311,9 @@ object NumericOps {
       }
     }
 
-    implicit def binaryOpAddFromDVUOpAdd2[V](implicit op: OpAdd.Impl2[DenseVector[V], V, DenseVector[V]]): OpAdd.Impl2[Array[V], V, Array[V]] = {
+    implicit def binaryOpAddFromDVUOpAdd2[V](implicit
+      op: OpAdd.Impl2[DenseVector[V], V, DenseVector[V]]
+    ): OpAdd.Impl2[Array[V], V, Array[V]] = {
       new OpAdd.Impl2[Array[V], V, Array[V]] {
         def apply(a: Array[V], b: V): Array[V] = {
           val r = op(DenseVector(a), b)
@@ -320,9 +326,9 @@ object NumericOps {
       }
     }
 
-    implicit def binaryOpFromDVOp2[V, Op <: OpType](
-        implicit op: UFunc.UImpl2[Op, DenseVector[V], DenseVector[V], DenseVector[V]])
-      : UFunc.UImpl2[Op, Array[V], Array[V], Array[V]] = {
+    implicit def binaryOpFromDVOp2[V, Op <: OpType](implicit
+      op: UFunc.UImpl2[Op, DenseVector[V], DenseVector[V], DenseVector[V]]
+    ): UFunc.UImpl2[Op, Array[V], Array[V], Array[V]] = {
       new UFunc.UImpl2[Op, Array[V], Array[V], Array[V]] {
         def apply(a: Array[V], b: Array[V]): Array[V] = {
           val r = op(DenseVector(a), DenseVector[V](b))
@@ -335,8 +341,9 @@ object NumericOps {
       }
     }
 
-    implicit def binaryUpdateOpFromDVDVOp[V, Op <: OpType](
-        implicit op: UFunc.InPlaceImpl2[Op, DenseVector[V], DenseVector[V]]): UFunc.InPlaceImpl2[Op, Array[V], Array[V]] = {
+    implicit def binaryUpdateOpFromDVDVOp[V, Op <: OpType](implicit
+      op: UFunc.InPlaceImpl2[Op, DenseVector[V], DenseVector[V]]
+    ): UFunc.InPlaceImpl2[Op, Array[V], Array[V]] = {
       new UFunc.InPlaceImpl2[Op, Array[V], Array[V]] {
         def apply(a: Array[V], b: Array[V]): Unit = {
           op(DenseVector(a), DenseVector(b))
@@ -344,8 +351,9 @@ object NumericOps {
       }
     }
 
-    implicit def binaryOpFromDVUOp2[V, Op <: OpType](
-        implicit op: UFunc.UImpl2[Op, DenseVector[V], V, DenseVector[V]]):UFunc.UImpl2[Op, Array[V], V, Array[V]]  = {
+    implicit def binaryOpFromDVUOp2[V, Op <: OpType](implicit
+      op: UFunc.UImpl2[Op, DenseVector[V], V, DenseVector[V]]
+    ): UFunc.UImpl2[Op, Array[V], V, Array[V]] = {
       new UFunc.UImpl2[Op, Array[V], V, Array[V]] {
         def apply(a: Array[V], b: V): Array[V] = {
           val r = op(DenseVector(a), b)
@@ -361,8 +369,9 @@ object NumericOps {
   }
 
   sealed trait ArraysLowPriority {
-    implicit def binaryUpdateOpFromDVOp[V, Other, Op](
-        implicit op: UFunc.InPlaceImpl2[Op, DenseVector[V], Other]): UFunc.InPlaceImpl2[Op, Array[V], Other] = {
+    implicit def binaryUpdateOpFromDVOp[V, Other, Op](implicit
+      op: UFunc.InPlaceImpl2[Op, DenseVector[V], Other]
+    ): UFunc.InPlaceImpl2[Op, Array[V], Other] = {
       new UFunc.InPlaceImpl2[Op, Array[V], Other] {
         def apply(a: Array[V], b: Other): Unit = {
           op(DenseVector(a), b)
@@ -370,10 +379,11 @@ object NumericOps {
       }
     }
 
-    implicit def binaryOpFromDVOp[V, Other, Op <: OpType, U](
-        implicit op: UFunc.UImpl2[Op, DenseVector[V], Other, DenseVector[U]],
-        man: ClassTag[U],
-        zero: Zero[U]): UFunc.UImpl2[Op, Array[V], Other, Array[U]] = {
+    implicit def binaryOpFromDVOp[V, Other, Op <: OpType, U](implicit
+      op: UFunc.UImpl2[Op, DenseVector[V], Other, DenseVector[U]],
+      man: ClassTag[U],
+      zero: Zero[U]
+    ): UFunc.UImpl2[Op, Array[V], Other, Array[U]] = {
       new UFunc.UImpl2[Op, Array[V], Other, Array[U]] {
         def apply(a: Array[V], b: Other): Array[U] = {
           val r = op(DenseVector(a), b)
@@ -389,8 +399,9 @@ object NumericOps {
     }
   }
 
-  implicit def binaryUpdateOpFromDVVOp[V, Op, U](
-      implicit op: UFunc.InPlaceImpl2[Op, DenseVector[V], U]): UFunc.InPlaceImpl2[Op, Array[V], U] = {
+  implicit def binaryUpdateOpFromDVVOp[V, Op, U](implicit
+    op: UFunc.InPlaceImpl2[Op, DenseVector[V], U]
+  ): UFunc.InPlaceImpl2[Op, Array[V], U] = {
     new UFunc.InPlaceImpl2[Op, Array[V], U] {
       def apply(a: Array[V], b: U): Unit = {
         op(DenseVector(a), b)

@@ -32,13 +32,13 @@ import breeze.util.Opt
 abstract class OptWindowFunction extends Opt
 object OptWindowFunction {
   case class Hamming(alpha: Double = 0.54, beta: Double = 0.46) extends OptWindowFunction {
-    override def toString = "Hamming window (" + alpha + ", " + beta + ")"
+    override def toString: String = "Hamming window (" + alpha + ", " + beta + ")"
   }
   case class Hanning(alpha: Double = 0.5, beta: Double = 0.5) extends OptWindowFunction {
-    override def toString = "Hanning window (" + alpha + "," + beta + ")"
+    override def toString: String = "Hanning window (" + alpha + "," + beta + ")"
   }
   case class Blackman(a0: Double = 0.42, a1: Double = 0.5, a2: Double = 0.08) extends OptWindowFunction {
-    override def toString = "Blackman window (" + a0 + a1 + a2 + ")"
+    override def toString: String = "Blackman window (" + a0 + a1 + a2 + ")"
   }
   case class User(dv: DenseVector[Double]) extends OptWindowFunction {
     override def toString = "user-specified window"
@@ -100,6 +100,7 @@ object OptMethod {
 
   /**Option value: Convolve using FFT.*/
   case object FFT extends OptMethod
+
   /**Option value: Convolve using for loop.*/
 }
 
@@ -124,7 +125,7 @@ object OptRange {
     override def toString() = "OptRange.All"
   }
   case class RangeOpt(r: Range) extends OptRange {
-    override def toString() =
+    override def toString(): String =
       "OptRange.RangeOpt( " + r.start + ", " + r.end + ", " + r.step + "), isInclusive=" + r.isInclusive
   }
 //  case class Single(i: Int) extends OptRange {

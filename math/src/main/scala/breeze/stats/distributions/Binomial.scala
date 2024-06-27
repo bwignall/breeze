@@ -15,7 +15,9 @@ package breeze.stats.distributions
  limitations under the License.
  */
 
-import breeze.numerics.{logI, lgamma}
+import breeze.numerics.lgamma
+import breeze.numerics.logI
+
 import math._
 
 /**
@@ -32,11 +34,11 @@ case class Binomial(n: Int, p: Double)(implicit rand: RandBasis)
   type Distr = Gamma
   require(n > 0, "n must be positive!")
   require(p >= 0.0, "p must be non-negative!")
-  def probabilityOf(k: Int) = exp(logProbabilityOf(k))
+  def probabilityOf(k: Int): Double = exp(logProbabilityOf(k))
 
-  override def toString() = "Binomial(" + n + ", " + p + ")"
+  override def toString(): String = "Binomial(" + n + ", " + p + ")"
 
-  override def logProbabilityOf(k: Int) = {
+  override def logProbabilityOf(k: Int): Double = {
     require(n >= k)
     require(k >= 0)
     if (p == 0) logI(k == 0)
@@ -72,7 +74,7 @@ case class Binomial(n: Int, p: Double)(implicit rand: RandBasis)
       var continueOuter = true
       while (continueOuter) {
         var continueInner = true
-        while(continueInner) {
+        while (continueInner) {
           val angle = math.Pi * rand.uniform.draw()
           y = tan(angle)
           bnl = sq * y + n * pp
@@ -86,7 +88,7 @@ case class Binomial(n: Int, p: Double)(implicit rand: RandBasis)
             + bnl * plog + (n - bnl) * pclog
         )
 
-        continueOuter = (rand.uniform.draw() > t)
+        continueOuter = rand.uniform.draw() > t
       }
     }
     if (p != pp) bnl = n - bnl
@@ -102,13 +104,13 @@ case class Binomial(n: Int, p: Double)(implicit rand: RandBasis)
   private val pclog = log(pc)
 
   private val sq = sqrt(2.0 * (n * pp) * pc)
-  //}
+  // }
 
-  def mean = n * p
-  def variance = mean * (1 - p)
-  def mode = math.floor((n + 1) * p)
+  def mean: Double = n * p
+  def variance: Double = mean * (1 - p)
+  def mode: Double = math.floor((n + 1) * p)
 
   /** with an additive O(1/n) term */
-  def entropy = .5 * math.log(2 * math.Pi * variance)
+  def entropy: Double = .5 * math.log(2 * math.Pi * variance)
 
 }

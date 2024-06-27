@@ -1,10 +1,12 @@
 package breeze.stats
+import breeze.linalg.support._
+import breeze.stats.distributions._
+import breeze.stats.meanAndVariance.MeanAndVariance
+
 import scala.math.pow
 import scala.math.sqrt
-import breeze.stats.distributions._
-import breeze.linalg.support._
+
 import CanTraverseValues._
-import breeze.stats.meanAndVariance.MeanAndVariance
 
 /**
  * This package contains hypothesis tests.
@@ -17,30 +19,34 @@ package object hypothesis {
    * Returns a p value
    */
   def tTest[T](it1: TraversableOnce[T], it2: Traversable[T])(implicit numeric: Numeric[T]): Double =
-    tTest[TraversableOnce[Double]](it1.map(numeric.toDouble), it2.map(numeric.toDouble)) //explicit type annotation ensures that the compiler runs the CanTraverseValues implementation of it
+    tTest[TraversableOnce[Double]](it1.map(numeric.toDouble),
+                                   it2.map(numeric.toDouble)
+    ) // explicit type annotation ensures that the compiler runs the CanTraverseValues implementation of it
 
   def tTest[X](it1: X, it2: X)(implicit ct: CanTraverseValues[X, Double]): Double = {
-    //first sample
+    // first sample
     val MeanAndVariance(mu1, var1, n1) = meanAndVariance(it1)
-    //second sample
+    // second sample
     val MeanAndVariance(mu2, var2, n2) = meanAndVariance(it2)
-    require(
-      var1 > 0 && var2 > 0,
-      "Two Sample T Test requires that both"
-        + "samples have variance > 0")
+    require(var1 > 0 && var2 > 0,
+            "Two Sample T Test requires that both"
+              + "samples have variance > 0"
+    )
     val tScore = (mu1 - mu2) / sqrt((var1 / n1) + (var2 / n2)) // T statistic
     val dof = pow((var1 / n1) + (var2 / n2), 2) / (pow(var1, 2) / (pow(n1, 2) * (n1 - 1)) +
-      pow(var2, 2) / (pow(n2, 2) * (n2 - 1))) //Welch–Satterthwaite equation
-    new StudentsT(dof)(RandBasis.mt0).cdf(tScore) //return p value
+      pow(var2, 2) / (pow(n2, 2) * (n2 - 1))) // Welch–Satterthwaite equation
+    new StudentsT(dof)(RandBasis.mt0).cdf(tScore) // return p value
   }
 
   def tTest[T](it1: Traversable[T])(implicit numeric: Numeric[T]): Double =
-    tTest[TraversableOnce[Double]](it1.map(numeric.toDouble)) //explicit type annotation ensures that the compiler runs the CanTraverseValues implementation of it
+    tTest[TraversableOnce[Double]](
+      it1.map(numeric.toDouble)
+    ) // explicit type annotation ensures that the compiler runs the CanTraverseValues implementation of it
   def tTest[X](it1: X)(implicit ct: CanTraverseValues[X, Double]): Double = {
     val MeanAndVariance(mu1, var1, n1) = meanAndVariance(it1)
     val Z = mu1 / sqrt(var1 / n1)
     val dof = n1 - 1
-    new StudentsT(dof)(RandBasis.mt0).cdf(Z) //return p value
+    new StudentsT(dof)(RandBasis.mt0).cdf(Z) // return p value
   }
 
   case class Chi2Result(chi2: Double, pVal: Double)
@@ -53,12 +59,12 @@ package object hypothesis {
      * between control and a variant.
      */
     val meanP = (successControl + successVariant).toDouble / (trialsControl + trialsVariant).toDouble
-    val chi2 = (chiSquaredTerm(meanP * trialsControl, successControl) + chiSquaredTerm(
-      (1 - meanP) * trialsControl,
-      trialsControl - successControl)
-      + chiSquaredTerm(meanP * trialsVariant, successVariant) + chiSquaredTerm(
-      (1 - meanP) * trialsVariant,
-      trialsVariant - successVariant))
+    val chi2 = (chiSquaredTerm(meanP * trialsControl, successControl) + chiSquaredTerm((1 - meanP) * trialsControl,
+                                                                                       trialsControl - successControl
+    )
+      + chiSquaredTerm(meanP * trialsVariant, successVariant) + chiSquaredTerm((1 - meanP) * trialsVariant,
+                                                                               trialsVariant - successVariant
+      ))
     val pVal = 1.0 - Gamma(0.5, 2.0)(RandBasis.mt0).cdf(chi2)
     Chi2Result(chi2, pVal)
   }

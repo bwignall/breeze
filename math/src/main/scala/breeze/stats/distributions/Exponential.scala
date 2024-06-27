@@ -15,14 +15,14 @@ case class Exponential(rate: Double)(implicit basis: RandBasis)
     with Moments[Double, Double]
     with HasCdf
     with HasInverseCdf {
-  override def toString() = ScalaRunTime._toString(this)
+  override def toString(): String = ScalaRunTime._toString(this)
   require(rate > 0)
 
-  def unnormalizedLogPdf(x: Double) = -rate * x
+  def unnormalizedLogPdf(x: Double): Double = -rate * x
 
-  lazy val logNormalizer = -math.log(rate)
+  lazy val logNormalizer: Double = -math.log(rate)
 
-  def draw() = -math.log(basis.uniform.draw()) / rate
+  def draw(): Double = -math.log(basis.uniform.draw()) / rate
 
   override def probability(x: Double, y: Double): Double = {
     new ExponentialDistribution(mean).probability(x, y)
@@ -57,15 +57,15 @@ object Exponential
     def *(weight: Double) = copy(n * weight, v * weight)
   }
 
-  def emptySufficientStatistic = SufficientStatistic(0, 0)
+  def emptySufficientStatistic: SufficientStatistic = SufficientStatistic(0, 0)
 
-  def sufficientStatisticFor(t: Double) = SufficientStatistic(1, t)
+  def sufficientStatisticFor(t: Double): SufficientStatistic = SufficientStatistic(1, t)
 
-  def mle(stats: SufficientStatistic) = {
+  def mle(stats: SufficientStatistic): Parameter = {
     stats.n / stats.v
   }
 
-  def likelihoodFunction(stats: SufficientStatistic) = new DiffFunction[Double] {
+  def likelihoodFunction(stats: SufficientStatistic): DiffFunction[Parameter] = new DiffFunction[Double] {
     def calculate(x: Double) = {
       val obj = x * stats.v - stats.n * math.log(x)
       val deriv = stats.v - stats.n / x

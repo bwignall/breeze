@@ -14,8 +14,8 @@ import scala.reflect.ClassTag
  */
 class VectorTest extends AnyFunSuite {
 
-  val dvTest = DenseVector(1, 2, 3, 4)
-  //val dmTest = DenseMatrix((1,2,3,4), (5,6,7,8))
+  val dvTest: DenseVector[Int] = DenseVector(1, 2, 3, 4)
+  // val dmTest = DenseMatrix((1,2,3,4), (5,6,7,8))
 
   test("scan") {
     assert(dvTest.scanLeft(0)((p1: Int, p2: Int) => p1 + p2) == DenseVector(0, 1, 3, 6, 10))
@@ -39,7 +39,7 @@ class VectorTest extends AnyFunSuite {
 
   test("hashcode") {
     val v: DenseVector[Int] = DenseVector(1, 2, 0, 0, 3)
-    val v2: SparseVector[Int] = SparseVector(5)((0 -> 1), (1 -> 2), (4 -> 3))
+    val v2: SparseVector[Int] = SparseVector(5)(0 -> 1, 1 -> 2, 4 -> 3)
     assert(v === v2)
     assert(v.hashCode == v2.hashCode)
   }
@@ -59,8 +59,8 @@ class VectorTest extends AnyFunSuite {
   }
 
   test("assert operations of different size fail") {
-    val a = Vector[Double](1D, 2D, 3D)
-    val b = Vector[Double](1D, 2D, 3D, 4D)
+    val a = Vector[Double](1d, 2d, 3d)
+    val b = Vector[Double](1d, 2d, 3d, 4d)
     intercept[IllegalArgumentException] {
       a + b
     }
@@ -74,7 +74,7 @@ class VectorTest extends AnyFunSuite {
 abstract class VectorPropertyTestBase[T: ClassTag: Zero: Semiring] extends TensorSpaceTestBase[Vector[T], Int, T] {
   def genScalar: Arbitrary[T]
 
-  override implicit def genSingle: Arbitrary[Vector[T]] = Arbitrary {
+  implicit override def genSingle: Arbitrary[Vector[T]] = Arbitrary {
     Gen.choose(1, 10).flatMap(RandomInstanceSupport.genVector(_, genScalar.arbitrary))
   }
 
@@ -89,25 +89,22 @@ abstract class VectorPropertyTestBase[T: ClassTag: Zero: Semiring] extends Tenso
   }
 }
 
-
 class VectorOps_DoubleTest
     extends VectorPropertyTestBase[Double]
     with DoubleValuedTensorSpaceTestBase[Vector[Double], Int] {
-  val space = Vector.space[Double]
+  val space: MutableEnumeratedCoordinateField[Vector[Double], Int, Double] = Vector.space[Double]
   def genScalar: Arbitrary[Double] = RandomInstanceSupport.genReasonableDouble
 }
 
-
 class VectorOps_FloatTest extends VectorPropertyTestBase[Float] {
-  val space = Vector.space[Float]
+  val space: MutableEnumeratedCoordinateField[Vector[Float], Int, Float] = Vector.space[Float]
 
-  override val TOL: Double = 1E-2
+  override val TOL: Double = 1e-2
   def genScalar: Arbitrary[Float] = RandomInstanceSupport.genReasonableFloat
 
 }
 
-
 class VectorOps_IntTest extends VectorPropertyTestBase[Int] {
-  val space = Vector.space[Int]
+  val space: MutableEnumeratedCoordinateField[Vector[Int], Int, Int] = Vector.space[Int]
   def genScalar: Arbitrary[Int] = RandomInstanceSupport.genReasonableInt
 }

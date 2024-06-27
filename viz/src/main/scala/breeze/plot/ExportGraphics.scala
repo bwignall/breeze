@@ -1,7 +1,10 @@
 package breeze.plot
 
-import java.io.{File, OutputStream, FileOutputStream, IOException}
 import java.awt.Graphics2D
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
 
 /**
  * Utility functions for exporting a Graphics2D drawable to some eps, pdf,
@@ -19,7 +22,7 @@ object ExportGraphics {
    * the given dpi (for rasterized formats only).  The extension of the file
    * determines its format, with options png, eps, svg, and pdf.
    */
-  def writeFile(file: File, draw: Drawable, width: Int, height: Int, dpi: Int = 72) = {
+  def writeFile(file: File, draw: Drawable, width: Int, height: Int, dpi: Int = 72): Unit = {
     lazy val fos = new FileOutputStream(file)
     if (file.getName.toLowerCase.endsWith(".png")) {
       try {

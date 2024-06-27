@@ -16,12 +16,15 @@ package breeze.util
  limitations under the License.
  */
 
-import java.io.{IOException, ObjectInputStream, ObjectStreamException}
-import scala.jdk.CollectionConverters._
-import scala.collection.mutable.{ArrayBuffer, HashMap}
-import java.util.Arrays
+import java.io.IOException
+import java.io.ObjectInputStream
+import java.io.ObjectStreamException
 import java.util
+import java.util.Arrays
+import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable.HashMap
 import scala.io.Source
+import scala.jdk.CollectionConverters._
 
 /**
  * Trait that marks an O(1) bidirectional map between Ints (increasing from 0)
@@ -81,12 +84,12 @@ trait Index[T] extends Iterable[T] with (T => Int) with Serializable {
     }
   }
 
-  protected lazy val defaultHashCode =
+  protected lazy val defaultHashCode: Int =
     foldLeft(17)(_ * 41 + _.hashCode())
 
   override def hashCode = defaultHashCode
 
-  override def toString = {
+  override def toString: String = {
     iterator.mkString("Index(", ",", ")")
   }
 
@@ -137,20 +140,20 @@ class HashIndex[T] extends MutableIndex[T] with Serializable {
   override def unapply(pos: Int): Option[T] =
     if (pos >= 0 && pos < objects.length) Some(objects(pos)) else None
 
-  override def contains(t: T) =
+  override def contains(t: T): Boolean =
     indices containsKey t
 
   override def indexOpt(t: T): Option[Int] =
     Option(indices.get(t))
 
-  override def get(pos: Int) =
+  override def get(pos: Int): T =
     objects(pos); // throws IndexOutOfBoundsException as required
 
   override def iterator =
     objects.iterator
 
   /** Returns the position of T, adding it to the index if it's not there. */
-  override def index(t: T) = {
+  override def index(t: T): Int = {
     if (!indices.containsKey(t)) {
       val ind = objects.size
       objects += t
@@ -212,25 +215,25 @@ class DenseIntIndex(beg: Int, end: Int) extends Index[Int] {
   require(beg >= 0)
   require(end >= beg)
 
-  override def size = end - beg
+  override def size: Int = end - beg
 
-  override def apply(t: Int) = if (contains(t)) t - beg else -1
+  override def apply(t: Int): Int = if (contains(t)) t - beg else -1
 
-  override def unapply(i: Int) = if (i < size) Some(i + beg) else None
+  override def unapply(i: Int): Option[Int] = if (i < size) Some(i + beg) else None
 
-  override def contains(t: Int) = t < end - beg && t >= 0
+  override def contains(t: Int): Boolean = t < end - beg && t >= 0
 
-  override def indexOpt(t: Int) =
+  override def indexOpt(t: Int): Option[Int] =
     if (contains(t)) Some(t) else None
 
-  override def get(i: Int) =
+  override def get(i: Int): Int =
     if (contains(i)) i else throw new IndexOutOfBoundsException()
 
-  override def iterator = (beg until end).iterator
+  override def iterator: Iterator[Int] = (beg until end).iterator
 
-  def pairs = iterator.zip(iterator.map(_ + min))
+  def pairs: Iterator[(Int, Int)] = iterator.zip(iterator.map(_ + min))
 
-  override def hashCode = beg + 37 * end
+  override def hashCode: Int = beg + 37 * end
 }
 
 /**
@@ -282,8 +285,8 @@ object Index {
  */
 @SerialVersionUID(1L)
 class EitherIndex[L, R](left: Index[L], right: Index[R]) extends Index[Either[L, R]] {
-  def apply(t: Either[L, R]) = t match {
-    case Left(l) => left(l)
+  def apply(t: Either[L, R]): Int = t match {
+    case Left(l)  => left(l)
     case Right(r) => right(r) + rightOffset
   }
 
@@ -293,17 +296,18 @@ class EitherIndex[L, R](left: Index[L], right: Index[R]) extends Index[Either[L,
    */
   def rightOffset = left.size
 
-  def unapply(i: Int) = {
+  def unapply(i: Int): Option[Either[L, R]] = {
     if (i < 0 || i >= size) None
     else if (i < left.size) Some(Left(left.get(i)))
     else Some(Right(right.get(i - left.size)))
   }
 
-  def pairs = left.pairs.map { case (l, i) => Left(l) -> i } ++ right.pairs.map {
-    case (r, i) => Right(r) -> (i + left.size)
+  def pairs: Iterator[(Either[L, R], Int)] = left.pairs.map { case (l, i) => Left(l) -> i } ++ right.pairs.map {
+    case (r, i) =>
+      Right(r) -> (i + left.size)
   }
 
-  def iterator = left.iterator.map { Left(_) } ++ right.map { Right(_) }
+  def iterator: Iterator[Either[L, R]] = left.iterator.map { Left(_) } ++ right.map { Right(_) }
 
   override def size: Int = left.size + right.size
 }
@@ -315,12 +319,12 @@ class EitherIndex[L, R](left: Index[L], right: Index[R]) extends Index[Either[L,
  */
 @SerialVersionUID(1L)
 class OptionIndex[T](inner: Index[T]) extends Index[Option[T]] {
-  def apply(t: Option[T]) = t match {
+  def apply(t: Option[T]): Int = t match {
     case Some(l) => inner(l)
-    case None => inner.size
+    case None    => inner.size
   }
 
-  def unapply(i: Int) = {
+  def unapply(i: Int): Option[Option[T]] = {
     if (i < 0 || i >= size) None
     else if (i < inner.size) Some(Some(inner.get(i))) // sic!
     else Some(None) // sic!
@@ -332,9 +336,10 @@ class OptionIndex[T](inner: Index[T]) extends Index[Option[T]] {
     else None
   }
 
-  def pairs = inner.pairs.map { case (l, i) => Some(l) -> i } ++ Iterator(None -> inner.size)
+  def pairs: Iterator[(Option[T], Int)] =
+    inner.pairs.map { case (l, i) => Some(l) -> i } ++ Iterator(None -> inner.size)
 
-  def iterator = inner.iterator.map { Some(_) } ++ Iterator(None)
+  def iterator: Iterator[Option[T]] = inner.iterator.map { Some(_) } ++ Iterator(None)
 
   override def size: Int = inner.size + 1
 }
@@ -356,19 +361,19 @@ final class CompositeIndex[U](indices: Index[_ <: U]*) extends Index[(Int, U)] {
    * you can quickly get its mapped value with this function.
    */
   @inline
-  def mapIndex(component: Int, uIndex: Int) = {
+  def mapIndex(component: Int, uIndex: Int): Int = {
     if (uIndex < 0) -1
     else offsets(component) + uIndex
   }
 
-  def apply(t: (Int, U)) = {
+  def apply(t: (Int, U)): Int = {
     if (t._1 >= indices.length || t._1 < 0) -1
     else {
       indices(t._1).asInstanceOf[Index[U]](t._2) + offsets(t._1)
     }
   }
 
-  def unapply(i: Int) = {
+  def unapply(i: Int): Option[(Int, U)] = {
     if (i < 0 || i >= size) None
     else {
       val index = {
@@ -381,19 +386,17 @@ final class CompositeIndex[U](indices: Index[_ <: U]*) extends Index[(Int, U)] {
     }
   }
 
-  def pairs =
-    indices.iterator.zipWithIndex.flatMap {
-      case (index, i) =>
-        index.iterator.map { t =>
-          (i, t: U)
-        }
+  def pairs: Iterator[((Int, U), Int)] =
+    indices.iterator.zipWithIndex.flatMap { case (index, i) =>
+      index.iterator.map { t =>
+        (i, t: U)
+      }
     }.zipWithIndex
 
-  def iterator = indices.iterator.zipWithIndex.flatMap {
-    case (index, i) =>
-      index.iterator.map { t =>
-        (i -> t)
-      }
+  def iterator: Iterator[(Int, U)] = indices.iterator.zipWithIndex.flatMap { case (index, i) =>
+    index.iterator.map { t =>
+      i -> t
+    }
   }
 
   override def size: Int = offsets(offsets.length - 1)

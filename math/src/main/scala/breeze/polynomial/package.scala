@@ -1,16 +1,18 @@
 package breeze
 
-import breeze.generic.{UFunc, VariableUFunc}
-import breeze.linalg.{DenseMatrix, DenseVector}
-import breeze.macros.cforRange
-import spire.math.poly.PolyDense
+import breeze.generic.UFunc
+import breeze.generic.VariableUFunc
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
 import breeze.macros._
+import breeze.macros.cforRange
 import spire.implicits.DoubleAlgebra
+import spire.math.poly.PolyDense
 
 package object polynomial {
   object densePolyval extends UFunc {
     implicit object doubleImpl extends Impl2[PolyDenseUFuncWrapper, Double, Double] {
-      def apply(k: PolyDenseUFuncWrapper, v: Double) = k.p(v)
+      def apply(k: PolyDenseUFuncWrapper, v: Double): Double = k.p(v)
     }
     implicit object denseVectorImpl extends Impl2[PolyDenseUFuncWrapper, DenseVector[Double], DenseVector[Double]] {
       /* This implementation uses Horner's Algorithm:
@@ -20,7 +22,7 @@ package object polynomial {
        *  vector coefficients second is about 3x faster than
        *  the other way around.
        */
-      def apply(k: PolyDenseUFuncWrapper, v: DenseVector[Double]) = {
+      def apply(k: PolyDenseUFuncWrapper, v: DenseVector[Double]): DenseVector[Double] = {
         val coeffs: Array[Double] = k.p.coeffs
         var i = coeffs.length - 1
         val result = DenseVector.fill[Double](v.size, coeffs(i))
@@ -42,7 +44,7 @@ package object polynomial {
        *  vector coefficients second is about 3x faster than
        *  the other way around.
        */
-      def apply(k: PolyDenseUFuncWrapper, v: DenseMatrix[Double]) = {
+      def apply(k: PolyDenseUFuncWrapper, v: DenseMatrix[Double]): DenseMatrix[Double] = {
         if (v.rows != v.cols) {
           throw new IllegalArgumentException("Can only apply polynomial to square matrix.")
         }
@@ -52,7 +54,7 @@ package object polynomial {
         var result = DenseMatrix.eye[Double](n) * coeffs(i)
         while (i > 0) {
           i -= 1
-          result = result * v //WILDLY INEFFICIENT, FIGURE OUT IN PLACE MULTIPLY
+          result = result * v // WILDLY INEFFICIENT, FIGURE OUT IN PLACE MULTIPLY
           val c = coeffs(i)
           cforRange(0 until n)(i => {
             result.update(i, i, result(i, i) + c)

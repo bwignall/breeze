@@ -1,13 +1,15 @@
 package breeze.linalg
 
 import breeze.linalg.operators.HasOps
-import org.scalatest._
-import org.scalatest.funsuite._
 import breeze.math._
-import breeze.numerics.{log, sin}
-import org.scalacheck.{Arbitrary, Gen}
+import breeze.numerics.log
+import breeze.numerics.sin
 import breeze.stats.mean
 import breeze.storage.Zero
+import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
+import org.scalatest._
+import org.scalatest.funsuite._
 
 import scala.reflect.ClassTag
 
@@ -18,7 +20,7 @@ import scala.reflect.ClassTag
 class SparseVectorTest extends AnyFunSuite {
 
   val TOLERANCE = 1e-4
-  def assertClose(a: Double, b: Double) =
+  def assertClose(a: Double, b: Double): Assertion =
     assert(math.abs(a - b) < TOLERANCE, s"$a vs. $b")
 
   test("Min/Max") {
@@ -350,7 +352,8 @@ class SparseVectorTest extends AnyFunSuite {
 
     assert(
       (m * x) ===
-        m * xd)
+        m * xd
+    )
 
   }
 
@@ -359,7 +362,7 @@ class SparseVectorTest extends AnyFunSuite {
     val v2 = SparseVector(0, 1, 0, 0)
 
     // do in two stages to ensure that telling the return type doesn't change type inference
-    val r = v1.+(v2) //type mismatch; found : breeze.linalg.Vector[Int] required: breeze.linalg.DenseVector[Int]
+    val r = v1.+(v2) // type mismatch; found : breeze.linalg.Vector[Int] required: breeze.linalg.DenseVector[Int]
     val q = r: DenseVector[Int]
     assert(q == DenseVector(0, 1, 0, 0))
   }
@@ -369,7 +372,7 @@ class SparseVectorTest extends AnyFunSuite {
     val v2 = SparseVector(0, 1, 0, 0)
 
     // do in two stages to ensure that telling the return type doesn't change type inference
-    val r = v2 + v1 //type mismatch; found : breeze.linalg.Vector[Int] required: breeze.linalg.DenseVector[Int]
+    val r = v2 + v1 // type mismatch; found : breeze.linalg.Vector[Int] required: breeze.linalg.DenseVector[Int]
     val q = r: DenseVector[Int]
     assert(q == DenseVector(0, 1, 0, 0))
   }
@@ -426,7 +429,7 @@ abstract class SparseVectorPropertyTestBase[T: ClassTag: Zero: Semiring]
     extends TensorSpaceTestBase[SparseVector[T], Int, T] {
   def genScalar: Arbitrary[T]
 
-  override implicit def genSingle: Arbitrary[SparseVector[T]] = Arbitrary {
+  implicit override def genSingle: Arbitrary[SparseVector[T]] = Arbitrary {
     Gen.choose(1, 10).flatMap(RandomInstanceSupport.genSparseVector(_, genScalar.arbitrary))
   }
 
@@ -444,19 +447,19 @@ abstract class SparseVectorPropertyTestBase[T: ClassTag: Zero: Semiring]
 class SparseVectorOps_DoubleTest
     extends SparseVectorPropertyTestBase[Double]
     with DoubleValuedTensorSpaceTestBase[SparseVector[Double], Int] {
-  val space = SparseVector.space[Double]
+  val space: MutableEnumeratedCoordinateField[SparseVector[Double], Int, Double] = SparseVector.space[Double]
   def genScalar: Arbitrary[Double] = RandomInstanceSupport.genReasonableDouble
 }
 
 class SparseVectorOps_FloatTest extends SparseVectorPropertyTestBase[Float] {
-  val space = SparseVector.space[Float]
+  val space: MutableEnumeratedCoordinateField[SparseVector[Float], Int, Float] = SparseVector.space[Float]
 
-  override val TOL: Double = 1E-2
+  override val TOL: Double = 1e-2
   def genScalar: Arbitrary[Float] = Arbitrary { RandomInstanceSupport.genReasonableDouble.arbitrary.map(_.toFloat) }
 
 }
 
 class SparseVectorOps_IntTest extends SparseVectorPropertyTestBase[Int] {
-  val space = SparseVector.space[Int]
+  val space: MutableEnumeratedCoordinateField[SparseVector[Int], Int, Int] = SparseVector.space[Int]
   def genScalar: Arbitrary[Int] = Arbitrary { Gen.Choose.chooseInt.choose(-1000, 1000) }
 }

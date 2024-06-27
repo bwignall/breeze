@@ -15,9 +15,10 @@ package breeze.collection.mutable
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import org.scalatestplus.scalacheck.Checkers
+import org.scalacheck.Arbitrary
+import org.scalacheck.Prop
 import org.scalatest.funsuite.AnyFunSuite
-import org.scalacheck.{Arbitrary, Prop}
+import org.scalatestplus.scalacheck.Checkers
 
 /**
  *
@@ -36,7 +37,8 @@ class OpenAddressHashArrayTest extends AnyFunSuite with Checkers {
             arr(i) = i
           }
           mdata.forall(i => arr(i) == i) && !(0 until size).filterNot(mdata).exists(arr(_) != 0)
-      })
+        }
+      )
     }
   }
 
@@ -56,7 +58,8 @@ class OpenAddressHashArrayTest extends AnyFunSuite with Checkers {
           }
           (arr == arr.copy && arr.hashCode == arr.copy.hashCode
           && arr2 == arr && arr2.copy.hashCode == arr.copy.hashCode)
-      })
+        }
+      )
     }
   }
 

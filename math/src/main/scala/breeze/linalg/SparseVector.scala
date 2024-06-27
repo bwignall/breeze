@@ -70,7 +70,7 @@ class SparseVector[@spec(Double, Int, Float, Long) V](val array: SparseArray[V])
 
   def repr: SparseVector[V] = this
 
-  def contains(i: Int) = array.contains(i)
+  def contains(i: Int): Boolean = array.contains(i)
 
   def apply(i: Int): V = {
     if (i < 0 || i >= size) throw new IndexOutOfBoundsException(s"$i not in [0,$size)")
@@ -97,11 +97,11 @@ class SparseVector[@spec(Double, Int, Float, Long) V](val array: SparseArray[V])
   /** This is always assumed to be equal to 0, for now. */
   def default: V = zero.zero
 
-  override def equals(other: Any) = other match {
+  override def equals(other: Any): Boolean = other match {
     case x: SparseVector[_] => this.array == x.array
     case x: Vector[_] =>
       this.length == x.length &&
-        (valuesIterator.sameElements(x.valuesIterator))
+      (valuesIterator.sameElements(x.valuesIterator))
     case _ => false
   }
 
@@ -110,9 +110,9 @@ class SparseVector[@spec(Double, Int, Float, Long) V](val array: SparseArray[V])
    **/
   override def hashCode = array.hashCode
 
-  def isActive(rawIndex: Int) = array.isActive(rawIndex)
+  def isActive(rawIndex: Int): Boolean = array.isActive(rawIndex)
 
-  override def toString = {
+  override def toString: String = {
     activeIterator.mkString(s"SparseVector($length)(", ", ", ")")
   }
 
@@ -125,7 +125,7 @@ class SparseVector[@spec(Double, Int, Float, Long) V](val array: SparseArray[V])
   }
 
   def compact(): Unit = {
-    //ToDo 3: will require changes if non-zero defaults are implemented
+    // ToDo 3: will require changes if non-zero defaults are implemented
     array.compact()
   }
 
@@ -169,7 +169,10 @@ class SparseVector[@spec(Double, Int, Float, Long) V](val array: SparseArray[V])
     else {
       var ii = 0
       val nIndex =
-        Array.tabulate[Int](length + 1)((cp: Int) => if (ii < used && cp == index(ii)) { ii += 1; ii - 1 } else ii)
+        Array.tabulate[Int](length + 1)((cp: Int) =>
+          if (ii < used && cp == index(ii)) { ii += 1; ii - 1 }
+          else ii
+        )
       assert(ii == used)
       new CSCMatrix[V](data, 1, length, nIndex, activeSize, Array.fill[Int](data.length)(0))
     }
@@ -214,7 +217,8 @@ object SparseVector {
   def horzcat[V: Zero: ClassTag](vectors: SparseVector[V]*): CSCMatrix[V] = {
     if (!vectors.forall(_.size == vectors(0).size))
       throw new IllegalArgumentException(
-        "vector lengths must be equal, but got: " + vectors.map(_.length).mkString(", "))
+        "vector lengths must be equal, but got: " + vectors.map(_.length).mkString(", ")
+      )
     val rows = vectors(0).length
     val cols = vectors.length
     val data = new Array[V](vectors.map(_.activeSize).sum)
@@ -238,12 +242,13 @@ object SparseVector {
 
   // implicits
   class CanCopySparseVector[@spec(Double, Int, Float, Long) V: ClassTag: Zero] extends CanCopy[SparseVector[V]] {
-    def apply(v1: SparseVector[V]) = {
+    def apply(v1: SparseVector[V]): SparseVector[V] = {
       v1.copy
     }
   }
 
-  implicit def canCopySparse[@spec(Double, Int, Float, Long) V: ClassTag: Zero]: CanCopySparseVector[V] = new CanCopySparseVector[V]
+  implicit def canCopySparse[@spec(Double, Int, Float, Long) V: ClassTag: Zero]: CanCopySparseVector[V] =
+    new CanCopySparseVector[V]
 
   implicit def canMapValues[V, V2: ClassTag: Zero]: CanMapValues[SparseVector[V], V, V2, SparseVector[V2]] = {
     new CanMapValues[SparseVector[V], V, V2, SparseVector[V2]] {
@@ -255,7 +260,7 @@ object SparseVector {
 
       override def mapActive(from: SparseVector[V], fn: V => V2): SparseVector[V2] = {
         val out = new Array[V2](from.activeSize)
-        cforRange (0 until from.activeSize) { i =>
+        cforRange(0 until from.activeSize) { i =>
           out(i) = fn(from.data(i))
         }
         new SparseVector(from.index.take(from.activeSize), out, from.activeSize, from.length)
@@ -365,8 +370,6 @@ object SparseVector {
 //      }
 //    }
 //  }
-
-
 
   implicit def canDim[E]: dim.Impl[SparseVector[E], Int] = new dim.Impl[SparseVector[E], Int] {
     def apply(v: SparseVector[E]): Int = v.size

@@ -1,6 +1,5 @@
 package breeze.linalg
 
-
 import breeze.numerics.abs
 import breeze.stats.distributions.RandBasis
 import org.scalatest.funsuite.AnyFunSuite
@@ -13,7 +12,7 @@ class LUTest extends AnyFunSuite {
     val LU.LU(p, l, u) = LU(a)
     val recon = p * l * u
     val diff = abs(a - recon)
-    assert(norm(sum(diff)) <= 1E-10)
+    assert(norm(sum(diff)) <= 1e-10)
   }
 
   test("Square LU decompose results in original matrix - float") {
@@ -22,7 +21,7 @@ class LUTest extends AnyFunSuite {
     val LU.LU(p, l, u) = LU(a)
     val recon = p * l * u
     val diff = abs(a - recon)
-    assert(norm(sum(diff)) <= 1E-3)
+    assert(norm(sum(diff)) <= 1e-3)
   }
 
 }

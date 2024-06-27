@@ -1,9 +1,9 @@
 package breeze.linalg
 
+import breeze.macros._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
-import breeze.macros._
 
 /**
  *
@@ -37,19 +37,19 @@ class splitTest extends AnyFunSuite {
       (3, 4, 5, 6, 7, 8),
       (5, 4, 5, 9, 7, 8)
     )
-    val expectedResult = List(
-      DenseMatrix(
-        (0, 1, 2),
-        (3, 4, 5),
-        (3, 4, 5),
-        (5, 4, 5)
-      ),
-      DenseMatrix(
-        (3, 4, 5),
-        (6, 7, 8),
-        (6, 7, 8),
-        (9, 7, 8)
-      ))
+    val expectedResult = List(DenseMatrix(
+                                (0, 1, 2),
+                                (3, 4, 5),
+                                (3, 4, 5),
+                                (5, 4, 5)
+                              ),
+                              DenseMatrix(
+                                (3, 4, 5),
+                                (6, 7, 8),
+                                (6, 7, 8),
+                                (9, 7, 8)
+                              )
+    )
     assert(hsplit(mbig, 2) == expectedResult)
   }
   test("vsplit works on dense matrix") {
@@ -59,15 +59,15 @@ class splitTest extends AnyFunSuite {
       (3, 4, 5, 6, 7, 8),
       (5, 4, 5, 9, 7, 8)
     )
-    val expectedResult = List(
-      DenseMatrix(
-        (0, 1, 2, 3, 4, 5),
-        (3, 4, 5, 6, 7, 8)
-      ),
-      DenseMatrix(
-        (3, 4, 5, 6, 7, 8),
-        (5, 4, 5, 9, 7, 8)
-      ))
+    val expectedResult = List(DenseMatrix(
+                                (0, 1, 2, 3, 4, 5),
+                                (3, 4, 5, 6, 7, 8)
+                              ),
+                              DenseMatrix(
+                                (3, 4, 5, 6, 7, 8),
+                                (5, 4, 5, 9, 7, 8)
+                              )
+    )
     assert(vsplit(mbig, 2) == expectedResult)
   }
 

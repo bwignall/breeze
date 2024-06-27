@@ -1,7 +1,8 @@
 package breeze.integrate
 
 import breeze.linalg._
-import org.apache.commons.math3.ode.{AbstractIntegrator, FirstOrderDifferentialEquations}
+import org.apache.commons.math3.ode.AbstractIntegrator
+import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 
 trait ApacheOdeIntegrator extends OdeIntegrator {
 
@@ -9,12 +10,12 @@ trait ApacheOdeIntegrator extends OdeIntegrator {
 
   protected def create: T
 
-  protected final val inner: T = create
+  final protected val inner: T = create
 
-  override def integrate(
-      f: (DenseVector[Double], Double) => DenseVector[Double],
-      y0: DenseVector[Double],
-      t: Array[Double]): Array[DenseVector[Double]] = {
+  override def integrate(f: (DenseVector[Double], Double) => DenseVector[Double],
+                         y0: DenseVector[Double],
+                         t: Array[Double]
+  ): Array[DenseVector[Double]] = {
 
     object equations extends FirstOrderDifferentialEquations {
 

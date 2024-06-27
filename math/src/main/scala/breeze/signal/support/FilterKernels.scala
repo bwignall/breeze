@@ -1,11 +1,18 @@
 package breeze.signal.support
 
-import breeze.linalg.{sum, DenseVector, diff}
-import breeze.numerics.{cos, sincpi, isOdd, isEven}
-import breeze.signal._
-import scala.math.{sin, Pi}
-import breeze.math.Complex
+import breeze.linalg.DenseVector
+import breeze.linalg.diff
+import breeze.linalg.sum
 import breeze.macros.expand
+import breeze.math.Complex
+import breeze.numerics.cos
+import breeze.numerics.isEven
+import breeze.numerics.isOdd
+import breeze.numerics.sincpi
+import breeze.signal._
+
+import scala.math.Pi
+import scala.math.sin
 
 /**
  * Portions of the code are translated from scipy (scipy.org) based on provisions of the BSD license.
@@ -14,7 +21,7 @@ import breeze.macros.expand
  */
 abstract class FilterKernel[T] {
   val designText: String
-  override def toString = this.getClass.getSimpleName + "(): " + designText
+  override def toString: String = this.getClass.getSimpleName + "(): " + designText
 //  def toLong(): FilterKernel[Long]
 //  def toInt(): FilterKernel[Int]
 //  def toDouble(): FilterKernel[Double]
@@ -36,27 +43,26 @@ object FIRKernel1D {
  * multiple applications of fft convolution.*/
 class FIRKernel1D[T](val kernel: DenseVector[T], override val multiplier: Double, override val designText: String)
     extends FilterKernel1D[T] {
-  //lazy val kernelFourier: DenseVector[Complex] = fourierTr( kernel )
+  // lazy val kernelFourier: DenseVector[Complex] = fourierTr( kernel )
   lazy val length = kernel.length
 
   /**Amount of overhang to prepend for convolution, to conserve output length.*/
-  lazy val overhangPre = (length - 1) / 2
+  lazy val overhangPre: Int = (length - 1) / 2
 
   /**Amount of overhang to append for convolution, to conserve output length.*/
-  lazy val overhangPost = length - 1 - overhangPre
+  lazy val overhangPost: Int = length - 1 - overhangPre
 
 //  override def toLong(): FIRKernel1D[Long] = FIRKernel1D[Long]( kernel.map(_.toLong), designText )
 //  override def toInt(): FIRKernel1D[Int] = FIRKernel1D[Int]( kernel.map(_.toInt), designText )
 //  override def toFloat(): FIRKernel1D[Float] = FIRKernel1D[Float]( kernel.map(_.toFloat), designText )
 //  override def toDouble(): FIRKernel1D[Double] = FIRKernel1D[Double]( kernel.map(_.toDouble), designText )
 
-  override def toString() = this.getClass.toString + " multiplier: " + multiplier + ": " + designText
+  override def toString(): String = this.getClass.toString + " multiplier: " + multiplier + ": " + designText
 }
 
 /**This immutable class will encapsulate 1D IIR kernels. Not implemented yet.*/
-class IIRKernel1D[T](
-    val kernelA: DenseVector[T],
-    val kernelB: DenseVector[T],
-    override val multiplier: Double,
-    override val designText: String)
-    extends FilterKernel1D[T] {}
+class IIRKernel1D[T](val kernelA: DenseVector[T],
+                     val kernelB: DenseVector[T],
+                     override val multiplier: Double,
+                     override val designText: String
+) extends FilterKernel1D[T] {}

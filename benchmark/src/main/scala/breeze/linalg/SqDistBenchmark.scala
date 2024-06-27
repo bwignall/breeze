@@ -1,7 +1,9 @@
 package breeze.linalg
 
-import breeze.benchmark.{MyRunner, BreezeBenchmark}
-import breeze.macros._
+import breeze.benchmark.BreezeBenchmark
+import breeze.benchmark.MyRunner
+import breeze.macros.*
+import com.google.caliper.Benchmark
 
 /**
  * Created by dlwh on 8/14/15.
@@ -10,9 +12,10 @@ class SqDistBenchmark extends BreezeBenchmark {
   assert(usingNatives)
 
   val x1, x2 = DenseMatrix.rand(20, 200)
-  val v1, v2 = DenseVector.rand(100)
+  private val v1, v2 = DenseVector.rand(100)
 
   /*
+  @Benchmark
   def timeCopying(reps: Int) = {
     cforRange(0 until reps) { i =>
       val t1 = -2.0 * (x1.t * x2)
@@ -23,6 +26,7 @@ class SqDistBenchmark extends BreezeBenchmark {
     }
   }
 
+  @Benchmark
   def timeVectorized(reps: Int) = {
     cforRange(0 until reps) { i =>
       val D = x1.rows
@@ -35,6 +39,7 @@ class SqDistBenchmark extends BreezeBenchmark {
     }
   }
 
+  @Benchmark
   def timeMrkaspasImpl(reps: Int) = {
     val dataSet = DenseMatrix.rand[Double](1024, 1934)
     val input = DenseVector.rand(1024)
@@ -54,6 +59,7 @@ class SqDistBenchmark extends BreezeBenchmark {
     }
   }
 
+  @Benchmark
   def timeBroadcastSubtract(reps: Int) = {
     val dataSet = DenseMatrix.rand[Double](1024, 1934)
     val input = DenseVector.rand(1024)
@@ -63,6 +69,7 @@ class SqDistBenchmark extends BreezeBenchmark {
     }
   }
 
+  @Benchmark
   def timeBroadcastRowSubtract(reps: Int) = {
     val dataSet = DenseMatrix.rand[Double](1934, 1024)
     val input = DenseVector.rand(1024)
@@ -72,6 +79,7 @@ class SqDistBenchmark extends BreezeBenchmark {
     }
   }
 
+  @Benchmark
   def timeInPlacish(reps: Int) = {
     cforRange(0 until reps) { i =>
       val t1 = (x1.t * x2) *= -2.0
@@ -82,11 +90,14 @@ class SqDistBenchmark extends BreezeBenchmark {
     }
   }
 
+  @Benchmark
   def timeFirstPart(reps: Int) = {
     cforRange(0 until reps) { i =>
       val t1 = (x1.t * x2) *= -2.0
     }
   }
+
+  @Benchmark
   def timeFirstAndSecondPart(reps: Int) = {
     cforRange(0 until reps) { i =>
       val t1 = (x1.t * x2) *= -2.0
@@ -95,6 +106,7 @@ class SqDistBenchmark extends BreezeBenchmark {
     }
   }
 
+  @Benchmark
   def timeFirstAndThirdPart(reps: Int) = {
     cforRange(0 until reps) { i =>
       val t1 = (x1.t * x2) *= -2.0
@@ -103,6 +115,7 @@ class SqDistBenchmark extends BreezeBenchmark {
     }
   }
 
+  @Benchmark
   def timeSumNoAdd(reps: Int) = {
     cforRange(0 until reps) { i =>
 
@@ -111,6 +124,7 @@ class SqDistBenchmark extends BreezeBenchmark {
     }
   }
 
+  @Benchmark
   def timeBroadcastColumnAdd(reps: Int) = {
     cforRange(0 until reps) { i =>
       val t1 = (x1.t * x2) *= -2.0
@@ -120,6 +134,7 @@ class SqDistBenchmark extends BreezeBenchmark {
     }
   }
 
+  @Benchmark
   def timeLoopColumnAdd(reps: Int) = {
     cforRange(0 until reps) { i =>
       val t1 = (x1.t * x2) *= -2.0
@@ -132,6 +147,7 @@ class SqDistBenchmark extends BreezeBenchmark {
   }
 
 
+  @Benchmark
   def timeLoopColumnAddWithCopy(reps: Int) = {
     cforRange(0 until reps) { i =>
       val t1 = (x1.t * x2) *= -2.0
@@ -144,16 +160,18 @@ class SqDistBenchmark extends BreezeBenchmark {
   }
    */
 
-  def timeVectorSquaredDistance(reps: Int) = {
+  @Benchmark
+  def timeVectorSquaredDistance(reps: Int): Double = {
     var sum = 0.0
-    cforRange(0 until reps) { i =>
+    cforRange(0 until reps) { _ =>
       sum += squaredDistance(v1, v2)
     }
 
     sum
   }
 
-  def timeOldSquaredDistance(reps: Int) = {
+  @Benchmark
+  def timeOldSquaredDistance(reps: Int): Unit = {
     var squaredDistance = 0.0
     cforRange(0 until reps) { _ =>
       zipValues(v1, v2).foreach { (a, b) =>

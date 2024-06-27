@@ -21,7 +21,7 @@ class PCA(val x: DenseMatrix[Double], val covmat: DenseMatrix[Double]) {
   /**
    * The means of each column (axis) of the data.
    */
-  lazy val center = mean(x, Axis._0).t
+  lazy val center: DenseVector[Double] = mean(x, Axis._0).t
 
   /**
    * Do SVD on the covariance matrix.
@@ -38,21 +38,20 @@ class PCA(val x: DenseMatrix[Double], val covmat: DenseMatrix[Double]) {
   /**
    * The standard deviations of the principal components.
    */
-  lazy val sdev = eigenvalues.map(math.sqrt)
+  lazy val sdev: DenseVector[Double] = eigenvalues.map(math.sqrt)
 
   /**
    * The proportion of variance explained by each principal component.
    */
-  lazy val propvar = normalize(eigenvalues)
+  lazy val propvar: DenseVector[Double] = normalize(eigenvalues)
 
   /**
    * The cumulative proportion of variance explained by the first n
    * principal components.
    */
-  lazy val cumuvar = propvar.map {
+  lazy val cumuvar: DenseVector[Double] = propvar.map {
     var c = 0.0;
-    d =>
-      { c += d; c }
+    d => { c += d; c }
   }
 
   /**

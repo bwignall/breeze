@@ -1,19 +1,26 @@
 package breeze.plot
 
 import org.jfree.chart.JFreeChart
-import org.jfree.chart.plot.{CrosshairState, DefaultDrawingSupplier, PlotRenderingInfo}
+import org.jfree.chart.axis.TickUnits
 import org.jfree.chart.axis._
+import org.jfree.chart.plot.CrosshairState
+import org.jfree.chart.plot.DefaultDrawingSupplier
+import org.jfree.chart.plot.PlotRenderingInfo
+import org.jfree.chart.plot.XYPlot
+import org.jfree.chart.renderer.xy.AbstractXYItemRenderer
+import org.jfree.chart.renderer.xy.XYItemRenderer
+import org.jfree.chart.renderer.xy.XYItemRendererState
+import org.jfree.chart.ui.RectangleEdge
+import org.jfree.chart.ui.RectangleInsets
+import org.jfree.data.xy
+
 import java.awt._
+import java.awt.geom.GeneralPath
+import java.awt.geom.Rectangle2D
+import java.lang
 
 import collection.mutable.ArrayBuffer
 import collection.mutable
-import org.jfree.chart.renderer.xy.{AbstractXYItemRenderer, XYItemRenderer, XYItemRendererState}
-import java.awt.geom.Rectangle2D
-
-import org.jfree.data.xy
-import java.lang
-
-import org.jfree.chart.ui.{RectangleEdge, RectangleInsets}
 
 /**
  * Maintains a set of series (or more strictly, the data from those series)
@@ -27,20 +34,22 @@ class Plot() {
   private var series = 0
   private val listeners = new mutable.WeakHashMap[Plot.Listener, Unit]()
 
-    
-  def +=(pl:  Series): Plot = {
+  def +=(pl: Series): Plot = {
     +=("Series " + series, pl)
     this
   }
-             
+
   def +=(nameSeries: (String, Series)): Plot = {
-    val (d,r) = nameSeries._2.getChartStuff( {i =>
-      nameSeries._1
-      }, { i =>
-      Plot.fillPaint(series + i)
-    }, { i =>
-      Plot.stroke(series + i)
-    })
+    val (d, r) = nameSeries._2.getChartStuff({ i =>
+                                               nameSeries._1
+                                             },
+                                             { i =>
+                                               Plot.fillPaint(series + i)
+                                             },
+                                             { i =>
+                                               Plot.stroke(series + i)
+                                             }
+    )
     datasets += d
     renderers += r
     series += d.getSeriesCount
@@ -71,7 +80,7 @@ class Plot() {
   }
 
   def unlisten(l: Plot.Listener): Unit = {
-    listeners -= (l)
+    listeners -= l
   }
 
   def xlabel = xaxis.getLabel
@@ -87,7 +96,7 @@ class Plot() {
   def xlim_=(lowerUpper: (Double, Double)): Unit = {
     xlim(lowerUpper._1, lowerUpper._2)
   }
-  def xlim = plot.getDomainAxis.getLowerBound -> plot.getDomainAxis.getUpperBound()
+  def xlim: (Double, Double) = plot.getDomainAxis.getLowerBound -> plot.getDomainAxis.getUpperBound()
 
   /** Sets the lower and upper bounds of the current plot. */
   def xlim(lower: Double, upper: Double): Unit = {
@@ -98,7 +107,7 @@ class Plot() {
   def ylim_=(lowerUpper: (Double, Double)): Unit = {
     ylim(lowerUpper._1, lowerUpper._2)
   }
-  def ylim = plot.getRangeAxis.getLowerBound -> plot.getRangeAxis.getUpperBound()
+  def ylim: (Double, Double) = plot.getRangeAxis.getLowerBound -> plot.getRangeAxis.getUpperBound()
   def ylim(lower: Double, upper: Double): Unit = {
     plot.getRangeAxis.setLowerBound(lower)
     plot.getRangeAxis.setUpperBound(upper)
@@ -110,8 +119,8 @@ class Plot() {
   private var _xaxis: NumberAxis = new NumberAxis(null)
   private var _yaxis: NumberAxis = new NumberAxis(null)
 
-  def logScaleX = xaxis.isInstanceOf[LogarithmicAxis]
-  def logScaleY = yaxis.isInstanceOf[LogarithmicAxis]
+  def logScaleX: Boolean = xaxis.isInstanceOf[LogarithmicAxis]
+  def logScaleY: Boolean = yaxis.isInstanceOf[LogarithmicAxis]
 
   def logScaleX_=(value: Boolean): Unit = {
     if (value != logScaleX) {
@@ -165,19 +174,20 @@ class Plot() {
   })
 
   /** The JFreeChart plot object. */
-  lazy val plot = {
+  lazy val plot: XYPlot = {
     val rv = new org.jfree.chart.plot.XYPlot()
     rv.setDomainAxis(xaxis)
     rv.setRangeAxis(yaxis)
 
     rv.setDrawingSupplier(
-      new DefaultDrawingSupplier(
-        Plot.paints,
-        Plot.fillPaints,
-        Plot.outlinePaints,
-        Plot.strokes,
-        Plot.outlineStrokes,
-        Plot.shapes))
+      new DefaultDrawingSupplier(Plot.paints,
+                                 Plot.fillPaints,
+                                 Plot.outlinePaints,
+                                 Plot.strokes,
+                                 Plot.outlineStrokes,
+                                 Plot.shapes
+      )
+    )
 
     rv
   }
@@ -203,7 +213,7 @@ class Plot() {
   def legend: Boolean = _legend
 
   /** The JFreeChart for this plot */
-  lazy val chart = {
+  lazy val chart: JFreeChart = {
     val rv = new JFreeChart(null, JFreeChart.DEFAULT_TITLE_FONT, plot, false)
     rv.setBackgroundPaint(Plot.transparent)
     rv.setPadding(new RectangleInsets(5, 0, 0, 0))
@@ -222,7 +232,7 @@ object Plot {
     def refresh(pl: Plot): Unit
   }
 
-  val integerTickUnits = {
+  val integerTickUnits: TickUnits = {
     val units = new TickUnits()
     val df = new java.text.DecimalFormat("0")
     for (b <- Seq(1, 2, 5); e <- Seq(0, 1, 2, 3, 4, 5, 6, 7, 8)) {
@@ -234,27 +244,27 @@ object Plot {
   // color cycle ignoring bright colors
   val paints: Array[Paint] = PaintScale.Category20.values.asInstanceOf[Array[Paint]]
 
-  def paint(series: Int) =
+  def paint(series: Int): Paint =
     paints(series % paints.length)
 
   val shapes = DefaultDrawingSupplier.DEFAULT_SHAPE_SEQUENCE
-  def shape(series: Int) =
+  def shape(series: Int): Shape =
     shapes(series % shapes.length)
 
   val strokes = DefaultDrawingSupplier.DEFAULT_STROKE_SEQUENCE
-  def stroke(series: Int) =
+  def stroke(series: Int): Stroke =
     strokes(series % strokes.length)
 
   val fillPaints = paints; // DefaultDrawingSupplier.DEFAULT_FILL_PAINT_SEQUENCE
-  def fillPaint(series: Int) =
+  def fillPaint(series: Int): Paint =
     fillPaints(series % fillPaints.length)
 
   val outlinePaints = paints; // DefaultDrawingSupplier.DEFAULT_OUTLINE_PAINT_SEQUENCE
-  def outlinePaint(series: Int) =
+  def outlinePaint(series: Int): Paint =
     outlinePaints(series % outlinePaints.length)
 
   val outlineStrokes = DefaultDrawingSupplier.DEFAULT_OUTLINE_STROKE_SEQUENCE
-  def outlineStroke(series: Int) =
+  def outlineStroke(series: Int): Stroke =
     outlineStrokes(series % outlineStrokes.length)
 
   val transparent = new Color(255, 255, 255, 0)
@@ -266,7 +276,7 @@ object Plot {
   val dot =
     new java.awt.geom.Ellipse2D.Double(-1, -1, 2, 2)
 
-  val plus = {
+  val plus: GeneralPath = {
     val shape = new java.awt.geom.GeneralPath()
     shape.moveTo(-3, 0)
     shape.lineTo(3, 0)
@@ -350,19 +360,19 @@ object Plot {
       datasetSeriesOffsets += seriesDelegates.length
     }
 
-    def drawItem(
-        p1: Graphics2D,
-        p2: XYItemRendererState,
-        p3: Rectangle2D,
-        p4: PlotRenderingInfo,
-        p5: org.jfree.chart.plot.XYPlot,
-        p6: ValueAxis,
-        p7: ValueAxis,
-        p8: org.jfree.data.xy.XYDataset,
-        series: Int,
-        item: Int,
-        p11: CrosshairState,
-        p12: Int): Unit = {
+    def drawItem(p1: Graphics2D,
+                 p2: XYItemRendererState,
+                 p3: Rectangle2D,
+                 p4: PlotRenderingInfo,
+                 p5: org.jfree.chart.plot.XYPlot,
+                 p6: ValueAxis,
+                 p7: ValueAxis,
+                 p8: org.jfree.data.xy.XYDataset,
+                 series: Int,
+                 item: Int,
+                 p11: CrosshairState,
+                 p12: Int
+    ): Unit = {
       delegate(series)(_.drawItem(p1, p2, p3, p4, p5, p6, p7, p8, _, item, p11, p12))
     }
 

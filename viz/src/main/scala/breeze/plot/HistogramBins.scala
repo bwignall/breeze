@@ -22,7 +22,7 @@ sealed trait HistogramBins
 case class StaticHistogramBins(splits: Array[Double]) extends HistogramBins {
 
   /** Returns the bin for the given value, between 0 and splits.length inclusive. */
-  def bin(value: Double) = {
+  def bin(value: Double): Int = {
     var i = 0
     while (i < splits.length && value > splits(i)) {
       i += 1
@@ -38,8 +38,8 @@ case class StaticHistogramBins(splits: Array[Double]) extends HistogramBins {
  * @author dramage
  */
 case class DynamicHistogramBins(number: Int = 10) extends HistogramBins {
-  def apply(lower: Double, upper: Double) =
-    StaticHistogramBins(Array.tabulate(number - 1)(i => lower + ((i + 1.0) / (number)) * (upper - lower)))
+  def apply(lower: Double, upper: Double): StaticHistogramBins =
+    StaticHistogramBins(Array.tabulate(number - 1)(i => lower + ((i + 1.0) / number) * (upper - lower)))
 }
 
 /**

@@ -14,17 +14,23 @@ package breeze.linalg
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import operators._
-
-import scala.{specialized => spec}
-import support._
-import breeze.util.{ArrayUtil, ReflectionUtil, Sorting}
-import breeze.math.{Field, MutableVectorSpace, Ring, Semiring}
+import breeze.generic.UFunc.InPlaceImpl2
+import breeze.generic.UFunc.UImpl2
+import breeze.macros.expand
+import breeze.math.Field
+import breeze.math.MutableVectorSpace
+import breeze.math.Ring
+import breeze.math.Semiring
 import breeze.storage.Zero
+import breeze.util.ArrayUtil
+import breeze.util.ReflectionUtil
+import breeze.util.Sorting
 
 import scala.reflect.ClassTag
-import breeze.macros.expand
-import breeze.generic.UFunc.{InPlaceImpl2, UImpl2}
+import scala.{specialized => spec}
+
+import operators._
+import support._
 
 /**
  * A VectorBuilder is basically an unsorted Sparse Vector. Two parallel
@@ -44,11 +50,11 @@ import breeze.generic.UFunc.{InPlaceImpl2, UImpl2}
  * @author dlwh
  */
 @SerialVersionUID(1)
-class VectorBuilder[@spec(Double, Int, Float, Long) E](
-    private var _index: Array[Int],
-    private var _data: Array[E],
-    private var used: Int,
-    var length: Int)(implicit ring: Semiring[E])
+class VectorBuilder[@spec(Double, Int, Float, Long) E](private var _index: Array[Int],
+                                                       private var _data: Array[E],
+                                                       private var used: Int,
+                                                       var length: Int
+)(implicit ring: Semiring[E])
     extends NumericOps[VectorBuilder[E]]
     with Serializable {
 

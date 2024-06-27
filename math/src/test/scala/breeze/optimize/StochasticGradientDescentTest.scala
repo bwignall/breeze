@@ -15,8 +15,8 @@ package breeze.optimize
  limitations under the License.
  */
 
-import org.scalacheck._
 import breeze.linalg._
+import org.scalacheck._
 
 class StochasticGradientDescentTest extends OptimizeTestBase {
 
@@ -33,7 +33,7 @@ class StochasticGradientDescentTest extends OptimizeTestBase {
       }
 
       val result = sgd.minimize(f, init)
-      norm(result -:- DenseVector.ones[Double](init.size) * 3.0, 2) < 1E-10
+      norm(result -:- DenseVector.ones[Double](init.size) * 3.0, 2) < 1e-10
     }
 
     check(Prop.forAll(optimizeThis _))
@@ -53,7 +53,7 @@ class StochasticGradientDescentTest extends OptimizeTestBase {
       }
 
       val result = sgd.minimize(f, init)
-      norm(result - 3.0, 2) < 1E-3
+      norm(result - 3.0, 2) < 1e-3
     }
 
     check(Prop.forAll(optimizeThis _))

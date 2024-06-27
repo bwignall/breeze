@@ -1,9 +1,10 @@
 package breeze.linalg
 
 import breeze.generic.UFunc
-import org.netlib.util.intW
+import breeze.macros.cforRange
+import breeze.macros.cforRange2
 import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
-import breeze.macros.{cforRange, cforRange2}
+import org.netlib.util.intW
 
 sealed private[this] trait QRMode
 private[this] case object CompleteQR extends QRMode // Q and R have dimensions (m, m), (m, n)
@@ -165,7 +166,7 @@ object qr extends UFunc {
 
     lapack.dgeqrf(m, n, A.data, m, tau, workspace, lwork, info)
 
-    //Error check
+    // Error check
     if (info.`val` > 0)
       throw new NotConvergedException(NotConvergedException.Iterations)
     else if (info.`val` < 0)
@@ -180,8 +181,7 @@ object qr extends UFunc {
         }
       }
       (null, A(0 until mn, ::))
-    }
-    else {
+    } else {
       val Q =
         if (mode == CompleteQR && m > n) DenseMatrix.zeros[Double](m, m)
         else DenseMatrix.zeros[Double](m, n)
@@ -197,7 +197,7 @@ object qr extends UFunc {
       // Compute Q
       lapack.dorgqr(m, mc, mn, Q.data, m, tau, workspace, lwork1, info)
 
-      //Error check
+      // Error check
       if (info.`val` > 0)
         throw new NotConvergedException(NotConvergedException.Iterations)
       else if (info.`val` < 0)
@@ -215,7 +215,8 @@ object qr extends UFunc {
   }
 
   private def doQr_Float(M: DenseMatrix[Float], skipQ: Boolean)(
-      mode: QRMode): (DenseMatrix[Float], DenseMatrix[Float]) = {
+    mode: QRMode
+  ): (DenseMatrix[Float], DenseMatrix[Float]) = {
 
     val A = M.copy
 
@@ -236,7 +237,7 @@ object qr extends UFunc {
 
     lapack.sgeqrf(m, n, A.data, m, tau, workspace, lwork, info)
 
-    //Error check
+    // Error check
     if (info.`val` > 0)
       throw new NotConvergedException(NotConvergedException.Iterations)
     else if (info.`val` < 0)
@@ -251,8 +252,7 @@ object qr extends UFunc {
         }
       }
       (null, A(0 until mn, ::))
-    }
-    else {
+    } else {
       val Q =
         if (mode == CompleteQR && m > n) DenseMatrix.zeros[Float](m, m)
         else DenseMatrix.zeros[Float](m, n)
@@ -268,7 +268,7 @@ object qr extends UFunc {
       // Compute Q
       lapack.sorgqr(m, mc, mn, Q.data, m, tau, workspace, lwork1, info)
 
-      //Error check
+      // Error check
       if (info.`val` > 0)
         throw new NotConvergedException(NotConvergedException.Iterations)
       else if (info.`val` < 0)
@@ -306,7 +306,7 @@ object qrp extends UFunc {
       val m = A.rows
       val n = A.cols
 
-      //Get optimal workspace size
+      // Get optimal workspace size
       // we do this by sending -1 as lwork to the lapack function
       val scratch, work = new Array[Double](1)
       var info = new intW(0)
@@ -314,10 +314,10 @@ object qrp extends UFunc {
       val lwork1 = if (info.`val` != 0) n else work(0).toInt
       lapack.dorgqr(m, m, scala.math.min(m, n), scratch, m, scratch, work, -1, info)
       val lwork2 = if (info.`val` != 0) n else work(0).toInt
-      //allocate workspace mem. as max of lwork1 and lwork3
+      // allocate workspace mem. as max of lwork1 and lwork3
       val workspace = new Array[Double](scala.math.max(lwork1, lwork2))
 
-      //Perform the QR factorization with dgep3
+      // Perform the QR factorization with dgep3
       val maxd = scala.math.max(m, n)
       val AFact = DenseMatrix.zeros[Double](m, maxd)
       val pvt = new Array[Int](n)
@@ -329,13 +329,13 @@ object qrp extends UFunc {
 
       lapack.dgeqp3(m, n, AFact.data, m, pvt, tau, workspace, workspace.length, info)
 
-      //Error check
+      // Error check
       if (info.`val` > 0)
         throw new NotConvergedException(NotConvergedException.Iterations)
       else if (info.`val` < 0)
         throw new IllegalArgumentException()
 
-      //Get R
+      // Get R
       val R = DenseMatrix.zeros[Double](m, n)
 
       cforRange(0 until min(n, maxd)) { c =>
@@ -344,7 +344,7 @@ object qrp extends UFunc {
         }
       }
 
-      //Get Q from the matrix returned by dgep3
+      // Get Q from the matrix returned by dgep3
       val Q = DenseMatrix.zeros[Double](m, m)
       lapack.dorgqr(m, m, scala.math.min(m, n), AFact.data, m, tau, workspace, workspace.length, info)
 
@@ -352,13 +352,13 @@ object qrp extends UFunc {
         Q(r, c) = AFact(r, c)
       }
 
-      //Error check
+      // Error check
       if (info.`val` > 0)
         throw new NotConvergedException(NotConvergedException.Iterations)
       else if (info.`val` < 0)
         throw new IllegalArgumentException()
 
-      //Get P
+      // Get P
       import NumericOps.Arrays._
       pvt -= 1
       val P = DenseMatrix.zeros[Int](n, n)

@@ -1,6 +1,8 @@
 package breeze.stats.distributions
 
-import breeze.numerics.{pow, exp, log}
+import breeze.numerics.exp
+import breeze.numerics.log
+import breeze.numerics.pow
 
 /**
  * http://en.wikipedia.org/wiki/Laplace_distribution
@@ -51,8 +53,8 @@ case class Pareto(scale: Double, shape: Double)(implicit rand: RandBasis)
     cdf(y) - cdf(x)
   }
 
-  def cdf(x: Double) = x match {
-    case x if x < scale => 0.0
+  def cdf(x: Double): Double = x match {
+    case x if x < scale          => 0.0
     case Double.PositiveInfinity => 1.0
     case x =>
       1 - math.pow(scale / x, shape)

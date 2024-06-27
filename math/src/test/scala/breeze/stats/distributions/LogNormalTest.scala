@@ -16,10 +16,12 @@ package breeze.stats.distributions
  limitations under the License.
  */
 
+import breeze.stats.distributions.LogNormal
+import org.scalacheck.Arbitrary
+import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
-import org.scalacheck._
 
 class LogNormalTest
     extends AnyFunSuite
@@ -31,32 +33,36 @@ class LogNormalTest
   import Arbitrary.arbitrary
   val expFam: LogNormal.type = LogNormal
 
-  def arbParameter = Arbitrary {
-    for (mean <- arbitrary[Double].map { _ % 10.0 };
+  def arbParameter: Arbitrary[(Double, Double)] = Arbitrary {
+    for (
+      mean <- arbitrary[Double].map { _ % 10.0 };
       std <- arbitrary[Double].map { x =>
         math.abs(x) % 8.0 + .1
-      }) yield (mean, std)
+      }
+    ) yield (mean, std)
   }
 
-  def paramsClose(p: (Double, Double), b: (Double, Double)) = {
-    val y1 = (p._1 - b._1).abs / (p._1.abs / 2 + b._1.abs / 2 + 1) < 1E-1
-    val y2 = (p._2 - b._2).abs / (p._2.abs / 2 + b._2.abs / 2 + 1) < 1E-1
+  def paramsClose(p: (Double, Double), b: (Double, Double)): Boolean = {
+    val y1 = (p._1 - b._1).abs / (p._1.abs / 2 + b._1.abs / 2 + 1) < 1e-1
+    val y2 = (p._2 - b._2).abs / (p._2.abs / 2 + b._2.abs / 2 + 1) < 1e-1
     y1 && y2
   }
 
-  override val VARIANCE_TOLERANCE: Double = 9E-2
+  override val VARIANCE_TOLERANCE: Double = 9e-2
 
   type Distr = LogNormal
 
-  implicit def arbDistr = Arbitrary {
+  implicit def arbDistr: Arbitrary[LogNormal] = Arbitrary {
     // make scala 2 happy
     implicit val basis: RandBasis = RandBasis.mt0
-    for (mean <- arbitrary[Double].map { x =>
+    for (
+      mean <- arbitrary[Double].map { x =>
         math.abs(x) % 10.0
       };
       std <- arbitrary[Double].map { x =>
         math.abs(x) % 1.0 + .1
-      }) yield new LogNormal(mean, std)
+      }
+    ) yield new LogNormal(mean, std)
   }
 
   def asDouble(x: Double) = x

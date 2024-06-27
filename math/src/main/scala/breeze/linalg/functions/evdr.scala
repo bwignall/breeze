@@ -3,10 +3,11 @@ package breeze.linalg
 import breeze.generic.UFunc
 import breeze.linalg._
 import breeze.linalg.eig.Eig
-import breeze.linalg.eigSym.{DenseEigSym, EigSym}
+import breeze.linalg.eigSym.DenseEigSym
+import breeze.linalg.eigSym.EigSym
+import breeze.macros.cforRange
 import breeze.numerics._
 import breeze.stats.distributions.Rand
-import breeze.macros.cforRange
 
 /**
  * Approximate truncated randomized EVD
@@ -47,9 +48,9 @@ object evdr extends UFunc {
    */
   private def doEigSymDouble(M: DenseMatrix[Double], s: Int, nOversamples: Int = 10, nIter: Int = 0): DenseEigSym = {
 
-    require(
-      s <= (M.rows.min(M.cols)),
-      "Number of columns in orthonormal matrix should be less than min(M.rows, M.cols)")
+    require(s <= (M.rows.min(M.cols)),
+            "Number of columns in orthonormal matrix should be less than min(M.rows, M.cols)"
+    )
     require(s >= 1, "Sketch size should be greater than 1")
 
     val nRandom = s + nOversamples

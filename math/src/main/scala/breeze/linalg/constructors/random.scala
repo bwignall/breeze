@@ -1,10 +1,12 @@
 package breeze.linalg
 
 import breeze.generic.UFunc
-import breeze.stats.distributions.{RandBasis, Rand}
-import scala.reflect.ClassTag
-import breeze.storage.Zero
 import breeze.macros._
+import breeze.stats.distributions.Rand
+import breeze.stats.distributions.RandBasis
+import breeze.storage.Zero
+
+import scala.reflect.ClassTag
 
 /**Gives a random Double.
  * +  randomDouble()... returns a random double, in [0, 1]
@@ -20,12 +22,12 @@ object randomDouble extends RandomGeneratorUFunc[Double] {
   protected def gen(implicit basis: RandBasis): Rand[Double] = basis.uniform
   protected def genRange(low: Double, high: Double)(implicit basis: RandBasis): Rand[Double] = {
     require(high >= low, s"High term must be greater than low term. ($low, $high)")
-    val range = (high - low)
+    val range = high - low
     basis.uniform.map(_ * range + low)
   }
 
   protected val _classTag: ClassTag[Double] = scala.reflect.classTag[Double]
-  protected val _zero = Zero[Double](0.0)
+  protected val _zero: Zero[Double] = Zero[Double](0.0)
 
 }
 
@@ -48,7 +50,7 @@ object randomInt extends RandomGeneratorUFunc[Int] {
   }
 
   protected val _classTag: ClassTag[Int] = scala.reflect.classTag[Int]
-  protected val _zero = Zero[Int](0)
+  protected val _zero: Zero[Int] = Zero[Int](0)
 
 }
 
@@ -74,10 +76,10 @@ object randn extends RandomGeneratorUFunc[Double] {
 trait RandomGeneratorUFunc[T] extends UFunc {
   protected def gen(implicit basis: RandBasis): Rand[T]
   protected def genRange(low: T, high: T)(implicit basis: RandBasis): Rand[T]
-  protected implicit val _classTag: ClassTag[T]
-  protected implicit val _zero: Zero[T]
+  implicit protected val _classTag: ClassTag[T]
+  implicit protected val _zero: Zero[T]
 
-  def apply()(implicit basis: RandBasis) = gen(basis).draw()
+  def apply()(implicit basis: RandBasis): T = gen(basis).draw()
 
   implicit def implRandomT_1D(implicit basis: RandBasis): Impl[Int, DenseVector[T]] =
     new Impl[Int, DenseVector[T]] {

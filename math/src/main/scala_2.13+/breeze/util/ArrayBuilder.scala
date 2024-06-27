@@ -13,19 +13,16 @@
 
 package breeze.util
 
-import scala.reflect.ClassTag
-
 import scala.collection._
 import scala.collection.mutable._
+import scala.reflect.ClassTag
 
 /** A builder class for arrays.
  *
  *  @tparam T    the type of the elements for the builder.
  */
 @SerialVersionUID(3L)
-sealed abstract class ArrayBuilder[@specialized T]
-  extends ReusableBuilder[T, Array[T]]
-    with Serializable {
+sealed abstract class ArrayBuilder[@specialized T] extends ReusableBuilder[T, Array[T]] with Serializable {
   protected[this] var capacity: Int = 0
   protected[this] def elems: Array[T]
   protected var size: Int = 0
@@ -34,7 +31,7 @@ sealed abstract class ArrayBuilder[@specialized T]
 
   override def knownSize: Int = size
 
-  protected[this] final def ensureSize(size: Int): Unit = {
+  final protected[this] def ensureSize(size: Int): Unit = {
     if (capacity < size || capacity == 0) {
       var newsize = if (capacity == 0) 16 else capacity * 2
       while (newsize < size) newsize *= 2
@@ -42,7 +39,7 @@ sealed abstract class ArrayBuilder[@specialized T]
     }
   }
 
-  override final def sizeHint(size: Int): Unit =
+  final override def sizeHint(size: Int): Unit =
     if (capacity < size) resize(size)
 
   def clear(): Unit = size = 0
@@ -62,14 +59,14 @@ sealed abstract class ArrayBuilder[@specialized T]
 
   override def addAll(xs: IterableOnce[T]): this.type = {
     val k = xs.knownSize
-    if(k > 0) {
+    if (k > 0) {
       ensureSize(this.size + k)
       xs match {
         case xs: scala.collection.Iterable[T] => xs.copyToArray(elems, this.size)
-        case _ => xs.iterator.copyToArray(elems, this.size)
+        case _                                => xs.iterator.copyToArray(elems, this.size)
       }
       size += k
-    } else if(k < 0) super.addAll(xs)
+    } else if (k < 0) super.addAll(xs)
     this
   }
 }
@@ -95,7 +92,8 @@ object ArrayBuilder {
       case java.lang.Double.TYPE    => new ArrayBuilder.ofDouble().asInstanceOf[ArrayBuilder[T]]
       case java.lang.Boolean.TYPE   => new ArrayBuilder.ofBoolean().asInstanceOf[ArrayBuilder[T]]
       case java.lang.Void.TYPE      => new ArrayBuilder.ofUnit().asInstanceOf[ArrayBuilder[T]]
-      case _                        => new ArrayBuilder.ofRef[T with AnyRef]()(tag.asInstanceOf[ClassTag[T with AnyRef]]).asInstanceOf[ArrayBuilder[T]]
+      case _ =>
+        new ArrayBuilder.ofRef[T with AnyRef]()(tag.asInstanceOf[ClassTag[T with AnyRef]]).asInstanceOf[ArrayBuilder[T]]
     }
   }
 
@@ -134,18 +132,17 @@ object ArrayBuilder {
         val res = elems
         elems = null
         res
-      }
-      else mkArray(size)
+      } else mkArray(size)
     }
 
     override def clear(): Unit = {
       super.clear()
-      if(elems ne null) java.util.Arrays.fill(elems.asInstanceOf[Array[AnyRef]], null)
+      if (elems ne null) java.util.Arrays.fill(elems.asInstanceOf[Array[AnyRef]], null)
     }
 
     override def equals(other: Any): Boolean = other match {
       case x: ofRef[_] => (size == x.size) && (elems == x.elems)
-      case _ => false
+      case _           => false
     }
 
     override def toString = "ArrayBuilder.ofRef"
@@ -181,13 +178,12 @@ object ArrayBuilder {
         val res = elems
         elems = null
         res
-      }
-      else mkArray(size)
+      } else mkArray(size)
     }
 
     override def equals(other: Any): Boolean = other match {
       case x: ofByte => (size == x.size) && (elems == x.elems)
-      case _ => false
+      case _         => false
     }
 
     override def toString = "ArrayBuilder.ofByte"
@@ -223,13 +219,12 @@ object ArrayBuilder {
         val res = elems
         elems = null
         res
-      }
-      else mkArray(size)
+      } else mkArray(size)
     }
 
     override def equals(other: Any): Boolean = other match {
       case x: ofShort => (size == x.size) && (elems == x.elems)
-      case _ => false
+      case _          => false
     }
 
     override def toString = "ArrayBuilder.ofShort"
@@ -265,13 +260,12 @@ object ArrayBuilder {
         val res = elems
         elems = null
         res
-      }
-      else mkArray(size)
+      } else mkArray(size)
     }
 
     override def equals(other: Any): Boolean = other match {
       case x: ofChar => (size == x.size) && (elems == x.elems)
-      case _ => false
+      case _         => false
     }
 
     override def toString = "ArrayBuilder.ofChar"
@@ -307,13 +301,12 @@ object ArrayBuilder {
         val res = elems
         elems = null
         res
-      }
-      else mkArray(size)
+      } else mkArray(size)
     }
 
     override def equals(other: Any): Boolean = other match {
       case x: ofInt => (size == x.size) && (elems == x.elems)
-      case _ => false
+      case _        => false
     }
 
     override def toString = "ArrayBuilder.ofInt"
@@ -349,13 +342,12 @@ object ArrayBuilder {
         val res = elems
         elems = null
         res
-      }
-      else mkArray(size)
+      } else mkArray(size)
     }
 
     override def equals(other: Any): Boolean = other match {
       case x: ofLong => (size == x.size) && (elems == x.elems)
-      case _ => false
+      case _         => false
     }
 
     override def toString = "ArrayBuilder.ofLong"
@@ -391,13 +383,12 @@ object ArrayBuilder {
         val res = elems
         elems = null
         res
-      }
-      else mkArray(size)
+      } else mkArray(size)
     }
 
     override def equals(other: Any): Boolean = other match {
       case x: ofFloat => (size == x.size) && (elems == x.elems)
-      case _ => false
+      case _          => false
     }
 
     override def toString = "ArrayBuilder.ofFloat"
@@ -433,13 +424,12 @@ object ArrayBuilder {
         val res = elems
         elems = null
         res
-      }
-      else mkArray(size)
+      } else mkArray(size)
     }
 
     override def equals(other: Any): Boolean = other match {
       case x: ofDouble => (size == x.size) && (elems == x.elems)
-      case _ => false
+      case _           => false
     }
 
     override def toString = "ArrayBuilder.ofDouble"
@@ -475,13 +465,12 @@ object ArrayBuilder {
         val res = elems
         elems = null
         res
-      }
-      else mkArray(size)
+      } else mkArray(size)
     }
 
     override def equals(other: Any): Boolean = other match {
       case x: ofBoolean => (size == x.size) && (elems == x.elems)
-      case _ => false
+      case _            => false
     }
 
     override def toString = "ArrayBuilder.ofBoolean"
@@ -508,7 +497,7 @@ object ArrayBuilder {
       this
     }
 
-    def result() = {
+    def result(): Array[Unit] = {
       val ans = new Array[Unit](size)
       var i = 0
       while (i < size) { ans(i) = (); i += 1 }
@@ -516,8 +505,8 @@ object ArrayBuilder {
     }
 
     override def equals(other: Any): Boolean = other match {
-      case x: ofUnit => (size == x.size)
-      case _ => false
+      case x: ofUnit => size == x.size
+      case _         => false
     }
 
     protected[this] def resize(size: Int): Unit = ()

@@ -16,12 +16,13 @@ package breeze.collection.mutable
  limitations under the License.
  */
 
-import java.util
+import breeze.storage.ConfigurableDefault
+import breeze.storage.Storage
+import breeze.storage.Zero
 
+import java.util
 import scala.reflect.ClassTag
 import scala.util.hashing.MurmurHash3
-
-import breeze.storage.{ConfigurableDefault, Storage, Zero}
 
 /**
  * This is a Sparse Array implementation backed by a linear-probing
@@ -31,20 +32,22 @@ import breeze.storage.{ConfigurableDefault, Storage, Zero}
  */
 @SerialVersionUID(1L)
 final class OpenAddressHashArray[@specialized(Int, Float, Long, Double) V] private[mutable] (
-    private[mutable] var _index: Array[Int],
-    private[mutable] var _data: Array[V],
-    private[mutable] var load: Int,
-    val size: Int,
-    val default: ConfigurableDefault[V] = ConfigurableDefault.default[V])(
-    implicit protected val manElem: ClassTag[V],
-    val zero: Zero[V])
+  private[mutable] var _index: Array[Int],
+  private[mutable] var _data: Array[V],
+  private[mutable] var load: Int,
+  val size: Int,
+  val default: ConfigurableDefault[V] = ConfigurableDefault.default[V]
+)(implicit protected val manElem: ClassTag[V], val zero: Zero[V])
     extends Storage[V]
     with SparseArrayLike[V]
     with Serializable {
 
   require(size > 0, "Size must be positive, but got " + size)
 
-  def this(size: Int, default: ConfigurableDefault[V], initialSize: Int)(implicit manElem: ClassTag[V], zero: Zero[V]) = {
+  def this(size: Int,
+           default: ConfigurableDefault[V],
+           initialSize: Int
+  )(implicit manElem: ClassTag[V], zero: Zero[V]) = {
     this(
       OpenAddressHashArray.emptyIndexArray(OpenAddressHashArray.calculateSize(initialSize)),
       default.makeArray(OpenAddressHashArray.calculateSize(initialSize)),
@@ -65,27 +68,27 @@ final class OpenAddressHashArray[@specialized(Int, Float, Long, Double) V] priva
   def data = _data
   def index = _index
 
-  def defaultValue = default.value(zero)
+  def defaultValue: V = default.value(zero)
 
   /**
    * Only iterates "active" elements
    */
   def valuesIterator = activeValuesIterator
 
-  def valueAt(i: Int) = data(i)
-  def indexAt(i: Int) = index(i)
+  def valueAt(i: Int): V = data(i)
+  def indexAt(i: Int): Int = index(i)
 
-  def keysIterator = index.iterator.filter(_ >= 0)
+  def keysIterator: Iterator[Int] = index.iterator.filter(_ >= 0)
 
   def activeSize = load
 
-  def contains(i: Int) = index(locate(i)) >= 0
+  def contains(i: Int): Boolean = index(locate(i)) >= 0
 
-  def isActive(i: Int) = index(i) >= 0
+  def isActive(i: Int): Boolean = index(i) >= 0
 
   def allVisitableIndicesActive = false
 
-  final def apply(i: Int) = {
+  final def apply(i: Int): V = {
     if (i < 0 || i >= size) throw new IndexOutOfBoundsException()
     if (index.length == 0) default.value
     else data(locate(i))
@@ -108,8 +111,8 @@ final class OpenAddressHashArray[@specialized(Int, Float, Long, Double) V] priva
   }
 
   def activeKeysIterator = keysIterator
-  def activeValuesIterator = activeIterator.map(_._2)
-  def activeIterator = index.iterator.zip(data.iterator).filter(_._1 >= 0)
+  def activeValuesIterator: Iterator[V] = activeIterator.map(_._2)
+  def activeIterator: Iterator[(Int, V)] = index.iterator.zip(data.iterator).filter(_._1 >= 0)
 
   private def locate(i: Int) = {
     if (i >= size) throw new IndexOutOfBoundsException(s"$i greater than size of $size")
@@ -164,12 +167,12 @@ final class OpenAddressHashArray[@specialized(Int, Float, Long, Double) V] priva
   override def toString: String = activeIterator.mkString("OpenAddressHashArray(", ", ", ")")
 
   def copy: OpenAddressHashArray[V] = {
-    new OpenAddressHashArray[V](
-      util.Arrays.copyOf(_index, _index.length),
-      breeze.util.ArrayUtil.copyOf(_data, _data.length),
-      load,
-      size,
-      default)
+    new OpenAddressHashArray[V](util.Arrays.copyOf(_index, _index.length),
+                                breeze.util.ArrayUtil.copyOf(_data, _data.length),
+                                load,
+                                size,
+                                default
+    )
   }
 
   def copyTo(other: OpenAddressHashArray[V]): Unit = {
@@ -188,26 +191,25 @@ final class OpenAddressHashArray[@specialized(Int, Float, Long, Double) V] priva
 
   // This hash code must be symmetric in the contents but ought not
   // collide trivially. based on hashmap.hashcode
-  override def hashCode() = MurmurHash3.unorderedHash(iterator.filter(_._2 != default.value), 43)
+  override def hashCode(): Int = MurmurHash3.unorderedHash(iterator.filter(_._2 != default.value), 43)
 
   override def equals(that: Any): Boolean = that match {
     case that: OpenAddressHashArray[V @unchecked] =>
       (this eq that) ||
-        (this.size == that.size) && {
-          try {
-            this.iterator.forall {
-              case (k, v) =>
-                that(k) match {
-                  case `v` =>
-                    true
-                  case _ => false
-                }
+      (this.size == that.size) && {
+        try {
+          this.iterator.forall { case (k, v) =>
+            that(k) match {
+              case `v` =>
+                true
+              case _ => false
             }
-          } catch {
-            case ex: ClassCastException =>
-              false
           }
+        } catch {
+          case ex: ClassCastException =>
+            false
         }
+      }
     case _ =>
       false
   }
@@ -215,7 +217,7 @@ final class OpenAddressHashArray[@specialized(Int, Float, Long, Double) V] priva
 }
 
 object OpenAddressHashArray {
-  def apply[@specialized(Int, Float, Long, Double) T: ClassTag: Zero](values: T*) = {
+  def apply[@specialized(Int, Float, Long, Double) T: ClassTag: Zero](values: T*): OpenAddressHashArray[T] = {
     val rv = new OpenAddressHashArray[T](values.length)
     val zero = implicitly[Zero[T]].zero
     for ((v, i) <- values.zipWithIndex if v != zero) {

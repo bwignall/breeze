@@ -15,11 +15,10 @@ package distributions
  See the License for the specific language governing permissions and
  limitations under the License.
  */
+import org.apache.commons.math3.distribution.{FDistribution => ApacheFDistribution}
+import org.apache.commons.math3.distribution.{RealDistribution => ApacheRealDistribution}
+
 import math.log
-import org.apache.commons.math3.distribution.{
-  FDistribution => ApacheFDistribution,
-  RealDistribution => ApacheRealDistribution
-}
 
 /**
  * The F-distribution - ratio of two scaled chi^2 variables
@@ -28,9 +27,9 @@ import org.apache.commons.math3.distribution.{
  */
 case class FDistribution(numeratorDegreesOfFreedom: Double, denominatorDegreesOfFreedom: Double)
     extends ApacheContinuousDistribution /* with Moments[Double,Double] */ {
-  //Moments not implemented cause I can't find the entropy of it
-  protected final val inner = new ApacheFDistribution(numeratorDegreesOfFreedom, denominatorDegreesOfFreedom)
-  def mode =
+  // Moments not implemented cause I can't find the entropy of it
+  final protected val inner = new ApacheFDistribution(numeratorDegreesOfFreedom, denominatorDegreesOfFreedom)
+  def mode: Double =
     ((numeratorDegreesOfFreedom - 2) / numeratorDegreesOfFreedom) * (denominatorDegreesOfFreedom / (denominatorDegreesOfFreedom + 2))
 }
 

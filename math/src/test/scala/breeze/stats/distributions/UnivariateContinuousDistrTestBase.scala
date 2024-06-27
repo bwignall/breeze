@@ -18,10 +18,11 @@
 
 package breeze.stats.distributions
 
-import org.scalacheck.{Arbitrary, Prop}
+import breeze.integrate.trapezoid
+import org.scalacheck.Arbitrary
+import org.scalacheck.Prop
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.Checkers
-import breeze.integrate.trapezoid
 
 /**
  * @author jrj-d
@@ -40,7 +41,7 @@ trait UnivariateContinuousDistrTestBase extends AnyFunSuite with Checkers {
 
       val inRange = samples.count(x => x >= low && x <= high) / (samples.length * 1.0)
       val prob = trapezoid(distr.pdf _, low, high, 2000)
-      if (prob >= 0 && math.abs(inRange - prob) <= 4E-2) {
+      if (prob >= 0 && math.abs(inRange - prob) <= 4e-2) {
         true
       } else {
         info(s"low: $low, high: $high")

@@ -1,8 +1,8 @@
 package breeze.linalg
 
+import breeze.macros._
 import org.scalatest._
 import org.scalatest.funsuite._
-import breeze.macros._
 
 /**
  * @author stucchio

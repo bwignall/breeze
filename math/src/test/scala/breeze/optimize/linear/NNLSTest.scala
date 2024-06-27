@@ -1,6 +1,8 @@
 package breeze.optimize.linear
 
-import breeze.linalg.{DenseMatrix, DenseVector, norm}
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
+import breeze.linalg.norm
 import breeze.numerics._
 import breeze.optimize.OptimizeTestBase
 
@@ -42,7 +44,7 @@ class NNLSTest extends OptimizeTestBase {
       5,
       5,
       Array(4.377, -3.531, -1.306, -0.139, 3.418, -3.531, 4.344, 0.934, 0.305, -2.140, -1.306, 0.934, 2.644, -0.203,
-        -0.170, -0.139, 0.305, -0.203, 5.883, 1.428, 3.418, -2.140, -0.170, 1.428, 4.684)
+            -0.170, -0.139, 0.305, -0.203, 5.883, 1.428, 3.418, -2.140, -0.170, 1.428, 4.684)
     )
 
     val atb = DenseVector[Double](-1.632, 2.115, 1.094, -1.025, -0.636)
@@ -52,7 +54,7 @@ class NNLSTest extends OptimizeTestBase {
     val nnls = new NNLS()
     val x = nnls.minimize(ata, atb)
     for (i <- 0 until n) {
-      assert(abs(x(i) - goodx(i)) < 1E-3)
+      assert(abs(x(i) - goodx(i)) < 1e-3)
       assert(x(i) >= 0)
     }
   }
@@ -63,9 +65,9 @@ class NNLSTest extends OptimizeTestBase {
       5,
       5,
       Array(517399.13534, 242529.67289, -153644.98976, 130802.84503, -798452.29283, 242529.67289, 126017.69765,
-        -75944.21743, 81785.36128, -405290.60884, -153644.98976, -75944.21743, 46986.44577, -45401.12659, 247059.51049,
-        130802.84503, 81785.36128, -45401.12659, 67457.31310, -253747.03819, -798452.29283, -405290.60884, 247059.51049,
-        -253747.03819, 1310939.40814)
+            -75944.21743, 81785.36128, -405290.60884, -153644.98976, -75944.21743, 46986.44577, -45401.12659,
+            247059.51049, 130802.84503, 81785.36128, -45401.12659, 67457.31310, -253747.03819, -798452.29283,
+            -405290.60884, 247059.51049, -253747.03819, 1310939.40814)
     )
 
     val atb = DenseVector(-31755.05710, 13047.14813, -20191.24443, 25993.77580, 11963.55017)
@@ -78,6 +80,6 @@ class NNLSTest extends OptimizeTestBase {
     val x = nnls.minimize(ata, atb)
     val obj = NNLS.computeObjectiveValue(ata, atb, x)
 
-    assert(obj < refObj + 1E-5)
+    assert(obj < refObj + 1e-5)
   }
 }

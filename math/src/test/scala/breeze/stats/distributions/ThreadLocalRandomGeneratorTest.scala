@@ -2,7 +2,6 @@ package breeze.stats.distributions
 
 import org.apache.commons.math3.random.MersenneTwister
 import org.scalatest.funsuite.AnyFunSuite
-
 import org.scalatest.matchers.should.Matchers._
 
 import java.io._
@@ -28,7 +27,6 @@ class ThreadLocalRandomGeneratorTest extends AnyFunSuite {
 
     i1 should not be i2
   }
-
 
   private def serialize(generator: ThreadLocalRandomGenerator): Array[Byte] = {
     val outputStream = new ByteArrayOutputStream(512)

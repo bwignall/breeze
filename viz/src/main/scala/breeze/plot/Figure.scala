@@ -1,12 +1,20 @@
 package breeze.plot
 
-import collection.mutable.ArrayBuffer
-import javax.swing.{SwingUtilities, WindowConstants, JFrame, JPanel}
-import java.util.concurrent.atomic.AtomicInteger
-import java.awt.{Color, Paint, Graphics2D}
-import org.jfree.chart.axis.{NumberTickUnit, TickUnits}
-import org.jfree.chart.plot.DefaultDrawingSupplier
 import breeze.plot.Plot.Listener
+import org.jfree.chart.axis.NumberTickUnit
+import org.jfree.chart.axis.TickUnits
+import org.jfree.chart.plot.DefaultDrawingSupplier
+
+import java.awt.Color
+import java.awt.Graphics2D
+import java.awt.Paint
+import java.util.concurrent.atomic.AtomicInteger
+import javax.swing.JFrame
+import javax.swing.JPanel
+import javax.swing.SwingUtilities
+import javax.swing.WindowConstants
+
+import collection.mutable.ArrayBuffer
 
 /**
  *
@@ -14,13 +22,13 @@ import breeze.plot.Plot.Listener
  */
 class Figure(name: String, private var rows_ : Int = 1, private var cols_ : Int = 1) {
 
-  protected val plots = ArrayBuffer[Option[Plot]]()
+  protected val plots: ArrayBuffer[Option[Plot]] = ArrayBuffer[Option[Plot]]()
 
   private var width_ = 600
   private var height_ = 400
 
   /**Selects the given subplot.  */
-  def subplot(i: Int) = selectPlot(i)
+  def subplot(i: Int): Plot = selectPlot(i)
 
   def clearPlot(i: Int): Unit = {
     if (i < plots.length) plots(i) = None
@@ -104,7 +112,7 @@ class Figure(name: String, private var rows_ : Int = 1, private var cols_ : Int 
   }
 
   /** Redraws the figure */
-  def refresh() = {
+  def refresh(): Unit = {
     while (plots.length < rows * cols) {
       plots += None
     }
@@ -148,12 +156,12 @@ class Figure(name: String, private var rows_ : Int = 1, private var cols_ : Int 
     // make sure figure is visible or saved image will come up empty
     refresh()
 
-    ExportGraphics.writeFile(
-      new java.io.File(filename),
-      draw = drawPlots _,
-      width = contents.getWidth,
-      height = contents.getHeight,
-      dpi = dpi)
+    ExportGraphics.writeFile(new java.io.File(filename),
+                             draw = drawPlots _,
+                             width = contents.getWidth,
+                             height = contents.getHeight,
+                             dpi = dpi
+    )
   }
 
   private def selectPlot(i: Int) = {

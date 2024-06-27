@@ -16,6 +16,8 @@ package breeze.stats.distributions
  limitations under the License.
  */
 
+import breeze.stats.distributions.Rayleigh
+import org.scalacheck.Arbitrary
 import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
@@ -35,10 +37,12 @@ class RayleighTest
 
   def fromDouble(x: Double) = x
 
-  implicit def arbDistr = Arbitrary {
-    for (scale <- arbitrary[Double].map { x =>
+  implicit def arbDistr: Arbitrary[Rayleigh] = Arbitrary {
+    for (
+      scale <- arbitrary[Double].map { x =>
         math.abs(x) % 8.0 + 1.0
-      }) yield new Rayleigh(scale)(RandBasis.mt0)
+      }
+    ) yield new Rayleigh(scale)(RandBasis.mt0)
   }
 
   override type Distr = Rayleigh

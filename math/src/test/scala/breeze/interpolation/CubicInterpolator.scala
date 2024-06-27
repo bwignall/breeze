@@ -1,19 +1,18 @@
 package breeze.interpolation
 
-import org.scalatest.funsuite.AnyFunSuite
-
-import breeze.linalg._
 import breeze.interpolation._
+import breeze.linalg._
 import breeze.numerics._
+import org.scalatest.funsuite.AnyFunSuite
 
 /**
  *
  * @author chrismedrela
  **/
 class CubicInterpolatorTest extends AnyFunSuite {
-  val x = DenseVector(1.0, 2.0, 3.0, 5.0)
-  val y = DenseVector(1.0, 5.0, 3.0, 7.0)
-  val f = CubicInterpolator(x, y)
+  val x: DenseVector[Double] = DenseVector(1.0, 2.0, 3.0, 5.0)
+  val y: DenseVector[Double] = DenseVector(1.0, 5.0, 3.0, 7.0)
+  val f: CubicInterpolator = CubicInterpolator(x, y)
 
   test("edge cases") {
     assert(closeTo(f(1.0), 1.0))

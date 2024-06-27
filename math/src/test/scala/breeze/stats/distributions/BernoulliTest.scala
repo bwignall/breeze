@@ -16,12 +16,13 @@ package breeze.stats.distributions
  limitations under the License.
  */
 
+import breeze.numerics._
+import breeze.stats.distributions.Bernoulli
+import org.scalacheck.Arbitrary
+import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
-import org.scalacheck._
-
-import breeze.numerics._
 
 class BernoulliTest extends RandTestBase with MomentsTestBase[Boolean] with ExpFamTest[Bernoulli, Boolean] {
   type Distr = Bernoulli
@@ -31,19 +32,21 @@ class BernoulliTest extends RandTestBase with MomentsTestBase[Boolean] with ExpF
 
   override val numSamples: Int = 30000
 
-  def arbParameter = Arbitrary(arbitrary[Double].map(x => math.max(math.abs(x) % 1.0, 1E-1)))
+  def arbParameter: Arbitrary[Double] = Arbitrary(arbitrary[Double].map(x => math.max(math.abs(x) % 1.0, 1e-1)))
 
-  def paramsClose(p: Double, b: Double) = if (b == 0.0) p < 1E-4 else (p - b).abs / b.abs.max(1E-4) < 1E-1
+  def paramsClose(p: Double, b: Double): Boolean = if (b == 0.0) p < 1e-4 else (p - b).abs / b.abs.max(1e-4) < 1e-1
 
-  implicit def arbDistr = Arbitrary {
+  implicit def arbDistr: Arbitrary[Bernoulli] = Arbitrary {
     // make scala 2 happy
     implicit val basis: RandBasis = RandBasis.mt0
-    for (p <- arbitrary[Double].map { x =>
-        math.max(math.abs(x) % 1.0, 1E-1)
-      }) yield new Bernoulli(p)
+    for (
+      p <- arbitrary[Double].map { x =>
+        math.max(math.abs(x) % 1.0, 1e-1)
+      }
+    ) yield new Bernoulli(p)
   }
 
-  def asDouble(x: Boolean) = I(x)
-  def fromDouble(x: Double) = x != 0.0
+  def asDouble(x: Boolean): Double = I(x)
+  def fromDouble(x: Double): Boolean = x != 0.0
 
 }

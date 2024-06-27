@@ -14,7 +14,8 @@ package breeze.linalg.support
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import breeze.math.{Field, Semiring}
+import breeze.math.Field
+import breeze.math.Semiring
 import breeze.util.ArrayUtil
 
 import scala.reflect.ClassTag
@@ -32,7 +33,7 @@ trait CanCreateZerosLike[From, +To] {
 object CanCreateZerosLike {
 
   class OpArray[@specialized V: ClassTag: Semiring] extends CanCreateZerosLike[Array[V], Array[V]] {
-    override def apply(from: Array[V]) = {
+    override def apply(from: Array[V]): Array[V] = {
       ArrayUtil.fillNewArrayLike(from, from.length, implicitly[Semiring[V]].zero)
     }
   }
@@ -42,9 +43,10 @@ object CanCreateZerosLike {
     def apply(v: From): To = map.mapActive(v, _ => op.zero)
   }
 
-  implicit def opMapValues[From, A, To](
-      implicit map: CanMapValues[From, A, A, To],
-      op: Field[A]): CanCreateZerosLike[From, To] = new OpMapValues[From, A, To]()(op, map)
+  implicit def opMapValues[From, A, To](implicit
+    map: CanMapValues[From, A, A, To],
+    op: Field[A]
+  ): CanCreateZerosLike[From, To] = new OpMapValues[From, A, To]()(op, map)
 
   implicit def OpArrayAny[V: ClassTag: Semiring]: OpArray[V] =
     new OpArray[V]

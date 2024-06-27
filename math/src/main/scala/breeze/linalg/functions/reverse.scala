@@ -3,6 +3,7 @@ package breeze.linalg
 import breeze.generic.UFunc
 import breeze.macros.expand
 import breeze.storage.Zero
+
 import scala.reflect.ClassTag
 
 /**

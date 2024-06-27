@@ -4,10 +4,10 @@ package breeze.interpolation
  *
  * @author chrismedrela
  */
-import scala.reflect.ClassTag
-
 import breeze.linalg._
 import breeze.math.Field
+
+import scala.reflect.ClassTag
 
 class LinearInterpolator[T: ClassTag: Field: Ordering](x_coords: Vector[T], y_coords: Vector[T])
     extends HandyUnivariateInterpolator[T](x_coords, y_coords) {

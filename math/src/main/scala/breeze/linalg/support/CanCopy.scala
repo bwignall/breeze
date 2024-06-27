@@ -16,6 +16,7 @@ package breeze.linalg.support
  */
 import breeze.math.Field
 import breeze.util.ArrayUtil
+
 import scala.reflect.ClassTag
 
 /**
@@ -30,7 +31,7 @@ trait CanCopy[V] {
 object CanCopy {
 
   class OpArray[@specialized V] extends CanCopy[Array[V]] {
-    override def apply(from: Array[V]) = {
+    override def apply(from: Array[V]): Array[V] = {
       ArrayUtil.copyOf(from, from.length)
     }
   }

@@ -1,11 +1,12 @@
 package breeze.stats.distributions
 
-import scala.runtime.ScalaRunTime
-import breeze.optimize.DiffFunction
 import breeze.numerics._
+import breeze.optimize.DiffFunction
+
 import scala.math.exp
 import scala.math.log
 import scala.math.sqrt
+import scala.runtime.ScalaRunTime
 
 /**
  * A log normal distribution is distributed such that log X ~ Normal(\mu, \sigma)
@@ -43,12 +44,12 @@ case class LogNormal(mu: Double, sigma: Double)(implicit rand: RandBasis)
    * @param p: a probability in [0,1]
    * @return x s.t. cdf(x) = numYes
    */
-  def inverseCdf(p: Double) = exp(myGaussian.inverseCdf(p))
+  def inverseCdf(p: Double): Double = exp(myGaussian.inverseCdf(p))
 
   /**
    * Computes the cumulative density function of the value x.
    */
-  def cdf(x: Double) = myGaussian.cdf(log(x))
+  def cdf(x: Double): Double = myGaussian.cdf(log(x))
 
   override def probability(x: Double, y: Double): Double = {
     myGaussian.probability(log(x), log(y))
@@ -76,7 +77,7 @@ object LogNormal
 
   def emptySufficientStatistic = Gaussian.emptySufficientStatistic
 
-  def sufficientStatisticFor(t: Double) = {
+  def sufficientStatisticFor(t: Double): SufficientStatistic = {
     SufficientStatistic(1, math.log(t), 0)
   }
 

@@ -16,12 +16,14 @@ package breeze.generic
  limitations under the License.
  */
 
-import collection.mutable.{ArrayBuffer, HashMap}
-import java.util.concurrent.ConcurrentHashMap
 import breeze.util.ReflectionUtil
 
-import collection.mutable
+import java.util.concurrent.ConcurrentHashMap
+import scala.collection.MapView
 import scala.collection.compat._
+
+import collection.mutable.{ArrayBuffer, HashMap}
+import collection.mutable
 
 /**
  * A Multimethod is basically a glorified registry that uses dynamic reflection (and subtyping) to determine which
@@ -29,10 +31,10 @@ import scala.collection.compat._
  *
  * @author dlwh
  */
-trait Multimethod[Method, A <: AnyRef, R] extends MMRegistry1[Method] {  self: Method =>
+trait Multimethod[Method, A <: AnyRef, R] extends MMRegistry1[Method] { self: Method =>
 
   protected def bindingMissing(a: A): R = throw new UnsupportedOperationException("Types not found!")
-  protected def multipleOptions(a: A, m: Map[Class[_], Method]) = {
+  protected def multipleOptions(a: A, m: Map[Class[_], Method]): Nothing = {
     throw new RuntimeException("Multiple bindings for method: " + m)
   }
 
@@ -81,7 +83,7 @@ trait MethodImpl[A, +R] {
 
 // TODO: switch to identity hashing!
 trait MMRegistry2[R] {
-  protected val ops = HashMap[(Class[_], Class[_]), R]()
+  protected val ops: HashMap[(Class[_], Class[_]), R] = HashMap[(Class[_], Class[_]), R]()
   protected val cache = new ConcurrentHashMap[(Class[_], Class[_]), Option[R]]()
 
   def register(a: Class[_], b: Class[_], op: R): Unit = {
@@ -136,7 +138,7 @@ trait MMRegistry2[R] {
   /** This selects based on the partial order induced by the inheritance hierarchy.
    *  If there is ambiguity, all are returned.
    **/
-  protected def selectBestOption(options: Map[(Class[_], Class[_]), R]) = {
+  protected def selectBestOption(options: Map[(Class[_], Class[_]), R]): MapView[(Class[_], Class[_]), R] = {
     var bestCandidates = Set[(Class[_], Class[_])]()
     for (pair @ (aa, bb) <- options.keys) {
       // if there is no option (aaa,bbb) s.t. aaa <: aa && bbb <: bb, then add it to the list
@@ -152,7 +154,7 @@ trait MMRegistry2[R] {
 
 // TODO: switch to identity hashing!
 trait MMRegistry3[R] {
-  protected val ops = HashMap[(Class[_], Class[_], Class[_]), R]()
+  protected val ops: HashMap[(Class[_], Class[_], Class[_]), R] = HashMap[(Class[_], Class[_], Class[_]), R]()
   protected val cache = new ConcurrentHashMap[(Class[_], Class[_], Class[_]), Option[R]]()
 
   def register(a: Class[_], b: Class[_], c: Class[_], op: R): Unit = {
@@ -207,14 +209,19 @@ trait MMRegistry3[R] {
   /** This selects based on the partial order induced by the inheritance hierarchy.
    *  If there is ambiguity, all are returned.
     **/
-  protected def selectBestOption(options: Map[(Class[_], Class[_], Class[_]), R]) = {
+  protected def selectBestOption(
+    options: Map[(Class[_], Class[_], Class[_]), R]
+  ): Map[(Class[_], Class[_], Class[_]), R] = {
     var bestCandidates = Set[(Class[_], Class[_], Class[_])]()
     for (pair @ (aa, bb, cc) <- options.keys) {
       // if there is no option (aaa,bbb) s.t. aaa <: aa && bbb <: bb, then add it to the list
-      if (!bestCandidates.exists(pair => aa.isAssignableFrom(pair._1) && bb.isAssignableFrom(pair._2)) && cc
-          .isAssignableFrom(pair._3)) {
+      if (
+        !bestCandidates.exists(pair => aa.isAssignableFrom(pair._1) && bb.isAssignableFrom(pair._2)) && cc
+          .isAssignableFrom(pair._3)
+      ) {
         bestCandidates = bestCandidates.filterNot(pair =>
-          pair._1.isAssignableFrom(aa) && pair._2.isAssignableFrom(bb) && pair._3.isAssignableFrom(cc))
+          pair._1.isAssignableFrom(aa) && pair._2.isAssignableFrom(bb) && pair._3.isAssignableFrom(cc)
+        )
         bestCandidates += pair
       }
     }
@@ -224,7 +231,7 @@ trait MMRegistry3[R] {
 }
 
 trait MMRegistry1[M] {
-  protected val ops = HashMap[Class[_], M]()
+  protected val ops: HashMap[Class[_], M] = HashMap[Class[_], M]()
   protected val cache = new ConcurrentHashMap[Class[_], M]()
 
   def register(a: Class[_], op: M): Unit = {

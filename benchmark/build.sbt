@@ -1,6 +1,6 @@
 Common.commonSettings
 
-resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+resolvers += "Sonatype OSS Snapshots".at("https://oss.sonatype.org/content/repositories/snapshots")
 
 // lazy val breeze = project in file("core")
 name := "breeze-benchmark"
@@ -14,7 +14,7 @@ libraryDependencies ++= Seq(
   // caliper stuff
   "com.google.guava" % "guava" % "r09",
   "com.google.code.java-allocation-instrumenter" % "java-allocation-instrumenter" % "2.0",
-  ("com.google.caliper" % "caliper" % "1.0-beta-2"),
+  "com.google.caliper" % "caliper" % "1.0-beta-3",
   "com.google.code.gson" % "gson" % "1.7.1"
 )
 

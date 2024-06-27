@@ -5,19 +5,16 @@ import breeze.linalg.support.CanMapValues.DenseCanMapValues
 import breeze.linalg.support.CanTraverseKeyValuePairs.KeyValuePairsVisitor
 import breeze.linalg.support.CanTraverseValues.ValuesVisitor
 import breeze.linalg.support._
+import breeze.macros._
 import breeze.math.Semiring
 import breeze.storage.Zero
-import breeze.macros._
 
 import scala.reflect.ClassTag
 
-class SliceMatrix[
-    @specialized(Int) K1,
-    @specialized(Int) K2,
-    @specialized(Double, Int, Float, Long) V: Semiring: ClassTag](
-    val tensor: Tensor[(K1, K2), V],
-    val slice1: IndexedSeq[K1],
-    val slice2: IndexedSeq[K2])
+class SliceMatrix[@specialized(Int) K1,
+                  @specialized(Int) K2,
+                  @specialized(Double, Int, Float, Long) V: Semiring: ClassTag
+](val tensor: Tensor[(K1, K2), V], val slice1: IndexedSeq[K1], val slice2: IndexedSeq[K2])
     extends Matrix[V]
     with MatrixLike[V, SliceMatrix[K1, K2, V]] {
 
@@ -78,12 +75,11 @@ object SliceMatrix extends LowPrioritySliceMatrix with SliceMatrixOps {
     }
   }
 
-  implicit def canMapValues[
-      K1,
-      K2,
-      @specialized(Int, Float, Double) V,
-      @specialized(Int, Float, Double) V2: ClassTag: Zero]
-    : CanMapValues[SliceMatrix[K1, K2, V], V, V2, DenseMatrix[V2]] = {
+  implicit def canMapValues[K1,
+                            K2,
+                            @specialized(Int, Float, Double) V,
+                            @specialized(Int, Float, Double) V2: ClassTag: Zero
+  ]: CanMapValues[SliceMatrix[K1, K2, V], V, V2, DenseMatrix[V2]] = {
     new DenseCanMapValues[SliceMatrix[K1, K2, V], V, V2, DenseMatrix[V2]] {
       override def map(from: SliceMatrix[K1, K2, V], fn: (V) => V2): DenseMatrix[V2] = {
         DenseMatrix.tabulate(from.rows, from.cols)((i, j) => fn(from(i, j)))
@@ -120,8 +116,8 @@ object SliceMatrix extends LowPrioritySliceMatrix with SliceMatrixOps {
 
       /** Traverses all values from the given collection. */
       override def traverse(from: SliceMatrix[K1, K2, V], fn: KeyValuePairsVisitor[(Int, Int), V]): Unit = {
-        from.iterator.foreach {
-          case (k, v) => fn.visit(k, v)
+        from.iterator.foreach { case (k, v) =>
+          fn.visit(k, v)
         }
 
       }
@@ -169,7 +165,7 @@ object SliceMatrix extends LowPrioritySliceMatrix with SliceMatrixOps {
   }
 }
 
-trait LowPrioritySliceMatrix {  self: SliceMatrix.type =>
+trait LowPrioritySliceMatrix { self: SliceMatrix.type =>
   // Note: can't have a separate implicit for Range and Seq since they will be ambiguous as both will return a
   // SliceMatrix which differs from dense matrix where a Range will return another DenseMatrix and only a seq will
   // return a SliceMatrix

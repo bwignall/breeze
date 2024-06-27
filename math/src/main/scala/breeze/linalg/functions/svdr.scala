@@ -2,10 +2,12 @@ package breeze.linalg
 
 import breeze.generic.UFunc
 import breeze.linalg._
-import breeze.linalg.svd.{DenseSVD, SVD}
-import breeze.numerics.{abs, signum}
-import breeze.stats.distributions.Rand
+import breeze.linalg.svd.DenseSVD
+import breeze.linalg.svd.SVD
 import breeze.macros._
+import breeze.numerics.abs
+import breeze.numerics.signum
+import breeze.stats.distributions.Rand
 
 /**
  * Approximate truncated randomized SVD
@@ -96,9 +98,9 @@ object svdr extends UFunc {
    * @param v right singular vectors
    * @return left and right singular vectors with resolved sign ambiguity
    */
-  private def flipSVDSigns(
-      u: DenseMatrix[Double],
-      v: DenseMatrix[Double]): (DenseMatrix[Double], DenseMatrix[Double]) = {
+  private def flipSVDSigns(u: DenseMatrix[Double],
+                           v: DenseMatrix[Double]
+  ): (DenseMatrix[Double], DenseMatrix[Double]) = {
 //    import DenseMatrix.canMapValues
     val abs_u = abs(u)
     val max_abs_cols = (0 until u.cols).map(c => argmax(abs_u(::, c)))

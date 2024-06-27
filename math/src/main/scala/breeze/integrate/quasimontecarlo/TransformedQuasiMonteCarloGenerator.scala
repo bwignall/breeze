@@ -1,6 +1,7 @@
 package breeze.integrate.quasimontecarlo
 
-import breeze.stats.distributions.{Exponential, RandBasis}
+import breeze.stats.distributions.Exponential
+import breeze.stats.distributions.RandBasis
 
 /*
  Copyright 2016 Chris Stucchio
@@ -20,7 +21,9 @@ import breeze.stats.distributions.{Exponential, RandBasis}
 
 trait ProvidesTransformedQuasiMonteCarlo {
 
-  def quasiMonteCarloIntegrate(f: Array[Double] => Double)(variables: QuasiRandomVariableSpec*)(numSamples: Long) = {
+  def quasiMonteCarloIntegrate(
+    f: Array[Double] => Double
+  )(variables: QuasiRandomVariableSpec*)(numSamples: Long): Double = {
     val generator = new TransformedQuasiMonteCarloGenerator(variables: _*)
     var fSum: Double = 0
 
@@ -35,7 +38,7 @@ trait ProvidesTransformedQuasiMonteCarlo {
 
   sealed trait QuasiRandomVariableSpec {
     val numInputs: Int
-    def copy: QuasiRandomVariableSpec //As a performance hack, a spec may contain hidden mutable variables. So users always need to copy them before use.
+    def copy: QuasiRandomVariableSpec // As a performance hack, a spec may contain hidden mutable variables. So users always need to copy them before use.
   }
 
   trait TransformingQuasiRandomVariableSpec extends QuasiRandomVariableSpec {
@@ -61,7 +64,7 @@ trait ProvidesTransformedQuasiMonteCarlo {
       extends TransformingQuasiRandomVariableSpec {
     val numInputs = 1
     def transform(x: Array[Double], position: Int): Double = icdfProvider.inverseCdf(x(position))
-    def copy = DistributionRandomVariableSpec(icdfProvider)
+    def copy: QuasiRandomVariableSpec = DistributionRandomVariableSpec(icdfProvider)
   }
 
   trait RejectionSampledGammaQuasiRandomVariable extends RejectionQuasiRandomVariableSpec
@@ -71,7 +74,7 @@ trait ProvidesTransformedQuasiMonteCarlo {
       require(alpha > 0)
       require(beta > 0)
       if (alpha == 1.0) {
-        new DistributionRandomVariableSpec(Exponential(1/beta)(RandBasis.mt0))
+        new DistributionRandomVariableSpec(Exponential(1 / beta)(RandBasis.mt0))
       } else if (alpha > 1) {
         GammaQuasiRandomVariableSpecAlphaGeq1(alpha, beta)
       } else {
@@ -102,12 +105,13 @@ trait ProvidesTransformedQuasiMonteCarlo {
       val exp_minus_x_over_two = math.exp(-0.5 * x)
       v <= (math.pow(x, alpha - 1) * exp_minus_x_over_two) / (two_to_alpha_minus_one * math.pow(
         1 - exp_minus_x_over_two,
-        alpha - 1))
+        alpha - 1
+      ))
     }
 
-    def compute(rvs: Array[Double], position: Int): Double = (theta * x)
+    def compute(rvs: Array[Double], position: Int): Double = theta * x
 
-    def copy = GammaQuasiRandomVariableSpecAlphaLeq1(alpha, theta)
+    def copy: QuasiRandomVariableSpec = GammaQuasiRandomVariableSpecAlphaLeq1(alpha, theta)
   }
 
   case class GammaQuasiRandomVariableSpecAlphaGeq1(alpha: Double, theta: Double)
@@ -139,16 +143,16 @@ trait ProvidesTransformedQuasiMonteCarlo {
 
     def compute(rvs: Array[Double], position: Int): Double = theta * x
 
-    def copy = GammaQuasiRandomVariableSpecAlphaGeq1(alpha, theta)
+    def copy: QuasiRandomVariableSpec = GammaQuasiRandomVariableSpecAlphaGeq1(alpha, theta)
   }
 
   class TransformedQuasiMonteCarloGenerator(val inVariables: List[QuasiRandomVariableSpec])
       extends QuasiMonteCarloGenerator {
     def this(inVariables: QuasiRandomVariableSpec*) = this(inVariables.toList)
-    val variables = inVariables.map(x => x.copy).toArray
+    val variables: Array[QuasiRandomVariableSpec] = inVariables.map(x => x.copy).toArray
 
     val dimension = variables.size
-    val inputDimension = variables.map(x => x.numInputs).sum
+    val inputDimension: Int = variables.map(x => x.numInputs).sum
     private val baseGenerator = new BaseUniformHaltonGenerator(inputDimension)
 
     private val currentValue: Array[Double] = new Array[Double](dimension)
@@ -160,7 +164,7 @@ trait ProvidesTransformedQuasiMonteCarlo {
     def numRejections: Long = rejectedCount.sum
     def numRejectionsByVariable: Array[Long] = rejectedCount.clone
 
-    def getNextUnsafe = {
+    def getNextUnsafe: Array[Double] = {
       var accepted = false
       while (!accepted) {
         accepted = true

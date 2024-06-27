@@ -1,9 +1,12 @@
 package breeze.optimize
 
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
 import breeze.linalg.operators.OpMulMatrix
 import breeze.linalg.support.CanCopy
-import breeze.linalg.{DenseMatrix, DenseVector}
-import breeze.math.{InnerProductVectorSpace, MutableInnerProductVectorSpace, VectorSpace}
+import breeze.math.InnerProductVectorSpace
+import breeze.math.MutableInnerProductVectorSpace
+import breeze.math.VectorSpace
 import breeze.stats.distributions.Rand
 
 /**
@@ -27,8 +30,9 @@ trait SecondOrderFunction[T, H] extends DiffFunction[T] {
 }
 
 object SecondOrderFunction {
-  def empirical[T, I](f: DiffFunction[T], eps: Double = 1E-5)(
-      implicit vs: VectorSpace[T, Double]): SecondOrderFunction[T, EmpiricalHessian[T]] = {
+  def empirical[T, I](f: DiffFunction[T], eps: Double = 1e-5)(implicit
+    vs: VectorSpace[T, Double]
+  ): SecondOrderFunction[T, EmpiricalHessian[T]] = {
     new SecondOrderFunction[T, EmpiricalHessian[T]] {
 
       /** Calculates the value, the gradient, and the Hessian at a point */
@@ -40,8 +44,9 @@ object SecondOrderFunction {
     }
   }
 
-  def minibatchEmpirical[T, I](f: BatchDiffFunction[T], eps: Double = 1E-5, batchSize: Int = 30000)(
-      implicit vs: InnerProductVectorSpace[T, Double]): SecondOrderFunction[T, EmpiricalHessian[T]] = {
+  def minibatchEmpirical[T, I](f: BatchDiffFunction[T], eps: Double = 1e-5, batchSize: Int = 30000)(implicit
+    vs: InnerProductVectorSpace[T, Double]
+  ): SecondOrderFunction[T, EmpiricalHessian[T]] = {
     new SecondOrderFunction[T, EmpiricalHessian[T]] {
 
       /** Calculates the value, the gradient, and the Hessian at a point */
@@ -72,7 +77,7 @@ object SecondOrderFunction {
  * @param eps a small value
  * @tparam T
  */
-class EmpiricalHessian[T](df: DiffFunction[T], x: T, grad: T, eps: Double = 1E-5)(implicit vs: VectorSpace[T, Double]) {
+class EmpiricalHessian[T](df: DiffFunction[T], x: T, grad: T, eps: Double = 1e-5)(implicit vs: VectorSpace[T, Double]) {
 
   import vs._
 
@@ -105,9 +110,10 @@ object EmpiricalHessian {
    *
    * @return Approximate hessian matrix
    */
-  def hessian(df: DiffFunction[DenseVector[Double]], x: DenseVector[Double], eps: Double = 1E-5)(
-      implicit vs: VectorSpace[DenseVector[Double], Double],
-      copy: CanCopy[DenseVector[Double]]): DenseMatrix[Double] = {
+  def hessian(df: DiffFunction[DenseVector[Double]], x: DenseVector[Double], eps: Double = 1e-5)(implicit
+    vs: VectorSpace[DenseVector[Double], Double],
+    copy: CanCopy[DenseVector[Double]]
+  ): DenseMatrix[Double] = {
     import vs._
     val n = x.length
     val H = DenseMatrix.zeros[Double](n, n)
@@ -141,9 +147,9 @@ object EmpiricalHessian {
 
 }
 
-class FisherDiffFunction[T](df: BatchDiffFunction[T], gradientsToKeep: Int = 1000)(
-    implicit vs: MutableInnerProductVectorSpace[T, Double])
-    extends SecondOrderFunction[T, FisherMatrix[T]] {
+class FisherDiffFunction[T](df: BatchDiffFunction[T], gradientsToKeep: Int = 1000)(implicit
+  vs: MutableInnerProductVectorSpace[T, Double]
+) extends SecondOrderFunction[T, FisherMatrix[T]] {
 
   /** Calculates the value, the gradient, and an approximation to the Fisher approximation to the Hessian */
   def calculate2(x: T): (Double, T, FisherMatrix[T]) = {

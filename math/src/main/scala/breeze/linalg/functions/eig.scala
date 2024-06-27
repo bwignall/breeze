@@ -1,9 +1,9 @@
 package breeze.linalg
 
 import breeze.generic.UFunc
-import org.netlib.util.intW
-import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
 import breeze.macros._
+import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
+import org.netlib.util.intW
 
 /**
  * Eigenvalue decomposition (right eigenvectors)
@@ -74,21 +74,21 @@ object eig extends UFunc {
 
       val A = DenseMatrix.zeros[Double](n, n)
       A := m
-      lapack.dgeev(
-        "N",
-        "V",
-        n,
-        A.data,
-        scala.math.max(1, n),
-        Wr.data,
-        Wi.data,
-        Vl.data,
-        scala.math.max(1, n),
-        Vr.data,
-        scala.math.max(1, n),
-        work,
-        work.length,
-        info)
+      lapack.dgeev("N",
+                   "V",
+                   n,
+                   A.data,
+                   scala.math.max(1, n),
+                   Wr.data,
+                   Wi.data,
+                   Vl.data,
+                   scala.math.max(1, n),
+                   Vr.data,
+                   scala.math.max(1, n),
+                   work,
+                   work.length,
+                   info
+      )
 
       if (info.`val` > 0)
         throw new NotConvergedException(NotConvergedException.Iterations)
@@ -112,7 +112,7 @@ object eigSym extends UFunc {
     def apply(X: DenseMatrix[Double]): DenseEigSym = {
       doEigSym(X, true) match {
         case (ev, Some(rev)) => EigSym(ev, rev)
-        case _ => throw new RuntimeException("Shouldn't be here!")
+        case _               => throw new RuntimeException("Shouldn't be here!")
       }
 
     }
@@ -127,9 +127,9 @@ object eigSym extends UFunc {
 
   }
 
-  private def doEigSym(
-      X: Matrix[Double],
-      rightEigenvectors: Boolean): (DenseVector[Double], Option[DenseMatrix[Double]]) = {
+  private def doEigSym(X: Matrix[Double],
+                       rightEigenvectors: Boolean
+  ): (DenseVector[Double], Option[DenseMatrix[Double]]) = {
     requireNonEmptyMatrix(X)
 
     // As LAPACK doesn't check if the given matrix is in fact symmetric,

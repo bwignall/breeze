@@ -42,9 +42,9 @@ class GaussianTest
     } yield (mean, std)
   }
 
-  def paramsClose(p: (Double, Double), b: (Double, Double)) = {
-    val y1 = (p._1 - b._1).abs / (p._1.abs / 2 + b._1.abs / 2 + 1) < 1E-1
-    val y2 = (p._2 - b._2).abs / (p._2.abs / 2 + b._2.abs / 2 + 1) < 1E-1
+  def paramsClose(p: (Double, Double), b: (Double, Double)): Boolean = {
+    val y1 = (p._1 - b._1).abs / (p._1.abs / 2 + b._1.abs / 2 + 1) < 1e-1
+    val y2 = (p._2 - b._2).abs / (p._2.abs / 2 + b._2.abs / 2 + 1) < 1e-1
     y1 && y2
   }
 
@@ -59,9 +59,9 @@ class GaussianTest
 
   test("#295, cdf/inverseCdf broken") {
     val gaussian = Gaussian(0, 1)
-    assert(
-      (gaussian.cdf(gaussian.inverseCdf(0.1)) - 0.1).abs <= 1E-3,
-      gaussian.cdf(gaussian.inverseCdf(0.1)) + " was not close to " + 0.1)
+    assert((gaussian.cdf(gaussian.inverseCdf(0.1)) - 0.1).abs <= 1e-3,
+           "" + (gaussian.cdf(gaussian.inverseCdf(0.1))) + " was not close to " + 0.1
+    )
   }
 
   test("Probability of N(0,1)(1) propto exp(-.5))") {
@@ -74,15 +74,17 @@ class GaussianTest
     }
   }
 
-  override val VARIANCE_TOLERANCE: Double = 9E-2
+  override val VARIANCE_TOLERANCE: Double = 9e-2
 
   implicit def arbDistr: Arbitrary[Distr] = Arbitrary {
-    for (mean <- arbitrary[Double].map { x =>
+    for (
+      mean <- arbitrary[Double].map { x =>
         math.abs(x) % 10000.0
       };
       std <- arbitrary[Double].map { x =>
         math.abs(x) % 8.0 + .1
-      }) yield new Gaussian(mean, std);
+      }
+    ) yield new Gaussian(mean, std);
   }
 
   def asDouble(x: Double) = x

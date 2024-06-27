@@ -15,10 +15,10 @@ package breeze.linalg.support
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import scala.collection.compat.IterableOnce
-
 import breeze.linalg.support.CanTraverseValues.ValuesVisitor
 import breeze.math.Complex
+
+import scala.collection.compat.IterableOnce
 
 /**
  * Marker for being able to traverse over the values in a collection/tensor
@@ -81,7 +81,7 @@ object CanTraverseValues extends LowPrioCanTraverseValues {
   //
 
   // stupid scala 2.12
-  class OpArray[/*@specialized(Double, Int, Float, Long)*/ A] extends CanTraverseValues[Array[A], A] {
+  class OpArray[ /*@specialized(Double, Int, Float, Long)*/ A] extends CanTraverseValues[Array[A], A] {
     def traverse(from: Array[A], fn: ValuesVisitor[A]): fn.type = {
       fn.visitArray(from)
       fn

@@ -1,9 +1,10 @@
 package breeze.util
 
-import org.scalatest.funsuite.AnyFunSuite
-import breeze.util.JavaArrayOps._
-import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
 import breeze.math._
+import breeze.util.JavaArrayOps._
+import org.scalatest.funsuite.AnyFunSuite
 
 /**
  * @author ktakagaki
@@ -21,9 +22,9 @@ class JavaArrayOpsTest extends AnyFunSuite {
 
   test("JavaOpts 2D conversions") {
     val dmD = DenseMatrix((0d, 1d, 2d, 3d, 4d, 5d), (10d, 8d, 6d, 4d, 2d, -2d))
-    val dmC = DenseMatrix(
-      (-1d * breeze.math.i, 0d * breeze.math.i, 2d * breeze.math.i),
-      (10d * breeze.math.i, 9d * breeze.math.i, 7d * breeze.math.i))
+    val dmC = DenseMatrix((-1d * breeze.math.i, 0d * breeze.math.i, 2d * breeze.math.i),
+                          (10d * breeze.math.i, 9d * breeze.math.i, 7d * breeze.math.i)
+    )
     val dmCAC = array2CToDm(dmCToArray2(dmC))
     assert(dmD == array2DToDm(dmDToArray2(dmD)))
     assert(dmC == dmCAC)

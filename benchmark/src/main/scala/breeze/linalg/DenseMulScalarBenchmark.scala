@@ -18,7 +18,8 @@
 
 package breeze.linalg
 
-import breeze.benchmark.{MyRunner, BreezeBenchmark}
+import breeze.benchmark.BreezeBenchmark
+import breeze.benchmark.MyRunner
 import breeze.macros._
 
 /**
@@ -29,19 +30,18 @@ class DenseMulScalarBenchmark extends BreezeBenchmark {
 
   val dv, dv2 = DenseVector.rand[Double](10000)
 
-  def timeSmallDVMulScalar(reps: Int) = {
-    var sum = 0.0
+  def timeSmallDVMulScalar(reps: Int): DenseVector[Double] = {
     var q = dv2
-    cforRange(0 until reps) { rep =>
+    cforRange(0 until reps) { _ =>
       q = dv *:* q
     }
     q
   }
 
-  def timeSmallDVInlineRange(reps: Int) = {
+  def timeSmallDVInlineRange(reps: Int): DenseVector[Double] = {
     var result = new Array[Double](dv.length)
     var b = dv2
-    cforRange(0 until reps) { rep =>
+    cforRange(0 until reps) { _ =>
       val ad = dv.data
       val bd = b.data
       cforRange(0 until dv.length) { i =>
@@ -53,11 +53,11 @@ class DenseMulScalarBenchmark extends BreezeBenchmark {
     b
   }
 
-  def timeSmallDVScaleAddInline(reps: Int) = {
+  def timeSmallDVScaleAddInline(reps: Int): Array[Double] = {
     val dv = this.dv.data
     var dv2 = this.dv2.data
     var result = new Array[Double](dv.length)
-    cforRange(0 until reps) { rep =>
+    cforRange(0 until reps) { _ =>
       result = new Array[Double](dv.length)
       result(0) += dv2(0) * dv(0)
       result(1) += dv2(1) * dv(1)

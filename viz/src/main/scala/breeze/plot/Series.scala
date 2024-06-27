@@ -1,7 +1,9 @@
 package breeze.plot
 
 import org.jfree.chart.renderer.xy.XYItemRenderer
-import java.awt.{Paint, Stroke}
+
+import java.awt.Paint
+import java.awt.Stroke
 
 /**
  * A Series is anything that can be added to a [[breeze.plot.Plot]]
@@ -17,8 +19,8 @@ trait Series {
    * @param defaultStroke
    * @return
    */
-  def getChartStuff(
-      defaultName: Int => String,
-      defaultColor: Int => Paint,
-      defaultStroke: Int => Stroke): (org.jfree.data.xy.XYDataset, XYItemRenderer)
+  def getChartStuff(defaultName: Int => String,
+                    defaultColor: Int => Paint,
+                    defaultStroke: Int => Stroke
+  ): (org.jfree.data.xy.XYDataset, XYItemRenderer)
 }

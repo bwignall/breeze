@@ -1,9 +1,9 @@
 package breeze.stats.regression
 
-import org.scalatest.wordspec.AnyWordSpec
 import breeze.linalg._
-import breeze.numerics._
 import breeze.macros.cforRange
+import breeze.numerics._
+import org.scalatest.wordspec.AnyWordSpec
 
 class LeastSquaresTest extends AnyWordSpec {
   "Least squares" should {

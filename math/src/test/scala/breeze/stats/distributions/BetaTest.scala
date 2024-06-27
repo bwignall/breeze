@@ -16,7 +16,10 @@ package breeze.stats.distributions;
  limitations under the License.
  */
 
-import breeze.linalg.{DenseVector, norm}
+import breeze.linalg.DenseVector
+import breeze.linalg.norm
+import breeze.stats.distributions.Beta
+import org.scalacheck.Arbitrary
 import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
@@ -33,18 +36,20 @@ class BetaTest
   val expFam: Beta.type = Beta
   import org.scalacheck.Arbitrary.arbitrary
 
-  def arbParameter = Arbitrary {
-    for (mean <- arbitrary[Double].map { x =>
-        math.abs(x) % 100.0 + 1E-4
+  def arbParameter: Arbitrary[(Double, Double)] = Arbitrary {
+    for (
+      mean <- arbitrary[Double].map { x =>
+        math.abs(x) % 100.0 + 1e-4
       };
       std <- arbitrary[Double].map { x =>
-        math.abs(x) % 100 + 1E-4
-      }) yield (mean, std)
+        math.abs(x) % 100 + 1e-4
+      }
+    ) yield (mean, std)
   }
 
-  def paramsClose(p: (Double, Double), b: (Double, Double)) = {
-    val y1 = (p._1 - b._1).abs / (p._1.abs / 2 + b._1.abs / 2 + 1) < 1E-1
-    val y2 = (p._2 - b._2).abs / (p._2.abs / 2 + b._2.abs / 2 + 1) < 1E-1
+  def paramsClose(p: (Double, Double), b: (Double, Double)): Boolean = {
+    val y1 = (p._1 - b._1).abs / (p._1.abs / 2 + b._1.abs / 2 + 1) < 1e-1
+    val y2 = (p._2 - b._2).abs / (p._2.abs / 2 + b._2.abs / 2 + 1) < 1e-1
     y1 && y2
   }
 
@@ -54,7 +59,7 @@ class BetaTest
 
   def fromDouble(x: Double) = x
 
-  implicit def arbDistr = {
+  implicit def arbDistr: Arbitrary[Beta] = {
     // make scala 2 happy
     implicit val basis: RandBasis = RandBasis.mt0
     Arbitrary {
@@ -76,7 +81,7 @@ class BetaTest
   }
 
   test("#15 test 2: Smaller a and b") {
-    val a = 7.672385302336129E-4
+    val a = 7.672385302336129e-4
     val b = 0.5028709732819038
     val n = 100000
     val samples = new Beta(a, b).sample(n)

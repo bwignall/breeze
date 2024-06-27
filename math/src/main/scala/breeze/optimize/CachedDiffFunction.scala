@@ -1,7 +1,7 @@
 package breeze.optimize
 
-import breeze.linalg.support.CanCopy
 import breeze.linalg.copy
+import breeze.linalg.support.CanCopy
 
 /**
  *

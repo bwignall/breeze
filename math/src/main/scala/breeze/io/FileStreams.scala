@@ -16,11 +16,15 @@
 package breeze;
 package io;
 
-import java.io.File;
-import java.io.{InputStream, OutputStream};
-import java.io.{FileInputStream, FileOutputStream};
-import java.io.{BufferedInputStream, BufferedOutputStream};
-import java.util.zip.{GZIPInputStream, GZIPOutputStream};
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.io.OutputStream
+import java.util.zip.GZIPInputStream
+import java.util.zip.GZIPOutputStream;
 
 /**
  * Gets input and output streams to a file, wrapping them in
@@ -31,7 +35,7 @@ import java.util.zip.{GZIPInputStream, GZIPOutputStream};
 object FileStreams {
 
   /** Use a 16k buffer size. */
-  val BUFFER_SIZE = 16 * 1024;
+  val BUFFER_SIZE: Int = 16 * 1024;
 
   /**
    * Gets an input stream with proper buffering (minimum 16k) for the given
@@ -48,7 +52,7 @@ object FileStreams {
     } catch {
       case ex: Throwable =>
         fis.close();
-        throw (ex);
+        throw ex;
     }
   }
 
@@ -67,7 +71,7 @@ object FileStreams {
     } catch {
       case ex: Throwable =>
         fos.close();
-        throw (ex);
+        throw ex;
     }
   }
 }

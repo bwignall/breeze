@@ -28,7 +28,7 @@ class BloomFilterTest extends AnyFunSuite with Checkers {
       {
         val numHashes = _numHashes.abs % 1000 + 1
         val numBuckets = (_numBuckets / 1000).abs % 1000 + 1
-        assert(numBuckets >= 0, numBuckets + " " + _numBuckets)
+        assert(numBuckets >= 0, "" + numBuckets + " " + _numBuckets)
         val bf = new BloomFilter[String](numBuckets, numHashes.abs)
         strings.foreach { bf += _ }
         strings.forall { bf contains _ }
@@ -41,7 +41,7 @@ class BloomFilterTest extends AnyFunSuite with Checkers {
       val numHashes = _numHashes.abs % 1000 + 1
       val numBuckets = (_numBuckets / 1000).abs % 1000 + 1
 
-      assert(numBuckets >= 0, numBuckets + " " + _numBuckets)
+      assert(numBuckets >= 0, "" + numBuckets + " " + _numBuckets)
 
       val bloomFilter = new BloomFilter[Long](numBuckets, numHashes.abs)
       bloomFilter += value
@@ -55,7 +55,7 @@ class BloomFilterTest extends AnyFunSuite with Checkers {
       {
         val numHashes = _numHashes.abs % 1000 + 1
         val numBuckets = (_numBuckets / 1000).abs % 1000 + 1
-        assert(numBuckets >= 0, numBuckets + " " + _numBuckets)
+        assert(numBuckets >= 0, "" + numBuckets + " " + _numBuckets)
         val bf = new BloomFilter[String](numBuckets, numHashes.abs)
         val bf2 = new BloomFilter[String](numBuckets, numHashes.abs)
         strings.foreach { bf += _ }
@@ -70,7 +70,7 @@ class BloomFilterTest extends AnyFunSuite with Checkers {
       {
         val numHashes = 5
         val numBuckets = 1000
-        assert(numBuckets >= 0, numBuckets + " " + _numBuckets)
+        assert(numBuckets >= 0, "" + numBuckets + " " + _numBuckets)
         (
           attempt1(numBuckets, numHashes, strings, strings2)
           || attempt1(numBuckets + 1, numHashes + 1, strings, strings2)

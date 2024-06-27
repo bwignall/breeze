@@ -140,18 +140,18 @@ trait Scaling {
   /**
    * Converts the scaled value into "normal" space
    */
-  def unscaleValue(score: Double, currentScale: Int) = {
+  def unscaleValue(score: Double, currentScale: Int): Double = {
     java.lang.Math.scalb(score, currentScale)
   }
 
   /**
    * Converts the scaled value into "normal" space
    */
-  def scaleValue(score: Double, currentScale: Int, targetScale: Int) = {
+  def scaleValue(score: Double, currentScale: Int, targetScale: Int): Double = {
     java.lang.Math.scalb(score, currentScale - targetScale)
   }
 
-  def toLogSpace(score: Double, currentScale: Int) = {
+  def toLogSpace(score: Double, currentScale: Int): Double = {
     log(score) + currentScale * log(2d)
   }
 }

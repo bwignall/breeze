@@ -1,11 +1,12 @@
 package breeze.linalg
 
-import breeze.macros.expand
-import org.netlib.util.intW
-import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
 import breeze.generic.UFunc
-import breeze.linalg.operators.{OpSolveMatrixBy, OpMulMatrix}
+import breeze.linalg.operators.OpMulMatrix
+import breeze.linalg.operators.OpSolveMatrixBy
 import breeze.linalg.support.CanTranspose
+import breeze.macros.expand
+import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
+import org.netlib.util.intW
 
 /**
  * Computes the inverse of a given real matrix.
@@ -14,8 +15,9 @@ import breeze.linalg.support.CanTranspose
  * A \ B.
  */
 object inv extends UFunc {
-  implicit def canInvUsingLU_Double[T](
-      implicit luImpl: LU.primitive.Impl[T, (DenseMatrix[Double], Array[Int])]): Impl[T, DenseMatrix[Double]] = {
+  implicit def canInvUsingLU_Double[T](implicit
+    luImpl: LU.primitive.Impl[T, (DenseMatrix[Double], Array[Int])]
+  ): Impl[T, DenseMatrix[Double]] = {
     new Impl[T, DenseMatrix[Double]] {
       def apply(X: T): DenseMatrix[Double] = {
         // Should these type hints be necessary?
@@ -43,8 +45,9 @@ object inv extends UFunc {
     }
   }
 
-  implicit def canInvUsingLU_Float[T](
-      implicit luImpl: LU.primitive.Impl[T, (DenseMatrix[Float], Array[Int])]): Impl[T, DenseMatrix[Float]] = {
+  implicit def canInvUsingLU_Float[T](implicit
+    luImpl: LU.primitive.Impl[T, (DenseMatrix[Float], Array[Int])]
+  ): Impl[T, DenseMatrix[Float]] = {
     new Impl[T, DenseMatrix[Float]] {
       def apply(X: T): DenseMatrix[Float] = {
         // Should these type hints be necessary?
@@ -73,6 +76,3 @@ object inv extends UFunc {
   }
 
 }
-
-
-

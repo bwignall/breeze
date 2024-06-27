@@ -2,7 +2,6 @@ package breeze.gymnastics
 
 import org.scalatest.funsuite.AnyFunSuite
 
-
 class NotGivenTest extends AnyFunSuite {
   test("simple not given") {
     implicitly[NotGiven[String]]

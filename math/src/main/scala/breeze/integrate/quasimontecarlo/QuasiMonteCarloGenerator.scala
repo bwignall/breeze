@@ -37,7 +37,7 @@ trait QuasiMonteCarloGenerator {
 
   def getNext: Array[Double] = getNextUnsafe.clone()
 
-  def getNextInto(to: Array[Double]) = java.lang.System.arraycopy(getNextUnsafe, 0, to, 0, dimension)
+  def getNextInto(to: Array[Double]): Unit = java.lang.System.arraycopy(getNextUnsafe, 0, to, 0, dimension)
 
   def numGenerated: Long
 }

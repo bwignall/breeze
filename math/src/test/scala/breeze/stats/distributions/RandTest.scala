@@ -33,9 +33,9 @@ class RandTest extends AnyFunSuite {
 
     assert { t2 != t3 } // sanity check
 
-    val threads = for (i <- 1 to 2)
-      yield
-        new Thread {
+    val threads =
+      for (i <- 1 to 2)
+        yield new Thread {
           override def run(): Unit = { t2 = new Gaussian(0, 1).sample(10) }
         }
     threads.map(_.start)

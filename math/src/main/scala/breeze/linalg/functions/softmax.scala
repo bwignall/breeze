@@ -1,10 +1,11 @@
 package breeze.linalg
 
-import breeze.generic.{MappingUFunc, UFunc}
+import breeze.generic.MappingUFunc
+import breeze.generic.UFunc
 import breeze.linalg.support.CanTraverseValues
 import breeze.linalg.support.CanTraverseValues.ValuesVisitor
-import breeze.macros.expand
 import breeze.macros._
+import breeze.macros.expand
 
 /**
  * Computes the softmax (a.k.a. logSum) of an object. Softmax is defined as \log \sum_i \exp(x(i)), but
@@ -30,7 +31,7 @@ object softmax extends UFunc {
    * @param length
    * @return
    */
-  def array(arr: Array[Double], length: Int) = {
+  def array(arr: Array[Double], length: Int): Double = {
     val m = max.array(arr, length)
     if (m.isInfinite) {
       m
@@ -45,9 +46,10 @@ object softmax extends UFunc {
     }
   }
 
-  implicit def reduceDouble[T](
-      implicit iter: CanTraverseValues[T, Double],
-      maxImpl: max.Impl[T, Double]): Impl[T, Double] = new Impl[T, Double] {
+  implicit def reduceDouble[T](implicit
+    iter: CanTraverseValues[T, Double],
+    maxImpl: max.Impl[T, Double]
+  ): Impl[T, Double] = new Impl[T, Double] {
     def apply(v: T): Double = {
 
       val max = if (!iter.isTraversableAgain(v)) 0.0 else maxImpl(v)

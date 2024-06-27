@@ -1,14 +1,12 @@
 package breeze
 
-import java.util.zip._
 import java.io._
-
-import scala.collection.generic._
-import scala.collection.mutable
 import java.util.BitSet
-
+import java.util.zip._
 import scala.collection.compat._
 import scala.collection.compat.immutable.ArraySeq
+import scala.collection.generic._
+import scala.collection.mutable
 
 /**
  *
@@ -153,7 +151,7 @@ package object util {
     val r = Runtime.getRuntime
     val free = r.freeMemory / (1024 * 1024)
     val total = r.totalMemory / (1024 * 1024)
-    s"${(total - free)}M used; ${free}M free; ${total}M total"
+    s"${total - free}M used; ${free}M free; ${total}M total"
   }
 
   /**

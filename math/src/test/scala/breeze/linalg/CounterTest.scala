@@ -14,9 +14,11 @@ package breeze.linalg
  See the License for the specific language governing permissions and
  limitations under the License.
  */
+import breeze.math.MutableEnumeratedCoordinateField
 import breeze.math.TensorSpaceTestBase
 import breeze.stats.mean
 import org.scalacheck.Arbitrary
+import org.scalatest.Assertion
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.Checkers
 
@@ -25,7 +27,7 @@ import org.scalatestplus.scalacheck.Checkers
  */
 class CounterTest extends AnyFunSuite with Checkers {
   val TOLERANCE = 1e-4
-  def assertClose(a: Double, b: Double) =
+  def assertClose(a: Double, b: Double): Assertion =
     assert(math.abs(a - b) < TOLERANCE)
 
   test("Addition") {
@@ -83,7 +85,7 @@ class CounterTest extends AnyFunSuite with Checkers {
 }
 
 class CounterOps_IntTest extends TensorSpaceTestBase[Counter[Int, Int], Int, Int] {
-  val space = Counter.space[Int, Int]
+  val space: MutableEnumeratedCoordinateField[Counter[Int, Int], Int, Int] = Counter.space[Int, Int]
 
   val N = 30
   def genTriple: Arbitrary[(Counter[Int, Int], Counter[Int, Int], Counter[Int, Int])] = {

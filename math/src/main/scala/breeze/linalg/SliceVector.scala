@@ -4,14 +4,13 @@ import breeze.linalg.operators._
 import breeze.linalg.support.CanTraverseKeyValuePairs.KeyValuePairsVisitor
 import breeze.linalg.support.CanTraverseValues.ValuesVisitor
 import breeze.linalg.support._
+import breeze.macros._
 import breeze.macros.expand
 import breeze.math.Semiring
 import breeze.storage.Zero
 
 import scala.reflect.ClassTag
 import scala.{specialized => spec}
-
-import breeze.macros._
 
 /**
  * A SliceVector is a vector that is a view of another underlying tensor. For instance:
@@ -24,10 +23,9 @@ import breeze.macros._
  *
  * @author dlwh
  */
-class SliceVector[@spec(Int) K, @spec(Double, Int, Float, Long) V: ClassTag](
-    val tensor: Tensor[K, V],
-    val slices: IndexedSeq[K])
-    extends Vector[V]
+class SliceVector[@spec(Int) K, @spec(Double, Int, Float, Long) V: ClassTag](val tensor: Tensor[K, V],
+                                                                             val slices: IndexedSeq[K]
+) extends Vector[V]
     with VectorLike[V, SliceVector[K, V]] {
 
   def apply(i: Int): V = tensor(slices(i))
@@ -48,7 +46,7 @@ class SliceVector[@spec(Int) K, @spec(Double, Int, Float, Long) V: ClassTag](
 
   def activeValuesIterator: Iterator[V] = valuesIterator
 
-  override def toString = {
+  override def toString: String = {
     valuesIterator.mkString("SliceVector(", ", ", ")")
   }
 }
@@ -109,8 +107,8 @@ object SliceVector {
 
       /** Traverses all values from the given collection. */
       override def traverse(from: SliceVector[K, V], fn: KeyValuePairsVisitor[Int, V]): Unit = {
-        from.iterator.foreach {
-          case (k, v) => fn.visit(k, v)
+        from.iterator.foreach { case (k, v) =>
+          fn.visit(k, v)
         }
 
       }

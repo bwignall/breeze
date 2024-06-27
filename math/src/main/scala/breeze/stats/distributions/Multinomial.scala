@@ -16,16 +16,16 @@ package breeze.stats.distributions
  limitations under the License.
  */
 
+import breeze.compat.Scala3Compat._
+import breeze.compat._
 import breeze.linalg._
 import breeze.math._
 import breeze.numerics
 import breeze.numerics._
 import breeze.optimize.DiffFunction
 
-import scala.collection.mutable
 import scala.collection.compat._
-import breeze.compat.Scala3Compat._
-import breeze.compat._
+import scala.collection.mutable
 
 /**
  * Represents a Multinomial distribution over elements.
@@ -37,11 +37,11 @@ import breeze.compat._
  *
  * @author dlwh
  */
-case class Multinomial[T, I](params: T)(
-  implicit ev: ConversionOrSubtype[T, QuasiTensor[I, Double]],
+case class Multinomial[T, I](params: T)(implicit
+  ev: ConversionOrSubtype[T, QuasiTensor[I, Double]],
   sumImpl: breeze.linalg.sum.Impl[T, Double],
-  rand: RandBasis)
-    extends DiscreteDistr[I] {
+  rand: RandBasis
+) extends DiscreteDistr[I] {
   val sum = breeze.linalg.sum(params)
   require(sum != 0.0, "There's no mass!")
 
@@ -129,11 +129,11 @@ case class Multinomial[T, I](params: T)(
 
 }
 
-case class AliasTable[I](
-    probs: DenseVector[Double],
-    aliases: DenseVector[Int],
-    outcomes: IndexedSeq[I],
-    rand: RandBasis) {
+case class AliasTable[I](probs: DenseVector[Double],
+                         aliases: DenseVector[Int],
+                         outcomes: IndexedSeq[I],
+                         rand: RandBasis
+) {
   def draw(): I = {
     val roll = rand.randInt(outcomes.length).draw()
     val toss = rand.uniform.draw()
@@ -150,10 +150,11 @@ case class AliasTable[I](
  */
 object Multinomial {
 
-  def apply[T, I](params: T)(
-    implicit ev: ConversionOrSubtype[T, QuasiTensor[I, Double]],
+  def apply[T, I](params: T)(implicit
+    ev: ConversionOrSubtype[T, QuasiTensor[I, Double]],
     sumImpl: breeze.linalg.sum.Impl[T, Double],
-    rand: RandBasis): Multinomial[T, I] = new Multinomial(params)
+    rand: RandBasis
+  ): Multinomial[T, I] = new Multinomial(params)
 
   class ExpFam[T, I](exemplar: T)(implicit space: MutableFiniteCoordinateField[T, I, Double])
       extends ExponentialFamily[Multinomial[T, I], I]

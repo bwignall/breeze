@@ -1,12 +1,13 @@
 package breeze.linalg
 
-import java.util
+import breeze.linalg.BitVector
 import breeze.linalg.operators.BitVectorOps
 import breeze.linalg.support.CanMapValues.DenseCanMapValues
 import breeze.linalg.support.CanTraverseValues.ValuesVisitor
 import breeze.linalg.support._
 import breeze.storage.Zero
 
+import java.util
 import scala.reflect.ClassTag
 
 /**
@@ -76,11 +77,11 @@ class BitVector(val data: java.util.BitSet, val length: Int, val enforceLength: 
     else
       other match {
         case x: BitVector => !x.enforceLength || x.length == length
-        case _ => other.length == length
+        case _            => other.length == length
       }
   }
 
-  override def toString = {
+  override def toString: String = {
     activeKeysIterator.mkString("BitVector(", ", ", ")")
   }
 
@@ -88,7 +89,7 @@ class BitVector(val data: java.util.BitSet, val length: Int, val enforceLength: 
 
 object BitVector {
 
-  def apply(bools: Boolean*) = {
+  def apply(bools: Boolean*): BitVector = {
     val bs = new util.BitSet
     for (i <- 0 until bools.length if bools(i)) {
       bs.set(i)
@@ -97,7 +98,7 @@ object BitVector {
     new BitVector(bs, bools.length)
   }
 
-  def apply(length: Int, enforceLength: Boolean = true)(trues: Int*) = {
+  def apply(length: Int, enforceLength: Boolean = true)(trues: Int*): BitVector = {
     val bs = new util.BitSet
     for (i <- trues) {
       if (enforceLength && i >= length)
@@ -110,7 +111,7 @@ object BitVector {
   def zeros(length: Int, enforceLength: Boolean = true): BitVector =
     new BitVector(new util.BitSet(), length, enforceLength)
 
-  def ones(length: Int, enforceLength: Boolean = true) = {
+  def ones(length: Int, enforceLength: Boolean = true): BitVector = {
     val bs = new java.util.BitSet(length)
     bs.set(0, length)
     new BitVector(bs, length, enforceLength)
@@ -169,9 +170,10 @@ object BitVector {
       }
     }
 
-  implicit def canMapPairs[V2](
-      implicit man: ClassTag[V2],
-      zero: Zero[V2]): CanMapKeyValuePairs[BitVector, Int, Boolean, V2, DenseVector[V2]] =
+  implicit def canMapPairs[V2](implicit
+    man: ClassTag[V2],
+    zero: Zero[V2]
+  ): CanMapKeyValuePairs[BitVector, Int, Boolean, V2, DenseVector[V2]] =
     new CanMapKeyValuePairs[BitVector, Int, Boolean, V2, DenseVector[V2]] {
       def map(from: BitVector, fn: (Int, Boolean) => V2): DenseVector[V2] = {
         DenseVector.tabulate(from.length)(i => fn(i, from(i)))

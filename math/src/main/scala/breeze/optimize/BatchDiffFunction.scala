@@ -1,12 +1,11 @@
 package breeze.optimize
 
+import breeze.linalg.support.CanCopy
 import breeze.stats.distributions.Rand
 import breeze.util.Isomorphism
 
-import scala.collection.immutable
-import breeze.linalg.support.CanCopy
-
 import scala.collection.compat.immutable.ArraySeq
+import scala.collection.immutable
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -33,9 +32,9 @@ trait BatchDiffFunction[T] extends DiffFunction[T] with ((T, IndexedSeq[Int]) =>
   override def valueAt(x: T): Double = valueAt(x, fullRange)
   override def gradientAt(x: T): T = gradientAt(x, fullRange)
 
-  def apply(x: T, batch: IndexedSeq[Int]) = valueAt(x, batch)
+  def apply(x: T, batch: IndexedSeq[Int]): Double = valueAt(x, batch)
 
-  override def cached(implicit copy: CanCopy[T]) = {
+  override def cached(implicit copy: CanCopy[T]): DiffFunction[T] = {
     if (this.isInstanceOf[CachedBatchDiffFunction[_]]) {
       this
     } else {
@@ -82,7 +81,7 @@ trait BatchDiffFunction[T] extends DiffFunction[T] with ((T, IndexedSeq[Int]) =>
     /**
      * The full size of the data
      */
-    def fullRange: IndexedSeq[Int] = (0 until groups.length)
+    def fullRange: IndexedSeq[Int] = 0 until groups.length
   }
 
   override def throughLens[U](implicit l: Isomorphism[T, U]): BatchDiffFunction[U] = new BatchDiffFunction[U] {

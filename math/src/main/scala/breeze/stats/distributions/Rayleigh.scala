@@ -1,7 +1,10 @@
 package breeze.stats.distributions
 
-import breeze.numerics.constants.{Pi, γ}
-import breeze.numerics.{expm1, log, sqrt}
+import breeze.numerics.constants.Pi
+import breeze.numerics.constants.γ
+import breeze.numerics.expm1
+import breeze.numerics.log
+import breeze.numerics.sqrt
 
 case class Rayleigh(scale: Double)(implicit rand: RandBasis)
     extends ContinuousDistr[Double]
