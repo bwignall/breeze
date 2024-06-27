@@ -1,13 +1,14 @@
 package breeze.polynomial
 
 import algebra.instances.all.doubleAlgebra
-import breeze.benchmark.*
-import breeze.linalg.{BuildsRandomVectors, DenseMatrix}
-import breeze.stats.distributions.*
-import spire.math.*
-import spire.math.poly.*
-import breeze.macros.*
+import breeze.benchmark._
+import breeze.linalg.BuildsRandomVectors
+import breeze.linalg.DenseMatrix
+import breeze.macros._
+import breeze.stats.distributions._
 import com.google.caliper.Benchmark
+import spire.math._
+import spire.math.poly._
 
 object DensePolynomialBenchmark extends MyRunner(classOf[DensePolynomialBenchmark])
 

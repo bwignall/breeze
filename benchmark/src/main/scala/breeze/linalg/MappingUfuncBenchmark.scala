@@ -1,7 +1,8 @@
 package breeze.linalg
 
-import breeze.benchmark.*
-import breeze.generic.{MappingUFunc, UFunc}
+import breeze.benchmark._
+import breeze.generic.MappingUFunc
+import breeze.generic.UFunc
 import breeze.stats.distributions.RandBasis
 
 object MappingUfuncBenchmark extends MyRunner(classOf[MappingUfuncBenchmark])

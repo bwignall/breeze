@@ -1,10 +1,11 @@
 package breeze.linalg
 
-import breeze.benchmark.{BreezeBenchmark, MyRunner}
+import breeze.benchmark.BreezeBenchmark
+import breeze.benchmark.MyRunner
 import breeze.linalg.operators.DenseVectorSupportMethods
+import breeze.macros._
 import breeze.numerics._
 import breeze.stats.distributions.Rand
-import breeze.macros._
 
 /**
  * Created by dlwh on 8/14/15.

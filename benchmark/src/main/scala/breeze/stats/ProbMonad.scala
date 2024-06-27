@@ -1,10 +1,9 @@
 package breeze.linalg
 
 import breeze.benchmark._
-
 import breeze.linalg._
-import breeze.stats.distributions._
 import breeze.macros.cforRange
+import breeze.stats.distributions._
 
 object ProbMonadRunner extends MyRunner(classOf[ProbMonadBenchmark])
 

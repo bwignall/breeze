@@ -18,7 +18,8 @@
 
 package breeze.linalg
 
-import breeze.benchmark.{BreezeBenchmark, MyRunner}
+import breeze.benchmark.BreezeBenchmark
+import breeze.benchmark.MyRunner
 import breeze.macros._
 
 /**

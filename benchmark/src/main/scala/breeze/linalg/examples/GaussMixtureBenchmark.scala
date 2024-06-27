@@ -1,10 +1,11 @@
 package breeze.linalg
 package examples
 
+import breeze.benchmark.BreezeBenchmark
+import breeze.benchmark.MyRunner
+import breeze.linalg.DenseVector
 import breeze.numerics._
 import breeze.stats.distributions._
-import breeze.benchmark.{BreezeBenchmark, MyRunner}
-import breeze.linalg.DenseVector
 
 /**
  * Created by dlwh on 8/20/15.

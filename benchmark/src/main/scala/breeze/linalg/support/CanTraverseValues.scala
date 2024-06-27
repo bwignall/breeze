@@ -1,7 +1,7 @@
 package breeze.linalg.support
 
-import breeze.benchmark.*
-import breeze.linalg.*
+import breeze.benchmark._
+import breeze.linalg._
 import breeze.stats.distributions.RandBasis
 
 object CanTraverseValuesBenchmark extends MyRunner(classOf[CanTraverseValuesBenchmark])

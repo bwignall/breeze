@@ -1,9 +1,9 @@
 package breeze.stats.mcmc
 
-import breeze.benchmark.*
-import breeze.stats.distributions.*
-import breeze.stats.mcmc.*
+import breeze.benchmark._
 import breeze.macros.cforRange
+import breeze.stats.distributions._
+import breeze.stats.mcmc._
 import com.google.caliper.Benchmark
 
 object MetropolisHastingsRunner extends MyRunner(classOf[MetropolisHastingsBenchmark])

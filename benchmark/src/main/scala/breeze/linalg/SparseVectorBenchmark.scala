@@ -18,7 +18,7 @@
 
 package breeze.linalg
 
-import breeze.benchmark.*
+import breeze.benchmark._
 import breeze.stats.distributions.RandBasis
 
 object SparseVectorBenchmark extends MyRunner(classOf[SparseVectorBenchmark])

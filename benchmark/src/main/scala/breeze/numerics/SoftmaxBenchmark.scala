@@ -1,9 +1,11 @@
 package breeze.numerics
 
-import breeze.benchmark.{BreezeBenchmark, MyRunner}
-import breeze.linalg.{softmax, DenseVector}
-import breeze.stats.distributions.Rand
+import breeze.benchmark.BreezeBenchmark
+import breeze.benchmark.MyRunner
+import breeze.linalg.DenseVector
+import breeze.linalg.softmax
 import breeze.macros._
+import breeze.stats.distributions.Rand
 
 /**
  * Created by dlwh on 10/3/15.

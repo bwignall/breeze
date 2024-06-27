@@ -19,8 +19,8 @@
 package breeze.benchmark
 
 import breeze.stats.distributions.RandBasis
-import com.google.caliper.runner.CaliperMain
 import com.google.caliper.Benchmark
+import com.google.caliper.runner.CaliperMain
 
 /**
  * Extend this to create an actual benchmarking class.

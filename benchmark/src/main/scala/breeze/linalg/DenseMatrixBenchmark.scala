@@ -1,8 +1,8 @@
 package breeze.linalg
 
-import breeze.benchmark.*
-import breeze.stats.distributions.*
-import breeze.macros.*
+import breeze.benchmark._
+import breeze.macros._
+import breeze.stats.distributions._
 import com.google.caliper.Benchmark
 
 object DenseMatrixBenchmark extends MyRunner(classOf[DenseMatrixBenchmark])
