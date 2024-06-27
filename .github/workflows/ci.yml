@@ -16,6 +16,8 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  SBT_OPTS: '-Xmx3G'
+  JAVA_OPTS: '-Xmx3G'
 
 
 concurrency:

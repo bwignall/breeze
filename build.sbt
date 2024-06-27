@@ -51,3 +51,7 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 Test / fork := true
 Test / javaOptions := Seq("-Xmx3G")
+
+// CI
+
+ThisBuild / githubWorkflowEnv ++= Map("SBT_OPTS" -> "-Xmx3G", "JAVA_OPTS" -> "-Xmx3G")
