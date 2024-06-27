@@ -71,5 +71,5 @@ trait SparseArrayLike[V] {
 
   def toIndexedSeq: List[V] = List.tabulate(length)(apply)
 
-  def toMap: Map[Int,V] = keysIterator.zip(valuesIterator).toMap
+  def toMap: Map[Int, V] = keysIterator.zip(valuesIterator).toMap
 }

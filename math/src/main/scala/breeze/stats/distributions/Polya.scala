@@ -61,7 +61,8 @@ object Polya {
   /**
    * Creates a new symmetric Polya of dimension k
    */
-  def sym(alpha: Double, k: Int)(implicit rand: RandBasis): Polya[DenseVector[Double],Int] = this(ArrayUtil.fillNewArray(k, alpha))
+  def sym(alpha: Double, k: Int)(implicit rand: RandBasis): Polya[DenseVector[Double], Int] =
+    this(ArrayUtil.fillNewArray(k, alpha))
 
   /**
    * Creates a new Polya of dimension k with the given parameters

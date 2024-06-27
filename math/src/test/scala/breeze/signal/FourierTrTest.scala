@@ -58,10 +58,12 @@ class FourierTrTest extends AnyFunSuite {
 
   val testNormThreshold = 1e-12
 
-  val test16: DenseVector[Double] = DenseVector[Double](0.814723686393179, 0.905791937075619, 0.126986816293506, 0.913375856139019,
-                                   0.63235924622541, 0.0975404049994095, 0.278498218867048, 0.546881519204984,
-                                   0.957506835434298, 0.964888535199277, 0.157613081677548, 0.970592781760616,
-                                   0.957166948242946, 0.485375648722841, 0.8002804688888, 0.141886338627215)
+  val test16: DenseVector[Double] = DenseVector[Double](0.814723686393179, 0.905791937075619, 0.126986816293506,
+                                                        0.913375856139019, 0.63235924622541, 0.0975404049994095,
+                                                        0.278498218867048, 0.546881519204984, 0.957506835434298,
+                                                        0.964888535199277, 0.157613081677548, 0.970592781760616,
+                                                        0.957166948242946, 0.485375648722841, 0.8002804688888,
+                                                        0.141886338627215)
 
   val test16C: DenseVector[Complex] = DenseVector[Complex](
     Complex(0.814723686393179, 0),
@@ -220,8 +222,8 @@ class FourierTrTest extends AnyFunSuite {
   }
 
   test("fourierShift/iFourierShift") {
-    val dvOdd = DenseVector.tabulate(5)(((i: Int)) => i)
-    val dvEven = DenseVector.tabulate(6)(((i: Int)) => i)
+    val dvOdd = DenseVector.tabulate(5)((i: Int) => i)
+    val dvEven = DenseVector.tabulate(6)((i: Int) => i)
     assert(fourierShift(dvOdd) == DenseVector(3, 4, 0, 1, 2))
     assert(iFourierShift(dvOdd) == DenseVector(2, 3, 4, 0, 1))
     assert(fourierShift(dvEven) == DenseVector(3, 4, 5, 0, 1, 2))

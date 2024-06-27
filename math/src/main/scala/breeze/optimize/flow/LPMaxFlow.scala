@@ -54,7 +54,7 @@ class LPMaxFlow[N](val g: FlowGraph[N]) {
     (Map.empty ++ edgeMap.mapValues(solution.valueOf(_)), solution.value)
   }
 
-  def minCostFlow(minimumFlow: Double = -1): (Map[Edge,Double], Double) = {
+  def minCostFlow(minimumFlow: Double = -1): (Map[Edge, Double], Double) = {
     val mf = if (minimumFlow < 0) maxFlow._2 else minimumFlow
 
     val queue = collection.mutable.Queue[N]()

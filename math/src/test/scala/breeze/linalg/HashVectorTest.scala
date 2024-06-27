@@ -261,18 +261,18 @@ abstract class HashVectorPropertyTestBase[T: ClassTag: Zero] extends TensorSpace
 class HashVectorOps_DoubleTest
     extends HashVectorPropertyTestBase[Double]
     with DoubleValuedTensorSpaceTestBase[HashVector[Double], Int] {
-  val space: MutableEnumeratedCoordinateField[HashVector[Double],Int,Double] = HashVector.space[Double]
+  val space: MutableEnumeratedCoordinateField[HashVector[Double], Int, Double] = HashVector.space[Double]
   def genScalar: Arbitrary[Double] = RandomInstanceSupport.genReasonableDouble
 }
 
 class HashVectorOps_FloatTest extends HashVectorPropertyTestBase[Float] {
-  val space: MutableEnumeratedCoordinateField[HashVector[Float],Int,Float] = HashVector.space[Float]
+  val space: MutableEnumeratedCoordinateField[HashVector[Float], Int, Float] = HashVector.space[Float]
 
   override val TOL: Double = 1e-2
   def genScalar: Arbitrary[Float] = Arbitrary { RandomInstanceSupport.genReasonableDouble.arbitrary.map(_.toFloat) }
 }
 
 class HashVectorOps_IntTest extends HashVectorPropertyTestBase[Int] {
-  val space: MutableEnumeratedCoordinateField[HashVector[Int],Int,Int] = HashVector.space[Int]
+  val space: MutableEnumeratedCoordinateField[HashVector[Int], Int, Int] = HashVector.space[Int]
   def genScalar: Arbitrary[Int] = Arbitrary { Gen.Choose.chooseInt.choose(-1000, 1000) }
 }

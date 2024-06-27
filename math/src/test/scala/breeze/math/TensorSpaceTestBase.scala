@@ -39,21 +39,21 @@ trait TensorSpaceTestBase[V, I, S] extends MutableModuleTestBase[V, S] {
   }
 
   test("norm triangle inequality") {
-    check(Prop.forAll { ((trip: (V, V, V))) =>
+    check(Prop.forAll { (trip: (V, V, V)) =>
       val (a, b, c) = trip
       (1.0 - TOL) * norm(a + b) <= norm(b) + norm(a)
     })
   }
 
   test("norm(v) == 0 iff v == 0") {
-    check(Prop.forAll { ((a: V)) =>
+    check(Prop.forAll { (a: V) =>
       val z = zeroLike(a)
       norm(z) == 0.0 && (close(z, a, TOL) || norm(a) != 0.0)
     })
   }
 
   test("dot product distributes over vector addition") {
-    check(Prop.forAll { ((trip: (V, V, V))) =>
+    check(Prop.forAll { (trip: (V, V, V)) =>
       val (a, b, c) = trip
       val res = scalars.close(scalars.+(a.dot(b), a.dot(c)), a.dot(b + c), TOL * tolRef(a, b, c))
       if (!res)
@@ -73,7 +73,7 @@ trait TensorSpaceTestBase[V, I, S] extends MutableModuleTestBase[V, S] {
 
   // zip map values
   test("zip map of + is the same as +") {
-    check(Prop.forAll { ((trip: (V, V, V))) =>
+    check(Prop.forAll { (trip: (V, V, V)) =>
       val (a, b, _) = trip
       zipMapValues.map(a, b, { scalars.+(_: S, _: S) }) == (a + b)
     })
@@ -81,7 +81,7 @@ trait TensorSpaceTestBase[V, I, S] extends MutableModuleTestBase[V, S] {
   }
 
   test("Elementwise mult of vectors distributes over vector addition") {
-    check(Prop.forAll { ((trip: (V, V, V))) =>
+    check(Prop.forAll { (trip: (V, V, V)) =>
       val (a, b, c) = trip
       val ab = copy(a)
       ab += b
@@ -93,7 +93,7 @@ trait TensorSpaceTestBase[V, I, S] extends MutableModuleTestBase[V, S] {
   }
 
   test("Vector element-wise mult distributes over vector addition") {
-    check(Prop.forAll { ((trip: (V, V, V))) =>
+    check(Prop.forAll { (trip: (V, V, V)) =>
       val (a, b, c) = trip
       close((a + b) *:* c, (b *:* c) + (a *:* c), TOL * tolRef(a, b, c))
     })
@@ -103,7 +103,7 @@ trait TensorSpaceTestBase[V, I, S] extends MutableModuleTestBase[V, S] {
 //      s == 0 || close( (a + b)/ s, (b / s +a / s), TOL)
 //    })
 
-    check(Prop.forAll { ((trip: (V, V, V))) =>
+    check(Prop.forAll { (trip: (V, V, V)) =>
       val (a, b, c) = trip
       val ab = copy(a)
       ab += b
@@ -129,7 +129,7 @@ trait DoubleValuedTensorSpaceTestBase[V, I] extends TensorSpaceTestBase[V, I, Do
   }
 
   test("normalize") {
-    check(Prop.forAll { ((v: V)) =>
+    check(Prop.forAll { (v: V) =>
       val aNorm = normalize(v)
       (norm(aNorm) - 1.0) <= TOL || norm(aNorm) == 0.0
     })

@@ -296,17 +296,18 @@ class EitherIndex[L, R](left: Index[L], right: Index[R]) extends Index[Either[L,
    */
   def rightOffset = left.size
 
-  def unapply(i: Int): Option[Either[L,R]] = {
+  def unapply(i: Int): Option[Either[L, R]] = {
     if (i < 0 || i >= size) None
     else if (i < left.size) Some(Left(left.get(i)))
     else Some(Right(right.get(i - left.size)))
   }
 
-  def pairs: Iterator[(Either[L,R], Int)] = left.pairs.map { case (l, i) => Left(l) -> i } ++ right.pairs.map { case (r, i) =>
-    Right(r) -> (i + left.size)
+  def pairs: Iterator[(Either[L, R], Int)] = left.pairs.map { case (l, i) => Left(l) -> i } ++ right.pairs.map {
+    case (r, i) =>
+      Right(r) -> (i + left.size)
   }
 
-  def iterator: Iterator[Either[L,R]] = left.iterator.map { Left(_) } ++ right.map { Right(_) }
+  def iterator: Iterator[Either[L, R]] = left.iterator.map { Left(_) } ++ right.map { Right(_) }
 
   override def size: Int = left.size + right.size
 }
@@ -335,7 +336,8 @@ class OptionIndex[T](inner: Index[T]) extends Index[Option[T]] {
     else None
   }
 
-  def pairs: Iterator[(Option[T], Int)] = inner.pairs.map { case (l, i) => Some(l) -> i } ++ Iterator(None -> inner.size)
+  def pairs: Iterator[(Option[T], Int)] =
+    inner.pairs.map { case (l, i) => Some(l) -> i } ++ Iterator(None -> inner.size)
 
   def iterator: Iterator[Option[T]] = inner.iterator.map { Some(_) } ++ Iterator(None)
 

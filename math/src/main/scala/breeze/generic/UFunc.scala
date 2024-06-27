@@ -211,7 +211,7 @@ trait ZeroPreservingUFuncOps extends ZeroPreservingUFuncLowPrio with MappingUFun
   implicit def canTransformActiveValuesUFunc[Tag <: ZeroPreservingUFunc, T, V](implicit
     canTransform: CanTransformValues[T, V],
     impl: UImpl[Tag, V, V]
-  ): InPlaceImpl[Tag, T] = { ((v: T)) =>
+  ): InPlaceImpl[Tag, T] = { (v: T) =>
     canTransform.transformActive(v, impl.apply)
   }
 

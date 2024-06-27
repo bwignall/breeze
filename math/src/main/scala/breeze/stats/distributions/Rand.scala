@@ -113,7 +113,7 @@ final private case class MappedRand[@specialized(Int, Double) T, @specialized(In
 ) extends Rand[U] {
   def draw() = func(rand.draw())
   override def drawOpt() = rand.drawOpt().map(func)
-  override def map[E](f: U => E): Rand[E] = MappedRand(rand, ((x: T)) => f(func(x)))
+  override def map[E](f: U => E): Rand[E] = MappedRand(rand, (x: T) => f(func(x)))
 }
 
 final private case class FlatMappedRand[@specialized(Int, Double) T, @specialized(Int, Double) U](rand: Rand[T],
@@ -121,7 +121,7 @@ final private case class FlatMappedRand[@specialized(Int, Double) T, @specialize
 ) extends Rand[U] {
   def draw() = func(rand.draw()).draw()
   override def drawOpt() = rand.drawOpt().flatMap(x => func(x).drawOpt())
-  override def flatMap[E](f: U => Rand[E]): Rand[E] = FlatMappedRand(rand, ((x: T)) => f(func(x).draw()))
+  override def flatMap[E](f: U => Rand[E]): Rand[E] = FlatMappedRand(rand, (x: T) => f(func(x).draw()))
 }
 
 private trait PredicateRandDraws[@specialized(Int, Double) T] extends Rand[T] {

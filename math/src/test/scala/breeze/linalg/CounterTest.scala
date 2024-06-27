@@ -85,7 +85,7 @@ class CounterTest extends AnyFunSuite with Checkers {
 }
 
 class CounterOps_IntTest extends TensorSpaceTestBase[Counter[Int, Int], Int, Int] {
-  val space: MutableEnumeratedCoordinateField[Counter[Int,Int],Int,Int] = Counter.space[Int, Int]
+  val space: MutableEnumeratedCoordinateField[Counter[Int, Int], Int, Int] = Counter.space[Int, Int]
 
   val N = 30
   def genTriple: Arbitrary[(Counter[Int, Int], Counter[Int, Int], Counter[Int, Int])] = {

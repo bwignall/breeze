@@ -1111,7 +1111,15 @@ object ByteConverterLittleEndian extends ByteConverter {
     ByteConverterBigEndian.bytesToInt64(b7, b6, b5, b4, b3, b2, b1, b0)
 //  override def bytesToUInt64(b0: Byte, b1 : Byte, b2 : Byte, b3 : Byte, b4 : Byte, b5 : Byte, b6 : Byte, b7 : Byte)
 //  = ByteConverterBigEndian.bytesToUInt64(b7, b6, b5, b4, b3, b2, b1, b0)
-  override def bytesToUInt64Shifted(b0: Byte, b1: Byte, b2: Byte, b3: Byte, b4: Byte, b5: Byte, b6: Byte, b7: Byte): Long =
+  override def bytesToUInt64Shifted(b0: Byte,
+                                    b1: Byte,
+                                    b2: Byte,
+                                    b3: Byte,
+                                    b4: Byte,
+                                    b5: Byte,
+                                    b6: Byte,
+                                    b7: Byte
+  ): Long =
     ByteConverterBigEndian.bytesToUInt64Shifted(b7, b6, b5, b4, b3, b2, b1, b0)
 
 //reverse is pretty slow, and a time hog. Therefore, unfortunately, the following code reuse is not practical

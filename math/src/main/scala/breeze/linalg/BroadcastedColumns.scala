@@ -35,9 +35,10 @@ import breeze.linalg.support._
  */
 case class BroadcastedColumns[T, ColType](underlying: T)
     extends BroadcastedLike[T, ColType, BroadcastedColumns[T, ColType]] {
-  def repr: BroadcastedColumns[T,ColType] = this
+  def repr: BroadcastedColumns[T, ColType] = this
 
-  def iterator(implicit canIterateAxis: CanIterateAxis[T, Axis._0.type, ColType]): Iterator[ColType] = canIterateAxis(underlying, Axis._0)
+  def iterator(implicit canIterateAxis: CanIterateAxis[T, Axis._0.type, ColType]): Iterator[ColType] =
+    canIterateAxis(underlying, Axis._0)
 
   def foldLeft[B](
     z: B

@@ -21,7 +21,9 @@ import breeze.stats.distributions.RandBasis
 
 trait ProvidesTransformedQuasiMonteCarlo {
 
-  def quasiMonteCarloIntegrate(f: Array[Double] => Double)(variables: QuasiRandomVariableSpec*)(numSamples: Long): Double = {
+  def quasiMonteCarloIntegrate(
+    f: Array[Double] => Double
+  )(variables: QuasiRandomVariableSpec*)(numSamples: Long): Double = {
     val generator = new TransformedQuasiMonteCarloGenerator(variables: _*)
     var fSum: Double = 0
 

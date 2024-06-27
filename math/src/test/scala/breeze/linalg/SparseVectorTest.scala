@@ -447,12 +447,12 @@ abstract class SparseVectorPropertyTestBase[T: ClassTag: Zero: Semiring]
 class SparseVectorOps_DoubleTest
     extends SparseVectorPropertyTestBase[Double]
     with DoubleValuedTensorSpaceTestBase[SparseVector[Double], Int] {
-  val space: MutableEnumeratedCoordinateField[SparseVector[Double],Int,Double] = SparseVector.space[Double]
+  val space: MutableEnumeratedCoordinateField[SparseVector[Double], Int, Double] = SparseVector.space[Double]
   def genScalar: Arbitrary[Double] = RandomInstanceSupport.genReasonableDouble
 }
 
 class SparseVectorOps_FloatTest extends SparseVectorPropertyTestBase[Float] {
-  val space: MutableEnumeratedCoordinateField[SparseVector[Float],Int,Float] = SparseVector.space[Float]
+  val space: MutableEnumeratedCoordinateField[SparseVector[Float], Int, Float] = SparseVector.space[Float]
 
   override val TOL: Double = 1e-2
   def genScalar: Arbitrary[Float] = Arbitrary { RandomInstanceSupport.genReasonableDouble.arbitrary.map(_.toFloat) }
@@ -460,6 +460,6 @@ class SparseVectorOps_FloatTest extends SparseVectorPropertyTestBase[Float] {
 }
 
 class SparseVectorOps_IntTest extends SparseVectorPropertyTestBase[Int] {
-  val space: MutableEnumeratedCoordinateField[SparseVector[Int],Int,Int] = SparseVector.space[Int]
+  val space: MutableEnumeratedCoordinateField[SparseVector[Int], Int, Int] = SparseVector.space[Int]
   def genScalar: Arbitrary[Int] = Arbitrary { Gen.Choose.chooseInt.choose(-1000, 1000) }
 }

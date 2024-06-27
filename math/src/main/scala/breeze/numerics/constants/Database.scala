@@ -24,7 +24,7 @@ object Database {
    * @param regex enter a regex object (i.e. """regex expression""".r)
    * @return returns a vector of (String, Double) objects, which contain the full entry name (String) and the value (Double)
    */
-  def value(regex: Regex): HashMap[String,Double] = databaseHM.collect {
+  def value(regex: Regex): HashMap[String, Double] = databaseHM.collect {
     case (key: String, (value: Double, _, _)) if regex.findFirstIn(key).nonEmpty => (key, value)
   }
 
@@ -38,7 +38,7 @@ object Database {
    * @param regex enter a regex object (i.e. """regex expression""".r)
    * @return returns a vector of (String, Double) objects, which contain the full entry name (String) and the uncertainty (Double)
    */
-  def uncertainty(regex: Regex): HashMap[String,Double] = databaseHM.collect {
+  def uncertainty(regex: Regex): HashMap[String, Double] = databaseHM.collect {
     case (key: String, (_, uncert: Double, _)) if regex.findFirstIn(key).nonEmpty => (key, uncert)
   }
 
@@ -52,7 +52,7 @@ object Database {
    * @param regex enter a regex object (i.e. """regex expression""".r)
    * @return returns a vector of (String, Double) objects, which contain the full entry name (String) and the uncertainty (Double)
    */
-  def unit(regex: Regex): HashMap[String,String] = databaseHM.collect {
+  def unit(regex: Regex): HashMap[String, String] = databaseHM.collect {
     case (key: String, (_, _, unit: String)) if regex.findFirstIn(key).nonEmpty => (key, unit)
   }
 

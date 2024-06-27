@@ -18,7 +18,8 @@ class NonstiffOdeTest extends AnyFunSuite {
 
   // Euler Equations vs. Matlab ode113
   // http://www.mathworks.com/help/matlab/math/ordinary-differential-equations.html#f1-40077
-  val f: (DenseVector[Double], Double) => DenseVector[Double] = (y: DenseVector[Double], t: Double) => DenseVector(y(1) * y(2), -y(0) * y(2), -0.51 * y(0) * y(1))
+  val f: (DenseVector[Double], Double) => DenseVector[Double] = (y: DenseVector[Double], t: Double) =>
+    DenseVector(y(1) * y(2), -y(0) * y(2), -0.51 * y(0) * y(1))
   val y0: DenseVector[Double] = DenseVector(0.0, 1.0, 1.0)
   val t: Array[Double] = Array(0.0, 12.0)
   val ans: DenseVector[Double] = DenseVector(-0.707186602982020, -0.709046793058523, 0.863898186330983)

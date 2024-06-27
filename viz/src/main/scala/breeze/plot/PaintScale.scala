@@ -342,7 +342,8 @@ object PaintScale {
   lazy val RedToGreen: Array[Color] = createGradient(Color.RED, Color.GREEN, 500)
 
   /** Produces a gradient through green, yellow, orange, red */
-  lazy val GreenYelloOrangeRed: Array[Color] = createMultiGradient(Array(Color.green, Color.yellow, Color.orange, Color.red), 500)
+  lazy val GreenYelloOrangeRed: Array[Color] =
+    createMultiGradient(Array(Color.green, Color.yellow, Color.orange, Color.red), 500)
 
   /** Produces a gradient through the rainbow: violet, blue, green, yellow, orange, red */
   lazy val Rainbow: Array[Color] = createMultiGradient(

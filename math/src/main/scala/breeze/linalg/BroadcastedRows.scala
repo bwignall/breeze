@@ -14,9 +14,10 @@ import breeze.linalg.support._
  * @tparam T the type of the tensor
  */
 case class BroadcastedRows[T, RowType](underlying: T) extends BroadcastedLike[T, RowType, BroadcastedRows[T, RowType]] {
-  def repr: BroadcastedRows[T,RowType] = this
+  def repr: BroadcastedRows[T, RowType] = this
 
-  def iterator(implicit canIterateAxis: CanIterateAxis[T, Axis._1.type, RowType]): Iterator[RowType] = canIterateAxis(underlying, Axis._1)
+  def iterator(implicit canIterateAxis: CanIterateAxis[T, Axis._1.type, RowType]): Iterator[RowType] =
+    canIterateAxis(underlying, Axis._1)
 
   def foldLeft[B](
     z: B

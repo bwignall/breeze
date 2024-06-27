@@ -167,7 +167,10 @@ class LBFGSB(lowerBounds: DenseVector[Double],
     )
   }
 
-  protected def getGeneralizedCauchyPoint(history: History, x: DenseVector[Double], g: DenseVector[Double]): (DenseVector[Double], DenseVector[Double]) = {
+  protected def getGeneralizedCauchyPoint(history: History,
+                                          x: DenseVector[Double],
+                                          g: DenseVector[Double]
+  ): (DenseVector[Double], DenseVector[Double]) = {
     import history._
     // Algorithm CP:Computation of generalized Cauchy point
     val n = x.length
@@ -309,7 +312,10 @@ class LBFGSB(lowerBounds: DenseVector[Double],
     subspaceMinX
   }
 
-  protected def updateSkYkHessianApproxMat(history: History, newS: DenseVector[Double], newY: DenseVector[Double]): History = {
+  protected def updateSkYkHessianApproxMat(history: History,
+                                           newS: DenseVector[Double],
+                                           newY: DenseVector[Double]
+  ): History = {
     val newHistory = {
       import history._
       if (0 == yHistory.cols) { // yHistory.cols means update times

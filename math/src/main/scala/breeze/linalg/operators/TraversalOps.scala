@@ -135,7 +135,7 @@ trait DenseVector_TraversalOps extends Vector_TraversalOps {
       def traverse(from: DenseVector[V], fn: CanTraverseKeyValuePairs.KeyValuePairsVisitor[Int, V]): Unit = {
         import from._
 
-        fn.visitArray(((ind: Int)) => (ind - offset) / stride, data, offset, length, stride)
+        fn.visitArray((ind: Int) => (ind - offset) / stride, data, offset, length, stride)
       }
 
     }
@@ -371,6 +371,6 @@ trait DenseMatrix_TraversalOps extends TensorLowPrio {
     }
   }
 
-  implicit def canCopy_DM[V: ClassTag]: CanCopy[DenseMatrix[V]] = ((v1: DenseMatrix[V])) => v1.copy
+  implicit def canCopy_DM[V: ClassTag]: CanCopy[DenseMatrix[V]] = (v1: DenseMatrix[V]) => v1.copy
 
 }

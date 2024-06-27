@@ -53,7 +53,10 @@ trait BinaryRegistry[A, B, Op, R]
   protected def bindingMissing(a: A, b: B): R =
     throw new UnsupportedOperationException("Types not found!" + a + b + " " + ops)
 
-  protected def multipleOptions(a: A, b: B, m: Map[(Class[_], Class[_]), UImpl2[Op, _ <: A, _ <: B, _ <: R]]): Nothing = {
+  protected def multipleOptions(a: A,
+                                b: B,
+                                m: Map[(Class[_], Class[_]), UImpl2[Op, _ <: A, _ <: B, _ <: R]]
+  ): Nothing = {
     throw new RuntimeException("Multiple bindings for method: " + m)
   }
 
@@ -119,7 +122,9 @@ trait BinaryRegistry[A, B, Op, R]
     }
   }
 
-  def register[AA <: A, BB <: B](op: UImpl2[Op, AA, BB, _ <: R])(implicit cA: ClassTag[AA], cB: ClassTag[BB]): UImpl2[Op,AA,BB,R] = {
+  def register[AA <: A, BB <: B](
+    op: UImpl2[Op, AA, BB, _ <: R]
+  )(implicit cA: ClassTag[AA], cB: ClassTag[BB]): UImpl2[Op, AA, BB, R] = {
     super.register(cA.runtimeClass, cB.runtimeClass, op)
     op
   }

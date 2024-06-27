@@ -19,8 +19,8 @@ class NonlinearMinimizerTest extends OptimizeTestBase {
           -1.0434994471390804, -0.13037609428980368, -6.097698907163584, 27.775920405610677, -5.574220233644466,
           -3.675310432634351, -0.40639564652095117, 2.29625304115155, -5.574220233644466, 12.21329172136971)
   )
-  val f: DenseVector[Double] = DenseVector(-1.2320199653150048, -0.14220655875869606, 0.38477404739124765, -0.3480575854151014,
-                      -0.4729810900829228)
+  val f: DenseVector[Double] = DenseVector(-1.2320199653150048, -0.14220655875869606, 0.38477404739124765,
+                                           -0.3480575854151014, -0.4729810900829228)
 
   val cost: QuadraticMinimizer.Cost = QuadraticMinimizer.Cost(H, f *:* -1.0)
   val init: DenseVector[Double] = DenseVector.zeros[Double](n)

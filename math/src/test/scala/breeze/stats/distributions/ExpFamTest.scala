@@ -20,7 +20,7 @@ trait ExpFamTest[D <: Density[T] with Rand[T], T] extends RandTestBase {
   def paramsClose(p: Parameter, b: Parameter): Boolean
 
   test("MLE is consistent") {
-    check(Prop.forAll { ((p: expFam.Parameter)) =>
+    check(Prop.forAll { (p: expFam.Parameter) =>
       try {
         val dist = expFam.distribution(p)
         val suffstat = dist.sample(numSamples).map(sufficientStatisticFor).reduce(_ + _)
@@ -38,7 +38,7 @@ trait ExpFamTest[D <: Density[T] with Rand[T], T] extends RandTestBase {
   }
 
   test("Rescale doesn't affect MLE") {
-    check(Prop.forAll { ((p: expFam.Parameter)) =>
+    check(Prop.forAll { (p: expFam.Parameter) =>
       val dist: D = expFam.distribution(p)
       val suffstat = dist.sample(100).map(sufficientStatisticFor).reduce(_ + _)
       val mle = expFam.mle(suffstat)

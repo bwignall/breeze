@@ -318,7 +318,7 @@ trait Counter2Ops {
       extends CanZipMapValues[Counter2[K1, K2, V], V, RV, Counter2[K1, K2, RV]] {
 
     /**Maps all corresponding values from the two collection. */
-    def map(from: Counter2[K1, K2, V], from2: Counter2[K1, K2, V], fn: (V, V) => RV): Counter2[K1,K2,RV] = {
+    def map(from: Counter2[K1, K2, V], from2: Counter2[K1, K2, V], fn: (V, V) => RV): Counter2[K1, K2, RV] = {
       val result = Counter2[K1, K2, RV]()
       for (k <- from.keySet ++ from2.keySet) {
         result(k) = fn(from(k), from2(k))

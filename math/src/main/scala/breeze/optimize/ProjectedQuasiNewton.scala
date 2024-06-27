@@ -81,7 +81,8 @@ class CompactHessian(M: DenseMatrix[Double],
       v * sigma - u
     }
   }
-  lazy val N: DenseMatrix[Double] = DenseMatrix.horzcat(collectionOfVectorsToMatrix(S).t * sigma, collectionOfVectorsToMatrix(Y).t)
+  lazy val N: DenseMatrix[Double] =
+    DenseMatrix.horzcat(collectionOfVectorsToMatrix(S).t * sigma, collectionOfVectorsToMatrix(Y).t)
 }
 
 class ProjectedQuasiNewton(convergenceCheck: ConvergenceCheck[DenseVector[Double]],
@@ -165,7 +166,10 @@ class ProjectedQuasiNewton(convergenceCheck: ConvergenceCheck[DenseVector[Double
    * @param dir The step direction
    * @return stepSize
    */
-  protected def determineStepSize(state: State, f: DiffFunction[DenseVector[Double]], dir: DenseVector[Double]): Double = {
+  protected def determineStepSize(state: State,
+                                  f: DiffFunction[DenseVector[Double]],
+                                  dir: DenseVector[Double]
+  ): Double = {
     val x = state.x
     val grad = state.grad
 

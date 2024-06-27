@@ -779,7 +779,7 @@ class LinearAlgebraTest extends AnyFunSuite with Checkers with DoubleImplicits {
 
     val a = SparseVector.tabulate(5)(identity)
     val b = SparseVector.zeros[Double](5)
-    assert(reverse(a) === SparseVector.tabulate(5)(((i: Int)) => 4 - i))
+    assert(reverse(a) === SparseVector.tabulate(5)((i: Int) => 4 - i))
     assert(reverse(b) === b)
     b(2) = 2.0
     assert(reverse(b) === b)

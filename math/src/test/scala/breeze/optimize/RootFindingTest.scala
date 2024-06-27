@@ -8,12 +8,12 @@ import org.scalatest.funsuite.AnyFunSuite
   * @author abertout
   **/
 class RootFindingTest extends AnyFunSuite {
-  val f: Double => Double = ((x: Double)) => x * x
-  val f2: Double => Double = ((x: Double)) => math.sin(x)
-  val f2d: Double => Double = ((x: Double)) => math.cos(x)
-  val f3: Double => Double = ((x: Double)) => (x + 3) * (x - 1) * (x - 1)
-  val f3d: Double => Double = ((x: Double)) => 3 * x * x + 2 * x - 5
-  val f4: Double => Double = ((x: Double)) => 2 * x
+  val f: Double => Double = (x: Double) => x * x
+  val f2: Double => Double = (x: Double) => math.sin(x)
+  val f2d: Double => Double = (x: Double) => math.cos(x)
+  val f3: Double => Double = (x: Double) => (x + 3) * (x - 1) * (x - 1)
+  val f3d: Double => Double = (x: Double) => 3 * x * x + 2 * x - 5
+  val f4: Double => Double = (x: Double) => 2 * x
 
   test("root finding general method") {
     val found = RootFinding.find(f3, x0 = -4, x1 = Some(4 / 3d))
@@ -32,8 +32,8 @@ class RootFindingTest extends AnyFunSuite {
     val found = RootFinding.brent(f3, a = -4, b = 4 / 3d)
     assert(closeTo(found, 1d) || closeTo(found, -3d))
     assert(closeTo(RootFinding.brent(f2, 3, 3.7), 3.1416))
-    assert(closeTo(RootFinding.brent(((x: Double)) => x * x - 1, -2, 0), -1))
-    assert(closeTo(RootFinding.brent(((x: Double)) => x * x - 1, 0, 2), 1))
+    assert(closeTo(RootFinding.brent((x: Double) => x * x - 1, -2, 0), -1))
+    assert(closeTo(RootFinding.brent((x: Double) => x * x - 1, 0, 2), 1))
   }
 
   test("bisection method") {

@@ -32,7 +32,13 @@ object QpGenerator {
     H
   }
 
-  def apply(nGram: Int, nEqualities: Int): (DenseMatrix[Double], DenseVector[Double], DenseVector[Double], DenseVector[Double], DenseVector[Double], DenseMatrix[Double]) = {
+  def apply(nGram: Int, nEqualities: Int): (DenseMatrix[Double],
+                                            DenseVector[Double],
+                                            DenseVector[Double],
+                                            DenseVector[Double],
+                                            DenseVector[Double],
+                                            DenseMatrix[Double]
+  ) = {
     val en = DenseVector.ones[Double](nGram)
     val zn = DenseVector.zeros[Double](nGram)
 

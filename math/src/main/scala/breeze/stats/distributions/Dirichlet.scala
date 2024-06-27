@@ -46,7 +46,7 @@ case class Dirichlet[T, @specialized(Int) I](params: T)(implicit
    */
   def unnormalizedDraw() = {
     mapValues.mapActive(params,
-                        { ((v: Double)) =>
+                        { (v: Double) =>
                           if (v == 0.0) 0.0 else new Gamma(v, 1).draw()
                         }
     )
@@ -57,7 +57,7 @@ case class Dirichlet[T, @specialized(Int) I](params: T)(implicit
    */
   def logDraw() = {
     val x = mapValues.mapActive(params,
-                                { ((v: Double)) =>
+                                { (v: Double) =>
                                   if (v == 0.0) 0.0 else new Gamma(v, 1).logDraw()
                                 }
     )

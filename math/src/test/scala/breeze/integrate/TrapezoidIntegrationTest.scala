@@ -10,8 +10,8 @@ import org.scalatest.funsuite.AnyFunSuite
  * @author chrismedrela
  **/
 class TrapezoidIntegrationTest extends AnyFunSuite {
-  val f: Double => Double = ((x: Double)) => 2 * x
-  val f2: Double => Double = ((x: Double)) => x * x
+  val f: Double => Double = (x: Double) => 2 * x
+  val f2: Double => Double = (x: Double) => x * x
 
   test("basics") {
     assert(closeTo(integrate.trapezoid(f, 0, 1, 2), 1))

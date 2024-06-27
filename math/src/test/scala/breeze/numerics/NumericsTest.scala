@@ -83,7 +83,7 @@ class NumericsTest extends AnyFunSuite with Checkers {
   }
 
   test("exp(digamma(x)) ≈ x - .5, x >= 12") {
-    check(Prop.forAll { ((a: Double)) =>
+    check(Prop.forAll { (a: Double) =>
       a.abs < 12 || a.abs > Double.MaxValue / 2 || exp(breeze.numerics.digamma(a.abs)) =~= (a.abs - .5)
     })
   }

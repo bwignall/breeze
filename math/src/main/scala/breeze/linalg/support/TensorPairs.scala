@@ -7,7 +7,7 @@ package support
  */
 class TensorPairs[K, V, +This](private val tensor: This,
                                active: Boolean,
-                               f: ((K, V)) => Boolean = { ((x: (K, V))) =>
+                               f: ((K, V)) => Boolean = { (x: (K, V)) =>
                                  true
                                }
 )(implicit ev: This <:< Tensor[K, V]) {
@@ -18,7 +18,7 @@ class TensorPairs[K, V, +This](private val tensor: This,
   def foreach[U](fn: ((K, V)) => U): Unit = iterator.foreach(fn)
   def foreach[U](fn: (K, V) => U): Unit = iterator.foreach { case (a, b) => fn(a, b) }
 
-  def filter(p: ((K, V)) => Boolean): TensorPairs[K,V,This] = withFilter(p)
+  def filter(p: ((K, V)) => Boolean): TensorPairs[K, V, This] = withFilter(p)
 
   def withFilter(p: ((K, V)) => Boolean): TensorPairs[K, V, This] = {
     new TensorPairs[K, V, This](tensor,

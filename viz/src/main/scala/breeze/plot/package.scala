@@ -49,10 +49,10 @@ package object plot {
       val dataset = XYDataset[Int](
         items = xv.domain(x),
         name = if (name == null) defaultName(0) else name,
-        x = ((k: K)) => vv(xv(x, k)),
-        y = ((k: K)) => vv(yv(y, k)),
-        label = ((k: K)) => if (labels != null) labels(k) else null,
-        tip = ((k: K)) => if (tips != null) tips(k) else null
+        x = (k: K) => vv(xv(x, k)),
+        y = (k: K) => vv(yv(y, k)),
+        label = (k: K) => if (labels != null) labels(k) else null,
+        tip = (k: K) => if (tips != null) tips(k) else null
       )
 
       // initialize the series renderer
@@ -149,11 +149,11 @@ package object plot {
       val dataset = XYZDataset(
         items = items,
         name = if (name == null) defaultName(0) else name,
-        x = ((k: K)) => vv(xv(x, k)),
-        y = ((k: K)) => vv(yv(y, k)),
-        z = ((k: K)) => size(k),
-        label = ((k: K)) => if (labels != null) labels(k) else null,
-        tip = ((k: K)) => if (tips != null) tips(k) else null
+        x = (k: K) => vv(xv(x, k)),
+        y = (k: K) => vv(yv(y, k)),
+        z = (k: K) => size(k),
+        label = (k: K) => if (labels != null) labels(k) else null,
+        tip = (k: K) => if (tips != null) tips(k) else null
       )
 
       // initialize the series renderer
@@ -220,15 +220,15 @@ package object plot {
         XYDataset(
           name = if (name == null) defaultName(0) else name,
           items = IndexedSeq.range(0, counts.length),
-          x = ((i: Int)) =>
+          x = (i: Int) =>
             if (i == binner.splits.length) {
               binner.splits(i - 1) + width / 2.0
             } else {
               binner.splits(i) - width / 2.0
             },
-          y = ((i: Int)) => counts(i),
-          label = ((i: Int)) => null,
-          tip = ((i: Int)) => null
+          y = (i: Int) => counts(i),
+          label = (i: Int) => null,
+          tip = (i: Int) => null
         ),
         width
       )
@@ -282,11 +282,11 @@ package object plot {
         val dataset = XYZDataset(
           items = items,
           name = if (name == null) defaultName(0) else name,
-          x = ((k: (Int, Int))) => k._2 + offset._2,
-          y = ((k: (Int, Int))) => k._1 + offset._1,
-          z = ((k: (Int, Int))) => mt(k._1, k._2),
-          label = ((k: (Int, Int))) => if (labels != null && labels.isDefinedAt(k)) labels(k) else null,
-          tip = ((k: (Int, Int))) => if (tips != null && tips.isDefinedAt(k)) tips(k) else null
+          x = (k: (Int, Int)) => k._2 + offset._2,
+          y = (k: (Int, Int)) => k._1 + offset._1,
+          z = (k: (Int, Int)) => mt(k._1, k._2),
+          label = (k: (Int, Int)) => if (labels != null && labels.isDefinedAt(k)) labels(k) else null,
+          tip = (k: (Int, Int)) => if (tips != null && tips.isDefinedAt(k)) tips(k) else null
         )
 
         // initialize renderer

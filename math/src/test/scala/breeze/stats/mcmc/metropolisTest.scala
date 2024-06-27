@@ -38,7 +38,7 @@ class metropolisTest extends AnyFunSuite {
 
   test("stupidly simple mcmc") {
     val mh = ArbitraryMetropolisHastings(logLikelihood _,
-                                         ((_: State)) => proposal,
+                                         (_: State) => proposal,
                                          (_: State, _: State) => 0.0,
                                          A,
                                          burnIn = 10000,
@@ -93,7 +93,7 @@ class metropolisTest extends AnyFunSuite {
 
   test("ArbitraryMetropolisHastings for a Gamma with a symmetric proposal") {
     val mh = ArbitraryMetropolisHastings(Gamma(2.0, 1.0 / 3).logPdf,
-                                         ((x: Double)) => Gaussian(x, 1.0),
+                                         (x: Double) => Gaussian(x, 1.0),
                                          (x: Double, xp: Double) => Gaussian(x, 1.0).logPdf(xp),
                                          1.0
     )
@@ -107,7 +107,7 @@ class metropolisTest extends AnyFunSuite {
 
   test("ArbitraryMetropolisHastings for a Gamma with a non-symmetric proposal") {
     val mh = ArbitraryMetropolisHastings(Gamma(2.0, 1.0 / 3).logPdf,
-                                         ((x: Double)) => Gaussian(x, 1.0 + x),
+                                         (x: Double) => Gaussian(x, 1.0 + x),
                                          (x: Double, xp: Double) => Gaussian(x, 1.0 + x).logPdf(xp),
                                          1.0
     )

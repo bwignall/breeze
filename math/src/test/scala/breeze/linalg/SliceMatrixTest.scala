@@ -16,7 +16,7 @@ class SliceMatrixTest extends AnyFunSuite {
   }
 
   // first matrix with the 4th row and 3rd column removed
-  val sliceMatrix: SliceMatrix[Int,Int,Int] = originalMatrix(Seq(0, 1, 2, 4), Seq(0, 1, 3, 4))
+  val sliceMatrix: SliceMatrix[Int, Int, Int] = originalMatrix(Seq(0, 1, 2, 4), Seq(0, 1, 3, 4))
 
   test("basic slices of a counter2") {
     val ctr = Counter2(("a", 0, 1), ("b", 1, 10), ("a", 1, 6))

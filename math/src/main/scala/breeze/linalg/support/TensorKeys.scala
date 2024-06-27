@@ -22,7 +22,7 @@ package support
  */
 class TensorKeys[K, V, +This](private val tensor: This,
                               active: Boolean = false,
-                              f: K => Boolean = { ((k: K)) =>
+                              f: K => Boolean = { (k: K) =>
                                 true
                               }
 )(implicit ev: This <:< Tensor[K, V]) {
@@ -34,7 +34,7 @@ class TensorKeys[K, V, +This](private val tensor: This,
   def withFilter(p: K => Boolean): TensorKeys[K, V, This] =
     new TensorKeys[K, V, This](tensor,
                                active,
-                               { ((a: K)) =>
+                               { (a: K) =>
                                  f(a) && p(a)
                                }
     )(ev)

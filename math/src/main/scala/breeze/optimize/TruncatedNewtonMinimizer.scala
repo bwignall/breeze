@@ -64,7 +64,7 @@ class TruncatedNewtonMinimizer[T, H](maxIterations: Int = -1,
   private val sigma3 = 4.0
 
   def iterations(f: SecondOrderFunction[T, H], initial: T): Iterator[State] = {
-    Iterator.iterate(initialState(f, initial)) { ((state: State)) =>
+    Iterator.iterate(initialState(f, initial)) { (state: State) =>
       import state._
       val cg = new ConjugateGradient[T, H](maxNormValue = delta,
                                            tolerance = .1 * norm(adjGrad),

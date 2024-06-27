@@ -169,7 +169,7 @@ class SparseVector[@spec(Double, Int, Float, Long) V](val array: SparseArray[V])
     else {
       var ii = 0
       val nIndex =
-        Array.tabulate[Int](length + 1)(((cp: Int)) =>
+        Array.tabulate[Int](length + 1)((cp: Int) =>
           if (ii < used && cp == index(ii)) { ii += 1; ii - 1 }
           else ii
         )

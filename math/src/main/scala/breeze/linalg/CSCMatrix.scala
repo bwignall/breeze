@@ -284,7 +284,10 @@ class CSCMatrix[@spec(Double, Int, Float, Long) V: Zero](private var _data: Arra
 }
 
 object CSCMatrix extends MatrixConstructors[CSCMatrix] {
-  def zeros[@specialized(Int, Float, Double) V: ClassTag: Zero](rows: Int, cols: Int, initialNonzero: Int): CSCMatrix[V] = {
+  def zeros[@specialized(Int, Float, Double) V: ClassTag: Zero](rows: Int,
+                                                                cols: Int,
+                                                                initialNonzero: Int
+  ): CSCMatrix[V] = {
     new CSCMatrix[V](new Array(initialNonzero), rows, cols, new Array(cols + 1), 0, new Array(initialNonzero))
   }
 

@@ -29,13 +29,13 @@ class OWLQN[K, T](convergenceCheck: ConvergenceCheck[T], m: Int, l1reg: K => Dou
 
   def this(maxIter: Int, m: Int, l1reg: Double, tolerance: Double = 1e-8)(implicit
     space: MutableEnumeratedCoordinateField[T, K, Double]
-  ) = this(maxIter, m, ((_: K)) => l1reg, tolerance)
+  ) = this(maxIter, m, (_: K) => l1reg, tolerance)
 
   def this(maxIter: Int, m: Int, l1reg: Double)(implicit space: MutableEnumeratedCoordinateField[T, K, Double]) =
-    this(maxIter, m, ((_: K)) => l1reg, 1e-8)
+    this(maxIter, m, (_: K) => l1reg, 1e-8)
 
   def this(maxIter: Int, m: Int)(implicit space: MutableEnumeratedCoordinateField[T, K, Double]) =
-    this(maxIter, m, ((_: K)) => 1.0, 1e-8)
+    this(maxIter, m, (_: K) => 1.0, 1e-8)
 
   require(m > 0)
 

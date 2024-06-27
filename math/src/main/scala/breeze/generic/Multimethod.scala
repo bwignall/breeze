@@ -83,7 +83,7 @@ trait MethodImpl[A, +R] {
 
 // TODO: switch to identity hashing!
 trait MMRegistry2[R] {
-  protected val ops: HashMap[(Class[_], Class[_]),R] = HashMap[(Class[_], Class[_]), R]()
+  protected val ops: HashMap[(Class[_], Class[_]), R] = HashMap[(Class[_], Class[_]), R]()
   protected val cache = new ConcurrentHashMap[(Class[_], Class[_]), Option[R]]()
 
   def register(a: Class[_], b: Class[_], op: R): Unit = {
@@ -138,7 +138,7 @@ trait MMRegistry2[R] {
   /** This selects based on the partial order induced by the inheritance hierarchy.
    *  If there is ambiguity, all are returned.
    **/
-  protected def selectBestOption(options: Map[(Class[_], Class[_]), R]): MapView[(Class[_], Class[_]),R] = {
+  protected def selectBestOption(options: Map[(Class[_], Class[_]), R]): MapView[(Class[_], Class[_]), R] = {
     var bestCandidates = Set[(Class[_], Class[_])]()
     for (pair @ (aa, bb) <- options.keys) {
       // if there is no option (aaa,bbb) s.t. aaa <: aa && bbb <: bb, then add it to the list
@@ -154,7 +154,7 @@ trait MMRegistry2[R] {
 
 // TODO: switch to identity hashing!
 trait MMRegistry3[R] {
-  protected val ops: HashMap[(Class[_], Class[_], Class[_]),R] = HashMap[(Class[_], Class[_], Class[_]), R]()
+  protected val ops: HashMap[(Class[_], Class[_], Class[_]), R] = HashMap[(Class[_], Class[_], Class[_]), R]()
   protected val cache = new ConcurrentHashMap[(Class[_], Class[_], Class[_]), Option[R]]()
 
   def register(a: Class[_], b: Class[_], c: Class[_], op: R): Unit = {
@@ -209,7 +209,9 @@ trait MMRegistry3[R] {
   /** This selects based on the partial order induced by the inheritance hierarchy.
    *  If there is ambiguity, all are returned.
     **/
-  protected def selectBestOption(options: Map[(Class[_], Class[_], Class[_]), R]): Map[(Class[_], Class[_], Class[_]),R] = {
+  protected def selectBestOption(
+    options: Map[(Class[_], Class[_], Class[_]), R]
+  ): Map[(Class[_], Class[_], Class[_]), R] = {
     var bestCandidates = Set[(Class[_], Class[_], Class[_])]()
     for (pair @ (aa, bb, cc) <- options.keys) {
       // if there is no option (aaa,bbb) s.t. aaa <: aa && bbb <: bb, then add it to the list
@@ -229,7 +231,7 @@ trait MMRegistry3[R] {
 }
 
 trait MMRegistry1[M] {
-  protected val ops: HashMap[Class[_],M] = HashMap[Class[_], M]()
+  protected val ops: HashMap[Class[_], M] = HashMap[Class[_], M]()
   protected val cache = new ConcurrentHashMap[Class[_], M]()
 
   def register(a: Class[_], op: M): Unit = {

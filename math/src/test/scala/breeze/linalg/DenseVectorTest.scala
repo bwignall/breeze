@@ -521,15 +521,15 @@ class DenseVectorTest extends AnyFunSuite with Checkers {
   }
 
   test("isClose") {
-    check(((a: DenseVector[Double])) => isClose(a, a))
+    check((a: DenseVector[Double]) => isClose(a, a))
     check((a: DenseVector[Double], b: DenseVector[Double]) =>
       isClose(a, b) == zipValues(a, b).forall((a, b) => (a - b).abs < 1e-8)
     )
   }
 
   test("nonfinite") {
-    check(((a: DenseVector[Double])) => any(isNonfinite, a) == a.exists(isNonfinite(_)))
-    check(((a: DenseVector[Double])) => all(isNonfinite, a) == a.forall(isNonfinite(_)))
+    check((a: DenseVector[Double]) => any(isNonfinite, a) == a.exists(isNonfinite(_)))
+    check((a: DenseVector[Double]) => all(isNonfinite, a) == a.forall(isNonfinite(_)))
     assert(all(isNonfinite, DenseVector[Double]())(all.reduceUFunc))
     assert(!any(isNonfinite, DenseVector[Double]()))
   }
@@ -632,18 +632,18 @@ abstract class DenseVectorPropertyTestBase[T: ClassTag] extends TensorSpaceTestB
 class DenseVectorOps_DoubleTest
     extends DenseVectorPropertyTestBase[Double]
     with DoubleValuedTensorSpaceTestBase[DenseVector[Double], Int] {
-  val space: MutableEnumeratedCoordinateField[DenseVector[Double],Int,Double] = DenseVector.space[Double]
+  val space: MutableEnumeratedCoordinateField[DenseVector[Double], Int, Double] = DenseVector.space[Double]
   def genScalar: Arbitrary[Double] = RandomInstanceSupport.genReasonableDouble
 }
 
 class DenseVectorOps_IntTest extends DenseVectorPropertyTestBase[Int] {
-  val space: MutableEnumeratedCoordinateField[DenseVector[Int],Int,Int] = DenseVector.space[Int]
+  val space: MutableEnumeratedCoordinateField[DenseVector[Int], Int, Int] = DenseVector.space[Int]
 
   def genScalar: Arbitrary[Int] = Arbitrary { Gen.Choose.chooseInt.choose(-1000, 1000) }
 }
 
 class DenseVectorOps_ComplexTest extends DenseVectorPropertyTestBase[Complex] {
-  val space: MutableEnumeratedCoordinateField[DenseVector[Complex],Int,Complex] = DenseVector.space[Complex]
+  val space: MutableEnumeratedCoordinateField[DenseVector[Complex], Int, Complex] = DenseVector.space[Complex]
   def genScalar: Arbitrary[Complex] = Arbitrary {
     for {
       r <- RandomInstanceSupport.genReasonableDouble.arbitrary
@@ -653,7 +653,7 @@ class DenseVectorOps_ComplexTest extends DenseVectorPropertyTestBase[Complex] {
 }
 
 class DenseVectorOps_FloatTest extends DenseVectorPropertyTestBase[Float] {
-  val space: MutableEnumeratedCoordinateField[DenseVector[Float],Int,Float] = DenseVector.space[Float]
+  val space: MutableEnumeratedCoordinateField[DenseVector[Float], Int, Float] = DenseVector.space[Float]
 
   override val TOL: Double = 5e-3
   def genScalar: Arbitrary[Float] = RandomInstanceSupport.genReasonableFloat

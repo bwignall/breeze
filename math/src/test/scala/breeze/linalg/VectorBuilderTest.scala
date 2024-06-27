@@ -48,7 +48,7 @@ class VectorBuilderTest extends AnyFunSuite with Checkers {
       } yield actives.distinct
     }
 
-    check(Prop.forAll(uniqueGen.arbitrary) { ((vs: List[Int])) =>
+    check(Prop.forAll(uniqueGen.arbitrary) { (vs: List[Int]) =>
       val vb = new VectorBuilder[Int](300)
 
       vs.foreach { v =>
@@ -70,7 +70,7 @@ class VectorBuilderTest extends AnyFunSuite with Checkers {
       } yield actives
     }
 
-    check(Prop.forAll(inputGen.arbitrary) { ((vs: List[Int])) =>
+    check(Prop.forAll(inputGen.arbitrary) { (vs: List[Int]) =>
       val vb = new VectorBuilder[Int](300)
 
       vs.foreach { v =>
@@ -103,7 +103,7 @@ class VectorBuilderTest extends AnyFunSuite with Checkers {
   }
 
   test("dot is consistent") {
-    check(Prop.forAll { ((pair: (VectorBuilder[Double], VectorBuilder[Double]))) =>
+    check(Prop.forAll { (pair: (VectorBuilder[Double], VectorBuilder[Double])) =>
       val (vb1, vb2) = pair
       val (hv1, hv2) = (vb1.toHashVector, vb2.toHashVector)
       closeTo(vb1.dot(hv2), hv1.dot(vb2)) && closeTo(vb1.dot(hv2), hv1.dot(hv2))
@@ -111,7 +111,7 @@ class VectorBuilderTest extends AnyFunSuite with Checkers {
   }
 
   test("+ for VB's and V's is consistent") {
-    check(Prop.forAll { ((pair: (VectorBuilder[Double], VectorBuilder[Double]))) =>
+    check(Prop.forAll { (pair: (VectorBuilder[Double], VectorBuilder[Double])) =>
       val (vb1, vb2) = pair
       val (hv1, hv2) = (vb1.toHashVector, vb2.toHashVector)
       val sum1 = (vb1 + vb2).toHashVector
