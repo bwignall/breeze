@@ -54,7 +54,7 @@ class MetropolisHastingsBenchmark extends BreezeBenchmark {
   @Benchmark
   def timeMetropolisHastings(reps: Int): Double = run(reps) {
     val m = ArbitraryMetropolisHastings(likelihood _,
-                                        ((_: Double)) => Uniform(0, 1),
+                                        (_: Double) => Uniform(0, 1),
                                         gaussianJumpLogProb _,
                                         0.5,
                                         burnIn = burnIn,
@@ -66,7 +66,7 @@ class MetropolisHastingsBenchmark extends BreezeBenchmark {
   @Benchmark
   def timeMetropolisHastingsWithWork(reps: Int): Double = run(reps) {
     val m = ArbitraryMetropolisHastings(likelihood _,
-                                        ((_: Double)) => Uniform(0, 1),
+                                        (_: Double) => Uniform(0, 1),
                                         gaussianJumpLogProb _,
                                         0.5,
                                         burnIn = 0,
@@ -78,7 +78,7 @@ class MetropolisHastingsBenchmark extends BreezeBenchmark {
   @Benchmark
   def timeThreadedBufferedWithWork(reps: Int): Double = run(reps) {
     val wrapped = ArbitraryMetropolisHastings(likelihood _,
-                                              ((_: Double)) => Uniform(0, 1),
+                                              (_: Double) => Uniform(0, 1),
                                               gaussianJumpLogProb _,
                                               0.5,
                                               burnIn = 0,

@@ -3,7 +3,7 @@ package examples
 
 import breeze.numerics._
 import breeze.stats.distributions._
-import breeze.benchmark.{MyRunner, BreezeBenchmark}
+import breeze.benchmark.{BreezeBenchmark, MyRunner}
 import breeze.linalg.DenseVector
 
 /**
@@ -69,7 +69,7 @@ object GaussMixtureTransform {
   }
 
   def samplesTransform(samples: Iterable[DenseVector[Double]], centers: DenseVector[Double], gamma: Double): Double = {
-    samples.map(((sample: DenseVector[Double])) => sampleTransform(sample, centers, gamma)).sum
+    samples.map((sample: DenseVector[Double]) => sampleTransform(sample, centers, gamma)).sum
   }
 
   def samplesTransform(samples: DenseMatrix[Double], centers: DenseVector[Double], gamma: Double): Double = {

@@ -225,7 +225,9 @@ class RandBasis(val generator: RandomGenerator) extends Serializable {
   def promote[U](col: Seq[Rand[U]]): Rand[Seq[U]] = fromBody(col.map(_.draw()))
 
   def promote[T1, T2](t: (Rand[T1], Rand[T2])): Rand[(T1, T2)] = fromBody((t._1.draw(), t._2.draw()))
-  def promote[T1, T2, T3](t: (Rand[T1], Rand[T2], Rand[T3])): Rand[(T1, T2, T3)] = fromBody((t._1.draw(), t._2.draw(), t._3.draw()))
+  def promote[T1, T2, T3](t: (Rand[T1], Rand[T2], Rand[T3])): Rand[(T1, T2, T3)] = fromBody(
+    (t._1.draw(), t._2.draw(), t._3.draw())
+  )
   def promote[T1, T2, T3, T4](t: (Rand[T1], Rand[T2], Rand[T3], Rand[T4])): Rand[(T1, T2, T3, T4)] =
     fromBody((t._1.draw(), t._2.draw(), t._3.draw(), t._4.draw()))
 
@@ -254,7 +256,7 @@ class RandBasis(val generator: RandomGenerator) extends Serializable {
    * Uniformly samples an integer in [n,m)
    */
   def randInt(n: Int, m: Int): Rand[Int] = new Rand[Int] {
-    def draw() : Int = generator.nextInt(m - n) + n
+    def draw(): Int = generator.nextInt(m - n) + n
   }
 
   /**

@@ -1,6 +1,6 @@
 package breeze.linalg
 
-import breeze.benchmark.{MyRunner, BreezeBenchmark}
+import breeze.benchmark.{BreezeBenchmark, MyRunner}
 import breeze.linalg.operators.DenseVectorSupportMethods
 import breeze.numerics._
 import breeze.stats.distributions.Rand
