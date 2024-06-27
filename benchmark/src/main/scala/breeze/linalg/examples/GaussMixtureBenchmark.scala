@@ -4,8 +4,8 @@ package examples
 import breeze.benchmark.BreezeBenchmark
 import breeze.benchmark.MyRunner
 import breeze.linalg.DenseVector
-import breeze.numerics._
-import breeze.stats.distributions._
+import breeze.numerics.*
+import com.google.caliper.Benchmark
 
 /**
  * Created by dlwh on 8/20/15.
@@ -16,9 +16,10 @@ class GaussMixtureBenchmark extends BreezeBenchmark {
 
   val x: DenseVector[Double] = DenseVector(5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0)
   val c: DenseVector[Double] = DenseVector(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0)
-  val gamma = 5.0
+  private val gamma = 5.0
   private val n: Int = 1000
 
+  @Benchmark
   def timeGMMVectors(reps: Int): Unit = {
     val denseVectors = IndexedSeq.fill(n)(x)
     (0 until reps).foreach { _ =>
@@ -26,6 +27,7 @@ class GaussMixtureBenchmark extends BreezeBenchmark {
     }
   }
 
+  @Benchmark
   def timeGMMMat(reps: Int): Unit = {
     val matrix = DenseMatrix.fill(n, 10)(5.0)
     (0 until reps).foreach { _ =>
@@ -33,6 +35,7 @@ class GaussMixtureBenchmark extends BreezeBenchmark {
     }
   }
 
+  @Benchmark
   def timeGMMMatColMajor(reps: Int): Unit = {
     val matrix = DenseMatrix.fill(10, n)(5.0)
     (0 until reps).foreach { _ =>
@@ -40,6 +43,7 @@ class GaussMixtureBenchmark extends BreezeBenchmark {
     }
   }
 
+  @Benchmark
   def timeCenterMat(reps: Int): Unit = {
     val matrix = DenseMatrix.fill(n, 10)(5.0)
     (0 until reps).foreach { _ =>
@@ -47,6 +51,7 @@ class GaussMixtureBenchmark extends BreezeBenchmark {
     }
   }
 
+  @Benchmark
   def timeCenterMatColMajor(reps: Int): Unit = {
     val matrix = DenseMatrix.fill(10, n)(5.0)
     (0 until reps).foreach { _ =>
@@ -54,19 +59,19 @@ class GaussMixtureBenchmark extends BreezeBenchmark {
     }
   }
 
+  @Benchmark
   def timeCenterVector(reps: Int): Unit = {
     val denseVectors = IndexedSeq.fill(n)(x)
     (0 until reps).foreach { _ =>
       denseVectors.foreach(_ - c)
     }
   }
-
 }
 
 object GaussMixtureTransform {
   def sampleTransform(sample: DenseVector[Double], centers: DenseVector[Double], gamma: Double): Double = {
     val diff: DenseVector[Double] = sample - centers
-    exp(-gamma * (diff.dot(diff)))
+    exp(-gamma * diff.dot(diff))
   }
 
   def samplesTransform(samples: Iterable[DenseVector[Double]], centers: DenseVector[Double], gamma: Double): Double = {
