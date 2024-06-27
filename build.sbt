@@ -29,6 +29,8 @@ val Scala3 = "3.3.3"
 ThisBuild / crossScalaVersions := Seq(Scala213) // Cannot run Scala 3 because of Spark-induced conflicts
 ThisBuild / scalaVersion := Scala213 // the default Scala
 
+javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xmx2g")
+
 lazy val root = project
   .in(file("."))
   .aggregate(math, natives, viz, macros)
