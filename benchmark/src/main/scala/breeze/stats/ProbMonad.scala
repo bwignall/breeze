@@ -13,22 +13,22 @@ class ProbMonadBenchmark extends BreezeBenchmark {
   val f: Double => Double = x => math.exp(-x * x)
   val f2: Double => Double = x => x * x
   val f3: Double => Double = x => math.log(x)
-  val fm: Double => Rand[Double] = (x => Uniform(min(x, 2 * x), max(x, 2 * x)))
+  val fm: Double => Rand[Double] = x => Uniform(min(x, 2 * x), max(x, 2 * x))
   val gaussian = Gaussian(0, 1)
 
   val size = 1024 * 1024
 
-  def timeMonad(reps: Int) = run(reps): Unit = {
+  def timeMonad(reps: Int): DenseVector[Double] = run(reps) {
     /* The purpose of this benchmark is to compare monadic usage of rand to non-monadic usage (see timeRaw).
      */
     val monadic = for {
       x <- gaussian
       y <- gaussian
-    } yield (x + y)
+    } yield x + y
     monadic.samplesVector(size)
   }
 
-  def timeRaw(reps: Int) = run(reps): Unit = {
+  def timeRaw(reps: Int): DenseVector[Double] = run(reps) {
     /* The purpose of this benchmark is to compare monadic usage of rand to non-monadic usage (see timeMonad).
      */
     val nonmonadic = new Rand[Double] {
@@ -37,37 +37,37 @@ class ProbMonadBenchmark extends BreezeBenchmark {
     nonmonadic.samplesVector(size)
   }
 
-  def timeMap(reps: Int) = run(reps): Unit = {
+  def timeMap(reps: Int): DenseVector[Double] = run(reps) {
     val mg = gaussian.map(f)
     mg.samplesVector(size)
   }
 
-  def timeMapRepeated(reps: Int) = run(reps): Unit = {
+  def timeMapRepeated(reps: Int): DenseVector[Double] = run(reps) {
     val mg = gaussian.map(f).map(f2).map(f3)
     mg.samplesVector(size)
   }
 
-  def timeFlatMap(reps: Int) = run(reps): Unit = {
+  def timeFlatMap(reps: Int): DenseVector[Double] = run(reps) {
     val mg = gaussian.flatMap(fm)
     mg.samplesVector(size)
   }
 
-  def timeFlatMapRepeated(reps: Int) = run(reps): Unit = {
+  def timeFlatMapRepeated(reps: Int): DenseVector[Double] = run(reps) {
     val mg = gaussian.flatMap(fm).flatMap(fm).flatMap(fm)
     mg.samplesVector(size)
   }
 
-  def timeCondition(reps: Int) = run(reps): Unit = {
+  def timeCondition(reps: Int): DenseVector[Double] = run(reps) {
     val mg = gaussian.condition(x => x > 0)
     mg.samplesVector(size)
   }
 
-  def timeRepeatCondition(reps: Int) = run(reps): Unit = {
+  def timeRepeatCondition(reps: Int): DenseVector[Double] = run(reps) {
     val mg = gaussian.condition(x => x > 0).condition(x => x < 1).condition(x => x > -1)
     mg.samplesVector(size)
   }
 
-  def timeDrawOpt(reps: Int) = run(reps): Unit = {
+  def timeDrawOpt(reps: Int): Array[Option[Double]] = run(reps) {
     val mg = gaussian.condition(x => x > 0)
     val result = new Array[Option[Double]](size)
     cforRange(0 until size)(i => {
@@ -75,7 +75,7 @@ class ProbMonadBenchmark extends BreezeBenchmark {
     })
     result
   }
-  def timeDrawOptMultipleCondition(reps: Int) = run(reps): Unit = {
+  def timeDrawOptMultipleCondition(reps: Int): Array[Option[Double]] = run(reps) {
     val mg = gaussian.condition(x => x > 0).condition(x => x < 1).condition(x => x > -1)
     val result = new Array[Option[Double]](size)
     cforRange(0 until size)(i => {
