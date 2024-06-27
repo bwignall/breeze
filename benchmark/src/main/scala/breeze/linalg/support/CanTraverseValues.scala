@@ -1,11 +1,13 @@
 package breeze.linalg.support
 
-import breeze.benchmark._
-import breeze.linalg._
+import breeze.benchmark.*
+import breeze.linalg.*
+import breeze.stats.distributions.RandBasis
 
 object CanTraverseValuesBenchmark extends MyRunner(classOf[CanTraverseValuesBenchmark])
 
 class CanTraverseValuesBenchmark extends BreezeBenchmark with BuildsRandomVectors {
+  implicit override val randBasis: RandBasis = RandBasis.mt0
 
   /*
   def timeSumWithCanTraverseValues(reps: Int) = runWith(reps, { randomArray(1024*8) })(arr => {

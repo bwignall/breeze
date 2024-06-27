@@ -18,11 +18,14 @@
 
 package breeze.linalg
 
-import breeze.benchmark._
+import breeze.benchmark.*
+import breeze.stats.distributions.RandBasis
 
 object SparseVectorBenchmark extends MyRunner(classOf[SparseVectorBenchmark])
 
 class SparseVectorBenchmark extends BreezeBenchmark with BuildsRandomVectors {
+  implicit override val randBasis: RandBasis = RandBasis.mt0
+
   def timeAllocate(reps: Int): SparseVector[Double] = run(reps) {
     SparseVector.zeros[Double](1024)
   }

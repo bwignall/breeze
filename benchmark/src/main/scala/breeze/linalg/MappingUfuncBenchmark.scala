@@ -1,7 +1,8 @@
 package breeze.linalg
 
-import breeze.benchmark._
+import breeze.benchmark.*
 import breeze.generic.{MappingUFunc, UFunc}
+import breeze.stats.distributions.RandBasis
 
 object MappingUfuncBenchmark extends MyRunner(classOf[MappingUfuncBenchmark])
 
@@ -16,6 +17,8 @@ object harderUfunc extends MappingUFunc {
 }
 
 class MappingUfuncBenchmark extends BreezeBenchmark with BuildsRandomMatrices with BuildsRandomVectors {
+  implicit override val randBasis: RandBasis = RandBasis.mt0
+
   // these should be roughly similar:
   // Group 1
   def timeMappingUfuncDenseMat(reps: Int) =

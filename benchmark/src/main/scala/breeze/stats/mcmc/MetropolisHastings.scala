@@ -1,10 +1,10 @@
 package breeze.stats.mcmc
 
-import breeze.benchmark._
-import breeze.stats.distributions._
-import breeze.stats.mcmc._
-
+import breeze.benchmark.*
+import breeze.stats.distributions.*
+import breeze.stats.mcmc.*
 import breeze.macros.cforRange
+import com.google.caliper.Benchmark
 
 object MetropolisHastingsRunner extends MyRunner(classOf[MetropolisHastingsBenchmark])
 
@@ -44,12 +44,14 @@ class MetropolisHastingsBenchmark extends BreezeBenchmark {
     result
   }
 
+  @Benchmark
   def timeMarkovChainEquiv(reps: Int): Double = run(reps) {
     val m =
       ArbitraryMetropolisHastings(likelihood _, gaussianJump _, gaussianJumpLogProb _, 0.5, burnIn = 0, dropCount = 0)
     pullAllSamples(m)
   }
 
+  @Benchmark
   def timeMetropolisHastings(reps: Int) = run(reps) {
     val m = ArbitraryMetropolisHastings(likelihood _,
                                         (_: Double) => Uniform(0, 1),
@@ -61,6 +63,7 @@ class MetropolisHastingsBenchmark extends BreezeBenchmark {
     pullAllSamples(m)
   }
 
+  @Benchmark
   def timeMetropolisHastingsWithWork(reps: Int) = run(reps) {
     val m = ArbitraryMetropolisHastings(likelihood _,
                                         (_: Double) => Uniform(0, 1),
@@ -72,6 +75,7 @@ class MetropolisHastingsBenchmark extends BreezeBenchmark {
     pullAllSamplesWithWork(m)
   }
 
+  @Benchmark
   def timeThreadedBufferedWithWork(reps: Int) = run(reps) {
     val wrapped = ArbitraryMetropolisHastings(likelihood _,
                                               (_: Double) => Uniform(0, 1),
