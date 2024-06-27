@@ -1,7 +1,7 @@
 package breeze.linalg
 
-import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.Assertion
+import org.scalatest.funsuite.AnyFunSuite
 
 class minkowskiDistanceTest extends AnyFunSuite {
 

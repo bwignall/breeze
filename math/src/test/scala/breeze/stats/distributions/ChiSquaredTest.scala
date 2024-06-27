@@ -16,13 +16,13 @@ package breeze.stats.distributions
  limitations under the License.
  */
 
+import breeze.stats.distributions.ChiSquared
 import org.apache.commons.math3.random.MersenneTwister
+import org.scalacheck.Arbitrary
 import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
-import breeze.stats.distributions.ChiSquared
-import org.scalacheck.Arbitrary
 
 class ChiSquaredTest
     extends AnyFunSuite

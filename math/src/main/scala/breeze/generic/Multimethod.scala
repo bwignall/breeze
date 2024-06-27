@@ -19,11 +19,11 @@ package breeze.generic
 import breeze.util.ReflectionUtil
 
 import java.util.concurrent.ConcurrentHashMap
+import scala.collection.MapView
 import scala.collection.compat._
 
 import collection.mutable.{ArrayBuffer, HashMap}
 import collection.mutable
-import scala.collection.MapView
 
 /**
  * A Multimethod is basically a glorified registry that uses dynamic reflection (and subtyping) to determine which

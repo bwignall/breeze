@@ -1,5 +1,6 @@
 package breeze.linalg
 
+import breeze.linalg.BitVector
 import breeze.linalg.operators.BitVectorOps
 import breeze.linalg.support.CanMapValues.DenseCanMapValues
 import breeze.linalg.support.CanTraverseValues.ValuesVisitor
@@ -8,7 +9,6 @@ import breeze.storage.Zero
 
 import java.util
 import scala.reflect.ClassTag
-import breeze.linalg.BitVector
 
 /**
  * A BitVector is a Vector of Booleans backed by a [[java.util.Bitset]]. Much better memory usage

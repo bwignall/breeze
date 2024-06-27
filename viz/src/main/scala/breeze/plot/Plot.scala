@@ -1,10 +1,12 @@
 package breeze.plot
 
 import org.jfree.chart.JFreeChart
+import org.jfree.chart.axis.TickUnits
 import org.jfree.chart.axis._
 import org.jfree.chart.plot.CrosshairState
 import org.jfree.chart.plot.DefaultDrawingSupplier
 import org.jfree.chart.plot.PlotRenderingInfo
+import org.jfree.chart.plot.XYPlot
 import org.jfree.chart.renderer.xy.AbstractXYItemRenderer
 import org.jfree.chart.renderer.xy.XYItemRenderer
 import org.jfree.chart.renderer.xy.XYItemRendererState
@@ -13,14 +15,12 @@ import org.jfree.chart.ui.RectangleInsets
 import org.jfree.data.xy
 
 import java.awt._
+import java.awt.geom.GeneralPath
 import java.awt.geom.Rectangle2D
 import java.lang
 
 import collection.mutable.ArrayBuffer
 import collection.mutable
-import java.awt.geom.GeneralPath
-import org.jfree.chart.axis.TickUnits
-import org.jfree.chart.plot.XYPlot
 
 /**
  * Maintains a set of series (or more strictly, the data from those series)

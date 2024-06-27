@@ -14,13 +14,13 @@ package breeze.linalg
  See the License for the specific language governing permissions and
  limitations under the License.
  */
+import breeze.math.MutableEnumeratedCoordinateField
 import breeze.math.TensorSpaceTestBase
 import breeze.stats.mean
 import org.scalacheck.Arbitrary
+import org.scalatest.Assertion
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.Checkers
-import breeze.math.MutableEnumeratedCoordinateField
-import org.scalatest.Assertion
 
 /**
  * @author dlwh
