@@ -144,7 +144,7 @@ class SqDistBenchmark extends BreezeBenchmark {
   }
    */
 
-  def timeVectorSquaredDistance(reps: Int) = {
+  def timeVectorSquaredDistance(reps: Int): Double = {
     var sum = 0.0
     cforRange(0 until reps) { i =>
       sum += squaredDistance(v1, v2)
@@ -153,7 +153,7 @@ class SqDistBenchmark extends BreezeBenchmark {
     sum
   }
 
-  def timeOldSquaredDistance(reps: Int) = {
+  def timeOldSquaredDistance(reps: Int): Unit = {
     var squaredDistance = 0.0
     cforRange(0 until reps) { _ =>
       zipValues(v1, v2).foreach { (a, b) =>

@@ -14,9 +14,9 @@ class ProbMonadBenchmark extends BreezeBenchmark {
   val f2: Double => Double = x => x * x
   val f3: Double => Double = x => math.log(x)
   val fm: Double => Rand[Double] = x => Uniform(min(x, 2 * x), max(x, 2 * x))
-  val gaussian = Gaussian(0, 1)
+  val gaussian: Gaussian = Gaussian(0, 1)
 
-  val size = 1024 * 1024
+  val size: Int = 1024 * 1024
 
   def timeMonad(reps: Int): DenseVector[Double] = run(reps) {
     /* The purpose of this benchmark is to compare monadic usage of rand to non-monadic usage (see timeRaw).

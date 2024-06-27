@@ -2,6 +2,7 @@ package breeze.linalg
 
 import breeze.benchmark.{BreezeBenchmark, MyRunner}
 import breeze.macros._
+import breeze.linalg.DenseVector
 
 /**
  * Created by dlwh on 8/14/15.
@@ -11,7 +12,7 @@ class DenseCopyBenchmark extends BreezeBenchmark {
 
   val dv, dv2 = DenseVector.rand(100000).apply(0 to -1 by 2)
 
-  def timeSmallDVset(reps: Int) = {
+  def timeSmallDVset(reps: Int): DenseVector[Double] = {
     var sum = 0.0
     cforRange(0 until reps) { rep =>
       dv := dv2
@@ -19,7 +20,7 @@ class DenseCopyBenchmark extends BreezeBenchmark {
     dv2
   }
 
-  def timeSmallDVInlineRange(reps: Int) = {
+  def timeSmallDVInlineRange(reps: Int): DenseVector[Double] = {
     cforRange(0 until reps) { rep =>
       val ad = dv.data
       val bd = dv2.data
@@ -30,7 +31,7 @@ class DenseCopyBenchmark extends BreezeBenchmark {
     dv
   }
 
-  def timeDVMemcopy(reps: Int) = {
+  def timeDVMemcopy(reps: Int): DenseVector[Double] = {
     cforRange(0 until reps) { rep =>
       val ad = dv.data
       val bd = dv2.data
@@ -39,7 +40,7 @@ class DenseCopyBenchmark extends BreezeBenchmark {
     dv
   }
 
-  def timeSmallDVSetInline(reps: Int) = {
+  def timeSmallDVSetInline(reps: Int): DenseVector[Double] = {
     cforRange(0 until reps) { rep =>
       dv(0) = dv2(0)
       dv(1) = dv2(1)

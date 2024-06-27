@@ -12,14 +12,14 @@ class DenseScaleBenchmark extends BreezeBenchmark {
   val dv, dv2 = DenseVector.rand(10)
 //  val dv, dv2 = DenseVector.rand(100000).apply(0 to -1 by 2)
 
-  def timeSmallDVScale(reps: Int) = {
+  def timeSmallDVScale(reps: Int): DenseVector[Double] = {
     cforRange(0 until reps) { rep =>
       dv *= 1.0001
     }
     dv
   }
 
-  def timeSmallDVInlineRange(reps: Int) = {
+  def timeSmallDVInlineRange(reps: Int): DenseVector[Double] = {
     cforRange(0 until reps) { rep =>
       val ad = dv.data
       cforRange(0 until dv.length) { i =>
@@ -29,7 +29,7 @@ class DenseScaleBenchmark extends BreezeBenchmark {
     dv
   }
 
-  def timeSmallDVScaleInline(reps: Int) = {
+  def timeSmallDVScaleInline(reps: Int): DenseVector[Double] = {
     val d = dv.data
     cforRange(0 until reps) { rep =>
       d(0) *= 1.0001
