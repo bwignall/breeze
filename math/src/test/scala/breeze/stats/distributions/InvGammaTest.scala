@@ -10,7 +10,6 @@ class InvGammaTest extends AnyFunSuite with MomentsTestBase[Double] {
   override type Distr = InvGamma
 
   override val numSamples: Int = 50000
-  override val VARIANCE_TOLERANCE: Double = 1e-1
 
   implicit val arbDistr: Arbitrary[InvGamma] = Arbitrary {
     for {
