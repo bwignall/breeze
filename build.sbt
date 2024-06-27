@@ -30,7 +30,7 @@ val defaultScala = Scala213
 ThisBuild / crossScalaVersions := Seq(defaultScala)
 ThisBuild / scalaVersion := defaultScala // the default Scala
 
-javacOptions ++= Seq("-source", "1.8", "-target", "1.8", "-Xmx2g")
+javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 
 lazy val root = project
   .in(file("."))
@@ -50,3 +50,4 @@ lazy val benchmark = project.in(file("benchmark")).dependsOn(math, natives)
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 Test / fork := true
+Test / javaOptions := Seq("-Xmx3G")

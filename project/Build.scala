@@ -26,7 +26,9 @@ object Common {
     scalaVersion := buildScalaVersion,
     crossScalaVersions := buildCrossScalaVersions,
     scalacOptions ++= Seq("-deprecation", "-language:_"),
-    javacOptions ++= Seq("-target", "1.8", "-source", "1.8", "-Xmx2g"),
+    javacOptions ++= Seq("-target", "1.8", "-source", "1.8"),
+    Test / fork := true,
+    Test / javaOptions := Seq("-Xmx3G"),
     credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"),
     resolvers ++= Seq(
       Resolver.mavenLocal,
