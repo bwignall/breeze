@@ -48,3 +48,5 @@ lazy val viz = project.in(file("viz")).dependsOn(math)
 lazy val benchmark = project.in(file("benchmark")).dependsOn(math, natives)
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
+
+Test / fork := true
