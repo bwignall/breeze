@@ -58,10 +58,6 @@ jobs:
         if: matrix.java == 'temurin@8' && matrix.os == 'ubuntu-latest'
         run: sbt '++ ${{ matrix.scala }}' scalafmtCheckAll 'project /' scalafmtSbtCheck
 
-      - name: Check scalafix lints
-        if: matrix.java == 'temurin@8' && matrix.os == 'ubuntu-latest'
-        run: sbt '++ ${{ matrix.scala }}' 'scalafixAll --check'
-
       - name: Test
         run: sbt '++ ${{ matrix.scala }}' test
 

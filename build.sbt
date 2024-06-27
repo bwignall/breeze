@@ -16,6 +16,9 @@ ThisBuild / tlCiDocCheck := true
 // Not currently bothering to generate/check headers
 ThisBuild / tlCiHeaderCheck := false
 
+// scalafix currently OOMs in CI
+ThisBuild / tlCiScalafixCheck := false
+
 name := "breeze-parent"
 
 val Scala213 = "2.13.13"
