@@ -13,8 +13,11 @@ object Common {
     }
   }
 
+  val Scala213 = "2.13.13"
+  val Scala3 = "3.3.3"
 //  val buildCrossScalaVersions = Seq("3.1.3", "2.12.15", "2.13.13")
-  val buildCrossScalaVersions = Seq("2.13.13")
+//  val buildCrossScalaVersions = Seq(Scala213, Scala3)
+  val buildCrossScalaVersions = Seq(Scala213)
 
   lazy val buildScalaVersion = buildCrossScalaVersions.head
 
@@ -23,7 +26,7 @@ object Common {
     scalaVersion := buildScalaVersion,
     crossScalaVersions := buildCrossScalaVersions,
     scalacOptions ++= Seq("-deprecation", "-language:_"),
-    javacOptions ++= Seq("-target", "1.8", "-source", "1.8"),
+    javacOptions ++= Seq("-target", "1.8", "-source", "1.8", "-Xmx2g"),
     credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"),
     resolvers ++= Seq(
       Resolver.mavenLocal,

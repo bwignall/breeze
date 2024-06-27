@@ -26,7 +26,7 @@ name := "breeze-parent"
 
 val Scala213 = "2.13.13"
 val Scala3 = "3.3.3"
-val defaultScala = Scala3
+val defaultScala = Scala213
 ThisBuild / crossScalaVersions := Seq(defaultScala)
 ThisBuild / scalaVersion := defaultScala // the default Scala
 
