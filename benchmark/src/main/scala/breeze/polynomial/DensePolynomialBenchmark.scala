@@ -2,7 +2,7 @@ package breeze.polynomial
 
 import algebra.instances.all.doubleAlgebra
 import breeze.benchmark.*
-import breeze.linalg.BuildsRandomVectors
+import breeze.linalg.{BuildsRandomVectors, DenseVector}
 import breeze.stats.distributions.*
 import spire.math.*
 import spire.math.poly.*
@@ -26,13 +26,13 @@ class DensePolynomialBenchmark extends BreezeBenchmark with BuildsRandomVectors 
   }
 
   @Benchmark
-  def timePolyOnDenseVector(reps: Int): Nothing =
+  def timePolyOnDenseVector(reps: Int): DenseVector[Double] =
     runWith2(reps, { randomPoly(10) }, { randomArray(1024 * 4) })((poly, arr) => {
       poly(arr)
     })
 
   @Benchmark
-  def timePolyOnDenseMatrix(reps: Int): Nothing =
+  def timePolyOnDenseMatrix(reps: Int): DenseVector[Double] =
     runWith2(reps, { randomPoly(10) }, { randomMatrix(256, 256) })((poly, arr) => {
       poly(arr)
     })
