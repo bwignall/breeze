@@ -4,7 +4,6 @@ import breeze.benchmark.BreezeBenchmark
 import breeze.benchmark.MyRunner
 import breeze.linalg.operators.DenseVectorSupportMethods
 import breeze.macros._
-import breeze.numerics._
 import breeze.stats.distributions.Rand
 
 /**
@@ -19,7 +18,7 @@ class DenseDotProductBenchmark extends BreezeBenchmark {
 
   def timeBigDVDotMasked(reps: Int): Double = {
     var sum = 0.0
-    cforRange(0 until reps) { rep =>
+    cforRange(0 until reps) { _ =>
       sum += (dvBig: Vector[Double]).dot(dv2Big: Vector[Double])
     }
     sum
@@ -27,7 +26,7 @@ class DenseDotProductBenchmark extends BreezeBenchmark {
 
   def timeDirectBigDV(reps: Int): Double = {
     var sum = 0.0
-    cforRange(0 until reps) { rep =>
+    cforRange(0 until reps) { _ =>
       sum += DenseVectorSupportMethods.dotProduct_Double(dvBig.data, 0, dv2Big.data, 0, dvBig.length)
     }
     sum
@@ -35,7 +34,7 @@ class DenseDotProductBenchmark extends BreezeBenchmark {
 
   def timeBigDVZip(reps: Int): Double = {
     var sum = 0.0
-    cforRange(0 until reps) { rep =>
+    cforRange(0 until reps) { _ =>
       zipValues(dvBig, dv2Big).foreach { (x, y) =>
         sum += x * y
       }
@@ -45,7 +44,7 @@ class DenseDotProductBenchmark extends BreezeBenchmark {
 
   def timeBigDVDot(reps: Int): Double = {
     var sum = 0.0
-    cforRange(0 until reps) { rep =>
+    cforRange(0 until reps) { _ =>
       sum += dvBig.dot(dv2Big)
     }
     sum
@@ -53,7 +52,7 @@ class DenseDotProductBenchmark extends BreezeBenchmark {
 
   def timeSmallDVDot(reps: Int): Double = {
     var sum = 0.0
-    cforRange(0 until reps) { rep =>
+    cforRange(0 until reps) { _ =>
       sum += dv.dot(dv2)
     }
     sum
@@ -61,7 +60,7 @@ class DenseDotProductBenchmark extends BreezeBenchmark {
 
   def timeSmallDVInlineRange(reps: Int): Double = {
     var sum = 0.0
-    cforRange(0 until reps) { rep =>
+    cforRange(0 until reps) { _ =>
       val ad = dv.data
       val bd = dv2.data
       cforRange(0 until dv.length) { i =>
@@ -73,7 +72,7 @@ class DenseDotProductBenchmark extends BreezeBenchmark {
 
   def timeDirectBigFV(reps: Int): Double = {
     var sum = 0.0
-    cforRange(0 until reps) { rep =>
+    cforRange(0 until reps) { _ =>
       sum += DenseVectorSupportMethods.dotProduct_Float(fvBig.data, 0, fv2Big.data, 0, fvBig.length)
     }
     sum
@@ -81,7 +80,7 @@ class DenseDotProductBenchmark extends BreezeBenchmark {
 
   def timeBigFVDot(reps: Int): Double = {
     var sum = 0.0
-    cforRange(0 until reps) { rep =>
+    cforRange(0 until reps) { _ =>
       sum += fvBig.dot(fv2Big)
     }
     sum

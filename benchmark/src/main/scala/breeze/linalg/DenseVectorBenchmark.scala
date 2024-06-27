@@ -38,7 +38,7 @@ trait BuildsRandomVectors {
   def randomSparseVector(size: Int, sparsity: Double = 0.01): SparseVector[Double] = {
     val nnz = (size * sparsity).toInt
     val vb = VectorBuilder.zeros[Double](size)
-    cforRange(0 until nnz) { i =>
+    cforRange(0 until nnz) { _ =>
       val ind = (Math.random() * size).toInt
       val v = Math.random()
       vb.add(ind, v)
