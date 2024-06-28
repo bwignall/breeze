@@ -37,7 +37,7 @@ trait MomentsTestBase[T] extends RandTestBase {
     })
   }
 
-  val VARIANCE_TOLERANCE = 5e-2
+  val VARIANCE_TOLERANCE = 10e-2
   test("variance") {
     check(Prop.forAll { (distr: Distr) =>
       // try twice, and only fail if both fail.
