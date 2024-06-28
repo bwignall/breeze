@@ -80,9 +80,10 @@ object SliceVector {
   }
 
   implicit def canCreateZerosLike[K, V: ClassTag: Zero]: CanCreateZerosLike[SliceVector[K, V], DenseVector[V]] = {
-    (v1: SliceVector[K, V]) => {
-      DenseVector.zeros[V](v1.length)
-    }
+    (v1: SliceVector[K, V]) =>
+      {
+        DenseVector.zeros[V](v1.length)
+      }
   }
 
   implicit def canIterateValues[K, V]: CanTraverseValues[SliceVector[K, V], V] =

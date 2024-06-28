@@ -43,7 +43,7 @@ class StochasticAveragedGradientTest extends OptimizeTestBase {
 
     def optimizeThis(init: DenseVector[Double]) = {
       val f = new DiffFunction[DenseVector[Double]] {
-        def calculate(x: DenseVector[Double]) = {
+        def calculate(x: DenseVector[Double]): (Double, DenseVector[Double]) = {
           (norm((x - 3.0) ^:^ 2.0, 1), (x * 2.0) - 6.0)
         }
       }

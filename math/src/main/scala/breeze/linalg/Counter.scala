@@ -43,10 +43,10 @@ trait CounterLike[K, V, +M <: scala.collection.mutable.Map[K, V], +This <: Count
 
   def repr: This = this.asInstanceOf[This]
 
-  override def size = data.size
-  def activeSize = data.size
+  override def size: Int = data.size
+  def activeSize: Int = data.size
 
-  def isEmpty = data.isEmpty
+  def isEmpty: Boolean = data.isEmpty
 
   def contains(k: K): Boolean = data.contains(k)
 
@@ -58,17 +58,17 @@ trait CounterLike[K, V, +M <: scala.collection.mutable.Map[K, V], +This <: Count
 
   def get(k: K): Option[V] = data.get(k)
 
-  override def keysIterator = data.keysIterator
+  override def keysIterator: Iterator[K] = data.keysIterator
 
-  override def valuesIterator = data.valuesIterator
+  override def valuesIterator: Iterator[V] = data.valuesIterator
 
-  override def iterator = data.iterator
+  override def iterator: Iterator[(K, V)] = data.iterator
 
-  def activeIterator = iterator
+  def activeIterator: Iterator[(K, V)] = iterator
 
-  def activeValuesIterator = valuesIterator
+  def activeValuesIterator: Iterator[V] = valuesIterator
 
-  def activeKeysIterator = keysIterator
+  def activeKeysIterator: Iterator[K] = keysIterator
 
   override def toString: String = data.mkString("Counter(", ", ", ")")
 
@@ -79,7 +79,7 @@ trait CounterLike[K, V, +M <: scala.collection.mutable.Map[K, V], +This <: Count
 
   override def hashCode(): Int = data.hashCode()
 
-  def toMap = data.toMap
+  def toMap: Map[K, V] = data.toMap
 }
 
 trait Counter[K, V] extends Tensor[K, V] with CounterLike[K, V, collection.mutable.Map[K, V], Counter[K, V]] {}
@@ -114,7 +114,7 @@ object Counter extends CounterOps {
   @SerialVersionUID(2872445575657408160L)
   class Impl[K, V](override val data: scala.collection.mutable.Map[K, V])(implicit zero: Zero[V])
       extends Counter[K, V] {
-    def default = zero.zero
+    def default: V = zero.zero
   }
 
   implicit def canMapValues[K, V, RV: Zero]: CanMapValues[Counter[K, V], V, RV, Counter[K, RV]] = {

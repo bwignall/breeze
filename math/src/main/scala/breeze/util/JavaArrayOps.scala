@@ -40,7 +40,7 @@ object JavaArrayOps {
     dv.copy.data
   }
   def dmToArray2[@specialized(Int, Double, Long, Float) V](dm: DenseMatrix[V]): Array[Array[V]] = {
-    implicit val ct = ReflectionUtil.elemClassTagFromArray(dm.data)
+    implicit val ct: ClassTag[V] = ReflectionUtil.elemClassTagFromArray(dm.data)
     dm(*, ::).toIndexedSeq.map(_.t.toArray).toArray
 //    val ret = new Array[Array[V]](dm.rows)
 //    var rowI = 0

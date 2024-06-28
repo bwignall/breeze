@@ -103,7 +103,7 @@ object AssertImpl {
   ): c.Expr[Unit] = {
     import c.universe._
 
-    def newValDef(name: String, rhs: Tree, tpe: Type = null) = {
+    def newValDef(name: String, rhs: Tree, tpe: Type = null): ValDef = {
       ValDef(
         NoMods,
         newTermName(c.fresh(name)),

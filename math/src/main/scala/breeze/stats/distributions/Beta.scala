@@ -136,8 +136,8 @@ object Beta extends ExponentialFamily[Beta, Double] with ContinuousDistributionU
   type Parameter = (Double, Double)
   case class SufficientStatistic(n: Double, meanLog: Double, meanLog1M: Double)
       extends distributions.SufficientStatistic[SufficientStatistic] {
-    def *(weight: Double) = SufficientStatistic(n * weight, meanLog, meanLog1M)
-    def +(t: SufficientStatistic) = {
+    def *(weight: Double): SufficientStatistic = SufficientStatistic(n * weight, meanLog, meanLog1M)
+    def +(t: SufficientStatistic): SufficientStatistic = {
       val delta = t.meanLog - meanLog
       val newMeanLog = meanLog + delta * (t.n / (t.n + n))
       val logDelta = t.meanLog1M - meanLog1M

@@ -34,7 +34,7 @@ object Iterators {
     new Iterator[T] {
 
       /** Keep track of the top of each list. */
-      val heads = iters.map(get _).toArray
+      val heads: Array[Option[T]] = iters.map(get _).toArray
 
       /** The merged iterator has more if any head is not None. */
       override def hasNext: Boolean =

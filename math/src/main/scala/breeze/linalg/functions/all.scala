@@ -19,34 +19,35 @@ object all extends UFunc {
   implicit def reduceUFunc[F, T, S](implicit
     impl2: Impl2[S => Boolean, T, Boolean],
     base: UFunc.UImpl[F, S, Boolean]
-  ): Impl2[F, T, Boolean] = {
-    (v: F, v2: T) => {
+  ): Impl2[F, T, Boolean] = { (v: F, v2: T) =>
+    {
       all((x: S) => base(x), v2)
     }
   }
 
   implicit def reduceFun[T, S](implicit ctv: CanTraverseValues[T, S]): Impl2[S => Boolean, T, Boolean] = {
-    (f: S => Boolean, v2: T) => {
+    (f: S => Boolean, v2: T) =>
+      {
 
-      object Visitor extends ValuesVisitor[S] {
-        def visit(a: S): Unit = {
-          if (!f(a)) throw Found
+        object Visitor extends ValuesVisitor[S] {
+          def visit(a: S): Unit = {
+            if (!f(a)) throw Found
+          }
+
+          def zeros(numZero: Int, zeroValue: S): Unit = {
+            if (numZero != 0 && !f(zeroValue)) throw Found
+          }
+
         }
 
-        def zeros(numZero: Int, zeroValue: S): Unit = {
-          if (numZero != 0 && !f(zeroValue)) throw Found
+        try {
+          ctv.traverse(v2, Visitor)
+          true
+        } catch {
+          case Found => false
         }
 
       }
-
-      try {
-        ctv.traverse(v2, Visitor)
-        true
-      } catch {
-        case Found => false
-      }
-
-    }
   }
 
   implicit def reduceZero[T, S](implicit impl2: Impl2[S => Boolean, T, Boolean], z: Zero[S]): Impl[T, Boolean] =

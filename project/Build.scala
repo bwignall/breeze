@@ -1,5 +1,5 @@
 import sbt.Keys._
-import sbt._
+import sbt.{Def, _}
 import breeze.codegen.plugin.SbtBreezeCodegenPlugin.breezeCodegenSettings
 import xerial.sbt.Sonatype.autoImport.{sonatypeProfileName, sonatypeProjectHosting, sonatypePublishTo}
 import xerial.sbt.Sonatype._
@@ -17,11 +17,11 @@ object Common {
   val Scala3 = "3.3.3"
 //  val buildCrossScalaVersions = Seq("3.1.3", "2.12.15", "2.13.13")
 //  val buildCrossScalaVersions = Seq(Scala213, Scala3)
-  val buildCrossScalaVersions = Seq(Scala213)
+  val buildCrossScalaVersions: Seq[String] = Seq(Scala213)
 
-  lazy val buildScalaVersion = buildCrossScalaVersions.head
+  lazy val buildScalaVersion: String = buildCrossScalaVersions.head
 
-  val commonSettings = Seq(
+  val commonSettings: Seq[Def.Setting[_]] = Seq(
     organization := "org.scalanlp",
     scalaVersion := buildScalaVersion,
     crossScalaVersions := buildCrossScalaVersions,

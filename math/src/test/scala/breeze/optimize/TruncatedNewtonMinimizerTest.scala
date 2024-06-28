@@ -32,7 +32,7 @@ class TruncatedNewtonMinimizerTest extends OptimizeTestBase {
                                                                                                  l2Regularization = reg
         )
       val f = new DiffFunction[DenseVector[Double]] {
-        def calculate(x: DenseVector[Double]) = {
+        def calculate(x: DenseVector[Double]): (Double, DenseVector[Double]) = {
           (norm((x - 3.0) ^:^ 2.0, 1), (x * 2.0) - 6.0)
         }
       }
@@ -56,7 +56,7 @@ class TruncatedNewtonMinimizerTest extends OptimizeTestBase {
 
     def optimizeThis(init: Counter[String, Double]) = {
       val f = new DiffFunction[Counter[String, Double]] {
-        def calculate(x: Counter[String, Double]) = {
+        def calculate(x: Counter[String, Double]): (Double, Counter[String, Double]) = {
           ((x - 3.0).dot(x - 3.0), (x * 2.0) - 6.0)
         }
       }

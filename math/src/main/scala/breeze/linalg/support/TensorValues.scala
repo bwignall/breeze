@@ -26,7 +26,7 @@ class TensorValues[K, V, +This](private val tensor: This,
                                   true
                                 }
 )(implicit ev: This <:< Tensor[K, V]) {
-  def size = tensor.size
+  def size: Int = tensor.size
 
   def iterator: Iterator[V] = { if (active) tensor.activeValuesIterator else tensor.valuesIterator }.filter(f)
 

@@ -62,7 +62,7 @@ object DiffFunction extends DiffFunctionOpImplicits {
         myGrad(grad, x)
       }
 
-      override def valueAt(x: T) = {
+      override def valueAt(x: T): Double = {
         val v = d.valueAt(x)
         myValueAt(v, x)
       }
@@ -75,7 +75,7 @@ object DiffFunction extends DiffFunctionOpImplicits {
         g + (x * weight)
       }
 
-      override def calculate(x: T) = {
+      override def calculate(x: T): (Double, T) = {
         val (v, grad) = d.calculate(x)
         (myValueAt(v, x), myGrad(grad, x))
       }
@@ -90,7 +90,7 @@ object DiffFunction extends DiffFunctionOpImplicits {
       myGrad(grad, x)
     }
 
-    override def valueAt(x: T, batch: IndexedSeq[Int]) = {
+    override def valueAt(x: T, batch: IndexedSeq[Int]): Double = {
       val v = d.valueAt(x, batch)
       v + myValueAt(x)
     }
@@ -103,12 +103,12 @@ object DiffFunction extends DiffFunctionOpImplicits {
       g + (x * weight)
     }
 
-    override def calculate(x: T, batch: IndexedSeq[Int]) = {
+    override def calculate(x: T, batch: IndexedSeq[Int]): (Double, T) = {
       val (v, grad) = d.calculate(x, batch)
       (v + myValueAt(x), myGrad(grad, x))
     }
 
-    def fullRange = d.fullRange
+    def fullRange: IndexedSeq[Int] = d.fullRange
   }
 }
 
@@ -116,8 +116,8 @@ sealed trait DiffFunctionOpImplicits { self: DiffFunction.type =>
 
   implicit def opAddDiffFunction[T](implicit
     opAdd: OpAdd.Impl2[T, T, T]
-  ): OpAdd.Impl2[DiffFunction[T], DiffFunction[T], DiffFunction[T]] = {
-    (f: DiffFunction[T], f2: DiffFunction[T]) => {
+  ): OpAdd.Impl2[DiffFunction[T], DiffFunction[T], DiffFunction[T]] = { (f: DiffFunction[T], f2: DiffFunction[T]) =>
+    {
       new DiffFunction[T] {
         override def calculate(x: T): (Double, T) = {
           val (v1, g1) = f.calculate(x)
@@ -132,8 +132,8 @@ sealed trait DiffFunctionOpImplicits { self: DiffFunction.type =>
 
   implicit def opSubDiffFunction[T](implicit
     opSub: OpSub.Impl2[T, T, T]
-  ): OpSub.Impl2[DiffFunction[T], DiffFunction[T], DiffFunction[T]] = {
-    (f: DiffFunction[T], f2: DiffFunction[T]) => {
+  ): OpSub.Impl2[DiffFunction[T], DiffFunction[T], DiffFunction[T]] = { (f: DiffFunction[T], f2: DiffFunction[T]) =>
+    {
       new DiffFunction[T] {
         override def calculate(x: T): (Double, T) = {
           val (v1, g1) = f.calculate(x)
@@ -148,8 +148,8 @@ sealed trait DiffFunctionOpImplicits { self: DiffFunction.type =>
 
   implicit def opMulDiffFunction[T](implicit
     opMul: OpMulMatrix.Impl2[T, Double, T]
-  ): OpMulMatrix.Impl2[DiffFunction[T], Double, DiffFunction[T]] = {
-    (f: DiffFunction[T], v: Double) => {
+  ): OpMulMatrix.Impl2[DiffFunction[T], Double, DiffFunction[T]] = { (f: DiffFunction[T], v: Double) =>
+    {
       new DiffFunction[T] {
         override def calculate(x: T): (Double, T) = {
           val (v1, g1) = f.calculate(x)
@@ -163,8 +163,8 @@ sealed trait DiffFunctionOpImplicits { self: DiffFunction.type =>
 
   implicit def opMulLHSDiffFunction[T](implicit
     opMul: OpMulMatrix.Impl2[Double, T, T]
-  ): OpMulMatrix.Impl2[Double, DiffFunction[T], DiffFunction[T]] = {
-    (v: Double, f: DiffFunction[T]) => {
+  ): OpMulMatrix.Impl2[Double, DiffFunction[T], DiffFunction[T]] = { (v: Double, f: DiffFunction[T]) =>
+    {
       new DiffFunction[T] {
         override def calculate(x: T): (Double, T) = {
           val (v1, g1) = f.calculate(x)
@@ -178,8 +178,8 @@ sealed trait DiffFunctionOpImplicits { self: DiffFunction.type =>
 
   implicit def opDivDiffFunction[T](implicit
     opDiv: OpDiv.Impl2[T, Double, T]
-  ): OpDiv.Impl2[DiffFunction[T], Double, DiffFunction[T]] = {
-    (f: DiffFunction[T], v: Double) => {
+  ): OpDiv.Impl2[DiffFunction[T], Double, DiffFunction[T]] = { (f: DiffFunction[T], v: Double) =>
+    {
       new DiffFunction[T] {
         override def calculate(x: T): (Double, T) = {
           val (v1, g1) = f.calculate(x)
@@ -194,8 +194,8 @@ sealed trait DiffFunctionOpImplicits { self: DiffFunction.type =>
   // d/dx a/f(x) = -a * f'(x) / f(x)^2
   implicit def opDivLHSDiffFunction[T](implicit
     opMul: OpMulMatrix.Impl2[Double, T, T]
-  ): OpDiv.Impl2[Double, DiffFunction[T], DiffFunction[T]] = {
-    (v: Double, f: DiffFunction[T]) => {
+  ): OpDiv.Impl2[Double, DiffFunction[T], DiffFunction[T]] = { (v: Double, f: DiffFunction[T]) =>
+    {
       new DiffFunction[T] {
         override def calculate(x: T): (Double, T) = {
           val (v1, g1) = f.calculate(x)

@@ -108,9 +108,9 @@ object Poisson extends ExponentialFamily[Poisson, Int] {
   type Parameter = Double
   case class SufficientStatistic(sum: Double, n: Double)
       extends distributions.SufficientStatistic[SufficientStatistic] {
-    def +(t: SufficientStatistic) = SufficientStatistic(t.sum + sum, t.n + n)
+    def +(t: SufficientStatistic): SufficientStatistic = SufficientStatistic(t.sum + sum, t.n + n)
 
-    def *(weight: Double) = SufficientStatistic(sum * weight, n * weight)
+    def *(weight: Double): SufficientStatistic = SufficientStatistic(sum * weight, n * weight)
   }
 
   def emptySufficientStatistic: SufficientStatistic = SufficientStatistic(0, 0)

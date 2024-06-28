@@ -25,7 +25,7 @@ class LBFGSTest extends OptimizeTestBase {
 
     def optimizeThis(init: DenseVector[Double]) = {
       val f = new DiffFunction[DenseVector[Double]] {
-        def calculate(x: DenseVector[Double]) = {
+        def calculate(x: DenseVector[Double]): (Double, DenseVector[Double]) = {
           (norm((x - 3.0) ^:^ 2.0, 1), (x *:* 2.0) - 6.0)
         }
       }
@@ -42,7 +42,7 @@ class LBFGSTest extends OptimizeTestBase {
 
     def optimizeThis(init: Counter[String, Double]): Boolean = {
       val f = new DiffFunction[Counter[String, Double]] {
-        def calculate(x: Counter[String, Double]) = {
+        def calculate(x: Counter[String, Double]): (Double, Counter[String, Double]) = {
           ((x("A") - 3.0) * (x("A") - 3.0), Counter("A" -> (x("A") * 2.0 - 6.0)))
         }
       }
@@ -65,7 +65,7 @@ class LBFGSTest extends OptimizeTestBase {
 
     def optimizeThis(init: Counter[String, Double]) = {
       val f = new DiffFunction[Counter[String, Double]] {
-        def calculate(x: Counter[String, Double]) = {
+        def calculate(x: Counter[String, Double]): (Double, Counter[String, Double]) = {
           ((x - 3.0).dot(x - 3.0), (x *:* 2.0) - 6.0)
         }
       }
@@ -83,7 +83,7 @@ class LBFGSTest extends OptimizeTestBase {
 
     def optimizeThis(init: DenseVector[Double]) = {
       val f = new DiffFunction[DenseVector[Double]] {
-        def calculate(x: DenseVector[Double]) = {
+        def calculate(x: DenseVector[Double]): (Double, DenseVector[Double]) = {
           ((x - 3.0).dot(x - 3.0), (x *:* 2.0) - 6.0)
         }
       }
@@ -104,7 +104,7 @@ class LBFGSTest extends OptimizeTestBase {
     def optimizeThis(init: DenseVector[Double]) = {
       val f = new DiffFunction[DenseVector[Double]] {
 
-        def calculate(x: DenseVector[Double]) = {
+        def calculate(x: DenseVector[Double]): (Double, DenseVector[Double]) = {
           var fx = 0.0
           val g = DenseVector.zeros[Double](x.length)
 
@@ -140,7 +140,7 @@ class LBFGSTest extends OptimizeTestBase {
 
     def optimizeThis(init: DenseVector[Float]) = {
       val f = new DiffFunction[DenseVector[Float]] {
-        def calculate(x: DenseVector[Float]) = {
+        def calculate(x: DenseVector[Float]): (Double, DenseVector[Float]) = {
           (norm((x - 3.0f) ^:^ 2.0f, 1), (x *:* 2.0f) - 6.0f)
         }
       }
@@ -157,7 +157,7 @@ class LBFGSTest extends OptimizeTestBase {
 
     def optimizeThis(init: DenseVector[Double]) = {
       val f = new DiffFunction[DenseVector[Double]] {
-        def calculate(x: DenseVector[Double]) = {
+        def calculate(x: DenseVector[Double]): (Double, DenseVector[Double]) = {
           (norm((x - 3.0) ^:^ 2.0, 1), (x *:* 2.0) - 6.0)
         }
       }

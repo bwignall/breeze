@@ -37,7 +37,7 @@ object LiteralRow {
       }
     }
 
-    def length(arr: Array[V]) = arr.length
+    def length(arr: Array[V]): Int = arr.length
   }
 
   implicit def dv[V]: LiteralRow[DenseVector[V], V] = new LiteralRow[DenseVector[V], V] {
@@ -47,7 +47,7 @@ object LiteralRow {
       }
     }
 
-    def length(arr: DenseVector[V]) = arr.length
+    def length(arr: DenseVector[V]): Int = arr.length
   }
 
   implicit def seq[V, S](implicit ev: S <:< Seq[V]): LiteralRow[S, V] = new LiteralRow[S, V] {
@@ -57,11 +57,11 @@ object LiteralRow {
       }
     }
 
-    def length(arr: S) = arr.length
+    def length(arr: S): Int = arr.length
   }
 
   implicit def vLiteral[V <: AnyVal]: LiteralRow[V, V] = new LiteralRow[V, V] {
-    def foreach[X](tup: V, fn: ((Int, V) => X)) = {
+    def foreach[X](tup: V, fn: ((Int, V) => X)): Unit = {
       fn(0, tup)
     }
 
@@ -71,12 +71,12 @@ object LiteralRow {
   @arityize(22)
   implicit def tuple[V]: LiteralRow[Tuple[V @arityize.repeat] @arityize.relative(tuple), V] =
     new LiteralRow[Tuple[V @arityize.repeat] @arityize.relative(tuple), V] {
-      def foreach[X](tup: Tuple[V @arityize.repeat] @arityize.relative(tuple), fn: ((Int, V) => X)) = {
+      def foreach[X](tup: Tuple[V @arityize.repeat] @arityize.relative(tuple), fn: ((Int, V) => X)): Unit = {
         for ((v, i) <- tup.productIterator.zipWithIndex) {
           fn(i, v.asInstanceOf[V])
         }
       }
 
-      def length(tup: Tuple[V @arityize.repeat] @arityize.relative(tuple)) = __order__
+      def length(tup: Tuple[V @arityize.repeat] @arityize.relative(tuple)): Int = __order__
     }
 }

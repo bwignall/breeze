@@ -47,9 +47,9 @@ class VonMisesTest
     y1 && y2
   }
 
-  def asDouble(x: Double) = x
+  def asDouble(x: Double): Double = x
 
-  def fromDouble(x: Double) = x
+  def fromDouble(x: Double): Double = x
 
   implicit def arbDistr: Arbitrary[VonMises] = Arbitrary {
     for (

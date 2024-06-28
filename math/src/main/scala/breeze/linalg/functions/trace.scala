@@ -9,8 +9,8 @@ object trace extends UFunc {
   implicit def impl_trace_using_diag_and_sum[T, U, V](implicit
     diagImpl: diag.Impl[T, U],
     sumImpl: sum.Impl[U, V]
-  ): Impl[T, V] = {
-    (X: T) => {
+  ): Impl[T, V] = { (X: T) =>
+    {
       sumImpl(diagImpl(X))
     }
   }

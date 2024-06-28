@@ -48,9 +48,9 @@ trait QuasiTensor[@spec(Int) K, @spec(Double, Int, Float, Long) V] extends HasOp
   def activeKeysIterator: Iterator[K]
 
   /** Returns all indices k whose value satisfies a predicate. */
-  def findAll(f: V => Boolean) = activeIterator.filter(p => f(p._2)).map(_._1).toIndexedSeq
+  def findAll(f: V => Boolean): Seq[K] = activeIterator.filter(p => f(p._2)).map(_._1).toIndexedSeq
 
-  override def hashCode() = {
+  override def hashCode(): Int = {
     var hash = 43
     for (v <- activeValuesIterator) {
       val hh = v.##
@@ -83,7 +83,7 @@ trait TensorLike[@spec(Int) K, @spec(Double, Int, Float, Long) V, +This <: Tenso
    * method for slicing a tensor. For instance, DenseVectors support efficient slicing by a Range object.
    * @return
    */
-  def apply[Slice, Result](slice: Slice)(implicit canSlice: CanSlice[This, Slice, Result]) = {
+  def apply[Slice, Result](slice: Slice)(implicit canSlice: CanSlice[This, Slice, Result]): Result = {
     canSlice(repr, slice)
   }
 

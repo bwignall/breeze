@@ -161,7 +161,7 @@ package object plot {
         val stroke = new java.awt.BasicStroke(0f)
         override def getItemPaint(series: Int, item: Int): java.awt.Paint =
           paintScale(items(item))
-        override def getItemStroke(series: Int, item: Int) = stroke
+        override def getItemStroke(series: Int, item: Int): BasicStroke = stroke
 
         // i dunno why we need this all of a sudden
         override def clone(): AnyRef = super.clone()
@@ -196,7 +196,7 @@ package object plot {
     xv: DomainFunction[D, Int, V],
     vv: V => Double
   ): Series = new Series {
-    val values = xv.domain(data).map(xv(data, _)).map(vv)
+    val values: Seq[Double] = xv.domain(data).map(xv(data, _)).map(vv)
     val (min, max) = (values.min, values.max)
     val binner: StaticHistogramBins = bins match {
       case static: StaticHistogramBins => static
@@ -209,7 +209,7 @@ package object plot {
       counts(binner.bin(value)) += 1
     }
 
-    val width = binner.splits.iterator.zip(binner.splits.iterator.drop(1)).map(tup => tup._2 - tup._1).min
+    val width: Double = binner.splits.iterator.zip(binner.splits.iterator.drop(1)).map(tup => tup._2 - tup._1).min
 
     def getChartStuff(defaultName: (Int) => String,
                       defaultColor: (Int) => Paint,
@@ -266,9 +266,9 @@ package object plot {
   ): Series =
     new Series {
 
-      val mt = img
+      val mt: Matrix[Double] = img
 
-      val items = img.keysIterator.toIndexedSeq
+      val items: Seq[(Int, Int)] = img.keysIterator.toIndexedSeq
 
       def getChartStuff(defaultName: (Int) => String,
                         defaultColor: (Int) => Paint,
@@ -318,9 +318,9 @@ package object plot {
         }
 
         val paintScale = new org.jfree.chart.renderer.PaintScale {
-          override def getLowerBound = staticScale.lower
-          override def getUpperBound = staticScale.upper
-          override def getPaint(value: Double) =
+          override def getLowerBound: Double = staticScale.lower
+          override def getUpperBound: Double = staticScale.upper
+          override def getPaint(value: Double): Paint =
             staticScale(value)
         }
 

@@ -111,7 +111,7 @@ object KuhnMunkres extends BipartiteMatching {
       marked(row).indexWhere(2 == _)
     }
 
-    def convertPath(path: Array[Array[Int]], count: Int) = {
+    def convertPath(path: Array[Array[Int]], count: Int): Unit = {
       for (i <- 0 to count) {
         if (marked(path(i)(0))(path(i)(1)) == 1)
           marked(path(i)(0))(path(i)(1)) = 0

@@ -20,7 +20,7 @@ class RingBuffer[A](val capacity: Int)
   // if the buffer is full, we set endPos = -1
   def isFull: Boolean = endPos < 0
 
-  override def knownSize = length
+  override def knownSize: Int = length
 
   private var startPos = 0
   private var endPos = 0

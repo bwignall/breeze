@@ -309,7 +309,7 @@ trait DenseMatrix_TraversalOps extends TensorLowPrio {
   implicit def canMapKeyValuePairs_DM[V, R: ClassTag]
     : CanMapKeyValuePairs[DenseMatrix[V], (Int, Int), V, R, DenseMatrix[R]] = {
     new CanMapKeyValuePairs[DenseMatrix[V], (Int, Int), V, R, DenseMatrix[R]] {
-      override def map(from: DenseMatrix[V], fn: (((Int, Int), V) => R)) = {
+      override def map(from: DenseMatrix[V], fn: (((Int, Int), V) => R)): DenseMatrix[R] = {
         val data = new Array[R](from.data.length)
         var off = 0
         cforRange(0 until from.cols) { j =>

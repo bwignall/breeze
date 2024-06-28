@@ -102,7 +102,7 @@ class LBFGSB(lowerBounds: DenseVector[Double],
                                            direction: DenseVector[Double]
   ): Double = {
     val ff = new DiffFunction[Double] {
-      def calculate(alpha: Double) = {
+      def calculate(alpha: Double): (Double, Double) = {
         val newX = takeStep(state, direction, alpha)
         val (ff, grad) = f.calculate(newX)
         ff -> (grad.dot(direction))

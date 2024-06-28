@@ -39,7 +39,7 @@ object CSVReader {
   ): Iterator[IndexedSeq[String]] = {
     val rdr = new OpenCSVReader(input, separator, quote, escape, skipLines)
     new Iterator[IndexedSeq[String]] {
-      var _next = rdr.readNext()
+      var _next: Array[String] = rdr.readNext()
       def hasNext: Boolean = _next ne null
 
       def next(): IndexedSeq[String] = {

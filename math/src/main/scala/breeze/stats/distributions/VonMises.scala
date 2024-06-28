@@ -63,8 +63,8 @@ case class VonMises(mu: Double, k: Double)(implicit rand: RandBasis)
 
   override lazy val toString: String = "VonMises(mu=" + mu + ", k=" + k + ")"
 
-  def mean = mu
-  def mode = mean
+  def mean: Double = mu
+  def mode: Double = mean
   def variance: Double = 1 - Bessel.i1(k) / Bessel.i0(k)
   def entropy: Double = -k * Bessel.i1(k) / Bessel.i0(k) + math.log(2 * math.Pi * Bessel.i0(k))
 }
@@ -75,7 +75,7 @@ object VonMises extends ExponentialFamily[VonMises, Double] {
       extends breeze.stats.distributions.SufficientStatistic[SufficientStatistic] {
     def +(t: SufficientStatistic) = new SufficientStatistic(n + t.n, sines + t.sines, cosines + t.cosines)
 
-    def *(weight: Double) = SufficientStatistic(weight * n, weight * sines, weight * cosines)
+    def *(weight: Double): SufficientStatistic = SufficientStatistic(weight * n, weight * sines, weight * cosines)
   }
 
   def emptySufficientStatistic: SufficientStatistic = SufficientStatistic(0, 0, 0)

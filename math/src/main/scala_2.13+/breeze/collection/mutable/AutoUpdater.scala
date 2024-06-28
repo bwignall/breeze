@@ -14,11 +14,11 @@ class AutoUpdater[M, K, V](val theMap: M, default: => V)(implicit ev: M <:< Map[
 
   def get(key: K): Option[V] = theMap.get(key)
 
-  def iterator = theMap.iterator
+  def iterator: Iterator[(K, V)] = theMap.iterator
 
   override def subtractOne(key: K): this.type = { theMap -= key; this }
 
-  override def size = theMap.size
+  override def size: Int = theMap.size
 }
 
 object AutoUpdater {

@@ -65,9 +65,9 @@ class LogNormalTest
     ) yield new LogNormal(mean, std)
   }
 
-  def asDouble(x: Double) = x
+  def asDouble(x: Double): Double = x
 
-  def fromDouble(x: Double) = x
+  def fromDouble(x: Double): Double = x
 
   test("pdf should return the correct value") {
     val dist = LogNormal(0.0, 1.0)

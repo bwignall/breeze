@@ -45,7 +45,7 @@ object reshape extends UFunc {
   implicit def dmReshape[T: ClassTag: Semiring: Zero]: Impl3[DenseMatrix[T], Int, Int, DenseMatrix[T]] =
     (dm: DenseMatrix[T], rows: Int, cols: Int) => {
       require(dm.rows * dm.cols == rows * cols,
-        "Cannot reshape a (%d,%d) matrix to a (%d,%d) matrix!".format(dm.rows, dm.cols, rows, cols)
+              "Cannot reshape a (%d,%d) matrix to a (%d,%d) matrix!".format(dm.rows, dm.cols, rows, cols)
       )
       val nDM = new DenseMatrix[T](dm.rows, dm.cols, new Array[T](dm.activeSize))
       // in-place set method should be used to take advantage of blas.dcopy for T = Double
@@ -57,7 +57,7 @@ object reshape extends UFunc {
   implicit def cscReshape[T: ClassTag: Semiring: Zero]: Impl3[CSCMatrix[T], Int, Int, CSCMatrix[T]] =
     (csc: CSCMatrix[T], rows: Int, cols: Int) => {
       require(csc.rows * csc.cols == rows * cols,
-        "Size of matrix must match new dimensions (i.e. m.rows * m.cols == rows * cols"
+              "Size of matrix must match new dimensions (i.e. m.rows * m.cols == rows * cols"
       )
       // Copy data
       val nData = new Array[T](csc.activeSize)

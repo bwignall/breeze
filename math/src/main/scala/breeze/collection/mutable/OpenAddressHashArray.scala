@@ -65,22 +65,22 @@ final class OpenAddressHashArray[@specialized(Int, Float, Long, Double) V] priva
     this(size, ConfigurableDefault.default[V])
   }
 
-  def data = _data
-  def index = _index
+  def data: Array[V] = _data
+  def index: Array[Int] = _index
 
   def defaultValue: V = default.value(zero)
 
   /**
    * Only iterates "active" elements
    */
-  def valuesIterator = activeValuesIterator
+  def valuesIterator: Iterator[V] = activeValuesIterator
 
   def valueAt(i: Int): V = data(i)
   def indexAt(i: Int): Int = index(i)
 
   def keysIterator: Iterator[Int] = index.iterator.filter(_ >= 0)
 
-  def activeSize = load
+  def activeSize: Int = load
 
   def contains(i: Int): Boolean = index(locate(i)) >= 0
 
@@ -110,7 +110,7 @@ final class OpenAddressHashArray[@specialized(Int, Float, Long, Double) V] priva
 
   }
 
-  def activeKeysIterator = keysIterator
+  def activeKeysIterator: Iterator[Int] = keysIterator
   def activeValuesIterator: Iterator[V] = activeIterator.map(_._2)
   def activeIterator: Iterator[(Int, V)] = index.iterator.zip(data.iterator).filter(_._1 >= 0)
 
@@ -162,7 +162,7 @@ final class OpenAddressHashArray[@specialized(Int, Float, Long, Double) V] priva
    * How many elements must be iterated over using valueAt/indexAt.
    * @return
    */
-  override def iterableSize = index.length
+  override def iterableSize: Int = index.length
 
   override def toString: String = activeIterator.mkString("OpenAddressHashArray(", ", ", ")")
 

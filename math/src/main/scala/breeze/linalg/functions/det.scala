@@ -9,8 +9,8 @@ import breeze.macros.cforRange
 object det extends UFunc {
   implicit def canDetUsingLU[T](implicit
     luImpl: LU.primitive.Impl[T, (DenseMatrix[Double], Array[Int])]
-  ): Impl[T, Double] = {
-    (X: T) => {
+  ): Impl[T, Double] = { (X: T) =>
+    {
 
       // For triangular N-by-N matrices X, the determinant of X equals the product
       // of the diagonal elements X(i,i) where 0 <= i < N.

@@ -48,7 +48,7 @@ trait SparseArrayLike[V] {
 
   def size: Int
 
-  def length = size
+  def length: Int = size
 
   /**
    * Only iterates "active" elements. I'm not sure how I feel

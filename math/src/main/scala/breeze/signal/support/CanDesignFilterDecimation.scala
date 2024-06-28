@@ -63,11 +63,17 @@ object CanDesignFilterDecimation {
    *
    */
   implicit def decimationFilterLong: CanDesignFilterDecimation[FIRKernel1D[Long]] = {
-    (factor: Int, multiplier: Double, optDesignMethod: OptDesignMethod, optWindow: OptWindowFunction, optFilterOrder: OptFilterTaps) => {
-      val temp: FIRKernel1D[Double] =
-        designFilterDecimation[FIRKernel1D[Double]](factor, multiplier, optDesignMethod, optWindow, optFilterOrder)
-      new FIRKernel1D[Long](convert(temp.kernel, Long), temp.multiplier.toLong, temp.designText)
-    }
+    (factor: Int,
+     multiplier: Double,
+     optDesignMethod: OptDesignMethod,
+     optWindow: OptWindowFunction,
+     optFilterOrder: OptFilterTaps
+    ) =>
+      {
+        val temp: FIRKernel1D[Double] =
+          designFilterDecimation[FIRKernel1D[Double]](factor, multiplier, optDesignMethod, optWindow, optFilterOrder)
+        new FIRKernel1D[Long](convert(temp.kernel, Long), temp.multiplier.toLong, temp.designText)
+      }
   }
 
 }

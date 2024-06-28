@@ -14,7 +14,7 @@ trait DenseVector_DoubleOps extends DenseVectorExpandOps {
   // TODO: try deleting (axpy)
   implicit val impl_OpAdd_InPlace_DV_DV_Double: OpAdd.InPlaceImpl2[DenseVector[Double], DenseVector[Double]] = {
     new OpAdd.InPlaceImpl2[DenseVector[Double], DenseVector[Double]] {
-      def apply(a: DenseVector[Double], b: DenseVector[Double]) = {
+      override def apply(a: DenseVector[Double], b: DenseVector[Double]): Unit = {
         impl_scaleAdd_InPlace_DV_T_DV_Double(a, 1.0, b)
       }
       implicitly[BinaryUpdateRegistry[Vector[Double], Vector[Double], OpAdd.type]].register(this)
@@ -56,7 +56,7 @@ trait DenseVector_DoubleOps extends DenseVectorExpandOps {
 
   implicit val impl_OpSub_InPlace_DV_DV_Double: OpSub.InPlaceImpl2[DenseVector[Double], DenseVector[Double]] = {
     new OpSub.InPlaceImpl2[DenseVector[Double], DenseVector[Double]] {
-      def apply(a: DenseVector[Double], b: DenseVector[Double]) = {
+      override def apply(a: DenseVector[Double], b: DenseVector[Double]): Unit = {
         impl_scaleAdd_InPlace_DV_T_DV_Double(a, -1.0, b)
       }
       implicitly[BinaryUpdateRegistry[Vector[Double], Vector[Double], OpSub.type]].register(this)
@@ -167,7 +167,7 @@ trait DenseVector_FloatOps extends DenseVectorExpandOps {
 
   implicit val impl_OpAdd_InPlace_DV_DV_Float: OpAdd.InPlaceImpl2[DenseVector[Float], DenseVector[Float]] = {
     new OpAdd.InPlaceImpl2[DenseVector[Float], DenseVector[Float]] {
-      def apply(a: DenseVector[Float], b: DenseVector[Float]) = {
+      def apply(a: DenseVector[Float], b: DenseVector[Float]): Unit = {
         scaleAdd.inPlace(a, 1.0f, b)
       }
       implicitly[BinaryUpdateRegistry[Vector[Float], Vector[Float], OpAdd.type]].register(this)
@@ -182,7 +182,7 @@ trait DenseVector_FloatOps extends DenseVectorExpandOps {
 
   implicit val impl_OpSub_InPlace_DV_DV_Float: OpSub.InPlaceImpl2[DenseVector[Float], DenseVector[Float]] = {
     new OpSub.InPlaceImpl2[DenseVector[Float], DenseVector[Float]] {
-      def apply(a: DenseVector[Float], b: DenseVector[Float]) = {
+      def apply(a: DenseVector[Float], b: DenseVector[Float]): Unit = {
         scaleAdd.inPlace(a, -1.0f, b)
       }
       implicitly[BinaryUpdateRegistry[Vector[Float], Vector[Float], OpSub.type]].register(this)
@@ -198,7 +198,7 @@ trait DenseVector_FloatOps extends DenseVectorExpandOps {
   implicit val impl_OpMulInner_DV_DV_eq_S_Float
     : breeze.linalg.operators.OpMulInner.Impl2[DenseVector[Float], DenseVector[Float], Float] = {
     new breeze.linalg.operators.OpMulInner.Impl2[DenseVector[Float], DenseVector[Float], Float] {
-      def apply(a: DenseVector[Float], b: DenseVector[Float]) = {
+      def apply(a: DenseVector[Float], b: DenseVector[Float]): Float = {
         require(a.length == b.length, s"Vectors must have same length")
         if (
           a.noOffsetOrStride && b.noOffsetOrStride && a.length < DenseVectorSupportMethods.MAX_SMALL_DOT_PRODUCT_LENGTH

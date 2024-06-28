@@ -75,7 +75,7 @@ object LogNormal
   import Gaussian.SufficientStatistic
   type SufficientStatistic = Gaussian.SufficientStatistic
 
-  def emptySufficientStatistic = Gaussian.emptySufficientStatistic
+  def emptySufficientStatistic: Gaussian.SufficientStatistic = Gaussian.emptySufficientStatistic
 
   def sufficientStatisticFor(t: Double): SufficientStatistic = {
     SufficientStatistic(1, math.log(t), 0)

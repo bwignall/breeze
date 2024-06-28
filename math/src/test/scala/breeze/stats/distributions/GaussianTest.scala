@@ -87,7 +87,7 @@ class GaussianTest
     ) yield new Gaussian(mean, std)
   }
 
-  def asDouble(x: Double) = x
+  def asDouble(x: Double): Double = x
 
-  def fromDouble(x: Double) = x
+  def fromDouble(x: Double): Double = x
 }

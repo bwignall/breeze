@@ -19,7 +19,7 @@ trait ApacheOdeIntegrator extends OdeIntegrator {
 
     object equations extends FirstOrderDifferentialEquations {
 
-      override val getDimension = y0.length
+      override val getDimension: Int = y0.length
 
       override def computeDerivatives(t: Double, y: Array[Double], yDot: Array[Double]): Unit =
         f(DenseVector(y), t).toArray.copyToArray(yDot)

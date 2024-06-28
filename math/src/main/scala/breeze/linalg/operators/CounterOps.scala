@@ -21,8 +21,8 @@ trait CounterOps {
   def binaryOpFromBinaryUpdateOp[K, V, Other, Op <: OpType](implicit
     copy: CanCopy[Counter[K, V]],
     op: UFunc.InPlaceImpl2[Op, Counter[K, V], Other]
-  ): UFunc.UImpl2[Op, Counter[K, V], Other, Counter[K, V]] = {
-    (a: Counter[K, V], b: Other) => {
+  ): UFunc.UImpl2[Op, Counter[K, V], Other, Counter[K, V]] = { (a: Counter[K, V], b: Other) =>
+    {
       val c = copy(a)
       op(c, b)
       c
@@ -31,7 +31,7 @@ trait CounterOps {
 
   implicit def addIntoVV[K1, V: Semiring]: OpAdd.InPlaceImpl2[Counter[K1, V], Counter[K1, V]] =
     new OpAdd.InPlaceImpl2[Counter[K1, V], Counter[K1, V]] {
-      val field = implicitly[Semiring[V]]
+      val field: Semiring[V] = implicitly[Semiring[V]]
       def apply(a: Counter[K1, V], b: Counter[K1, V]): Unit = {
         // scala 2.13 hashmaps invalidate iterators if you change values, even if the keys are already there
         val it = if (ScalaVersion.is213 && (b eq a)) {
@@ -48,7 +48,7 @@ trait CounterOps {
 
   implicit def canAxpy[K1, V: Semiring]: scaleAdd.InPlaceImpl3[Counter[K1, V], V, Counter[K1, V]] =
     new scaleAdd.InPlaceImpl3[Counter[K1, V], V, Counter[K1, V]] {
-      val field = implicitly[Semiring[V]]
+      val field: Semiring[V] = implicitly[Semiring[V]]
       def apply(a: Counter[K1, V], s: V, b: Counter[K1, V]): Unit = {
         // scala 2.13 hashmaps invalidate iterators if you change values, even if the keys are already there
         val it = if (ScalaVersion.is213 && (b eq a)) {
@@ -69,7 +69,7 @@ trait CounterOps {
 
   implicit def addIntoVS[K1, V: Semiring]: OpAdd.InPlaceImpl2[Counter[K1, V], V] =
     new OpAdd.InPlaceImpl2[Counter[K1, V], V] {
-      val field = implicitly[Semiring[V]]
+      val field: Semiring[V] = implicitly[Semiring[V]]
       def apply(a: Counter[K1, V], b: V): Unit = {
         // scala 2.13 hashmaps invalidate iterators if you change values, even if the keys are already there
         val it = if (ScalaVersion.is213) {
@@ -90,7 +90,7 @@ trait CounterOps {
 
   implicit def subIntoVV[K1, V: Ring]: OpSub.InPlaceImpl2[Counter[K1, V], Counter[K1, V]] = {
     new OpSub.InPlaceImpl2[Counter[K1, V], Counter[K1, V]] {
-      val field = implicitly[Ring[V]]
+      val field: Ring[V] = implicitly[Ring[V]]
       def apply(a: Counter[K1, V], b: Counter[K1, V]): Unit = {
         // scala 2.13 hashmaps invalidate iterators if you change values, even if the keys are already there
         val it = if (ScalaVersion.is213 && (b eq a)) {
@@ -112,7 +112,7 @@ trait CounterOps {
 
   implicit def subIntoVS[K1, V: Ring]: OpSub.InPlaceImpl2[Counter[K1, V], V] =
     new OpSub.InPlaceImpl2[Counter[K1, V], V] {
-      val field = implicitly[Ring[V]]
+      val field: Ring[V] = implicitly[Ring[V]]
       def apply(a: Counter[K1, V], b: V): Unit = {
         for ((k, v) <- a.activeIterator) {
           a(k) = field.-(v, b)
@@ -126,7 +126,7 @@ trait CounterOps {
 
   implicit def canMulIntoVV[K2, K1 <: K2, V: Semiring]: OpMulScalar.InPlaceImpl2[Counter[K1, V], Counter[K2, V]] =
     new OpMulScalar.InPlaceImpl2[Counter[K1, V], Counter[K2, V]] {
-      val field = implicitly[Semiring[V]]
+      val field: Semiring[V] = implicitly[Semiring[V]]
       def apply(a: Counter[K1, V], b: Counter[K2, V]): Unit = {
         // scala 2.13 hashmaps invalidate iterators if you change values, even if the keys are already there
         val it = if (ScalaVersion.is213) {
@@ -143,8 +143,8 @@ trait CounterOps {
 
   implicit def canMulVV[K1, V](implicit
     semiring: Semiring[V]
-  ): OpMulScalar.Impl2[Counter[K1, V], Counter[K1, V], Counter[K1, V]] = {
-    (a: Counter[K1, V], b: Counter[K1, V]) => {
+  ): OpMulScalar.Impl2[Counter[K1, V], Counter[K1, V], Counter[K1, V]] = { (a: Counter[K1, V], b: Counter[K1, V]) =>
+    {
       val r = Counter[K1, V]()
       for ((k, v) <- a.activeIterator) {
         val vr = semiring.*(v, b(k))
@@ -157,7 +157,7 @@ trait CounterOps {
 
   implicit def canMulIntoVS[K2, K1 <: K2, V: Semiring]: OpMulScalar.InPlaceImpl2[Counter[K1, V], V] =
     new OpMulScalar.InPlaceImpl2[Counter[K1, V], V] {
-      val field = implicitly[Semiring[V]]
+      val field: Semiring[V] = implicitly[Semiring[V]]
       def apply(a: Counter[K1, V], b: V): Unit = {
         // scala 2.13 hashmaps invalidate iterators if you change values, even if the keys are already there
         val it = if (ScalaVersion.is213) {
@@ -174,7 +174,7 @@ trait CounterOps {
 
   implicit def canMulIntoVS_M[K2, K1 <: K2, V: Semiring]: OpMulMatrix.InPlaceImpl2[Counter[K1, V], V] =
     new OpMulMatrix.InPlaceImpl2[Counter[K1, V], V] {
-      val field = implicitly[Semiring[V]]
+      val field: Semiring[V] = implicitly[Semiring[V]]
       def apply(a: Counter[K1, V], b: V): Unit = {
         // scala 2.13 hashmaps invalidate iterators if you change values, even if the keys are already there
         val it = if (ScalaVersion.is213) {
@@ -191,8 +191,8 @@ trait CounterOps {
 
   implicit def canMulVS[K2, K1 <: K2, V](implicit
     semiring: Semiring[V]
-  ): OpMulScalar.Impl2[Counter[K1, V], V, Counter[K1, V]] = {
-    (a: Counter[K1, V], b: V) => {
+  ): OpMulScalar.Impl2[Counter[K1, V], V, Counter[K1, V]] = { (a: Counter[K1, V], b: V) =>
+    {
       val r = Counter[K1, V]()
       for ((k, v) <- a.activeIterator) {
         val vr = semiring.*(v, b)
@@ -204,8 +204,8 @@ trait CounterOps {
 
   implicit def canMulVS_M[K2, K1 <: K2, V](implicit
     semiring: Semiring[V]
-  ): OpMulMatrix.Impl2[Counter[K1, V], V, Counter[K1, V]] = {
-    (a: Counter[K1, V], b: V) => {
+  ): OpMulMatrix.Impl2[Counter[K1, V], V, Counter[K1, V]] = { (a: Counter[K1, V], b: V) =>
+    {
       val r = Counter[K1, V]()
       for ((k, v) <- a.activeIterator) {
         val vr = semiring.*(v, b)
@@ -217,7 +217,7 @@ trait CounterOps {
 
   implicit def canDivIntoVV[K1, V: Field]: OpDiv.InPlaceImpl2[Counter[K1, V], Counter[K1, V]] = {
     new OpDiv.InPlaceImpl2[Counter[K1, V], Counter[K1, V]] {
-      val field = implicitly[Field[V]]
+      val field: Field[V] = implicitly[Field[V]]
       def apply(a: Counter[K1, V], b: Counter[K1, V]): Unit = {
         // scala 2.13 hashmaps invalidate iterators if you change values, even if the keys are already there
         val it = if (ScalaVersion.is213) {
@@ -236,8 +236,8 @@ trait CounterOps {
   implicit def canDivVV[K1, V](implicit
     copy: CanCopy[Counter[K1, V]],
     semiring: Field[V]
-  ): OpDiv.Impl2[Counter[K1, V], Counter[K1, V], Counter[K1, V]] = {
-    (a: Counter[K1, V], b: Counter[K1, V]) => {
+  ): OpDiv.Impl2[Counter[K1, V], Counter[K1, V], Counter[K1, V]] = { (a: Counter[K1, V], b: Counter[K1, V]) =>
+    {
       val r = Counter[K1, V]()
       for ((k, v) <- a.activeIterator) {
         val vr = semiring./(v, b(k))
@@ -250,8 +250,8 @@ trait CounterOps {
   implicit def canDivVS[K1, V](implicit
     copy: CanCopy[Counter[K1, V]],
     semiring: Field[V]
-  ): OpDiv.Impl2[Counter[K1, V], V, Counter[K1, V]] = {
-    (a: Counter[K1, V], b: V) => {
+  ): OpDiv.Impl2[Counter[K1, V], V, Counter[K1, V]] = { (a: Counter[K1, V], b: V) =>
+    {
       val r = Counter[K1, V]()
       for ((k, v) <- a.activeIterator) {
         val vr = semiring./(v, b)
@@ -263,7 +263,7 @@ trait CounterOps {
 
   implicit def canDivIntoVS[K1, V: Field]: OpDiv.InPlaceImpl2[Counter[K1, V], V] =
     new OpDiv.InPlaceImpl2[Counter[K1, V], V] {
-      val field = implicitly[Field[V]]
+      val field: Field[V] = implicitly[Field[V]]
       def apply(a: Counter[K1, V], b: V): Unit = {
         // scala 2.13 hashmaps invalidate iterators if you change values, even if the keys are already there
         val it = if (ScalaVersion.is213) {
@@ -286,8 +286,8 @@ trait CounterOps {
       }
     }
 
-  implicit def canSetIntoVS[K1, V]: OpSet.InPlaceImpl2[Counter[K1, V], V] = {
-    (a: Counter[K1, V], b: V) => {
+  implicit def canSetIntoVS[K1, V]: OpSet.InPlaceImpl2[Counter[K1, V], V] = { (a: Counter[K1, V], b: V) =>
+    {
       // scala 2.13 hashmaps invalidate iterators if you change values, even if the keys are already there
       val it = if (ScalaVersion.is213) {
         a.keysIterator.toSet.iterator
@@ -302,14 +302,15 @@ trait CounterOps {
   }
 
   implicit def canNegate[K1, V](implicit ring: Ring[V]): OpNeg.Impl[Counter[K1, V], Counter[K1, V]] = {
-    (a: Counter[K1, V]) => {
-      val result = Counter[K1, V]()
-      for ((k, v) <- a.activeIterator) {
-        val vr = ring.negate(v)
-        result(k) = vr
+    (a: Counter[K1, V]) =>
+      {
+        val result = Counter[K1, V]()
+        for ((k, v) <- a.activeIterator) {
+          val vr = ring.negate(v)
+          result(k) = vr
+        }
+        result
       }
-      result
-    }
   }
 
   implicit def canMulInner[K1, V](implicit
@@ -317,7 +318,7 @@ trait CounterOps {
     semiring: Semiring[V]
   ): OpMulInner.Impl2[Counter[K1, V], Counter[K1, V], V] = {
     new OpMulInner.Impl2[Counter[K1, V], Counter[K1, V], V] {
-      val zero = semiring.zero
+      val zero: V = semiring.zero
       override def apply(a: Counter[K1, V], b: Counter[K1, V]): V = {
         if (a.activeSize > b.activeSize) {
           apply(b, a)
@@ -339,7 +340,7 @@ trait CounterOps {
   class CanZipMapValuesCounter[K, V, RV: Zero: Semiring] extends CanZipMapValues[Counter[K, V], V, RV, Counter[K, RV]] {
 
     /**Maps all corresponding values from the two collection. */
-    def map(from: Counter[K, V], from2: Counter[K, V], fn: (V, V) => RV) = {
+    def map(from: Counter[K, V], from2: Counter[K, V], fn: (V, V) => RV): Counter[K, RV] = {
       val result = Counter[K, RV]()
       for (k <- from.keySet ++ from2.keySet) {
         result(k) = fn(from(k), from2(k))
@@ -355,7 +356,7 @@ trait CounterOps {
       extends CanZipMapKeyValues[Counter[K, V], K, V, RV, Counter[K, RV]] {
 
     /**Maps all corresponding values from the two collection. */
-    def map(from: Counter[K, V], from2: Counter[K, V], fn: (K, V, V) => RV) = {
+    def map(from: Counter[K, V], from2: Counter[K, V], fn: (K, V, V) => RV): Counter[K, RV] = {
       val result = Counter[K, RV]()
       for (k <- from.keySet ++ from2.keySet) {
         result(k) = fn(k, from(k), from2(k))

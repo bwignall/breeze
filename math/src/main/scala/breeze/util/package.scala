@@ -1,11 +1,12 @@
 package breeze
 
-import java.io._
+import java.io.*
+import java.util
 import java.util.BitSet
-import java.util.zip._
-import scala.collection.compat._
+import java.util.zip.*
+import scala.collection.compat.*
 import scala.collection.compat.immutable.ArraySeq
-import scala.collection.generic._
+import scala.collection.generic.*
 import scala.collection.mutable
 
 /**
@@ -22,7 +23,7 @@ package object util {
   /**
    * Deserializes an object using java serialization
    */
-  def readObject[T](loc: File, ignoreSerialVersionUID: Boolean) = {
+  def readObject[T](loc: File, ignoreSerialVersionUID: Boolean): T = {
     val stream = new BufferedInputStream(new GZIPInputStream(new FileInputStream(loc)))
     val oin = nonstupidObjectInputStream(stream, ignoreSerialVersionUID)
     try {
@@ -130,7 +131,7 @@ package object util {
   /**
    * Computes the current source file and line number.
    */
-  @noinline def LOCATION = {
+  @noinline def LOCATION: String = {
     val e = new Exception().getStackTrace()(1)
     e.getFileName() + ":" + e.getLineNumber()
   }
@@ -139,7 +140,7 @@ package object util {
    * Computes the source file location of the nth parent.
    * 0 is equivalent to LOCATION
    */
-  @noinline def CALLER(nth: Int) = {
+  @noinline def CALLER(nth: Int): String = {
     val e = new Exception().getStackTrace()(nth + 1)
     e.getFileName() + ":" + e.getLineNumber()
   }
@@ -147,7 +148,7 @@ package object util {
   /**
    * Returns a string with info about the available and used space.
    */
-  def memoryString = {
+  def memoryString: String = {
     val r = Runtime.getRuntime
     val free = r.freeMemory / (1024 * 1024)
     val total = r.totalMemory / (1024 * 1024)
@@ -157,18 +158,18 @@ package object util {
   /**
    * prints a and returns it.
    */
-  def trace[T](a: T) = { println(a); a }
+  def trace[T](a: T): T = { println(a); a }
 
   // this should be a separate trait but Scala is freaking out
   implicit class SeqExtras[T](s: Seq[T]) {
-    def argmax(implicit ordering: Ordering[T]) = {
+    def argmax(implicit ordering: Ordering[T]): Int = {
       s.zipWithIndex.reduceLeft((a, b) => if (ordering.gt(a._1, b._1)) a else b)._2
     }
-    def argmin(implicit ordering: Ordering[T]) = {
+    def argmin(implicit ordering: Ordering[T]): Int = {
       s.zipWithIndex.reduceLeft((a, b) => if (ordering.lt(a._1, b._1)) a else b)._2
     }
 
-    def unfold[U, To](init: U)(f: (U, T) => U)(implicit cbf: BuildFrom[Seq[T], U, To]) = {
+    def unfold[U, To](init: U)(f: (U, T) => U)(implicit cbf: BuildFrom[Seq[T], U, To]): To = {
       val builder = cbf.newBuilder(s)
       builder.sizeHint(s.size + 1)
       var u = init
@@ -184,11 +185,11 @@ package object util {
   implicit def arraySeqExtras[T](s: Array[T]): SeqExtras[T] = new SeqExtras(ArraySeq.unsafeWrapArray(s))
 
   implicit class AwesomeBitSet(val bs: java.util.BitSet) extends AnyVal {
-    def apply(r: Int) = bs.get(r)
+    def apply(r: Int): Boolean = bs.get(r)
 
     def iterator: Iterator[Int] = new BSIterator(bs)
 
-    def map[U, C](f: Int => U)(implicit cbf: BuildFrom[java.util.BitSet, U, C]) = {
+    def map[U, C](f: Int => U)(implicit cbf: BuildFrom[java.util.BitSet, U, C]): C = {
       val r: mutable.Builder[U, C] = cbf.newBuilder(bs)
       r.sizeHint(bs.size)
       iterator.foreach { i =>
@@ -207,57 +208,57 @@ package object util {
 
     }
 
-    def &=(other: BitSet) = {
+    def &=(other: BitSet): util.BitSet = {
       bs.and(other)
       bs
     }
 
-    def &~=(other: BitSet) = {
+    def &~=(other: BitSet): util.BitSet = {
       bs.andNot(other)
       bs
     }
 
-    def |=(other: BitSet) = {
+    def |=(other: BitSet): util.BitSet = {
       bs.or(other)
       bs
     }
 
-    def ^=(other: BitSet) = {
+    private def ^=(other: BitSet) = {
       bs.xor(other)
       bs
     }
 
-    def |(other: BitSet) = {
+    def |(other: BitSet): util.BitSet = {
       copy |= other
     }
 
-    def &~(other: BitSet) = {
+    def &~(other: BitSet): util.BitSet = {
       copy &~= other
     }
 
-    def &(other: BitSet) = {
+    def &(other: BitSet): util.BitSet = {
       copy &= other
     }
 
-    def ^(other: BitSet) = {
+    def ^(other: BitSet): util.BitSet = {
       copy ^= other
     }
 
-    def copy = bs.clone().asInstanceOf[java.util.BitSet]
+    def copy: util.BitSet = bs.clone().asInstanceOf[java.util.BitSet]
 
-    def nonEmpty = !bs.isEmpty
+    def nonEmpty: Boolean = !bs.isEmpty
 
-    def +=(i: Int) = {
+    def +=(i: Int): util.BitSet = {
       bs.set(i)
       bs
     }
   }
 
   private class BSIterator(bs: java.util.BitSet) extends Iterator[Int] {
-    var currentBit = bs.nextSetBit(0)
+    var currentBit: Int = bs.nextSetBit(0)
     def hasNext: Boolean = currentBit != -1
 
-    def next() = {
+    def next(): Int = {
       assert(currentBit != -1)
       val cur = currentBit
       currentBit = bs.nextSetBit(cur + 1)

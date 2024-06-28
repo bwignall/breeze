@@ -60,7 +60,7 @@ class NumericsTest extends AnyFunSuite with Checkers {
   import Arbitrary._
 
   implicit class ae(x: Double) {
-    def =~=(y: Double) = breeze.numerics.closeTo(x, y, 1e-6)
+    def =~=(y: Double): Boolean = breeze.numerics.closeTo(x, y, 1e-6)
   }
 
   // TODO 2.9 filter out Double.MaxValue.

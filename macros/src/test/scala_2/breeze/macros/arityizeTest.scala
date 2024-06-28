@@ -7,7 +7,7 @@ class arityizeTest extends AnyFunSuite {
   test("Compiles?") {
     @arityize(5)
     class Foo[@arityize.replicate T](@arityize.replicate x: T @arityize.relative(x)) {
-      override def toString = List(x: @arityize.replicate).mkString("(", ", ", ")")
+      override def toString: String = List(x: @arityize.replicate).mkString("(", ", ", ")")
     }
 
     val foo = new Foo2[Int, String](x1 = 3, x2 = "Foo")

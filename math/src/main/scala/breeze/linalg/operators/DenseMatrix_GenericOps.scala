@@ -13,15 +13,16 @@ import scala.reflect.ClassTag
 trait DenseMatrix_GenericOps extends MatrixOps {
 
   implicit def impl_scaleAdd_InPlace_DM_T_DM[T: Semiring]: scaleAdd.InPlaceImpl3[DenseMatrix[T], T, DenseMatrix[T]] = {
-    (a: DenseMatrix[T], s: T, b: DenseMatrix[T]) => {
-      val ring = implicitly[Semiring[T]]
-      require(a.rows == b.rows, "Vector row dimensions must match!")
-      require(a.cols == b.cols, "Vector col dimensions must match!")
+    (a: DenseMatrix[T], s: T, b: DenseMatrix[T]) =>
+      {
+        val ring = implicitly[Semiring[T]]
+        require(a.rows == b.rows, "Vector row dimensions must match!")
+        require(a.cols == b.cols, "Vector col dimensions must match!")
 
-      cforRange2(0 until a.cols, 0 until a.rows) { (j, i) =>
-        a(i, j) = ring.+(a(i, j), ring.*(s, b(i, j)))
+        cforRange2(0 until a.cols, 0 until a.rows) { (j, i) =>
+          a(i, j) = ring.+(a(i, j), ring.*(s, b(i, j)))
+        }
       }
-    }
   }
 
   implicit def impl_OpMulMatrix_DM_DM_eq_DM_Generic[T: Semiring]

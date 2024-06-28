@@ -8,7 +8,7 @@ object Database {
 
   /** Return a vector containing all database keys.
    */
-  def list() = databaseHM.keys.toVector
+  def list(): Seq[String] = databaseHM.keys.toVector
 
   /** Look up the value of a specific entry.
    * Name must be an exact match with the entry.

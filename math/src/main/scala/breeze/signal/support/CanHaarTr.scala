@@ -83,8 +83,8 @@ object CanHaarTr {
 
   /** Compute the fht on a given double vector.
    */
-  implicit val dvDouble1FHT: CanHaarTr[DenseVector[Double], DenseVector[Double]] = {
-    (v: DenseVector[Double]) => {
+  implicit val dvDouble1FHT: CanHaarTr[DenseVector[Double], DenseVector[Double]] = { (v: DenseVector[Double]) =>
+    {
       def _fht(v: DenseVector[Double]): DenseVector[Double] = {
         if (v.length > 1) {
           val p = v.toArray.grouped(2).toList
@@ -100,8 +100,8 @@ object CanHaarTr {
 
   /** Compute the fht on a given double matrix.
    */
-  implicit val dmDouble1FHT: CanHaarTr[DenseMatrix[Double], DenseMatrix[Double]] = {
-    (m: DenseMatrix[Double]) => {
+  implicit val dmDouble1FHT: CanHaarTr[DenseMatrix[Double], DenseMatrix[Double]] = { (m: DenseMatrix[Double]) =>
+    {
       def _fht(m: DenseMatrix[Double], limit: Int): Unit = {
         if (limit > 1) {
           for (c <- 0 until limit) {

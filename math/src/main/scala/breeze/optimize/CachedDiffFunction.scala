@@ -44,7 +44,7 @@ class CachedBatchDiffFunction[T: CanCopy](obj: BatchDiffFunction[T]) extends Bat
 
   private var lastData: (T, Double, T, IndexedSeq[Int]) = _
 
-  def fullRange = obj.fullRange
+  def fullRange: IndexedSeq[Int] = obj.fullRange
 
   /** Calculates both the value and the gradient at a point */
   override def calculate(x: T, range: IndexedSeq[Int]): (Double, T) = {

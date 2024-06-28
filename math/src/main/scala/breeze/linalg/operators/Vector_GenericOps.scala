@@ -204,7 +204,7 @@ trait Vector_GenericOps extends GenericOps with Vector_TraversalOps {
   // todo: try deleting
   implicit def impl_OpSub_V_V_eq_V_Generic[T: Ring]: OpSub.Impl2[Vector[T], Vector[T], Vector[T]] =
     new OpSub.Impl2[Vector[T], Vector[T], Vector[T]] {
-      val r = implicitly[Ring[T]]
+      val r: Ring[T] = implicitly[Ring[T]]
       def apply(a: Vector[T], b: Vector[T]): Vector[T] = {
         require(b.length == a.length, "Vectors must be the same length!")
         val result = a.copy
@@ -218,7 +218,7 @@ trait Vector_GenericOps extends GenericOps with Vector_TraversalOps {
   // todo: try deleting
   implicit def impl_OpAdd_V_V_eq_V_Generic[T: Semiring]: OpAdd.Impl2[Vector[T], Vector[T], Vector[T]] =
     new OpAdd.Impl2[Vector[T], Vector[T], Vector[T]] {
-      val r = implicitly[Semiring[T]]
+      val r: Semiring[T] = implicitly[Semiring[T]]
       def apply(a: Vector[T], b: Vector[T]): Vector[T] = {
         require(b.length == a.length, "Vectors must be the same length!")
         val result = a.copy
@@ -348,7 +348,7 @@ trait SparseVector_GenericOps extends GenericOps {
     ring: Semiring[T]
   ): OpMulScalar.Impl2[SparseVector[T], SparseVector[T], SparseVector[T]] =
     new OpMulScalar.Impl2[SparseVector[T], SparseVector[T], SparseVector[T]] {
-      def apply(a: SparseVector[T], b: SparseVector[T]) = {
+      def apply(a: SparseVector[T], b: SparseVector[T]): SparseVector[T] = {
         implicit val ct: ClassTag[T] = ReflectionUtil.elemClassTagFromArray(a.data)
         if (b.activeSize < a.activeSize) {
           apply(b, a)
@@ -531,7 +531,7 @@ trait DenseVector_GenericOps extends VectorOps {
   implicit def impl_scaleAdd_InPlace_DV_S_DV_Generic[T: Semiring]
     : scaleAdd.InPlaceImpl3[DenseVector[T], T, DenseVector[T]] =
     new scaleAdd.InPlaceImpl3[DenseVector[T], T, DenseVector[T]] {
-      val ring = implicitly[Semiring[T]]
+      val ring: Semiring[T] = implicitly[Semiring[T]]
       def apply(a: DenseVector[T], s: T, b: DenseVector[T]): Unit = {
         if (a.overlaps(b)) {
           apply(a, s, b.copy)
@@ -583,7 +583,7 @@ trait DenseVector_GenericOps extends VectorOps {
     field: Semiring[T]
   ): OpAdd.InPlaceImpl2[DenseVector[T], DenseVector[T]] = {
     new OpAdd.InPlaceImpl2[DenseVector[T], DenseVector[T]] {
-      override def apply(v: DenseVector[T], v2: DenseVector[T]) = {
+      override def apply(v: DenseVector[T], v2: DenseVector[T]): Unit = {
         if (v.overlaps(v2)) {
           apply(v, v2.copy)
         } else {
@@ -599,7 +599,7 @@ trait DenseVector_GenericOps extends VectorOps {
     field: Ring[T]
   ): OpSub.InPlaceImpl2[DenseVector[T], DenseVector[T]] = {
     new OpSub.InPlaceImpl2[DenseVector[T], DenseVector[T]] {
-      override def apply(v: DenseVector[T], v2: DenseVector[T]) = {
+      override def apply(v: DenseVector[T], v2: DenseVector[T]): Unit = {
         if (v.overlaps(v2)) {
           apply(v, v2.copy)
         } else {
@@ -615,7 +615,7 @@ trait DenseVector_GenericOps extends VectorOps {
     field: Semiring[T]
   ): OpMulScalar.InPlaceImpl2[DenseVector[T], DenseVector[T]] = {
     new OpMulScalar.InPlaceImpl2[DenseVector[T], DenseVector[T]] {
-      override def apply(v: DenseVector[T], v2: DenseVector[T]) = {
+      override def apply(v: DenseVector[T], v2: DenseVector[T]): Unit = {
         if (v.overlaps(v2)) {
           apply(v, v2.copy)
         } else {
@@ -631,7 +631,7 @@ trait DenseVector_GenericOps extends VectorOps {
     field: Field[T]
   ): OpDiv.InPlaceImpl2[DenseVector[T], DenseVector[T]] = {
     new OpDiv.InPlaceImpl2[DenseVector[T], DenseVector[T]] {
-      override def apply(v: DenseVector[T], v2: DenseVector[T]) = {
+      override def apply(v: DenseVector[T], v2: DenseVector[T]): Unit = {
         if (v.overlaps(v2)) {
           apply(v, v2.copy)
         } else {
@@ -647,7 +647,7 @@ trait DenseVector_GenericOps extends VectorOps {
     pow: OpPow.Impl2[T, T, T]
   ): OpPow.InPlaceImpl2[DenseVector[T], DenseVector[T]] = {
     new OpPow.InPlaceImpl2[DenseVector[T], DenseVector[T]] {
-      override def apply(v: DenseVector[T], v2: DenseVector[T]) = {
+      override def apply(v: DenseVector[T], v2: DenseVector[T]): Unit = {
         if (v.overlaps(v2)) {
           apply(v, v2.copy)
         } else {
@@ -813,10 +813,10 @@ trait HashVector_GenericOps extends GenericOps {
                                   @specialized(Int, Double) RV: ClassTag: Zero
   ] extends CanZipMapValues[HashVector[V], V, RV, HashVector[RV]] {
 
-    def create(length: Int) = HashVector.zeros(length)
+    def create(length: Int): HashVector[RV] = HashVector.zeros(length)
 
     /**Maps all corresponding values from the two collections. */
-    def map(from: HashVector[V], from2: HashVector[V], fn: (V, V) => RV) = {
+    def map(from: HashVector[V], from2: HashVector[V], fn: (V, V) => RV): HashVector[RV] = {
       require(from.length == from2.length, "Vector lengths must match!")
       val result = create(from.length)
       var i = 0
@@ -827,7 +827,7 @@ trait HashVector_GenericOps extends GenericOps {
       result
     }
 
-    def mapActive(from: HashVector[V], from2: HashVector[V], fn: (V, V) => RV) = {
+    def mapActive(from: HashVector[V], from2: HashVector[V], fn: (V, V) => RV): HashVector[RV] = {
       map(from, from2, fn)
     }
 
@@ -841,10 +841,10 @@ trait HashVector_GenericOps extends GenericOps {
                                      @specialized(Int, Double) RV: ClassTag: Zero
   ] extends CanZipMapKeyValues[HashVector[V], Int, V, RV, HashVector[RV]] {
 
-    def create(length: Int) = HashVector.zeros(length)
+    def create(length: Int): HashVector[RV] = HashVector.zeros(length)
 
     /**Maps all corresponding values from the two collections. */
-    def map(from: HashVector[V], from2: HashVector[V], fn: (Int, V, V) => RV) = {
+    def map(from: HashVector[V], from2: HashVector[V], fn: (Int, V, V) => RV): HashVector[RV] = {
       require(from.length == from2.length, "Vector lengths must match!")
       val result = create(from.length)
       var i = 0

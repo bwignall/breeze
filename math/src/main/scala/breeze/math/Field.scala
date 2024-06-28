@@ -37,13 +37,13 @@ object Field {
   implicit object fieldInt extends Field[Int] with Serializable {
     def zero = 0
     def one = 1
-    def ==(a: Int, b: Int) = a == b
-    def !=(a: Int, b: Int) = a != b
-    def +(a: Int, b: Int) = a + b
-    def -(a: Int, b: Int) = a - b
-    def *(a: Int, b: Int) = a * b
-    def /(a: Int, b: Int) = a / b
-    def %(a: Int, b: Int) = a % b
+    def ==(a: Int, b: Int): Boolean = a == b
+    def !=(a: Int, b: Int): Boolean = a != b
+    def +(a: Int, b: Int): Int = a + b
+    def -(a: Int, b: Int): Int = a - b
+    def *(a: Int, b: Int): Int = a * b
+    def /(a: Int, b: Int): Int = a / b
+    def %(a: Int, b: Int): Int = a % b
     def pow(a: Int, b: Int): Int = math.pow(a, b).toInt
 
     implicit val normImpl: norm.Impl[Int, Double] = (v: Int) => math.abs(v).toDouble
@@ -54,13 +54,13 @@ object Field {
   implicit object fieldShort extends Field[Short] with Serializable {
     def zero: Short = 0.asInstanceOf[Short]
     def one: Short = 1.asInstanceOf[Short]
-    def ==(a: Short, b: Short) = a == b
-    def !=(a: Short, b: Short) = a != b
-    def +(a: Short, b: Short) = (a + b).asInstanceOf[Short]
-    def -(a: Short, b: Short) = (a - b).asInstanceOf[Short]
-    def *(a: Short, b: Short) = (a * b).asInstanceOf[Short]
-    def /(a: Short, b: Short) = (a / b).asInstanceOf[Short]
-    def %(a: Short, b: Short) = (a % b).asInstanceOf[Short]
+    def ==(a: Short, b: Short): Boolean = a == b
+    def !=(a: Short, b: Short): Boolean = a != b
+    def +(a: Short, b: Short): Short = (a + b).asInstanceOf[Short]
+    def -(a: Short, b: Short): Short = (a - b).asInstanceOf[Short]
+    def *(a: Short, b: Short): Short = (a * b).asInstanceOf[Short]
+    def /(a: Short, b: Short): Short = (a / b).asInstanceOf[Short]
+    def %(a: Short, b: Short): Short = (a % b).asInstanceOf[Short]
     def pow(a: Short, b: Short): Short = math.pow(a, b).toShort
 
     implicit val normImpl: norm.Impl[Short, Double] = (v: Short) => math.abs(v).toDouble
@@ -71,13 +71,13 @@ object Field {
   implicit object fieldLong extends Field[Long] with Serializable {
     def zero = 0L
     def one = 1L
-    def ==(a: Long, b: Long) = a == b
-    def !=(a: Long, b: Long) = a != b
-    def +(a: Long, b: Long) = a + b
-    def -(a: Long, b: Long) = a - b
-    def *(a: Long, b: Long) = a * b
-    def /(a: Long, b: Long) = a / b
-    def %(a: Long, b: Long) = a % b.toLong
+    def ==(a: Long, b: Long): Boolean = a == b
+    def !=(a: Long, b: Long): Boolean = a != b
+    def +(a: Long, b: Long): Long = a + b
+    def -(a: Long, b: Long): Long = a - b
+    def *(a: Long, b: Long): Long = a * b
+    def /(a: Long, b: Long): Long = a / b
+    def %(a: Long, b: Long): Long = a % b.toLong
     // TODO: bad idea?
     def pow(a: Long, b: Long): Long = math.pow(a.toDouble, b.toDouble).toLong
 
@@ -89,13 +89,13 @@ object Field {
   implicit object fieldBigInt extends Field[BigInt] with Serializable {
     def zero = 0L
     def one = 1L
-    def ==(a: BigInt, b: BigInt) = a == b
-    def !=(a: BigInt, b: BigInt) = a != b
-    def +(a: BigInt, b: BigInt) = a + b
-    def -(a: BigInt, b: BigInt) = a - b
-    def *(a: BigInt, b: BigInt) = a * b
-    def /(a: BigInt, b: BigInt) = a / b
-    def %(a: BigInt, b: BigInt) = a % b
+    def ==(a: BigInt, b: BigInt): Boolean = a == b
+    def !=(a: BigInt, b: BigInt): Boolean = a != b
+    def +(a: BigInt, b: BigInt): BigInt = a + b
+    def -(a: BigInt, b: BigInt): BigInt = a - b
+    def *(a: BigInt, b: BigInt): BigInt = a * b
+    def /(a: BigInt, b: BigInt): BigInt = a / b
+    def %(a: BigInt, b: BigInt): BigInt = a % b
     def pow(a: BigInt, b: BigInt): BigInt = a.pow(b.toInt)
 
     implicit val normImpl: norm.Impl[BigInt, Double] = (v: BigInt) => v.abs.toDouble
@@ -105,13 +105,13 @@ object Field {
   implicit object fieldBigDecimal extends Field[BigDecimal] with Serializable {
     def zero = 0L
     def one = 1L
-    def ==(a: BigDecimal, b: BigDecimal) = a == b
-    def !=(a: BigDecimal, b: BigDecimal) = a != b
-    def +(a: BigDecimal, b: BigDecimal) = a + b
-    def -(a: BigDecimal, b: BigDecimal) = a - b
-    def *(a: BigDecimal, b: BigDecimal) = a * b
-    def /(a: BigDecimal, b: BigDecimal) = a / b
-    def %(a: BigDecimal, b: BigDecimal) = a % b
+    def ==(a: BigDecimal, b: BigDecimal): Boolean = a == b
+    def !=(a: BigDecimal, b: BigDecimal): Boolean = a != b
+    def +(a: BigDecimal, b: BigDecimal): BigDecimal = a + b
+    def -(a: BigDecimal, b: BigDecimal): BigDecimal = a - b
+    def *(a: BigDecimal, b: BigDecimal): BigDecimal = a * b
+    def /(a: BigDecimal, b: BigDecimal): BigDecimal = a / b
+    def %(a: BigDecimal, b: BigDecimal): BigDecimal = a % b
     def pow(a: BigDecimal, b: BigDecimal): BigDecimal = a.pow(b.toInt)
 
     override def close(a: BigDecimal, b: BigDecimal, tolerance: Double): Boolean = {
@@ -125,13 +125,13 @@ object Field {
   implicit object fieldFloat extends Field[Float] with Serializable {
     def zero = 0.0f
     def one = 1.0f
-    def ==(a: Float, b: Float) = a == b
-    def !=(a: Float, b: Float) = a != b
-    def +(a: Float, b: Float) = a + b
-    def -(a: Float, b: Float) = a - b
-    def *(a: Float, b: Float) = a * b
-    def /(a: Float, b: Float) = a / b
-    def %(a: Float, b: Float) = a % b
+    def ==(a: Float, b: Float): Boolean = a == b
+    def !=(a: Float, b: Float): Boolean = a != b
+    def +(a: Float, b: Float): Float = a + b
+    def -(a: Float, b: Float): Float = a - b
+    def *(a: Float, b: Float): Float = a * b
+    def /(a: Float, b: Float): Float = a / b
+    def %(a: Float, b: Float): Float = a % b
     def pow(a: Float, b: Float): Float = numerics.pow(a, b)
 
     // http://floating-point-gui.de/errors/comparison/
@@ -149,13 +149,13 @@ object Field {
   implicit object fieldDouble extends Field[Double] with Serializable {
     def zero = 0.0
     def one = 1.0
-    def ==(a: Double, b: Double) = a == b
-    def !=(a: Double, b: Double) = a != b
-    def +(a: Double, b: Double) = a + b
-    def -(a: Double, b: Double) = a - b
-    def *(a: Double, b: Double) = a * b
-    def /(a: Double, b: Double) = a / b
-    def %(a: Double, b: Double): Double = a % b
+    def ==(a: Double, b: Double): Boolean = a == b
+    def !=(a: Double, b: Double): Boolean = a != b
+    def +(a: Double, b: Double): Double = a + b
+    def -(a: Double, b: Double): Double = a - b
+    def *(a: Double, b: Double): Double = a * b
+    def /(a: Double, b: Double): Double = a / b
+    override def %(a: Double, b: Double): Double = a % b
     def pow(a: Double, b: Double): Double = math.pow(a, b)
 
     override def close(a: Double, b: Double, tolerance: Double): Boolean = {

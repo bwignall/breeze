@@ -56,7 +56,7 @@ class SpectralProjectedGradientTest
     val optimizer = new SpectralProjectedGradient[DenseVector[Double]](tolerance = 1.0e-9)
     forAll { (init: DenseVector[Double]) =>
       val f = new DiffFunction[DenseVector[Double]] {
-        def calculate(x: DenseVector[Double]) = {
+        def calculate(x: DenseVector[Double]): (Double, DenseVector[Double]) = {
           (sum((x - 3.0) ^:^ 2.0), (x * 2.0) - 6.0)
         }
       }
@@ -73,7 +73,7 @@ class SpectralProjectedGradientTest
     forAll { (init: DenseVector[Double]) =>
       init := clip(init, Double.NegativeInfinity, 2.0)
       val f = new DiffFunction[DenseVector[Double]] {
-        def calculate(x: DenseVector[Double]) = {
+        def calculate(x: DenseVector[Double]): (Double, DenseVector[Double]) = {
           (sum((x - 3.0) ^:^ 4.0), ((x - 3.0) ^:^ 3.0) *:* 4.0)
         }
       }

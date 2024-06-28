@@ -16,7 +16,7 @@ class PCA(val x: DenseMatrix[Double], val covmat: DenseMatrix[Double]) {
   /**
    * The number of observations.
    */
-  lazy val nobs = x.rows
+  lazy val nobs: Int = x.rows
 
   /**
    * The means of each column (axis) of the data.

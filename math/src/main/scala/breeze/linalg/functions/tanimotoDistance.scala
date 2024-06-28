@@ -8,8 +8,8 @@ object tanimotoDistance extends UFunc {
     dotTU: OpMulInner.Impl2[T, U, Double],
     dotTT: OpMulInner.Impl2[T, T, Double],
     dotUU: OpMulInner.Impl2[U, U, Double]
-  ): Impl2[T, U, Double] = {
-    (v: T, v2: U) => {
+  ): Impl2[T, U, Double] = { (v: T, v2: U) =>
+    {
       val dotProduct = dotTU(v, v2)
       val denom = dotTT(v, v) + dotUU(v2, v2) - dotProduct
       if (denom == 0.0) {

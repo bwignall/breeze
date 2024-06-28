@@ -36,14 +36,14 @@ class BinomialHeap[T]()(implicit ord: Ordering[T])
   protected val trees: List[Node[T]] = Nil
   override val size = 0
 
-  def +(x: T) = mkHeap(insertTree(Node(0, x, Nil), trees), size + 1)
+  def +(x: T): BinomialHeap[T] = mkHeap(insertTree(Node(0, x, Nil), trees), size + 1)
   private def insertTree(n: Node[T], t: List[Node[T]]): List[Node[T]] = {
     if (t.isEmpty) List(n)
     else if (n.rank < t.head.rank) n :: t
     else insertTree(n.link(t.head), t.tail)
   }
 
-  def ++(other: BinomialHeap[T]) = mkHeap(merge(trees, other.trees, Nil), size + other.size)
+  def ++(other: BinomialHeap[T]): BinomialHeap[T] = mkHeap(merge(trees, other.trees, Nil), size + other.size)
   // TODO: make somewhat tail recursive
   private def merge(l1: List[Node[T]], l2: List[Node[T]], acc: List[Node[T]]): List[Node[T]] = (l1, l2) match {
     case (Nil, l2) => acc.reverse ++ l2
@@ -54,7 +54,7 @@ class BinomialHeap[T]()(implicit ord: Ordering[T])
       else insertTree(n1.link(n2), merge(r1, r2, acc))
   }
 
-  def min = minOpt.get
+  def min: T = minOpt.get
 
   lazy val minOpt: Option[T] = if (trees.isEmpty) None else Some(findMin(trees))
 
@@ -123,12 +123,12 @@ object BinomialHeap {
   }
 
   def empty[T: Ordering]: BinomialHeap[T] = new BinomialHeap[T] {
-    override val trees = Nil
+    override val trees: scala.Seq[Nothing] = Nil
   }
 
   private def mkHeap[T: Ordering](ns: List[Node[T]], sz: Int) = new BinomialHeap[T] {
-    override val trees = ns
-    override val size = sz
+    override val trees: List[Node[T]] = ns
+    override val size: Int = sz
   }
 
   def apply[T: Ordering](t: T*): BinomialHeap[T] = empty[T] ++ t
@@ -137,11 +137,11 @@ object BinomialHeap {
     new BuildFrom[BinomialHeap[T], B, BinomialHeap[B]] {
       def newBuilder(heap: BinomialHeap[T]): mutable.Builder[B, BinomialHeap[B]] = {
         new mutable.Builder[B, BinomialHeap[B]] {
-          var heap = BinomialHeap.empty[B]
+          var heap: BinomialHeap[B] = BinomialHeap.empty[B]
 
-          def result() = heap
+          def result(): BinomialHeap[B] = heap
 
-          def clear() = heap = BinomialHeap.empty[B]
+          def clear(): Unit = heap = BinomialHeap.empty[B]
 
           def addOne(elem: B): this.type = {
             heap += elem; this

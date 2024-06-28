@@ -64,9 +64,9 @@ class SparseVector[@spec(Double, Int, Float, Long) V](val array: SparseArray[V])
 
   def data: Array[V] = array.data
   def index: Array[Int] = array.index
-  def activeSize = array.activeSize
-  def used = activeSize
-  def length = array.length
+  def activeSize: Int = array.activeSize
+  def used: Int = activeSize
+  def length: Int = array.length
 
   def repr: SparseVector[V] = this
 
@@ -108,7 +108,7 @@ class SparseVector[@spec(Double, Int, Float, Long) V](val array: SparseArray[V])
   /**
    * This hashcode is consistent with over [[breeze.linalg.Vector]] hashcodes so long as the hashcode of "0" is 0.
    **/
-  override def hashCode = array.hashCode
+  override def hashCode() = array.hashCode
 
   def isActive(rawIndex: Int): Boolean = array.isActive(rawIndex)
 
@@ -285,21 +285,22 @@ object SparseVector {
     }
   }
 
-  implicit def canCreateZeros[V: ClassTag: Zero]: CanCreateZeros[SparseVector[V], Int] = {
-    (d: Int) => {
+  implicit def canCreateZeros[V: ClassTag: Zero]: CanCreateZeros[SparseVector[V], Int] = { (d: Int) =>
+    {
       zeros[V](d)
     }
   }
 
   implicit def canCreateZerosLike[V: ClassTag: Zero]: CanCreateZerosLike[SparseVector[V], SparseVector[V]] = {
-    (d: SparseVector[V]) => {
-      zeros[V](d.length)
-    }
+    (d: SparseVector[V]) =>
+      {
+        zeros[V](d.length)
+      }
   }
 
   implicit def canTransformValues[V: Zero: ClassTag]: CanTransformValues[SparseVector[V], V] = {
     new CanTransformValues[SparseVector[V], V] {
-      val z = implicitly[Zero[V]]
+      val z: Zero[V] = implicitly[Zero[V]]
 
       /**Transforms all key-value pairs from the given collection. */
       def transform(from: SparseVector[V], fn: (V) => V): Unit = {
@@ -376,5 +377,5 @@ object SparseVector {
   implicit def scalarOf[T]: ScalarOf[SparseVector[T], T] = ScalarOf.dummy
 
   @noinline
-  private def init() = {}
+  private def init(): Unit = {}
 }

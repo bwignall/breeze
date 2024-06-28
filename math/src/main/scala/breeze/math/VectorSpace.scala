@@ -1034,8 +1034,8 @@ private object FloatDoubleOperatorAdaptors {
 
   implicit def liftInPlaceOp3[Op <: UFunc, V, V3](
     op: InPlaceImpl3[Op, V, Float, V3]
-  ): InPlaceImpl3[Op, V, Double, V3] = {
-    (v: V, v2: Double, v3: V3) => op(v, v2.toFloat, v3)
+  ): InPlaceImpl3[Op, V, Double, V3] = { (v: V, v2: Double, v3: V3) =>
+    op(v, v2.toFloat, v3)
   }
 
   implicit def liftOpReturnFloat[Op <: UFunc, V](op: UImpl2[Op, V, V, Float]): UImpl2[Op, V, V, Double] = {

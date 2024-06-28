@@ -68,7 +68,7 @@ class DenseVector[@spec(Double, Int, Float, Long) V](val data: Array[V],
 
   def repr: DenseVector[V] = this
 
-  def activeSize = length
+  def activeSize: Int = length
 
   def apply(i: Int): V = {
     if (i < -size || i >= size) throw new IndexOutOfBoundsException(s"$i not in [-$size,$size)")
@@ -611,7 +611,7 @@ object DenseVector extends VectorConstructors[DenseVector] {
 
   // used to make sure the operators are loaded
   @noinline
-  private def init() = {}
+  private def init(): Unit = {}
 }
 
 /** Static initialization of [[DenseVector]] depends on initializing [[operators.HasOps]], whose static

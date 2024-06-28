@@ -43,9 +43,9 @@ object Geometric extends ExponentialFamily[Geometric, Int] with HasConjugatePrio
   type Parameter = Double
   case class SufficientStatistic(sum: Double, n: Double)
       extends breeze.stats.distributions.SufficientStatistic[SufficientStatistic] {
-    def +(t: SufficientStatistic) = SufficientStatistic(sum + t.sum, n + t.n)
+    def +(t: SufficientStatistic): SufficientStatistic = SufficientStatistic(sum + t.sum, n + t.n)
 
-    def *(weight: Double) = SufficientStatistic(sum * weight, n * weight)
+    def *(weight: Double): SufficientStatistic = SufficientStatistic(sum * weight, n * weight)
   }
 
   def emptySufficientStatistic: SufficientStatistic = SufficientStatistic(0, 0)
@@ -66,7 +66,7 @@ object Geometric extends ExponentialFamily[Geometric, Int] with HasConjugatePrio
   type ConjugatePrior = Beta
   val conjugateFamily: Beta.type = Beta
 
-  def predictive(parameter: conjugateFamily.Parameter)(implicit basis: RandBasis) = ???
+  def predictive(parameter: conjugateFamily.Parameter)(implicit basis: RandBasis): Density[Int] = ???
 
   def posterior(prior: conjugateFamily.Parameter, evidence: IterableOnce[Int]): (Double, Double) = {
     evidence.iterator.foldLeft(prior) { (acc, x) =>

@@ -17,8 +17,8 @@ object kron extends UFunc {
     asMat: M <:< Matrix[V2],
     man: ClassTag[RV],
     zero: Zero[RV]
-  ): Impl2[DenseMatrix[V1], M, DenseMatrix[RV]] = {
-    (a: DenseMatrix[V1], b: M) => {
+  ): Impl2[DenseMatrix[V1], M, DenseMatrix[RV]] = { (a: DenseMatrix[V1], b: M) =>
+    {
 
       val result: DenseMatrix[RV] = DenseMatrix.zeros[RV](a.rows * b.rows, a.cols * b.cols)
 

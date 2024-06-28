@@ -72,9 +72,9 @@ abstract class BaseMetropolisHastings[T](logLikelihoodFunc: T => Double, init: T
 
   def logLikelihood(x: T): Double = logLikelihoodFunc(x)
 
-  def aboveOneCount = acceptanceAboveOne
-  def total = totalCount
-  def acceptanceCount = acceptances
+  def aboveOneCount: Long = acceptanceAboveOne
+  def total: Long = totalCount
+  def acceptanceCount: Long = acceptances
 
   private def getNext(): T = {
     totalCount += 1

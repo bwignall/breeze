@@ -37,8 +37,8 @@ object partition extends UFunc {
 
   implicit def inPlaceFromQSelectImplImpl[Arr, T](implicit
     qs: quickSelectImpl.Impl2[Arr, Int, T]
-  ): InPlaceImpl2[Arr, Int] = {
-    (v: Arr, v2: Int) => {
+  ): InPlaceImpl2[Arr, Int] = { (v: Arr, v2: Int) =>
+    {
       qs(v, v2)
     }
   }
@@ -46,8 +46,8 @@ object partition extends UFunc {
   implicit def implFromInPlaceAndcopy[Arr](implicit
     qs: InPlaceImpl2[Arr, Int],
     copy: CanCopy[Arr]
-  ): Impl2[Arr, Int, Arr] = {
-    (v: Arr, v2: Int) => {
+  ): Impl2[Arr, Int, Arr] = { (v: Arr, v2: Int) =>
+    {
       val c = copy(v)
       qs(c, v2)
       c

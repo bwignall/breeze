@@ -74,7 +74,7 @@ class LBFGS[T](convergenceCheck: ConvergenceCheck[T], m: Int)(implicit space: Mu
    * @param dir The step direction
    * @return stepSize
    */
-  protected def determineStepSize(state: State, f: DiffFunction[T], dir: T) = {
+  protected def determineStepSize(state: State, f: DiffFunction[T], dir: T): Double = {
     val x = state.x
     val grad = state.grad
 
@@ -100,16 +100,16 @@ object LBFGS {
 
     def repr: ApproximateInverseHessian[T] = this
 
-    def updated(step: T, gradDelta: T) = {
+    def updated(step: T, gradDelta: T): ApproximateInverseHessian[T] = {
       val memStep = (step +: this.memStep).take(m)
       val memGradDelta = (gradDelta +: this.memGradDelta).take(m)
 
       new ApproximateInverseHessian(m, memStep, memGradDelta)
     }
 
-    def historyLength = memStep.length
+    def historyLength: Int = memStep.length
 
-    def *(grad: T) = {
+    def *(grad: T): T = {
       val diag = if (historyLength > 0) {
         val prevStep = memStep.head
         val prevGradStep = memGradDelta.head
@@ -148,7 +148,7 @@ object LBFGS {
 
   implicit def multiplyInverseHessian[T](implicit
     vspace: MutableInnerProductModule[T, Double]
-  ): OpMulMatrix.Impl2[ApproximateInverseHessian[T], T, T] = {
-    (a: ApproximateInverseHessian[T], b: T) => a * b
+  ): OpMulMatrix.Impl2[ApproximateInverseHessian[T], T, T] = { (a: ApproximateInverseHessian[T], b: T) =>
+    a * b
   }
 }

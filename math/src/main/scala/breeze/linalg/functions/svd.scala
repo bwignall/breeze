@@ -27,7 +27,7 @@ object svd extends UFunc {
   case class SVD[M, V](leftVectors: M, singularValues: V, rightVectors: M) {
     def U: M = leftVectors
     def ∑ : V = singularValues
-    def S = ∑
+    def S: V = ∑
     def Vt: M = rightVectors
   }
 
@@ -235,7 +235,7 @@ object svd extends UFunc {
   ): Impl3[Mat, Int, Double, DenseSVD] = {
 
     class Svd_Sparse_Impl_Instance extends Impl3[Mat, Int, Double, DenseSVD] {
-      val arpack = ARPACK.getInstance()
+      val arpack: ARPACK = ARPACK.getInstance()
 
       def av(mat: Mat,
              matTrans: MatTranspose,

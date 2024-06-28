@@ -97,12 +97,13 @@ object MutablizingAdaptor {
     def unwrap(w: Wrapper): V = w.value
 
     implicit val mutaVspace: MutableVectorSpace[Wrapper, S] = new MutableVectorSpace[Wrapper, S] {
-      val u = underlying
+      val u: VectorSpace[V, S] = underlying
       def scalars: Field[S] = underlying.scalars
 
       override val hasOps: ConversionOrSubtype[Wrapper, NumericOps[Wrapper]] = identity
 
-      implicit def zeroLike: CanCreateZerosLike[Wrapper, Wrapper] = (from: Wrapper) => from.map(underlying.zeroLike.apply)
+      implicit def zeroLike: CanCreateZerosLike[Wrapper, Wrapper] = (from: Wrapper) =>
+        from.map(underlying.zeroLike.apply)
 
       implicit def copy: CanCopy[Wrapper] = (from: Wrapper) => from
 
@@ -139,8 +140,8 @@ object MutablizingAdaptor {
         a.value = b.value
       }
 
-      implicit def scaleAddVV: scaleAdd.InPlaceImpl3[Wrapper, S, Wrapper] = {
-        (y: Wrapper, a: S, x: Wrapper) => {
+      implicit def scaleAddVV: scaleAdd.InPlaceImpl3[Wrapper, S, Wrapper] = { (y: Wrapper, a: S, x: Wrapper) =>
+        {
           y += x * a
         }
       }
@@ -167,12 +168,13 @@ object MutablizingAdaptor {
 
     implicit val mutaVspace: MutableInnerProductVectorSpace[Wrapper, S] =
       new MutableInnerProductVectorSpace[Wrapper, S] {
-        val u = underlying
+        val u: InnerProductVectorSpace[V, S] = underlying
         def scalars: Field[S] = underlying.scalars
 
         val hasOps: ConversionOrSubtype[Wrapper, NumericOps[Wrapper]] = identity
 
-        implicit def zeroLike: CanCreateZerosLike[Wrapper, Wrapper] = (from: Wrapper) => from.map(underlying.zeroLike.apply)
+        implicit def zeroLike: CanCreateZerosLike[Wrapper, Wrapper] = (from: Wrapper) =>
+          from.map(underlying.zeroLike.apply)
 
 //      implicit def zero: CanCreateZeros[Wrapper,I] = new CanCreateZeros[Wrapper,I] {
 //        override def apply(d: I): Wrapper = wrap(u.zero(d))
@@ -244,8 +246,8 @@ object MutablizingAdaptor {
           a.value = b.value
         }
 
-        implicit def scaleAddVV: scaleAdd.InPlaceImpl3[Wrapper, S, Wrapper] = {
-          (y: Wrapper, a: S, x: Wrapper) => {
+        implicit def scaleAddVV: scaleAdd.InPlaceImpl3[Wrapper, S, Wrapper] = { (y: Wrapper, a: S, x: Wrapper) =>
+          {
             y += x * a
           }
         }
@@ -286,7 +288,7 @@ object MutablizingAdaptor {
     def unwrap(w: Wrapper): V = w.value
 
     implicit val mutaVspace: MutableVectorField[Wrapper, S] = new MutableVectorField[Wrapper, S] {
-      val u = underlying
+      val u: VectorField[V, S] = underlying
       def scalars: Field[S] = underlying.scalars
 
       val hasOps: ConversionOrSubtype[Wrapper, NumericOps[Wrapper]] = identity
@@ -327,9 +329,10 @@ object MutablizingAdaptor {
         }
       }
 
-      implicit def zipMapValues: CanZipMapValues[Wrapper, S, S, Wrapper] = (from: Wrapper, from2: Wrapper, fn: (S, S) => S) => {
-        from.map(canZipMap.map(_, from2.value, fn))
-      }
+      implicit def zipMapValues: CanZipMapValues[Wrapper, S, S, Wrapper] =
+        (from: Wrapper, from2: Wrapper, fn: (S, S) => S) => {
+          from.map(canZipMap.map(_, from2.value, fn))
+        }
 
       def liftUpdate[Op <: OpType](implicit op: UImpl2[Op, V, S, V]): UFunc.InPlaceImpl2[Op, Wrapper, S] =
         (a: Wrapper, b: S) => {
@@ -384,8 +387,8 @@ object MutablizingAdaptor {
 
       implicit def divIntoVV: OpDiv.InPlaceImpl2[Wrapper, Wrapper] = liftUpdateV(u.divVV)
 
-      implicit def scaleAddVV: scaleAdd.InPlaceImpl3[Wrapper, S, Wrapper] = {
-        (y: Wrapper, a: S, x: Wrapper) => {
+      implicit def scaleAddVV: scaleAdd.InPlaceImpl3[Wrapper, S, Wrapper] = { (y: Wrapper, a: S, x: Wrapper) =>
+        {
           y += x * a
         }
       }
@@ -426,12 +429,13 @@ object MutablizingAdaptor {
     def unwrap(w: Wrapper): V = w.value
 
     implicit val mutaVspace: MutableVectorRing[Wrapper, S] = new MutableVectorRing[Wrapper, S] {
-      val u = underlying
+      val u: VectorRing[V, S] = underlying
       def scalars: Ring[S] = underlying.scalars
 
       val hasOps: ConversionOrSubtype[Wrapper, NumericOps[Wrapper]] = identity
 
-      implicit def zeroLike: CanCreateZerosLike[Wrapper, Wrapper] = (from: Wrapper) => from.map(underlying.zeroLike.apply)
+      implicit def zeroLike: CanCreateZerosLike[Wrapper, Wrapper] = (from: Wrapper) =>
+        from.map(underlying.zeroLike.apply)
 
       implicit def copy: CanCopy[Wrapper] = (from: Wrapper) => from
 
@@ -462,9 +466,10 @@ object MutablizingAdaptor {
         }
       }
 
-      implicit def zipMapValues: CanZipMapValues[Wrapper, S, S, Wrapper] = (from: Wrapper, from2: Wrapper, fn: (S, S) => S) => {
-        from.map(canZipMap.map(_, from2.value, fn))
-      }
+      implicit def zipMapValues: CanZipMapValues[Wrapper, S, S, Wrapper] =
+        (from: Wrapper, from2: Wrapper, fn: (S, S) => S) => {
+          from.map(canZipMap.map(_, from2.value, fn))
+        }
 
       def liftUpdate[Op <: OpType](implicit op: UImpl2[Op, V, S, V]): UFunc.InPlaceImpl2[Op, Wrapper, S] =
         (a: Wrapper, b: S) => {
@@ -513,8 +518,8 @@ object MutablizingAdaptor {
 //
 //      implicit def addVS: OpAdd.Impl2[Wrapper, S, Wrapper] = liftOp(u.addVS)
 
-      implicit def scaleAddVV: scaleAdd.InPlaceImpl3[Wrapper, S, Wrapper] = {
-        (y: Wrapper, a: S, x: Wrapper) => {
+      implicit def scaleAddVV: scaleAdd.InPlaceImpl3[Wrapper, S, Wrapper] = { (y: Wrapper, a: S, x: Wrapper) =>
+        {
           y += x * a
         }
       }
@@ -548,12 +553,13 @@ object MutablizingAdaptor {
     def unwrap(w: Wrapper): V = w.value
 
     implicit val mutaVspace: MutableCoordinateField[Wrapper, S] = new MutableCoordinateField[Wrapper, S] {
-      val u = underlying
-      def scalars = underlying.scalars
+      val u: CoordinateField[V, S] = underlying
+      def scalars: Field[S] = underlying.scalars
 
       val hasOps: ConversionOrSubtype[Wrapper, NumericOps[Wrapper]] = identity
 
-      implicit def zeroLike: CanCreateZerosLike[Wrapper, Wrapper] = (from: Wrapper) => from.map(underlying.zeroLike.apply)
+      implicit def zeroLike: CanCreateZerosLike[Wrapper, Wrapper] = (from: Wrapper) =>
+        from.map(underlying.zeroLike.apply)
 
       implicit def copy: CanCopy[Wrapper] = new CanCopy[Wrapper] {
         // Should not inherit from Form=>To because the compiler will try to use it to coerce types.
@@ -585,9 +591,10 @@ object MutablizingAdaptor {
 
       implicit override def scalarOf: ScalarOf[Wrapper, S] = ScalarOf.dummy
 
-      implicit def zipMapValues: CanZipMapValues[Wrapper, S, S, Wrapper] = (from: Wrapper, from2: Wrapper, fn: (S, S) => S) => {
-        from.map(canZipMap.map(_, from2.value, fn))
-      }
+      implicit def zipMapValues: CanZipMapValues[Wrapper, S, S, Wrapper] =
+        (from: Wrapper, from2: Wrapper, fn: (S, S) => S) => {
+          from.map(canZipMap.map(_, from2.value, fn))
+        }
 
       def liftUpdate[Op <: OpType](implicit op: UImpl2[Op, V, S, V]): UFunc.InPlaceImpl2[Op, Wrapper, S] =
         (a: Wrapper, b: S) => {
@@ -623,8 +630,8 @@ object MutablizingAdaptor {
 
       implicit def mulIntoVV: OpMulScalar.InPlaceImpl2[Wrapper, Wrapper] = liftUpdateV(u.mulVV)
 
-      implicit def scaleAddVV: scaleAdd.InPlaceImpl3[Wrapper, S, Wrapper] = {
-        (y: Wrapper, a: S, x: Wrapper) => {
+      implicit def scaleAddVV: scaleAdd.InPlaceImpl3[Wrapper, S, Wrapper] = { (y: Wrapper, a: S, x: Wrapper) =>
+        {
           y += x * a
         }
       }
@@ -644,7 +651,8 @@ object MutablizingAdaptor {
         u.dotVV(a.value, b.value)
       }
 
-      implicit override def normImpl2: norm.Impl2[Wrapper, Double, Double] = (v: Wrapper, v2: Double) => underlying.normImpl2(v.value, v2)
+      implicit override def normImpl2: norm.Impl2[Wrapper, Double, Double] = (v: Wrapper, v2: Double) =>
+        underlying.normImpl2(v.value, v2)
 
       implicit override def divIntoVV: OpDiv.InPlaceImpl2[Wrapper, Wrapper] = liftUpdateV(underlying.divVV)
 

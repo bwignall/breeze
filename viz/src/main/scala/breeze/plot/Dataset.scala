@@ -36,7 +36,7 @@ class XYDataset[Item](x: Item => Number, y: Item => Number, label: Item => Strin
   override def getSeriesKey(series: Int): Comparable[_ <: Object] =
     names(series)
 
-  override def getSeriesCount =
+  override def getSeriesCount: Int =
     names.length
 
   override def getItemCount(series: Int): Int =
@@ -90,7 +90,7 @@ class XYZDataset[Item](x: Item => Number,
   override def getSeriesKey(series: Int): Comparable[_ <: Object] =
     names(series)
 
-  override def getSeriesCount =
+  override def getSeriesCount: Int =
     names.length
 
   override def getItemCount(series: Int): Int =

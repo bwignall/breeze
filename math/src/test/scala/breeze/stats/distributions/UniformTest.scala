@@ -32,9 +32,9 @@ class UniformTest
 
   import Arbitrary.arbitrary
 
-  def asDouble(x: Double) = x
+  def asDouble(x: Double): Double = x
 
-  def fromDouble(x: Double) = x
+  def fromDouble(x: Double): Double = x
 
   implicit def arbDistr: Arbitrary[Uniform] = Arbitrary {
     for (

@@ -51,8 +51,8 @@ class GeometricTest extends AnyFunSuite with Checkers with MomentsTestBase[Int] 
     ) yield new Geometric(p)(RandBasis.mt0)
   }
 
-  def asDouble(x: Int) = x.toDouble
-  def fromDouble(x: Double) = x.toInt
+  def asDouble(x: Int): Double = x.toDouble
+  def fromDouble(x: Double): Int = x.toInt
 
   override type Distr = Geometric
 }

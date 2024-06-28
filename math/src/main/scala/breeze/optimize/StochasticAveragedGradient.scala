@@ -40,7 +40,7 @@ class StochasticAveragedGradient[T](maxIter: Int = -1,
     f.calculate(x, IndexedSeq(history.nextPos))
   }
 
-  override protected def adjust(newX: T, newGrad: T, newVal: Double) = {
+  override protected def adjust(newX: T, newGrad: T, newVal: Double): (Double, T) = {
     val av = newVal + (newX.dot(newX)) * l2Regularization / 2.0
     val ag = newGrad + newX * l2Regularization
     av -> ag

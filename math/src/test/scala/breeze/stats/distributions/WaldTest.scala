@@ -26,9 +26,9 @@ class WaldTest extends AnyFunSuite with Checkers with UnivariateContinuousDistrT
   import Arbitrary.arbitrary
   override val numSamples = 40000
 
-  def asDouble(x: Double) = x
+  def asDouble(x: Double): Double = x
 
-  def fromDouble(x: Double) = x
+  def fromDouble(x: Double): Double = x
 
   implicit def arbDistr: Arbitrary[Distr] = Arbitrary {
     for (

@@ -2,11 +2,8 @@ package breeze.io
 
 import spire.math.ULong
 
-import java.io.Closeable
-import java.io.DataInput
-import java.io.DataOutput
-import java.io.File
-import java.io.IOException
+import java.io.{Closeable, DataInput, DataOutput, File, FileDescriptor, IOException}
+import java.nio.channels.FileChannel
 
 /** Wrapper for [[java.io.RandomAccessFile]].
  *
@@ -881,11 +878,11 @@ class RandomAccessFile(file: File, arg0: String = "r")(implicit converter: ByteC
 
   /** Pass on to [[java.io.RandomAccessFile]]
    */
-  def getChannel = rafObj.getChannel
+  def getChannel: FileChannel = rafObj.getChannel
 
   /** Pass on to [[java.io.RandomAccessFile]]
    */
-  def getFD = rafObj.getFD
+  def getFD: FileDescriptor = rafObj.getFD
 
   /** Pass on to [[java.io.RandomAccessFile]]
    */

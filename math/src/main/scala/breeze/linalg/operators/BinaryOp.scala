@@ -28,8 +28,8 @@ object BinaryOp {
   def fromCopyAndUpdate[A, B, Op](implicit
     op: UFunc.InPlaceImpl2[Op, A, B],
     copy: CanCopy[A]
-  ): UFunc.UImpl2[Op, A, B, A] = {
-    (a: A, b: B) => {
+  ): UFunc.UImpl2[Op, A, B, A] = { (a: A, b: B) =>
+    {
       val c = copy(a)
       op(c, b)
       c

@@ -181,11 +181,12 @@ object Counter2 extends LowPriorityCounter2 with Counter2Ops {
     (from: Counter2[K1, K2, V], row: K1, unused: ::.type) => from.innerGetOrElseUpdate(row, from.data)
 
   implicit def canSliceCol[K1, K2, V]: CanSlice2[Counter2[K1, K2, V], ::.type, K2, Counter[K1, V]] =
-    (from: Counter2[K1, K2, V], x: ::.type, col: K2) => new Counter[K1, V] {
-      def default: V = from.default
+    (from: Counter2[K1, K2, V], x: ::.type, col: K2) =>
+      new Counter[K1, V] {
+        def default: V = from.default
 
-      override val data = new Counter2ProjectionMap(from, col)
-    }
+        override val data = new Counter2ProjectionMap(from, col)
+      }
 
   /**
    * Returns a Counter[K2, V]

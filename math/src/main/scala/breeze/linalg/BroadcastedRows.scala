@@ -59,8 +59,8 @@ trait BroadcastedRowsOps {
     handhold: CanCollapseAxis.HandHold[T, Axis._1.type, RowType],
     op: InPlaceImpl[Op, RowType],
     cc: CanTraverseAxis[T, Axis._1.type, RowType]
-  ): InPlaceImpl[Op, BroadcastedRows[T, RowType]] = {
-    (v: BroadcastedRows[T, RowType]) => {
+  ): InPlaceImpl[Op, BroadcastedRows[T, RowType]] = { (v: BroadcastedRows[T, RowType]) =>
+    {
       cc(v.underlying, Axis._1) {
         op(_)
       }
@@ -71,8 +71,8 @@ trait BroadcastedRowsOps {
     handhold: CanCollapseAxis.HandHold[T, Axis._1.type, RowType],
     op: UImpl2[Op, RowType, RHS, OpResult],
     cc: CanCollapseAxis[T, Axis._1.type, RowType, OpResult, Result]
-  ): UImpl2[Op, BroadcastedRows[T, RowType], RHS, Result] = {
-    (v: BroadcastedRows[T, RowType], v2: RHS) => {
+  ): UImpl2[Op, BroadcastedRows[T, RowType], RHS, Result] = { (v: BroadcastedRows[T, RowType], v2: RHS) =>
+    {
       cc(v.underlying, Axis._1) {
         op(_, v2)
       }
@@ -83,8 +83,8 @@ trait BroadcastedRowsOps {
     handhold: CanCollapseAxis.HandHold[T, Axis._1.type, RowType],
     op: UImpl2[Op, LHS, RowType, OpResult],
     cc: CanCollapseAxis[T, Axis._1.type, RowType, OpResult, Result]
-  ): UImpl2[Op, LHS, BroadcastedRows[T, RowType], Result] = {
-    (v: LHS, v2: BroadcastedRows[T, RowType]) => {
+  ): UImpl2[Op, LHS, BroadcastedRows[T, RowType], Result] = { (v: LHS, v2: BroadcastedRows[T, RowType]) =>
+    {
       cc(v2.underlying, Axis._1) {
         op(v, _)
       }
@@ -95,8 +95,8 @@ trait BroadcastedRowsOps {
     handhold: CanCollapseAxis.HandHold[T, Axis._1.type, RowType],
     op: InPlaceImpl2[Op, RowType, RHS],
     cc: CanTraverseAxis[T, Axis._1.type, RowType]
-  ): InPlaceImpl2[Op, BroadcastedRows[T, RowType], RHS] = {
-    (v: BroadcastedRows[T, RowType], v2: RHS) => {
+  ): InPlaceImpl2[Op, BroadcastedRows[T, RowType], RHS] = { (v: BroadcastedRows[T, RowType], v2: RHS) =>
+    {
       cc(v.underlying, Axis._1) {
         op(_, v2)
       }

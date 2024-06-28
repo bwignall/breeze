@@ -5,7 +5,8 @@ import breeze.linalg.support.CanTranspose
 import breeze.optimize.DiffFunction
 import breeze.optimize.GradientTester
 import breeze.optimize.LBFGS
-import breeze.stats.distributions.RandBasis
+import breeze.stats.distributions.{Rand, RandBasis}
+import org.scalatest.Assertion
 import org.scalatest.funsuite.AnyFunSuite
 
 class LSMRTest extends AnyFunSuite {
@@ -49,7 +50,7 @@ class LSMRTest extends AnyFunSuite {
     assert(norm(bfgsSolved - lsmrSolved) < 1e-5, s"$bfgsSolved $lsmrSolved")
   }
 
-  def gen = RandBasis.mt0.uniform
+  def gen: Rand[Double] = RandBasis.mt0.uniform
 
   test("big regularized solve, 2.0") {
     val g = gen
@@ -89,7 +90,7 @@ class LSMRTest extends AnyFunSuite {
    * @param m
    * @param n
    */
-  def lsmrTest(m: Int, n: Int) = {
+  def lsmrTest(m: Int, n: Int): Assertion = {
 
     /*
      * This is a simple example for testing LSMR.

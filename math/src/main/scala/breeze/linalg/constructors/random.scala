@@ -60,7 +60,7 @@ object randn extends RandomGeneratorUFunc[Double] {
     basis.gaussian(low, high)
 
   protected val _classTag: ClassTag[Double] = scala.reflect.classTag[Double]
-  protected val _zero = Zero.DoubleZero
+  protected val _zero: Zero[Double] = Zero.DoubleZero
 
 }
 

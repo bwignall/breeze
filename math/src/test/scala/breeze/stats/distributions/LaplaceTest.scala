@@ -34,9 +34,9 @@ class LaplaceTest
 
   override val numSamples = 50000
 
-  def asDouble(x: Double) = x
+  def asDouble(x: Double): Double = x
 
-  def fromDouble(x: Double) = x
+  def fromDouble(x: Double): Double = x
 
   implicit def arbDistr: Arbitrary[Laplace] = Arbitrary {
     for (

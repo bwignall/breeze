@@ -50,9 +50,9 @@ object Semiring {
   implicit object fieldB extends Semiring[Boolean] {
     def zero = false
     def one = true
-    def ==(a: Boolean, b: Boolean) = a == b
-    def !=(a: Boolean, b: Boolean) = a != b
-    def +(a: Boolean, b: Boolean) = a || b
-    def *(a: Boolean, b: Boolean) = a && b
+    def ==(a: Boolean, b: Boolean): Boolean = a == b
+    def !=(a: Boolean, b: Boolean): Boolean = a != b
+    def +(a: Boolean, b: Boolean): Boolean = a || b
+    def *(a: Boolean, b: Boolean): Boolean = a && b
   }
 }

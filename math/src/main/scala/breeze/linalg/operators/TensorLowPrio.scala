@@ -15,8 +15,8 @@ import scala.reflect.ClassTag
 trait TensorLowPrio extends GenericOps {
   implicit def canSliceTensor_Seq_to_2[K, V, Res](implicit
     seqSlice: CanSlice[Tensor[K, V], Seq[K], Res]
-  ): CanSlice2[Tensor[K, V], K, K, Res] = {
-    (from: Tensor[K, V], slice: K, slice2: K) => {
+  ): CanSlice2[Tensor[K, V], K, K, Res] = { (from: Tensor[K, V], slice: K, slice2: K) =>
+    {
       seqSlice(from, Seq(slice, slice2))
     }
   }
@@ -31,22 +31,25 @@ trait TensorLowPrio extends GenericOps {
 
   implicit def canSliceTensor2[K1, K2, V: Semiring: ClassTag]
     : CanSlice2[Tensor[(K1, K2), V], Seq[K1], Seq[K2], SliceMatrix[K1, K2, V]] = {
-    (from: Tensor[(K1, K2), V], slice: Seq[K1], slice2: Seq[K2]) => {
-      new SliceMatrix(from, slice.toIndexedSeq, slice2.toIndexedSeq)
-    }
+    (from: Tensor[(K1, K2), V], slice: Seq[K1], slice2: Seq[K2]) =>
+      {
+        new SliceMatrix(from, slice.toIndexedSeq, slice2.toIndexedSeq)
+      }
   }
 
   implicit def canSliceTensor2_CRs[K1, K2, V: Semiring: ClassTag]
     : CanSlice2[Tensor[(K1, K2), V], Seq[K1], K2, SliceVector[(K1, K2), V]] = {
-    (from: Tensor[(K1, K2), V], slice: Seq[K1], slice2: K2) => {
-      new SliceVector(from, slice.map(k1 => (k1, slice2)).toIndexedSeq)
-    }
+    (from: Tensor[(K1, K2), V], slice: Seq[K1], slice2: K2) =>
+      {
+        new SliceVector(from, slice.map(k1 => (k1, slice2)).toIndexedSeq)
+      }
   }
 
   implicit def canSliceTensor2_CsR[K1, K2, V: Semiring: ClassTag]
     : CanSlice2[Tensor[(K1, K2), V], K1, Seq[K2], Transpose[SliceVector[(K1, K2), V]]] = {
-    (from: Tensor[(K1, K2), V], slice: K1, slice2: Seq[K2]) => {
-      new SliceVector(from, slice2.map(k2 => (slice, k2)).toIndexedSeq).t
-    }
+    (from: Tensor[(K1, K2), V], slice: K1, slice2: Seq[K2]) =>
+      {
+        new SliceVector(from, slice2.map(k2 => (slice, k2)).toIndexedSeq).t
+      }
   }
 }

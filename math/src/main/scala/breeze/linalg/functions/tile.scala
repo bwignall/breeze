@@ -18,8 +18,8 @@ object tile extends UFunc {
     ct: ClassTag[T],
     z: Zero[T],
     set: OpSet.InPlaceImpl2[DenseVector[T], DenseVector[T]]
-  ): Impl2[DenseVector[T], Int, DenseVector[T]] = {
-    (x: DenseVector[T], n: Int) => {
+  ): Impl2[DenseVector[T], Int, DenseVector[T]] = { (x: DenseVector[T], n: Int) =>
+    {
       // DenseVector is column-major, i.e., it can be considered a matrix of size (v.length x 1)
       val out = DenseVector.zeros[T](x.length * n)
       var i = 0

@@ -37,7 +37,7 @@ trait Process[T] extends Rand[T] { process =>
   def steps: Iterator[T] = new Iterator[T] {
     private var current = process
     def hasNext = true
-    def next = {
+    def next: T = {
       val (x, nextP) = current.step()
       current = nextP
       x

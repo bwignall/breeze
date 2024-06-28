@@ -42,7 +42,7 @@ case class Multinomial[T, I](params: T)(implicit
   sumImpl: breeze.linalg.sum.Impl[T, Double],
   rand: RandBasis
 ) extends DiscreteDistr[I] {
-  val sum = breeze.linalg.sum(params)
+  val sum: Double = breeze.linalg.sum(params)
   require(sum != 0.0, "There's no mass!")
 
   private var haveSampled = false
@@ -102,16 +102,16 @@ case class Multinomial[T, I](params: T)(implicit
     AliasTable(probs, aliases, outcomes, rand)
   }
 
-  def probabilityOf(e: I) = {
+  def probabilityOf(e: I): Double = {
     // this deals with the fact that DenseVectors support negative indexing
     if (!params.keySet.contains(e)) 0.0
     else params(e) / sum
   }
-  override def unnormalizedProbabilityOf(e: I) = params(e)
+  override def unnormalizedProbabilityOf(e: I): Double = params(e)
 
-  override def toString = ev(params).activeIterator.mkString("Multinomial{", ",", "}")
+  override def toString: String = ev(params).activeIterator.mkString("Multinomial{", ",", "}")
 
-  def expectedValue[U](f: I => U)(implicit vs: VectorSpace[U, Double]) = {
+  def expectedValue[U](f: I => U)(implicit vs: VectorSpace[U, Double]): U = {
     val wrapped = MutablizingAdaptor.ensureMutable(vs)
     import wrapped._
     import wrapped.mutaVspace._
@@ -166,7 +166,7 @@ object Multinomial {
 
     def predictive(parameter: conjugateFamily.Parameter)(implicit basis: RandBasis) = new Polya(parameter)
 
-    def posterior(prior: conjugateFamily.Parameter, evidence: IterableOnce[I]) = {
+    def posterior(prior: conjugateFamily.Parameter, evidence: IterableOnce[I]): T = {
       val localCopy: T = space.copy(prior)
       for (e <- evidence.iterator) {
         localCopy(e) += 1.0
@@ -178,19 +178,19 @@ object Multinomial {
     type Parameter = T
     case class SufficientStatistic(counts: T)
         extends breeze.stats.distributions.SufficientStatistic[SufficientStatistic] {
-      def +(tt: SufficientStatistic) = SufficientStatistic(counts + tt.counts)
-      def *(w: Double) = SufficientStatistic(counts * w)
+      def +(tt: SufficientStatistic): SufficientStatistic = SufficientStatistic(counts + tt.counts)
+      def *(w: Double): SufficientStatistic = SufficientStatistic(counts * w)
     }
 
-    def emptySufficientStatistic = SufficientStatistic(zeroLike(exemplar))
+    def emptySufficientStatistic: SufficientStatistic = SufficientStatistic(zeroLike(exemplar))
 
-    def sufficientStatisticFor(t: I) = {
+    def sufficientStatisticFor(t: I): SufficientStatistic = {
       val r = zeroLike(exemplar)
       r(t) = 1.0
       SufficientStatistic(r)
     }
 
-    def mle(stats: SufficientStatistic) = log(stats.counts)
+    def mle(stats: SufficientStatistic): T = log(stats.counts)
 
     def likelihoodFunction(stats: SufficientStatistic): DiffFunction[T] = (x: T) => {
       val nn: T = logNormalize(x)
@@ -204,7 +204,7 @@ object Multinomial {
       (-lp, grad)
     }
 
-    override def distribution(p: Parameter)(implicit rand: RandBasis) = {
+    override def distribution(p: Parameter)(implicit rand: RandBasis): Multinomial[T, I] = {
       new Multinomial(numerics.exp(p))
     }
   }

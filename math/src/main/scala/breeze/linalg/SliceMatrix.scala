@@ -89,8 +89,8 @@ object SliceMatrix extends LowPrioritySliceMatrix with SliceMatrixOps {
   }
 
   implicit def canCreateZerosLike[K1, K2, V: ClassTag: Zero]
-    : CanCreateZerosLike[SliceMatrix[K1, K2, V], DenseMatrix[V]] = {
-    (v1: SliceMatrix[K1, K2, V]) => {
+    : CanCreateZerosLike[SliceMatrix[K1, K2, V], DenseMatrix[V]] = { (v1: SliceMatrix[K1, K2, V]) =>
+    {
       DenseMatrix.zeros[V](v1.rows, v1.cols)
     }
   }
@@ -142,20 +142,22 @@ object SliceMatrix extends LowPrioritySliceMatrix with SliceMatrixOps {
   // slices
   implicit def canSliceRow[K1, K2, V: Semiring: ClassTag]
     : CanSlice2[SliceMatrix[K1, K2, V], Int, ::.type, Transpose[SliceVector[(K1, K2), V]]] = {
-    (from: SliceMatrix[K1, K2, V], sliceRow: Int, ignored: ::.type) => {
-      val row = SliceUtils.mapRow(sliceRow, from.rows)
-      val k1: K1 = from.slice1(row)
-      new SliceVector(from.tensor, from.slice2.map(k1 -> _)).t
-    }
+    (from: SliceMatrix[K1, K2, V], sliceRow: Int, ignored: ::.type) =>
+      {
+        val row = SliceUtils.mapRow(sliceRow, from.rows)
+        val k1: K1 = from.slice1(row)
+        new SliceVector(from.tensor, from.slice2.map(k1 -> _)).t
+      }
   }
 
   implicit def canSliceCol[K1, K2, V: Semiring: ClassTag]
     : CanSlice2[SliceMatrix[K1, K2, V], ::.type, Int, SliceVector[(K1, K2), V]] = {
-    (from: SliceMatrix[K1, K2, V], ignored: ::.type, sliceCol: Int) => {
-      val col = SliceUtils.mapColumn(sliceCol, from.cols)
-      val k2: K2 = from.slice2(col)
-      new SliceVector(from.tensor, from.slice1.map(_ -> k2))
-    }
+    (from: SliceMatrix[K1, K2, V], ignored: ::.type, sliceCol: Int) =>
+      {
+        val col = SliceUtils.mapColumn(sliceCol, from.cols)
+        val k2: K2 = from.slice2(col)
+        new SliceVector(from.tensor, from.slice1.map(_ -> k2))
+      }
   }
 }
 
@@ -165,9 +167,10 @@ trait LowPrioritySliceMatrix { self: SliceMatrix.type =>
   // return a SliceMatrix
   implicit def canSliceWeirdRows_SM[K1, K2, V: Semiring: ClassTag]
     : CanSlice2[SliceMatrix[K1, K2, V], Seq[Int], ::.type, SliceMatrix[K1, K2, V]] = {
-    (from: SliceMatrix[K1, K2, V], rows: Seq[Int], ignored: ::.type) => {
-      new SliceMatrix(from.tensor, SliceUtils.mapRowSeq(rows, from.rows).map(from.slice1), from.slice2)
-    }
+    (from: SliceMatrix[K1, K2, V], rows: Seq[Int], ignored: ::.type) =>
+      {
+        new SliceMatrix(from.tensor, SliceUtils.mapRowSeq(rows, from.rows).map(from.slice1), from.slice2)
+      }
   }
 
   // Note: can't have a separate implicit for Range and Seq since they will be ambiguous as both will return a
@@ -175,9 +178,10 @@ trait LowPrioritySliceMatrix { self: SliceMatrix.type =>
   // return a SliceMatrix
   implicit def canSliceWeirdCols_SM[K1, K2, V: Semiring: ClassTag]
     : CanSlice2[SliceMatrix[K1, K2, V], ::.type, Seq[Int], SliceMatrix[K1, K2, V]] = {
-    (from: SliceMatrix[K1, K2, V], ignored: ::.type, cols: Seq[Int]) => {
-      new SliceMatrix(from.tensor, from.slice1, SliceUtils.mapColumnSeq(cols, from.cols).map(from.slice2))
-    }
+    (from: SliceMatrix[K1, K2, V], ignored: ::.type, cols: Seq[Int]) =>
+      {
+        new SliceMatrix(from.tensor, from.slice1, SliceUtils.mapColumnSeq(cols, from.cols).map(from.slice2))
+      }
   }
 
   implicit def handholdCanMapRows_SM[K1, K2, V]

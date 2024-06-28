@@ -46,7 +46,7 @@ class BitVector(val data: java.util.BitSet, val length: Int, val enforceLength: 
 
     new Iterator[Int] {
       var nextReady = true
-      var _next = firstBit
+      var _next: Int = firstBit
       def hasNext: Boolean =
         (_next >= 0) && (nextReady || {
           _next += 1

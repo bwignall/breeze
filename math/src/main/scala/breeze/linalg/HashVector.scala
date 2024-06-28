@@ -39,7 +39,7 @@ class HashVector[@spec(Double, Int, Float, Long) E](val array: OpenAddressHashAr
     array(i) = v
   }
 
-  def default = array.defaultValue
+  def default: E = array.defaultValue
 
   def activeSize: Int = array.activeSize
 
@@ -47,23 +47,23 @@ class HashVector[@spec(Double, Int, Float, Long) E](val array: OpenAddressHashAr
 
   def copy: HashVector[E] = new HashVector(array.copy)
 
-  def repr = this
+  def repr: HashVector[E] = this
 
   final def iterableSize: Int = array.iterableSize
-  def data = array.data
-  final def index = array.index
-  final def isActive(i: Int) = array.isActive(i)
+  def data: Array[E] = array.data
+  final def index: Array[Int] = array.index
+  final def isActive(i: Int): Boolean = array.isActive(i)
 
   def clear(): Unit = array.clear()
 
-  override def toString = {
+  override def toString: String = {
     activeIterator.mkString("HashVector(", ", ", ")")
   }
 
   def allVisitableIndicesActive: Boolean = false
 
   // TODO: needs to be consistent with Sparse/Dense (meaning it just has to be the slow dense thing)
-  override def hashCode() = {
+  override def hashCode(): Int = {
     var hash = 47
     // we make the hash code based on index * value, so that zeros don't affect the hashcode.
     val dv = array.default.value(array.zero)
@@ -86,10 +86,10 @@ class HashVector[@spec(Double, Int, Float, Long) E](val array: OpenAddressHashAr
 }
 
 object HashVector {
-  def zeros[@spec(Double, Int, Float, Long) V: ClassTag: Zero](size: Int) = {
+  def zeros[@spec(Double, Int, Float, Long) V: ClassTag: Zero](size: Int): HashVector[V] = {
     new HashVector(new OpenAddressHashArray[V](size))
   }
-  def apply[@spec(Double, Int, Float, Long) V: Zero](values: Array[V]) = {
+  def apply[@spec(Double, Int, Float, Long) V: Zero](values: Array[V]): HashVector[V] = {
     implicit val ctg: ClassTag[V] = ReflectionUtil.elemClassTagFromArray(values)
     val oah = new OpenAddressHashArray[V](values.length)
     for ((v, i) <- values.zipWithIndex) oah(i) = v
@@ -104,7 +104,7 @@ object HashVector {
   def tabulate[@spec(Double, Int, Float, Long) V: ClassTag: Zero](size: Int)(f: Int => V): HashVector[V] =
     apply(Array.tabulate(size)(f))
 
-  def apply[V: ClassTag: Zero](length: Int)(values: (Int, V)*) = {
+  def apply[V: ClassTag: Zero](length: Int)(values: (Int, V)*): HashVector[V] = {
     val r = zeros[V](length)
     for ((i, v) <- values) {
       r(i) = v
@@ -121,7 +121,7 @@ object HashVector {
 
   // implicits
   class CanCopyHashVector[@specialized(Int, Float, Double) V: ClassTag: Zero] extends CanCopy[HashVector[V]] {
-    def apply(v1: HashVector[V]) = {
+    def apply(v1: HashVector[V]): HashVector[V] = {
       v1.copy
     }
   }
@@ -131,7 +131,7 @@ object HashVector {
 
   implicit def canMapValues[V, V2: ClassTag: Zero]: CanMapValues[HashVector[V], V, V2, HashVector[V2]] = {
     new CanMapValues[HashVector[V], V, V2, HashVector[V2]] {
-      def map(from: HashVector[V], fn: (V) => V2) = {
+      def map(from: HashVector[V], fn: (V) => V2): HashVector[V2] = {
         HashVector.tabulate(from.length)(i => fn(from(i)))
       }
 
@@ -217,5 +217,5 @@ object HashVector {
   }
 
   @noinline
-  private def init() = {}
+  private def init(): Unit = {}
 }

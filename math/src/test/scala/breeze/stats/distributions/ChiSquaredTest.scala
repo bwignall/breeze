@@ -44,9 +44,9 @@ class ChiSquaredTest
 
   def paramsClose(p: Double, b: Double): Boolean = breeze.numerics.closeTo(p, b, 5e-2)
 
-  def asDouble(x: Double) = x
+  def asDouble(x: Double): Double = x
 
-  def fromDouble(x: Double) = x
+  def fromDouble(x: Double): Double = x
 
   implicit def arbDistr: Arbitrary[ChiSquared] = Arbitrary {
     for (

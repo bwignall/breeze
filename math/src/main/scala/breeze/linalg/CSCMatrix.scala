@@ -67,8 +67,8 @@ class CSCMatrix[@spec(Double, Int, Float, Long) V: Zero](private var _data: Arra
   def this(data: Array[V], rows: Int, cols: Int, colPtrs: Array[Int], rowIndices: Array[Int]) =
     this(data, rows, cols, colPtrs, data.length, rowIndices)
 
-  def rowIndices = _rowIndices
-  def data = _data
+  def rowIndices: Array[Int] = _rowIndices
+  def data: Array[V] = _data
 
   // don't delete
   CSCMatrix.init()
@@ -444,5 +444,5 @@ object CSCMatrix extends MatrixConstructors[CSCMatrix] {
   }
 
   @noinline
-  private def init() = {}
+  private def init(): Unit = {}
 }

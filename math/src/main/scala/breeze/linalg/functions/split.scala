@@ -17,22 +17,23 @@ import scala.reflect.ClassTag
 object split extends UFunc {
 
   implicit def implIntVec[T: ClassTag]: Impl2[DenseVector[T], Int, IndexedSeq[DenseVector[T]]] = {
-    (v: DenseVector[T], n: Int) => {
-      require(n >= 0)
-      require(n <= v.size)
-      require(v.size % n == 0)
+    (v: DenseVector[T], n: Int) =>
+      {
+        require(n >= 0)
+        require(n <= v.size)
+        require(v.size % n == 0)
 
-      val individualVectorSize = v.size / n
-      val result = mutable.ArrayBuilder.make[DenseVector[T]]
+        val individualVectorSize = v.size / n
+        val result = mutable.ArrayBuilder.make[DenseVector[T]]
 
-      cforRange(0 until n) { k =>
-        val offsetInOriginalVector = k * individualVectorSize
-        val chunk = new DenseVector(new Array[T](individualVectorSize))
-        chunk := v(offsetInOriginalVector until (offsetInOriginalVector + individualVectorSize))
-        result += chunk
+        cforRange(0 until n) { k =>
+          val offsetInOriginalVector = k * individualVectorSize
+          val chunk = new DenseVector(new Array[T](individualVectorSize))
+          chunk := v(offsetInOriginalVector until (offsetInOriginalVector + individualVectorSize))
+          result += chunk
+        }
+        ArraySeq.unsafeWrapArray(result.result())
       }
-      ArraySeq.unsafeWrapArray(result.result())
-    }
   }
 
   implicit def implSeqVec[T: ClassTag]: Impl2[DenseVector[T], Seq[Int], IndexedSeq[DenseVector[T]]] =
@@ -62,11 +63,12 @@ object split extends UFunc {
   implicit def implIntMatrix[T: ClassTag](implicit
     zero: Zero[T]
   ): Impl3[DenseMatrix[T], Int, Int, IndexedSeq[DenseMatrix[T]]] =
-    (v: DenseMatrix[T], n: Int, axis: Int) => axis match {
-      case 0 => vsplit(v, n)
-      case 1 => hsplit(v, n)
-      case _ => throw new IllegalArgumentException("Matrices have only two axes.")
-    }
+    (v: DenseMatrix[T], n: Int, axis: Int) =>
+      axis match {
+        case 0 => vsplit(v, n)
+        case 1 => hsplit(v, n)
+        case _ => throw new IllegalArgumentException("Matrices have only two axes.")
+      }
 }
 
 object hsplit extends UFunc {

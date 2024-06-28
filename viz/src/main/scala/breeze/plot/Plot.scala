@@ -57,7 +57,7 @@ class Plot() {
     this
   }
 
-  def ++=(pl: IterableOnce[Series]) = {
+  def ++=(pl: IterableOnce[Series]): Plot = {
     pl.iterator.foreach(this += _)
     refresh()
     this
@@ -83,12 +83,12 @@ class Plot() {
     listeners -= l
   }
 
-  def xlabel = xaxis.getLabel
+  def xlabel: String = xaxis.getLabel
   def xlabel_=(label: String): Unit = {
     xaxis.setLabel(label)
   }
 
-  def ylabel = yaxis.getLabel
+  def ylabel: String = yaxis.getLabel
   def ylabel_=(label: String): Unit = {
     yaxis.setLabel(label)
   }
@@ -113,8 +113,8 @@ class Plot() {
     plot.getRangeAxis.setUpperBound(upper)
   }
 
-  def xaxis = _xaxis
-  def yaxis = _yaxis
+  def xaxis: NumberAxis = _xaxis
+  def yaxis: NumberAxis = _yaxis
 
   private var _xaxis: NumberAxis = new NumberAxis(null)
   private var _yaxis: NumberAxis = new NumberAxis(null)
@@ -247,23 +247,23 @@ object Plot {
   def paint(series: Int): Paint =
     paints(series % paints.length)
 
-  val shapes = DefaultDrawingSupplier.DEFAULT_SHAPE_SEQUENCE
+  val shapes: Array[Shape] = DefaultDrawingSupplier.DEFAULT_SHAPE_SEQUENCE
   def shape(series: Int): Shape =
     shapes(series % shapes.length)
 
-  val strokes = DefaultDrawingSupplier.DEFAULT_STROKE_SEQUENCE
+  val strokes: Array[Stroke] = DefaultDrawingSupplier.DEFAULT_STROKE_SEQUENCE
   def stroke(series: Int): Stroke =
     strokes(series % strokes.length)
 
-  val fillPaints = paints; // DefaultDrawingSupplier.DEFAULT_FILL_PAINT_SEQUENCE
+  val fillPaints: Array[Paint] = paints; // DefaultDrawingSupplier.DEFAULT_FILL_PAINT_SEQUENCE
   def fillPaint(series: Int): Paint =
     fillPaints(series % fillPaints.length)
 
-  val outlinePaints = paints; // DefaultDrawingSupplier.DEFAULT_OUTLINE_PAINT_SEQUENCE
+  val outlinePaints: Array[Paint] = paints; // DefaultDrawingSupplier.DEFAULT_OUTLINE_PAINT_SEQUENCE
   def outlinePaint(series: Int): Paint =
     outlinePaints(series % outlinePaints.length)
 
-  val outlineStrokes = DefaultDrawingSupplier.DEFAULT_OUTLINE_STROKE_SEQUENCE
+  val outlineStrokes: Array[Stroke] = DefaultDrawingSupplier.DEFAULT_OUTLINE_STROKE_SEQUENCE
   def outlineStroke(series: Int): Stroke =
     outlineStrokes(series % outlineStrokes.length)
 

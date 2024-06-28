@@ -41,15 +41,15 @@ abstract class StochasticGradientDescent[T](val defaultStepSize: Double,
    *
    * Default just takes a step
    */
-  protected def takeStep(state: State, dir: T, stepSize: Double) = state.x + dir * stepSize
-  protected def chooseDescentDirection(state: State, fn: StochasticDiffFunction[T]) = state.grad * -1.0
+  protected def takeStep(state: State, dir: T, stepSize: Double): T = state.x + dir * stepSize
+  protected def chooseDescentDirection(state: State, fn: StochasticDiffFunction[T]): T = state.grad * -1.0
 
   /**
    * Choose a step size scale for this iteration.
    *
    * Default is eta / math.pow(state.iter + 1,2.0 / 3.0)
    */
-  def determineStepSize(state: State, f: StochasticDiffFunction[T], dir: T) = {
+  def determineStepSize(state: State, f: StochasticDiffFunction[T], dir: T): Double = {
     defaultStepSize / math.pow(state.iter + 1, 2.0 / 3.0)
   }
 
@@ -65,8 +65,8 @@ object StochasticGradientDescent {
   class SimpleSGD[T](initialStepSize: Double = 4, maxIter: Int = 100)(implicit vs: NormedModule[T, Double])
       extends StochasticGradientDescent[T](initialStepSize, maxIter) {
     type History = Unit
-    def initialHistory(f: StochasticDiffFunction[T], init: T) = ()
-    def updateHistory(newX: T, newGrad: T, newValue: Double, f: StochasticDiffFunction[T], oldState: State) = ()
+    def initialHistory(f: StochasticDiffFunction[T], init: T): Unit = ()
+    def updateHistory(newX: T, newGrad: T, newValue: Double, f: StochasticDiffFunction[T], oldState: State): Unit = ()
   }
 
 }

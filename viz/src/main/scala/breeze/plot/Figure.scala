@@ -38,28 +38,28 @@ class Figure(name: String, private var rows_ : Int = 1, private var cols_ : Int 
   }
 
   /** Width of figure on screen (or in image) */
-  def width = width_
+  def width: Int = width_
   def width_=(newwidth: Int): Unit = {
     width_ = newwidth
     refresh()
   }
 
   /** Height of figure on screen (or in image) */
-  def height = height_
+  def height: Int = height_
   def height_=(newheight: Int): Unit = {
     height_ = newheight
     refresh()
   }
 
   /** How many rows of plots are in the figure */
-  def rows = rows_
+  def rows: Int = rows_
   def rows_=(newrows: Int): Unit = {
     rows_ = newrows
     refresh()
   }
 
   /** How many cols of plots are in the figure */
-  def cols = cols_
+  private def cols = cols_
   def cols_=(newcols: Int): Unit = {
     cols_ = newcols
     refresh()
@@ -67,7 +67,7 @@ class Figure(name: String, private var rows_ : Int = 1, private var cols_ : Int 
 
   /** Visibility state of the plot */
   private var visible_ = true
-  def visible = visible_
+  def visible: Boolean = visible_
   def visible_=(newvis: Boolean): Unit = {
     visible_ = newvis
     frame.setVisible(visible_)

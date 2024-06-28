@@ -20,8 +20,8 @@ object where extends UFunc {
   implicit def whereFromTraverseKeyValuePairs[T, K, V](implicit
     trav: CanTraverseKeyValuePairs[T, K, V],
     semi: Semiring[V]
-  ): Impl[T, IndexedSeq[K]] = {
-    (v: T) => {
+  ): Impl[T, IndexedSeq[K]] = { (v: T) =>
+    {
       val result = new ArrayBuffer[K]()
       trav.traverse(
         v,
@@ -44,12 +44,12 @@ object where extends UFunc {
     ev: Q <:< QuasiTensor[K, V2],
     trav: CanMapKeyValuePairs[T, K, V, V2, U],
     semi: Semiring[V]
-  ): Impl3[T, Q, Q, U] = {
-    (from: T, v2: Q, v3: Q) => {
+  ): Impl3[T, Q, Q, U] = { (from: T, v2: Q, v3: Q) =>
+    {
       trav.map(from,
-        { (k, v) =>
-          if (v != semi.zero) v2(k) else v3(k)
-        }
+               { (k, v) =>
+                 if (v != semi.zero) v2(k) else v3(k)
+               }
       )
     }
   }

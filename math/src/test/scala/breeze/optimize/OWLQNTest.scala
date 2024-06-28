@@ -25,7 +25,7 @@ class OWLQNTest extends OptimizeTestBase {
 
     def optimizeThis(init: DenseVector[Double]) = {
       val f = new DiffFunction[DenseVector[Double]] {
-        def calculate(x: DenseVector[Double]) = {
+        def calculate(x: DenseVector[Double]): (Double, DenseVector[Double]) = {
           (norm((x - 3.0) ^:^ 2.0, 1), (x * 2.0) - 6.0)
         }
       }
@@ -43,7 +43,7 @@ class OWLQNTest extends OptimizeTestBase {
 
     def optimizeThis(init: DenseVector[Double]) = {
       val f = new DiffFunction[DenseVector[Double]] {
-        def calculate(x: DenseVector[Double]) = {
+        def calculate(x: DenseVector[Double]): (Double, DenseVector[Double]) = {
           (math.pow(norm(x - 3.0, 2), 2), (x * 2.0) - 6.0)
         }
       }
@@ -66,7 +66,7 @@ class OWLQNTest extends OptimizeTestBase {
 
     def optimizeThis(init: SparseVector[Double]) = {
       val f = new DiffFunction[SparseVector[Double]] {
-        def calculate(x: SparseVector[Double]) = {
+        def calculate(x: SparseVector[Double]): (Double, SparseVector[Double]) = {
           (math.pow(norm(x - 3.0, 2), 2), (x * 2.0) - 6.0)
         }
       }

@@ -41,7 +41,7 @@ object hist extends UFunc {
       val result = DenseVector.zeros[Int](bins)
 
       val visitor = new ValuesVisitor[S] {
-        def visit(a: S) = {
+        def visit(a: S): Unit = {
           val ad = conv(a)
           val i: Int = binOf(ad)
           if ((i >= 0) && (i < bins)) {
@@ -96,7 +96,7 @@ object hist extends UFunc {
       val result = DenseVector.zeros[Double](bins)
 
       val visitor = new PairValuesVisitor[S, Double] {
-        def visit(a: S, w: Double) = {
+        def visit(a: S, w: Double): Unit = {
           val ad = conv(a).toDouble
           val i: Int = math.floor(bins * ((ad - minimum) / (maximum - minimum))).toInt
           if ((i >= 0) && (i < bins)) {

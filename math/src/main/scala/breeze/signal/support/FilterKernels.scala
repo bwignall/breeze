@@ -44,7 +44,7 @@ object FIRKernel1D {
 class FIRKernel1D[T](val kernel: DenseVector[T], override val multiplier: Double, override val designText: String)
     extends FilterKernel1D[T] {
   // lazy val kernelFourier: DenseVector[Complex] = fourierTr( kernel )
-  lazy val length = kernel.length
+  lazy val length: Int = kernel.length
 
   /**Amount of overhang to prepend for convolution, to conserve output length.*/
   lazy val overhangPre: Int = (length - 1) / 2

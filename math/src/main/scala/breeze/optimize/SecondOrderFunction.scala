@@ -32,8 +32,8 @@ trait SecondOrderFunction[T, H] extends DiffFunction[T] {
 object SecondOrderFunction {
   def empirical[T, I](f: DiffFunction[T], eps: Double = 1e-5)(implicit
     vs: VectorSpace[T, Double]
-  ): SecondOrderFunction[T, EmpiricalHessian[T]] = {
-    (x: T) => {
+  ): SecondOrderFunction[T, EmpiricalHessian[T]] = { (x: T) =>
+    {
       val (v, grad) = f.calculate(x)
       val h = new EmpiricalHessian(f, x, grad, eps)
       (v, grad, h)
@@ -42,8 +42,8 @@ object SecondOrderFunction {
 
   def minibatchEmpirical[T, I](f: BatchDiffFunction[T], eps: Double = 1e-5, batchSize: Int = 30000)(implicit
     vs: InnerProductVectorSpace[T, Double]
-  ): SecondOrderFunction[T, EmpiricalHessian[T]] = {
-    (x: T) => {
+  ): SecondOrderFunction[T, EmpiricalHessian[T]] = { (x: T) =>
+    {
       val subset = Rand.subsetsOfSize(f.fullRange, batchSize).draw()
       val (v, grad) = f.calculate(x)
       val newf = new DiffFunction[T] {
@@ -80,8 +80,8 @@ class EmpiricalHessian[T](df: DiffFunction[T], x: T, grad: T, eps: Double = 1e-5
 }
 
 object EmpiricalHessian {
-  implicit def product[T, I]: OpMulMatrix.Impl2[EmpiricalHessian[T], T, T] = {
-    (a: EmpiricalHessian[T], b: T) => {
+  implicit def product[T, I]: OpMulMatrix.Impl2[EmpiricalHessian[T], T, T] = { (a: EmpiricalHessian[T], b: T) =>
+    {
       a * b
     }
   }
@@ -172,8 +172,8 @@ class FisherMatrix[T](grads: IndexedSeq[T])(implicit vs: MutableInnerProductVect
 }
 
 object FisherMatrix {
-  implicit def product[T, I]: OpMulMatrix.Impl2[FisherMatrix[T], T, T] = {
-    (a: FisherMatrix[T], b: T) => {
+  implicit def product[T, I]: OpMulMatrix.Impl2[FisherMatrix[T], T, T] = { (a: FisherMatrix[T], b: T) =>
+    {
       a * b
     }
   }

@@ -48,8 +48,8 @@ trait BatchDiffFunction[T] extends DiffFunction[T] with ((T, IndexedSeq[Int]) =>
   def fullRange: IndexedSeq[Int]
 
   def withRandomBatches(size: Int): StochasticDiffFunction[T] = new StochasticDiffFunction[T] {
-    val rand = Rand.subsetsOfSize(fullRange, size)
-    def calculate(x: T) = outer.calculate(x, rand.draw())
+    val rand: Rand[IndexedSeq[Int]] = Rand.subsetsOfSize(fullRange, size)
+    def calculate(x: T): (Double, T) = outer.calculate(x, rand.draw())
   }
 
   def withScanningBatches(size: Int): StochasticDiffFunction[T] = new StochasticDiffFunction[T] {
@@ -61,11 +61,11 @@ trait BatchDiffFunction[T] extends DiffFunction[T] with ((T, IndexedSeq[Int]) =>
       ArraySeq.unsafeWrapArray(Array.tabulate(size)(i => fullRange((i + start) % fullRange.size)))
     }
 
-    def calculate(x: T) = outer.calculate(x, nextBatch)
+    def calculate(x: T): (Double, T) = outer.calculate(x, nextBatch)
   }
 
   def groupItems(groupSize: Int): BatchDiffFunction[T] = new BatchDiffFunction[T] {
-    val numGroups = (outer.fullRange.size + groupSize - 1) / groupSize
+    val numGroups: Int = (outer.fullRange.size + groupSize - 1) / groupSize
     val groups: Array[immutable.IndexedSeq[Int]] =
       Array.tabulate(numGroups)(i => (i until outer.fullRange.length by numGroups).map(outer.fullRange))
 
@@ -100,7 +100,7 @@ trait BatchDiffFunction[T] extends DiffFunction[T] with ((T, IndexedSeq[Int]) =>
      */
     override def fullRange: IndexedSeq[Int] = outer.fullRange
 
-    override def calculate(u: U) = {
+    override def calculate(u: U): (Double, U) = {
       val t = l.backward(u)
       val (obj, gu) = outer.calculate(t)
       (obj, l.forward(gu))

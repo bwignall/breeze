@@ -184,8 +184,8 @@ object Gamma extends ExponentialFamily[Gamma, Double] with ContinuousDistributio
   import breeze.stats.distributions.{SufficientStatistic => BaseSuffStat}
   case class SufficientStatistic(n: Double, meanOfLogs: Double, mean: Double)
       extends BaseSuffStat[SufficientStatistic] {
-    def *(weight: Double) = SufficientStatistic(n * weight, meanOfLogs, mean)
-    def +(t: SufficientStatistic) = {
+    def *(weight: Double): SufficientStatistic = SufficientStatistic(n * weight, meanOfLogs, mean)
+    def +(t: SufficientStatistic): SufficientStatistic = {
       val delta = t.mean - mean
       val newMean = mean + delta * (t.n / (t.n + n))
       val logDelta = t.meanOfLogs - meanOfLogs
@@ -233,7 +233,7 @@ object Gamma extends ExponentialFamily[Gamma, Double] with ContinuousDistributio
 
   def likelihoodFunction(stats: SufficientStatistic): DiffFunction[Parameter] = new DiffFunction[(Double, Double)] {
     val SufficientStatistic(n, meanOfLogs, mean) = stats
-    def calculate(x: (Double, Double)) = {
+    def calculate(x: (Double, Double)): (Double, (Double, Double)) = {
       val (a, b) = x
       val obj = -n * ((a - 1) * meanOfLogs - lgamma(a) - a * log(b) - mean / b)
       val gradA = -n * (meanOfLogs - digamma(a) - log(b))

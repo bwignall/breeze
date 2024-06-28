@@ -151,7 +151,7 @@ trait ProvidesTransformedQuasiMonteCarlo {
     def this(inVariables: QuasiRandomVariableSpec*) = this(inVariables.toList)
     val variables: Array[QuasiRandomVariableSpec] = inVariables.map(x => x.copy).toArray
 
-    val dimension = variables.length
+    val dimension: Int = variables.length
     val inputDimension: Int = variables.map(x => x.numInputs).sum
     private val baseGenerator = new BaseUniformHaltonGenerator(inputDimension)
 

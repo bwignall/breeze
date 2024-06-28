@@ -571,7 +571,7 @@ package object numerics {
 
   object floor extends ZeroPreservingUFunc {
     implicit object floorIntImpl extends Impl[Int, Int] {
-      def apply(v: Int) = v
+      def apply(v: Int): Int = v
     }
 
     implicit object floorDoubleImpl extends Impl[Double, Double] {
@@ -585,7 +585,7 @@ package object numerics {
 
   object ceil extends ZeroPreservingUFunc {
     implicit object ceilIntImpl extends Impl[Int, Int] {
-      def apply(v: Int) = v
+      def apply(v: Int): Int = v
     }
 
     implicit object ceilDoubleImpl extends Impl[Double, Double] {
@@ -599,7 +599,7 @@ package object numerics {
 
   object round extends ZeroPreservingUFunc {
     implicit object roundIntImpl extends Impl[Int, Int] {
-      def apply(v: Int) = v
+      def apply(v: Int): Int = v
     }
 
     implicit object roundDoubleImpl extends Impl[Double, Long] {
@@ -613,7 +613,7 @@ package object numerics {
 
   object rint extends ZeroPreservingUFunc {
     implicit object rintIntImpl extends Impl[Int, Int] {
-      def apply(v: Int) = v
+      def apply(v: Int): Int = v
     }
 
     implicit object rintDoubleImpl extends Impl[Double, Double] {
@@ -661,23 +661,23 @@ package object numerics {
    * and therefore does not necessarily equal !isEven for fractional input.
    */
   object isOdd extends ZeroPreservingUFunc {
-    implicit val isOddImpl_Int: Impl[Int, Boolean] = {
-      (v: Int) => {
+    implicit val isOddImpl_Int: Impl[Int, Boolean] = { (v: Int) =>
+      {
         v % 2 == 1
       }
     }
-    implicit val isOddImpl_Double: Impl[Double, Boolean] = {
-      (v: Double) => {
+    implicit val isOddImpl_Double: Impl[Double, Boolean] = { (v: Double) =>
+      {
         v % 2 == 1
       }
     }
-    implicit val isOddImpl_Float: Impl[Float, Boolean] = {
-      (v: Float) => {
+    implicit val isOddImpl_Float: Impl[Float, Boolean] = { (v: Float) =>
+      {
         v % 2 == 1
       }
     }
-    implicit val isOddImpl_Long: Impl[Long, Boolean] = {
-      (v: Long) => {
+    implicit val isOddImpl_Long: Impl[Long, Boolean] = { (v: Long) =>
+      {
         v % 2 == 1
       }
     }
@@ -687,23 +687,23 @@ package object numerics {
    * and therefore does not necessarily equal !isOdd for fractional input.
    */
   object isEven extends MappingUFunc {
-    implicit val isEvenImpl_Int: Impl[Int, Boolean] = {
-      (v: Int) => {
+    implicit val isEvenImpl_Int: Impl[Int, Boolean] = { (v: Int) =>
+      {
         v % 2 == 0
       }
     }
-    implicit val isEvenImpl_Double: Impl[Double, Boolean] = {
-      (v: Double) => {
+    implicit val isEvenImpl_Double: Impl[Double, Boolean] = { (v: Double) =>
+      {
         v % 2 == 0
       }
     }
-    implicit val isEvenImpl_Float: Impl[Float, Boolean] = {
-      (v: Float) => {
+    implicit val isEvenImpl_Float: Impl[Float, Boolean] = { (v: Float) =>
+      {
         v % 2 == 0
       }
     }
-    implicit val isEvenImpl_Long: Impl[Long, Boolean] = {
-      (v: Long) => {
+    implicit val isEvenImpl_Long: Impl[Long, Boolean] = { (v: Long) =>
+      {
         v % 2 == 0
       }
     }
@@ -713,26 +713,26 @@ package object numerics {
   val nan, NaN = Double.NaN
 
   object isNonfinite extends ZeroPreservingUFunc {
-    implicit val isNonfiniteImpl_Double: Impl[Double, Boolean] = {
-      (v: Double) => {
+    implicit val isNonfiniteImpl_Double: Impl[Double, Boolean] = { (v: Double) =>
+      {
         !isFinite(v)
       }
     }
-    implicit val isNonfiniteImpl_Float: Impl[Float, Boolean] = {
-      (v: Float) => {
+    implicit val isNonfiniteImpl_Float: Impl[Float, Boolean] = { (v: Float) =>
+      {
         !isFinite(v)
       }
     }
   }
 
   object isFinite extends MappingUFunc {
-    implicit val isFiniteImpl_Double: Impl[Double, Boolean] = {
-      (v: Double) => {
+    implicit val isFiniteImpl_Double: Impl[Double, Boolean] = { (v: Double) =>
+      {
         m.abs(v) <= Double.MaxValue
       }
     }
-    implicit val isFiniteImpl_Float: Impl[Float, Boolean] = {
-      (v: Float) => {
+    implicit val isFiniteImpl_Float: Impl[Float, Boolean] = { (v: Float) =>
+      {
         m.abs(v) <= Double.MaxValue
       }
     }

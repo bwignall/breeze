@@ -41,7 +41,7 @@ class Beam[T](val maxSize: Int)(implicit override protected val ordering: Orderi
   assert(maxSize >= 0)
   protected val queue = new java.util.PriorityQueue[T](clip(maxSize, 1, 16), ordering: Comparator[T])
 
-  override def size = queue.size
+  override def size: Int = queue.size
 
   def min: T = {
     if (queue.isEmpty) {
@@ -121,7 +121,7 @@ object Beam {
     def deleted: Iterable[T]
   }
   case object NotAdded extends BeamResult[Nothing] {
-    def deleted = Iterable.empty
+    def deleted: Iterable[Nothing] = Iterable.empty
   }
   case class Added[+T](deleted: Iterable[T]) extends BeamResult[T]
 

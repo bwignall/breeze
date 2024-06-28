@@ -11,7 +11,7 @@ class ApproximateGradientFunctionTest extends OptimizeTestBase {
 
   test("simple quadratic function") {
     val f = new DiffFunction[DenseVector[Double]] {
-      def calculate(x: DenseVector[Double]) = {
+      def calculate(x: DenseVector[Double]): (Double, DenseVector[Double]) = {
         val sqrtfx = norm(x - 3.0, 2)
         val grad = (x - 3.0) * 2.0
         (sqrtfx * sqrtfx, grad)
