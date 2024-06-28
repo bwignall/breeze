@@ -82,7 +82,8 @@ trait ImmutableNumericOps[+This] extends Any with HasOps {
   final def ^:^[B, That](b: B)(implicit op: OpPow.Impl2[This @uncheckedVariance, B, That]): That = op(repr, b)
 
   /** Inner product of this and b. */
-  final def dot[B, BB >: B, That](b: B)(implicit op: OpMulInner.Impl2[This @uncheckedVariance, BB, That]): That = op(repr, b)
+  final def dot[B, BB >: B, That](b: B)(implicit op: OpMulInner.Impl2[This @uncheckedVariance, BB, That]): That =
+    op(repr, b)
 
   /*
    * Logical Ops

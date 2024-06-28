@@ -471,9 +471,15 @@ object Complex { outer =>
     )
   }
 
-  implicit object logComplexImpl extends breeze.numerics.log.Impl[Complex, Complex] { def apply(v: Complex): Complex = v.log }
-  implicit object expComplexImpl extends breeze.numerics.exp.Impl[Complex, Complex] { def apply(v: Complex): Complex = v.exp }
-  implicit object absComplexImpl extends breeze.numerics.abs.Impl[Complex, Double] { def apply(v: Complex): Double = v.abs }
+  implicit object logComplexImpl extends breeze.numerics.log.Impl[Complex, Complex] {
+    def apply(v: Complex): Complex = v.log
+  }
+  implicit object expComplexImpl extends breeze.numerics.exp.Impl[Complex, Complex] {
+    def apply(v: Complex): Complex = v.exp
+  }
+  implicit object absComplexImpl extends breeze.numerics.abs.Impl[Complex, Double] {
+    def apply(v: Complex): Double = v.abs
+  }
   implicit object powComplexDoubleImpl extends breeze.numerics.pow.Impl2[Complex, Double, Complex] {
     def apply(v: Complex, d: Double): Complex = v.pow(d)
   }

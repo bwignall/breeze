@@ -873,7 +873,8 @@ class LinearAlgebraTest extends AnyFunSuite with Checkers with DoubleImplicits {
         (-0.71, -1.0099999999999998)
       )
 
-      val covmat: DenseMatrix[Nothing] = DenseMatrix((0.6165555555555556, 0.6154444444444445), (0.6154444444444445, 0.7165555555555555))
+      val covmat: DenseMatrix[Nothing] =
+        DenseMatrix((0.6165555555555556, 0.6154444444444445), (0.6154444444444445, 0.7165555555555555))
 
       val eigenvalues: DenseVector[Double] =
         DenseVector(1.2840277121727839, 0.04908339893832735)

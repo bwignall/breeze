@@ -559,7 +559,10 @@ object QuadraticMinimizer {
     }
   }
 
-  def optimizeWithLBFGS(init: DenseVector[Double], H: DenseMatrix[Double], q: DenseVector[Double]): DenseVector[Double] = {
+  def optimizeWithLBFGS(init: DenseVector[Double],
+                        H: DenseMatrix[Double],
+                        q: DenseVector[Double]
+  ): DenseVector[Double] = {
     val lbfgs = new LBFGS[DenseVector[Double]](-1, 7)
     val state = lbfgs.minimizeAndReturnState(Cost(H, q), init)
     state.x

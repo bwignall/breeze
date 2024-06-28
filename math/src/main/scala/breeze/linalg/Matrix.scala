@@ -56,7 +56,8 @@ trait Matrix[@spec(Double, Int, Float, Long) V] extends MatrixLike[V, Matrix[V]]
 
   def keySet: Set[(Int, Int)] = new MatrixKeySet(rows, cols)
 
-  def iterator: Iterator[((Int, Int), V)] = for (i <- Iterator.range(0, rows); j <- Iterator.range(0, cols)) yield (i -> j) -> apply(i, j)
+  def iterator: Iterator[((Int, Int), V)] = for (i <- Iterator.range(0, rows); j <- Iterator.range(0, cols))
+    yield (i -> j) -> apply(i, j)
 
   def valuesIterator: Iterator[V] = for (i <- Iterator.range(0, rows); j <- Iterator.range(0, cols)) yield apply(i, j)
 

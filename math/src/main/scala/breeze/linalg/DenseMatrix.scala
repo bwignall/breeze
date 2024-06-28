@@ -433,7 +433,12 @@ object DenseMatrix extends MatrixConstructors[DenseMatrix] {
   /** Horizontally tiles some matrices. They must have the same number of rows */
   def horzcat[M, V](
     matrices: M*
-  )(implicit ev: M <:< Matrix[V], opset: OpSet.InPlaceImpl2[DenseMatrix[V], M], vman: ClassTag[V], zero: Zero[V]): DenseMatrix[V] = {
+  )(implicit
+    ev: M <:< Matrix[V],
+    opset: OpSet.InPlaceImpl2[DenseMatrix[V], M],
+    vman: ClassTag[V],
+    zero: Zero[V]
+  ): DenseMatrix[V] = {
     if (matrices.isEmpty) zeros[V](0, 0)
     else {
       require(matrices.forall(m => m.rows == matrices(0).rows), "Not all matrices have the same number of rows")
@@ -452,7 +457,11 @@ object DenseMatrix extends MatrixConstructors[DenseMatrix] {
   /** Vertically tiles some matrices. They must have the same number of columns */
   def vertcat[V](
     matrices: DenseMatrix[V]*
-  )(implicit opset: OpSet.InPlaceImpl2[DenseMatrix[V], DenseMatrix[V]], vman: ClassTag[V], zero: Zero[V]): DenseMatrix[V] = {
+  )(implicit
+    opset: OpSet.InPlaceImpl2[DenseMatrix[V], DenseMatrix[V]],
+    vman: ClassTag[V],
+    zero: Zero[V]
+  ): DenseMatrix[V] = {
     if (matrices.isEmpty) zeros[V](0, 0)
     else {
       require(matrices.forall(m => m.cols == matrices(0).cols), "Not all matrices have the same number of columns")
