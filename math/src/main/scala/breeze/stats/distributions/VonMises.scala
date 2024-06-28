@@ -114,13 +114,11 @@ object VonMises extends ExponentialFamily[VonMises, Double] {
       else 1 / (t * (3 + t * (-4 + t)))
     }
     val result = minimize(lensed, DenseVector(mu, kx))
-    val res @ (a, b) = (result(0), result(1))
-    res
+    (result(0), result(1))
   }
 
   def likelihoodFunction(stats: SufficientStatistic): DiffFunction[Parameter] = new DiffFunction[(Double, Double)] {
     def calculate(x: (Double, Double)) = {
-      val DELTA = 1e-5
       val (mu, k) = x
       if (mu < 0 || mu > 2 * Pi || k < 0) (Double.PositiveInfinity, (0.0, 0.0))
       else {

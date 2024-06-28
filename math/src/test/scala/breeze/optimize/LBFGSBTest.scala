@@ -65,7 +65,6 @@ class LBFGSBTest extends OptimizeTestBase {
     }
 
     var optX = solver.minimize(f, nearX0)
-    val expectFx = 0.0
     assert(norm(f(optX)) < EPS)
 
     val farX0 = DenseVector[Double](12.0, 8.2)

@@ -38,7 +38,7 @@ object ExportGraphics {
       }
     } else if (file.getName.toLowerCase.endsWith(".pdf")) {
       try {
-        writePDF(fos, draw, width.toFLoat, height.toFLoat)
+        writePDF(fos, draw, width.toFloat, height.toFloat)
       } finally {
         fos.close()
       }
