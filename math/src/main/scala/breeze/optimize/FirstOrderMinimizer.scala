@@ -192,7 +192,7 @@ object FirstOrderMinimizer {
     override def update(newX: T, newGrad: T, newVal: Double, oldState: State[T, _, _], oldInfo: Info): Info = {
       require(oldInfo.length == checks.length)
       val out = ArrayBuffer[ConvergenceCheck[T]#Info]()
-      cforRange(0 until checks.length) { j =>
+      cforRange(checks.indices) { j =>
         val c = checks(j)
         val i = oldInfo(j)
         out += c.update(newX, newGrad, newVal, oldState, i.asInstanceOf[c.Info])

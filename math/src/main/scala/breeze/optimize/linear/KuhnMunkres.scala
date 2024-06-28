@@ -37,8 +37,8 @@ object KuhnMunkres extends BipartiteMatching {
       if (costs.length > costs(0).length) {
         val newCosts = Array.fill(costs(0).length, costs.length)(0.0)
         for (
-          i <- 0 until costs.length;
-          j <- 0 until costs(0).length
+          i <- costs.indices;
+          j <- costs(0).indices
         ) {
           newCosts(j)(i) = costs(i)(j)
         }
@@ -52,7 +52,7 @@ object KuhnMunkres extends BipartiteMatching {
       }
 
     val C: Array[Array[Double]] = padMatrix(costs2);
-    val n = C.size;
+    val n = C.length;
     val rowCovered = Array.fill(n)(false);
     val colCovered = Array.fill(n)(false);
 
@@ -250,7 +250,7 @@ object KuhnMunkres extends BipartiteMatching {
 
     var answers = Array.fill(costs2.length)(-1);
     var cost = 0.0;
-    for (i <- 0 until answers.length) {
+    for (i <- answers.indices) {
       val j = marked(i).indexWhere(_ == 1);
       if (j >= 0) {
         cost += costs2(i)(j);
@@ -261,7 +261,7 @@ object KuhnMunkres extends BipartiteMatching {
     // invert rows with columns to their original layout
     if (inverted) {
       val answers2 = Array.fill(costs2(0).length)(-1)
-      for (i <- 0 until answers.length) {
+      for (i <- answers.indices) {
         val j = answers(i)
         if (j != -1) {
           answers2(j) = i

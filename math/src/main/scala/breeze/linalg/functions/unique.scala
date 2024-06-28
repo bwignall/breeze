@@ -27,7 +27,7 @@ object unique extends UFunc {
         var elementCount = 1
         var lastElement = data(0)
 
-        cforRange(0 until data.length) { i =>
+        cforRange(data.indices) { i =>
           val di = data(i)
           if (di != lastElement) {
             elementCount += 1
@@ -39,7 +39,7 @@ object unique extends UFunc {
         result(0) = data(0)
         lastElement = data(0)
         var idx = 1
-        cforRange(0 until data.length) { i =>
+        cforRange(data.indices) { i =>
           val di = data(i)
           if (di != lastElement) {
             result(idx) = di

@@ -143,7 +143,7 @@ final class OpenAddressHashArray[@specialized(Int, Float, Long, Double) V] priva
   final protected def rehash(): Unit = {
     val oldIndex = index
     val oldValues = data
-    val newSize = OpenAddressHashArray.calculateSize(oldIndex.size + 1)
+    val newSize = OpenAddressHashArray.calculateSize(oldIndex.length + 1)
     _index = new Array[Int](newSize)
     util.Arrays.fill(_index, -1)
     _data = new Array[V](newSize)

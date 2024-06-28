@@ -315,7 +315,7 @@ final class SparseArray[@specialized(Double, Int, Float, Long) V](var index: Arr
       if (used > data.length) {
         // need to grow array
         val newLength = {
-          if (data.length == 0) { 4 }
+          if (data.isEmpty) { 4 }
           else if (data.length < 0x0400) { data.length * 2 }
           else if (data.length < 0x0800) {
             data.length + 0x0400

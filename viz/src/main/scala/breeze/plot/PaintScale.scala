@@ -422,7 +422,7 @@ object PaintScale {
     for (section <- 0 until numSections) {
       // we divide the gradient into (n - 1) sections, and do a regular gradient for each
       val temp = createGradient(colors(section), colors(section + 1), numSteps / numSections)
-      for (i <- 0 until temp.length) {
+      for (i <- temp.indices) {
         // copy the sub-gradient into the overall gradient
         gradient(gradientIndex) = temp(i)
         gradientIndex += 1

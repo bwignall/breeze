@@ -238,7 +238,7 @@ class RandomAccessFile(file: File, arg0: String = "r")(implicit converter: ByteC
   final def writeInt16(v: Array[Short]): Unit = {
     val writeArr = new Array[Byte](v.length * 2)
     var currIndex = 0
-    for (cnt <- 0 until v.length) {
+    for (cnt <- v.indices) {
       val x = converter.int16ToBytes(v(cnt))
       writeArr(currIndex) = x(0); currIndex += 1
       writeArr(currIndex) = x(1); currIndex += 1

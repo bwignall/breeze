@@ -224,7 +224,7 @@ class DenseIntIndex(beg: Int, end: Int) extends Index[Int] {
   override def contains(t: Int): Boolean = t < end - beg && t >= 0
 
   override def indexOpt(t: Int): Option[Int] =
-    if (contains(t)) Some(t) else None
+    Some(t).filter(contains)
 
   override def get(i: Int): Int =
     if (contains(i)) i else throw new IndexOutOfBoundsException()

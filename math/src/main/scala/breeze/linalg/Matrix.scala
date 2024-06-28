@@ -90,7 +90,7 @@ trait Matrix[@spec(Double, Int, Float, Long) V] extends MatrixLike[V, Matrix[V]]
     val newline = Terminal.newline
 
     val rv = new scala.StringBuilder
-    for (row <- 0 until showRows; col <- 0 until colWidths.length) {
+    for (row <- 0 until showRows; col <- colWidths.indices) {
       val cell = if (this(row, col) != null) this(row, col).toString else "--"
       rv.append(cell)
       rv.append(new StringOps(" ") * (colWidths(col) - cell.length))

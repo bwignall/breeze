@@ -121,9 +121,9 @@ class BaseUniformHaltonGenerator(val dimension: Int) extends QuasiMonteCarloGene
     private var actualSize: Int = 0
 
     def add(x: Int): Unit = {
-      if (actualSize == storage.size) {
+      if (actualSize == storage.length) {
         val oldStorage = storage
-        storage = new Array[Int](oldStorage.size * 2)
+        storage = new Array[Int](oldStorage.length * 2)
       }
       storage(actualSize) = x
       actualSize += 1

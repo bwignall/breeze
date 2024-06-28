@@ -114,8 +114,8 @@ abstract class BaseMetropolisHastings[T](logLikelihoodFunc: T => Double, init: T
 }
 
 case class ArbitraryMetropolisHastings[T](logLikelihood: T => Double,
-                                          val proposal: T => Rand[T],
-                                          val logProposalDensity: (T, T) => Double,
+                                          proposal: T => Rand[T],
+                                          logProposalDensity: (T, T) => Double,
                                           init: T,
                                           burnIn: Int = 0,
                                           dropCount: Int = 0
@@ -128,7 +128,7 @@ case class ArbitraryMetropolisHastings[T](logLikelihood: T => Double,
 }
 
 case class AffineStepMetropolisHastings[T](logLikelihood: T => Double,
-                                           val proposalStep: Rand[T],
+                                           proposalStep: Rand[T],
                                            init: T,
                                            burnIn: Int = 0,
                                            dropCount: Int = 0

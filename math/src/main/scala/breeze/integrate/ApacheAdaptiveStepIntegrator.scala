@@ -18,7 +18,7 @@ abstract class ApacheAdaptiveStepIntegrator(relTol: DenseVector[Double] = null, 
   protected val (aTol, rTol): (Array[Double], Array[Double]) =
     if (someRelTol.isEmpty && someAbsTol.isEmpty)
       (Array.empty[Double], Array.empty[Double])
-    else if (!someRelTol.isEmpty && !someAbsTol.isEmpty)
+    else if (someRelTol.isDefined && someAbsTol.isDefined)
       (someAbsTol.get.toArray, someRelTol.get.toArray)
     else if (someRelTol.isEmpty)
       (someAbsTol.get.toArray, Array.fill(someAbsTol.get.length)(ApacheAdaptiveStepIntegrator.defaultRelTol))

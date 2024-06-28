@@ -15,7 +15,7 @@ trait DomainFunction[T, K, +V] {
 object DomainFunction {
   implicit def arrIsDomainFunction[V]: DomainFunction[Array[V], Int, V] = {
     new DomainFunction[Array[V], Int, V] {
-      def domain(t: Array[V]): IndexedSeq[Int] = 0 until t.length
+      def domain(t: Array[V]): IndexedSeq[Int] = t.indices
 
       def apply(t: Array[V], k: Int): V = t(k)
     }

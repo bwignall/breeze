@@ -137,11 +137,7 @@ private trait PredicateRandDraws[@specialized(Int, Double) T] extends Rand[T] {
 
   override def drawOpt(): Option[T] = {
     val x = rand.get()
-    if (predicate(x)) {
-      Some(x)
-    } else {
-      None
-    }
+    Some(x).filter(predicate)
   }
 }
 
@@ -162,7 +158,7 @@ final private case class MultiplePredicatesRand[@specialized(Int, Double) T](ran
 ) extends PredicateRandDraws[T] {
   override def condition(p: T => Boolean): Rand[T] = {
     val newPredicates = new Array[T => Boolean](predicates.length + 1)
-    cforRange(0 until predicates.length)(i => {
+    cforRange(predicates.indices)(i => {
       newPredicates(i) = predicates(i)
     })
     newPredicates(predicates.length) = p

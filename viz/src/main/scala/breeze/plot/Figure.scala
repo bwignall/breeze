@@ -174,7 +174,7 @@ class Figure(name: String, private var rows_ : Int = 1, private var cols_ : Int 
       plots += Some(new Plot)
       plots.last.get
     } else {
-      if (plots(i) == None) {
+      if (plots(i).isEmpty) {
         plots(i) = Some(new Plot)
       }
       plots(i).get

@@ -146,7 +146,7 @@ class TruncatedNewtonMinimizer[T, H](maxIterations: Int = -1,
     val grad = state.adjGrad
     val memStep = state.history.memStep
     val memGradDelta = state.history.memGradDelta
-    val diag = if (memStep.size > 0) {
+    val diag = if (memStep.nonEmpty) {
       computeDiagScale(memStep.head, memGradDelta.head)
     } else {
       1.0 / norm(grad)
@@ -167,7 +167,7 @@ class TruncatedNewtonMinimizer[T, H](maxIterations: Int = -1,
 
     dir *= diag
 
-    for (i <- 0 until memStep.length) {
+    for (i <- memStep.indices) {
       val beta = (memGradDelta(i).dot(dir)) / rho(i)
       dir += memStep(i) * (as(i) - beta)
     }

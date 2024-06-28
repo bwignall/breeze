@@ -57,7 +57,7 @@ package object signal {
 
     val shiftedFreq = if (isEven(windowLength)) {
       DenseVector.vertcat(
-        DenseVector.tabulate(0 to windowLength / 2 - 1)((i: Int) => i.toDouble * realFs / windowLength.toDouble),
+        DenseVector.tabulate(0 until windowLength / 2)((i: Int) => i.toDouble * realFs / windowLength.toDouble),
         DenseVector.tabulate(-windowLength / 2 to -1)((i: Int) => i.toDouble * realFs / windowLength.toDouble)
       )
     } else {

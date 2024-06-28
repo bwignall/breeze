@@ -32,7 +32,7 @@ trait LiteralRow[R, @specialized V] {
 object LiteralRow {
   implicit def array[V]: LiteralRow[Array[V], V] = new LiteralRow[Array[V], V] {
     def foreach[X](arr: Array[V], fn: (Int, V) => X): Unit = {
-      for (i <- 0 until arr.length) {
+      for (i <- arr.indices) {
         fn(i, arr(i))
       }
     }

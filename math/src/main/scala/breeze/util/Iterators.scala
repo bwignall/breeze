@@ -38,7 +38,7 @@ object Iterators {
 
       /** The merged iterator has more if any head is not None. */
       override def hasNext: Boolean =
-        heads.map(_ != None).foldLeft(false)(_ || _)
+        heads.map(_.isDefined).foldLeft(false)(_ || _)
 
       /** Return the smallest element that is currently a list head. */
       override def next: T = {

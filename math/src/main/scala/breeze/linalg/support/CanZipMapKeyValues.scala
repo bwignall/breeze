@@ -79,7 +79,7 @@ object CanZipMapKeyValues {
     def map(from: Array[V], from2: Array[V], fn: (Int, V, V) => RV) = {
       require(from.length == from2.length, "Array lengths don't match!")
       val arr = new Array[RV](from.length)
-      for (i <- 0 until from.length) {
+      for (i <- from.indices) {
         arr(i) = fn(i, from(i), from2(i))
       }
       arr

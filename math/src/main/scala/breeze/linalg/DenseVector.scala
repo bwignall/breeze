@@ -429,13 +429,13 @@ object DenseVector extends VectorConstructors[DenseVector] {
       }
 
       private def mediumPath(out: Array[V2], fn: (V) => V2, data: Array[V], off: Int): Unit = {
-        cforRange(0 until out.length) { j =>
+        cforRange(out.indices) { j =>
           out(j) = fn(data(j + off))
         }
       }
 
       private def fastestPath(out: Array[V2], fn: (V) => V2, data: Array[V]): Unit = {
-        cforRange(0 until out.length) { j =>
+        cforRange(out.indices) { j =>
           out(j) = fn(data(j))
         }
       }

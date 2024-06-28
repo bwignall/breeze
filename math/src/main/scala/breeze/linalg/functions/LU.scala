@@ -140,7 +140,7 @@ object LU extends UFunc {
       indices(i) = i
     }
 
-    for (i <- 0 until ipiv.length) {
+    for (i <- ipiv.indices) {
       val j = ipiv(i) - 1
       val t = indices(i)
       indices(i) = indices(j)

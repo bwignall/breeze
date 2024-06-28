@@ -363,7 +363,7 @@ trait DenseMatrix_TraversalOps extends TensorLowPrio {
         val isTranspose = from.isTranspose
         val off = from.offset
         val fd = from.data
-        cforRange(0 until data.length) { i =>
+        cforRange(data.indices) { i =>
           data(i) = fn(fd(i + off))
         }
         DenseMatrix.create(from.rows, from.cols, data, 0, if (isTranspose) from.cols else from.rows, isTranspose)

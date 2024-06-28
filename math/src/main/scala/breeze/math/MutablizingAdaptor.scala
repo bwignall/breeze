@@ -173,7 +173,7 @@ object MutablizingAdaptor {
     }
   }
 
-  case class InnerProductSpaceAdaptor[V, S](val underlying: InnerProductVectorSpace[V, S])
+  case class InnerProductSpaceAdaptor[V, S](underlying: InnerProductVectorSpace[V, S])
       extends MutablizingAdaptor[InnerProductVectorSpace, MutableInnerProductVectorSpace, V, S] {
     type Wrapper = Ref[V]
 
@@ -308,7 +308,7 @@ object MutablizingAdaptor {
       }
   }
 
-  case class VectorFieldAdaptor[V, S](val underlying: VectorField[V, S])(implicit
+  case class VectorFieldAdaptor[V, S](underlying: VectorField[V, S])(implicit
     canIterate: CanTraverseValues[V, S],
     canMap: CanMapValues[V, S, S, V],
     canZipMap: CanZipMapValues[V, S, S, V]
@@ -466,7 +466,7 @@ object MutablizingAdaptor {
     def map[U](f: T => U): Ref[U] = Ref(f(value))
   }
 
-  case class VectorRingAdaptor[V, S](val underlying: VectorRing[V, S])(implicit
+  case class VectorRingAdaptor[V, S](underlying: VectorRing[V, S])(implicit
     canIterate: CanTraverseValues[V, S],
     canMap: CanMapValues[V, S, S, V],
     canZipMap: CanZipMapValues[V, S, S, V]
