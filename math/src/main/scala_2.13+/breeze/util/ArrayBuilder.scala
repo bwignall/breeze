@@ -141,7 +141,7 @@ object ArrayBuilder {
     }
 
     override def equals(other: Any): Boolean = other match {
-      case x: ofRef[_] => (size == x.size) && (elems sameElements x.elems)
+      case x: ofRef[_] => (size == x.size) && (elems.sameElements(x.elems))
       case _           => false
     }
 
@@ -182,7 +182,7 @@ object ArrayBuilder {
     }
 
     override def equals(other: Any): Boolean = other match {
-      case x: ofByte => (size == x.size) && (elems sameElements x.elems)
+      case x: ofByte => (size == x.size) && (elems.sameElements(x.elems))
       case _         => false
     }
 
@@ -223,7 +223,7 @@ object ArrayBuilder {
     }
 
     override def equals(other: Any): Boolean = other match {
-      case x: ofShort => (size == x.size) && (elems sameElements x.elems)
+      case x: ofShort => (size == x.size) && (elems.sameElements(x.elems))
       case _          => false
     }
 
@@ -264,7 +264,7 @@ object ArrayBuilder {
     }
 
     override def equals(other: Any): Boolean = other match {
-      case x: ofChar => (size == x.size) && (elems sameElements x.elems)
+      case x: ofChar => (size == x.size) && (elems.sameElements(x.elems))
       case _         => false
     }
 
@@ -305,7 +305,7 @@ object ArrayBuilder {
     }
 
     override def equals(other: Any): Boolean = other match {
-      case x: ofInt => (size == x.size) && (elems sameElements x.elems)
+      case x: ofInt => (size == x.size) && (elems.sameElements(x.elems))
       case _        => false
     }
 
@@ -346,7 +346,7 @@ object ArrayBuilder {
     }
 
     override def equals(other: Any): Boolean = other match {
-      case x: ofLong => (size == x.size) && (elems sameElements x.elems)
+      case x: ofLong => (size == x.size) && (elems.sameElements(x.elems))
       case _         => false
     }
 
@@ -387,7 +387,7 @@ object ArrayBuilder {
     }
 
     override def equals(other: Any): Boolean = other match {
-      case x: ofFloat => (size == x.size) && (elems sameElements x.elems)
+      case x: ofFloat => (size == x.size) && (elems.sameElements(x.elems))
       case _          => false
     }
 
@@ -428,7 +428,7 @@ object ArrayBuilder {
     }
 
     override def equals(other: Any): Boolean = other match {
-      case x: ofDouble => (size == x.size) && (elems sameElements x.elems)
+      case x: ofDouble => (size == x.size) && (elems.sameElements(x.elems))
       case _           => false
     }
 
@@ -469,7 +469,7 @@ object ArrayBuilder {
     }
 
     override def equals(other: Any): Boolean = other match {
-      case x: ofBoolean => (size == x.size) && (elems sameElements x.elems)
+      case x: ofBoolean => (size == x.size) && (elems.sameElements(x.elems))
       case _            => false
     }
 
