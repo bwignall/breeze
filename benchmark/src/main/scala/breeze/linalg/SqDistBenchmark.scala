@@ -178,7 +178,6 @@ class SqDistBenchmark extends BreezeBenchmark {
         val score = a - b
         squaredDistance += (score * score)
       }
-      squaredDistance
     }
   }
 
