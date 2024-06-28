@@ -3,7 +3,6 @@ package breeze.stats.regression
 import breeze.generic.UFunc
 import breeze.linalg._
 import breeze.macros.cforRange
-import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
 
 private case class LassoCalculator(data: DenseMatrix[Double],
                                    outputs: DenseVector[Double],
@@ -20,7 +19,7 @@ private case class LassoCalculator(data: DenseMatrix[Double],
   require(data.rows == outputs.size)
   require(data.rows > data.cols)
   require(data.rows == outputs.size)
-  require(workArray.size >= 2 * data.rows * data.cols)
+  require(workArray.length >= 2 * data.rows * data.cols)
 
   private val outputCopy = DenseVector.zeros[Double](outputs.size)
   private val singleColumnMatrix = new DenseMatrix[Double](data.rows, 1)
