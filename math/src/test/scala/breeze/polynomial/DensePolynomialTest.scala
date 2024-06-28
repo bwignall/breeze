@@ -57,7 +57,7 @@ class DensePolynomialTest extends AnyFunSuite {
   }
   test("PolyDenseUfuncWrapper applied to subdiagonal dense matrix") {
     val p = Polynomial.dense(Array[Double](1, 2, 4))
-    var M = 100
+    val M = 100
 
     val x = DenseMatrix.zeros[Double](M, M)
     cforRange(0 until M)(i => { //   x is matrix with 1's just below the diagonal

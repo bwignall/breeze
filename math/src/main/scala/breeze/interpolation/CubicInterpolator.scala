@@ -8,8 +8,6 @@ import breeze.linalg._
 import breeze.math.Field
 import breeze.storage.Zero
 
-import scala.reflect.ClassTag
-
 class CubicInterpolator(x_coords: Vector[Double], y_coords: Vector[Double])
     extends HandyUnivariateInterpolator[Double](x_coords, y_coords) {
 
@@ -27,8 +25,7 @@ class CubicInterpolator(x_coords: Vector[Double], y_coords: Vector[Double])
     case (i, j) if j - i == 1  => lambda(i + 1) // one cell to right from the diagonal
     case _                     => 0
   }
-  private val b = DenseVector.tabulate(X.length - 2)(i =>
-    6 * (d(i + 1) - d(i)) / (h(i) + h(i + 1)))
+  private val b = DenseVector.tabulate(X.length - 2)(i => 6 * (d(i + 1) - d(i)) / (h(i) + h(i + 1)))
   private val mp = M \ b
   private def m(i: Int) = i match {
     case 0                      => 0

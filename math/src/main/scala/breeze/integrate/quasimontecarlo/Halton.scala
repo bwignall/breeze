@@ -97,7 +97,7 @@ class BaseUniformHaltonGenerator(val dimension: Int) extends QuasiMonteCarloGene
         counters(j).set(lIndex, counters(j).get(lIndex) + 1)
       }
 
-      var lCountSizeI: Int = counters(j).size()
+      val lCountSizeI: Int = counters(j).size()
       var lBasesPow: Long = bases(j)
       var lValue: Double = permutations(j)(counters(j).get(lCountSizeI - 1)).toDouble
       cforRange(lCountSizeI until 0 by -1) { k =>

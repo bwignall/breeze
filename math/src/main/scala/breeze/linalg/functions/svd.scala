@@ -284,18 +284,18 @@ object svd extends UFunc {
         val bmat = "I"
         val which = "LM"
 
-        var iparam = new Array[Int](11)
+        val iparam = new Array[Int](11)
         iparam(0) = 1
         iparam(2) = 300
         iparam(6) = 1
 
-        var ido = new intW(0)
-        var info = new intW(0)
-        var resid: Array[Double] = new Array[Double](n)
-        var v = new Array[Double](n * ncv)
-        var workd = new Array[Double](3 * n)
-        var workl = new Array[Double](ncv * (ncv + 8))
-        var ipntr = new Array[Int](11)
+        val ido = new intW(0)
+        val info = new intW(0)
+        val resid: Array[Double] = new Array[Double](n)
+        val v = new Array[Double](n * ncv)
+        val workd = new Array[Double](3 * n)
+        val workl = new Array[Double](ncv * (ncv + 8))
+        val ipntr = new Array[Int](11)
 
         arpack.dsaupd(ido,
                       bmat,

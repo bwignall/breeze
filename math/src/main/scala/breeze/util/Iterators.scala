@@ -55,7 +55,7 @@ object Iterators {
 
         // update the top list and return its value
         heads(top._2) = get(iters(top._2))
-        return top._1.get
+        top._1.get
       }
 
       def get(iter: Iterator[T]): Option[T] =

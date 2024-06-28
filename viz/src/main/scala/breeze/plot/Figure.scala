@@ -1,13 +1,6 @@
 package breeze.plot
 
-import breeze.plot.Plot.Listener
-import org.jfree.chart.axis.NumberTickUnit
-import org.jfree.chart.axis.TickUnits
-import org.jfree.chart.plot.DefaultDrawingSupplier
-
-import java.awt.Color
 import java.awt.Graphics2D
-import java.awt.Paint
 import java.util.concurrent.atomic.AtomicInteger
 import javax.swing.JFrame
 import javax.swing.JPanel

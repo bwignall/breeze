@@ -136,7 +136,7 @@ trait Matrix[@spec(Double, Int, Float, Long) V] extends MatrixLike[V, Matrix[V]]
       this.rows == x.rows && this.cols == x.cols &&
       keysIterator.forall(k => this(k) == x(k))
     case _ =>
-      return false
+      false
   }
 
 }

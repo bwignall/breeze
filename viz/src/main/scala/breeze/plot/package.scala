@@ -1,6 +1,5 @@
 package breeze
 
-import breeze.compat.Scala3Compat._
 import org.jfree.chart.renderer.xy.XYItemRenderer
 import org.jfree.chart.ui.RectangleAnchor
 import org.jfree.data.xy
@@ -132,7 +131,7 @@ package object plot {
      * returns data needed by jfreechart.
      * @param defaultName series index => default name
      * @param defaultColor series index => default color
-     * @param defaultStroke
+     * @param defaultStroke series index => default stroke
      * @return
      */
     def getChartStuff(defaultName: (Int) => String,
@@ -140,7 +139,7 @@ package object plot {
                       defaultStroke: (Int) => Stroke
     ): (xy.XYDataset, XYItemRenderer) = {
 
-      val items = xv.domain(x).toIndexedSeq
+      val items = xv.domain(x)
 
       val paintScale = CategoricalPaintScale[K](colors)
 
@@ -227,8 +226,8 @@ package object plot {
               binner.splits(i) - width / 2.0
             },
           y = (i: Int) => counts(i),
-          label = (i: Int) => null,
-          tip = (i: Int) => null
+          label = (_: Int) => null,
+          tip = (_: Int) => null
         ),
         width
       )
@@ -268,9 +267,6 @@ package object plot {
     new Series {
 
       val mt = img
-
-      val (minx, maxx) = (0, img.cols)
-      val (miny, maxy) = (0, img.rows)
 
       val items = img.keysIterator.toIndexedSeq
 

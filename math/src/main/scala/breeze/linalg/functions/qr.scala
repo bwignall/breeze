@@ -309,7 +309,7 @@ object qrp extends UFunc {
       // Get optimal workspace size
       // we do this by sending -1 as lwork to the lapack function
       val scratch, work = new Array[Double](1)
-      var info = new intW(0)
+      val info = new intW(0)
       lapack.dgeqrf(m, n, scratch, m, scratch, work, -1, info)
       val lwork1 = if (info.`val` != 0) n else work(0).toInt
       lapack.dorgqr(m, m, scala.math.min(m, n), scratch, m, scratch, work, -1, info)

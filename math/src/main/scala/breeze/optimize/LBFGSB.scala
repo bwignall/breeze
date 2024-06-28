@@ -191,7 +191,7 @@ class LBFGSB(lowerBounds: DenseVector[Double],
 
     // Initialize
     val xCauchy = x.copy
-    var p = W.t * d
+    val p = W.t * d
     var c = DenseVector.zeros[Double](M.rows)
     var fDerivative: Double = g.dot(d)
     var fSecondDerivative: Double = (-1.0 * theta) * fDerivative - p.dot(M * p)

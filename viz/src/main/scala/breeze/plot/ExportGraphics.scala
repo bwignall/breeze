@@ -38,7 +38,7 @@ object ExportGraphics {
       }
     } else if (file.getName.toLowerCase.endsWith(".pdf")) {
       try {
-        writePDF(fos, draw, width, height)
+        writePDF(fos, draw, width.toFLoat, height.toFLoat)
       } finally {
         fos.close()
       }
@@ -73,6 +73,7 @@ object ExportGraphics {
     g2d.dispose
 
     ImageIO.write(image, "png", out)
+    ()
   }
 
   /**

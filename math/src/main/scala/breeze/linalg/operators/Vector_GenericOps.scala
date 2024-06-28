@@ -939,7 +939,7 @@ trait HashVector_GenericOps extends GenericOps {
         if (v2 == field.zero) {
           v.clear()
         } else if (v2 == field.one) {
-          return
+          ()
         } else {
           cforRange(0 until v.length) { i =>
             v(i) = field.*(v(i), v2)

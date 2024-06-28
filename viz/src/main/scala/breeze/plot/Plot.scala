@@ -40,7 +40,7 @@ class Plot() {
   }
 
   def +=(nameSeries: (String, Series)): Plot = {
-    val (d, r) = nameSeries._2.getChartStuff({ i =>
+    val (d, r) = nameSeries._2.getChartStuff({ _ =>
                                                nameSeries._1
                                              },
                                              { i =>
@@ -65,7 +65,7 @@ class Plot() {
 
   def refresh(): Unit = {
     var series = 0
-    for ((d, r) <- datasets.zip(renderers); s <- 0 until d.getSeriesCount) {
+    for ((d, r) <- datasets.zip(renderers); _ <- 0 until d.getSeriesCount) {
       plot.setDataset(series, d)
       plot.setRenderer(series, r)
       series += 1
@@ -236,7 +236,7 @@ object Plot {
     val units = new TickUnits()
     val df = new java.text.DecimalFormat("0")
     for (b <- Seq(1, 2, 5); e <- Seq(0, 1, 2, 3, 4, 5, 6, 7, 8)) {
-      units.add(new NumberTickUnit(b * math.pow(10, e).toInt, df))
+      units.add(new NumberTickUnit(b.toDouble * math.pow(10.0, e).toInt, df))
     }
     units
   }
@@ -307,7 +307,7 @@ object Plot {
 
     def +=(d: xy.XYDataset): Unit = {
       datasets += d
-      for (i <- 0 until d.getSeriesCount) {
+      for (_ <- 0 until d.getSeriesCount) {
         seriesDelegates += (datasets.size - 1)
       }
       datasetSeriesOffsets += seriesDelegates.length
@@ -352,7 +352,7 @@ object Plot {
 
     def +=(d: xy.XYItemRenderer, numSeries: Int, autocolor: Boolean, autostroke: Boolean): Unit = {
       renderers += d
-      for (i <- 0 until numSeries) {
+      for (_ <- 0 until numSeries) {
         seriesDelegates += (renderers.size - 1)
         autopaint += autocolor
         this.autostroke += autostroke

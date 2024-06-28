@@ -1,7 +1,6 @@
 package breeze.plot
 
 import breeze.compat.Scala3Compat._
-import breeze.compat._
 
 import java.awt.Color
 import scala.language.implicitConversions

@@ -274,11 +274,11 @@ class CSCMatrix[@spec(Double, Int, Float, Long) V: Zero](private var _data: Arra
           while (yIter.hasNext) if (yIter.next()._2 != 0) return false
         }
       }
-      return true
+      true
     case y: Matrix[_] =>
-      return y == this
+      y == this
     case _ =>
-      return false
+      false
   }
 
 }
