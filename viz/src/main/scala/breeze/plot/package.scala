@@ -112,7 +112,7 @@ package object plot {
    * @param x The x coordinates to draw as provided by anything that can be seen as a Tensor1.
    * @param y The y coordinates to draw as provided by anything that can be seen as a Tensor1.
    * @param size The size of each circle (on the same scale as the domain axis)
-   * @param c A partial function (e.g. a Map) from item ids to the color to draw the bubble.
+   * @param colors A partial function (e.g. a Map) from item ids to the color to draw the bubble.
    *   Missing colors are drawn with a hashed pattern.
    * @param labels Labels to draw next to each point.
    * @param tips Tooltips to show on mouseover for each point.

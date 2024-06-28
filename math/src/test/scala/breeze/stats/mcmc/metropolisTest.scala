@@ -8,8 +8,6 @@ import org.scalatest.funsuite.AnyFunSuite
 
 /**Tests for breeze.stats.mcmc.MetropolisHastings
  * Test for clip is currently located in "DenseVectorTest.scala"
- * @author stucchio
- * @date 3/13/14.
  */
 class metropolisTest extends AnyFunSuite {
 

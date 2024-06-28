@@ -5,9 +5,8 @@ import breeze.math.Complex
 
 import scala.reflect.ClassTag
 
-/**This utility class facilitates transparent access of breeze data objects from plain Java without Scala-related Generic complications.
- * @author ktakagaki
- * @date 03/20/2014.
+/** This utility class facilitates transparent access of breeze data objects from plain Java
+ *  without Scala-related Generic complications.
  */
 object JavaArrayOps {
 

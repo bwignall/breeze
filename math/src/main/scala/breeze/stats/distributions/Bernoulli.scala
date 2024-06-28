@@ -56,7 +56,7 @@ object Bernoulli extends ExponentialFamily[Bernoulli, Boolean] with HasConjugate
   )
 
   override def posterior(prior: Beta.Parameter, evidence: IterableOnce[Boolean]): (Double, Double) = {
-    evidence.foldLeft(prior) { (acc, ev) =>
+    evidence.iterator.foldLeft(prior) { (acc, ev) =>
       if (ev) acc.copy(_1 = acc._1 + 1)
       else acc.copy(_2 = acc._2 + 1)
     }

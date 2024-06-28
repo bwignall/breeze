@@ -10,8 +10,6 @@ import scala.reflect.ClassTag
 /**
  * returns a vector along the diagonal of v.
  * Requires a square matrix?
- * @param m the matrix
- * @tparam V
  */
 object diag extends UFunc with diagLowPrio2 {
 

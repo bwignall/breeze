@@ -38,7 +38,7 @@ class TruncatedNewtonMinimizer[T, H](maxIterations: Int = -1,
                    history: History
   ) {
     def converged: Boolean =
-      (iter >= maxIterations && maxIterations > 0 && accept == true) || norm(
+      iter >= maxIterations && maxIterations > 0 && accept || norm(
         adjGrad
       ) <= tolerance * initialGNorm || stop
   }
@@ -115,10 +115,10 @@ class TruncatedNewtonMinimizer[T, H](maxIterations: Int = -1,
           ) true
           else false
         val newHistory = updateHistory(x_new, adjNewG, adjNewV, state)
-        val this_iter = if (state.accept == true) iter + 1 else iter
+        val this_iter = if (state.accept) iter + 1 else iter
         State(this_iter, initialGNorm, newDelta, x_new, newv, newg, newh, adjNewV, adjNewG, stop_cond, true, newHistory)
       } else {
-        val this_iter = if (state.accept == true) iter + 1 else iter
+        val this_iter = if (state.accept) iter + 1 else iter
         val stop_cond =
           if (
             adjFval < -1.0e+32 ||

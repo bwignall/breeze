@@ -32,8 +32,8 @@ object Common {
     credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"),
     resolvers ++= Seq(
       Resolver.mavenLocal,
-      Resolver.sonatypeRepo("snapshots"),
-      Resolver.sonatypeRepo("releases"),
+      Resolver.sonatypeOssRepos("snapshots"),
+      Resolver.sonatypeOssRepos("releases"),
       Resolver.typesafeRepo("releases")
     ),
     Test / testOptions += Tests.Argument("-oDF"),

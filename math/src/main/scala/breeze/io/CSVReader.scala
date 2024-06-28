@@ -71,7 +71,7 @@ object CSVWriter {
             escape: Char = '\\'
   ): Unit = {
     val writer = new OpenCSVWriter(output, separator, quote, escape)
-    import scala.collection.JavaConverters._
+    import scala.jdk.CollectionConverters._
     mat match {
       case x: Seq[Seq[String]] => writer.writeAll(x.map(_.toArray).asJava)
       case _ =>

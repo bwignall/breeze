@@ -10,7 +10,6 @@ import breeze.linalg.support.CanTraverseValues.ValuesVisitor
 import breeze.linalg.support._
 import breeze.util.Isomorphism
 
-import scala.language.higherKinds
 import scala.language.implicitConversions
 
 /**

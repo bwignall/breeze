@@ -14,9 +14,6 @@ import scala.reflect.ClassTag
  * +  randomDouble( n: Int, (r1: Double, r2: Double) )... returns a DenseVector with n random doubles, in [r1, r2]
  * +  randomDouble( (n1: Int, n2: Int) )... returns an n1 x n2 DenseMatrix with n random doubles, in [0, 1]
  * +  randomDouble( (n1: Int, n2: Int), (r1: Double, r2: Double) )... returns an n1 x n2 DenseMatrix with n random doubles, in [r1, r2]
- *
- * @author ktakagaki
- * @date 04/30/2014.
  */
 object randomDouble extends RandomGeneratorUFunc[Double] {
   protected def gen(implicit basis: RandBasis): Rand[Double] = basis.uniform
@@ -37,9 +34,6 @@ object randomDouble extends RandomGeneratorUFunc[Double] {
  * +  randomInt( n: Int, (r1: Int, r2: Int) )... returns a DenseVector with n random Ints, in [r1, r2)
  * +  randomInt( (n1: Int, n2: Int) )... returns an n1 x n2 DenseMatrix with n random Ints, in [0, 1]
  * +  randomInt( (n1: Int, n2: Int), (r1: Int, r2: Int) )... returns an n1 x n2 DenseMatrix with n random Ints, in [r1, r2)
- *
- * @author ktakagaki
- * @date 04/30/2014.
  */
 object randomInt extends RandomGeneratorUFunc[Int] {
 
@@ -58,9 +52,6 @@ object randomInt extends RandomGeneratorUFunc[Int] {
  * +  randn()... returns a Gaussian random variable with mean 0, variance 1
  * +  randn( n: Int )... returns a DenseVector with n randn's
  * +  randn( (n1: Int, n2: Int) )... returns an n1 x n2 DenseMatrix with randn's
- *
- * @author ktakagaki
- * @date 04/30/2014.
  */
 object randn extends RandomGeneratorUFunc[Double] {
 

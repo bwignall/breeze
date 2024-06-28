@@ -14,8 +14,6 @@ import scala.reflect.ClassTag
 /**Shift the zero-frequency component to the center of the spectrum.
  * This function swaps half-spaces for all axes listed (defaults to all). Note that y[0] is the Nyquist component only if len(x) is even.
  *
- * @param dft input array
- * @return
  */
 object fourierShift extends UFunc {
 

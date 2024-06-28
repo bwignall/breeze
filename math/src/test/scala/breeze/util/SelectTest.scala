@@ -9,10 +9,6 @@ import org.scalatest.funsuite.AnyFunSuite
 
 import scala.collection.mutable.ArrayBuffer
 
-/**
- * @author ktakagaki
- * @date 05/10/2014.
- */
 class SelectTest extends AnyFunSuite {
 
   implicit val rand: RandBasis = RandBasis.mt0

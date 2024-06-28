@@ -58,7 +58,7 @@ class Plot() {
   }
 
   def ++=(pl: IterableOnce[Series]) = {
-    pl.foreach(this += _)
+    pl.iterator.foreach(this += _)
     refresh()
     this
   }

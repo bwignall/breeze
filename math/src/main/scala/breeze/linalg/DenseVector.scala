@@ -333,9 +333,10 @@ object DenseVector extends VectorConstructors[DenseVector] {
    * Creates a new DenseVector using the provided array (not making a copy!). In generic contexts, prefer to
    * use this (or apply) instead of `new DenseVector[V](data, offset, stride, length)`, which in general
    * won't give specialized implementations.
-   * @param rows
-   * @param cols
    * @param data
+   * @param offset
+   * @param stride
+   * @param length
    * @tparam V
    * @return
    */

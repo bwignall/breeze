@@ -4,10 +4,6 @@ import breeze.linalg.DenseVector
 import breeze.linalg.convert
 import breeze.signal._
 
-/**
- * @author ktakagaki
- * @date 2/4/14.
- */
 trait CanDesignFilterDecimation[Output] {
   def apply(factor: Int,
             multiplier: Double,

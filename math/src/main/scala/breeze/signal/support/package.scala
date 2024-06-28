@@ -4,10 +4,6 @@ import breeze.numerics.ceil
 import breeze.numerics.log
 import breeze.numerics.pow
 
-/**
- * @author ktakagaki
- * @date 2/3/14.
- */
 package object support {
 
   /** Gives the next largest power of base. nextPower(x, 2) is equivalent to MATLAB nextPow2(x).

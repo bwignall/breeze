@@ -4,12 +4,7 @@ import breeze.generic.UFunc
 import breeze.linalg._
 import breeze.numerics.sqrt
 
-/** Root mean square of a vector.
- *
- * @author ktakagaki
- * @author dlwh
- * @date 2/17/14.
- */
+/** Root mean square of a vector. */
 object rootMeanSquare extends UFunc {
 
   implicit def rms1D[Vec](implicit

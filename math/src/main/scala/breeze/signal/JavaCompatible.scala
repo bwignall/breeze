@@ -4,9 +4,6 @@ import breeze.math.Complex
 import breeze.util.JavaArrayOps._
 
 /**This class is a converter for using breeze.signal functions on Arrays of Double and Complex, from Java/Matlab/Mathematica.
- *
- * @author ktakagaki
- * @date 3/11/14.
  */
 object JavaCompatible {
 

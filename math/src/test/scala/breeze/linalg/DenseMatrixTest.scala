@@ -699,7 +699,7 @@ class DenseMatrixTest extends AnyFunSuite with Checkers with DoubleImplicits wit
 
   test("#278: don't crash on solve when majorStride == 0") {
     val d = DenseVector[Double]()
-    val m = DenseMatrix.tabulate(0, 0) { case x => 0.0 }
+    val m = DenseMatrix.tabulate(0, 0)(x => 0.0)
     assert(m \ d === d)
 
   }

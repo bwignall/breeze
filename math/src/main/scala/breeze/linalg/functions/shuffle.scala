@@ -15,11 +15,6 @@ import scala.reflect.ClassTag
  * corresponding shuffle index information, or return the given Array as a
  * shuffled copy using the inverse of the given shuffle index information,
  * reversing the shuffle.
- *
- * @author ktakagaki
- * @date 05/12/2014
- * @author huaminli
- * @date 08/01/2016
  */
 object shuffle extends UFunc {
 

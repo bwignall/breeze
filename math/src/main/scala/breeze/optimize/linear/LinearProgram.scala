@@ -4,7 +4,7 @@ import breeze.linalg._
 import org.apache.commons.math3.optim.linear._
 import org.apache.commons.math3.optim.nonlinear.scalar._
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 import collection.mutable.ArrayBuffer
 
