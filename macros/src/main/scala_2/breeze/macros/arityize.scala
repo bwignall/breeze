@@ -27,11 +27,11 @@ object arityize {
         val maxOrder: Int = extractOrder(c)
 
         val results = for (order <- 1 to maxOrder) yield {
-          val bindings = Map(name.encoded -> order)
+          val bindings = Map(name.encodedName.toString -> order)
           val newTemplate =
             Template(impl.parents, impl.self, impl.body.flatMap(x => expandArity(c, order, bindings)(x)))
           val newTargs = targs.flatMap(arg => expandTypeDef(c, order, bindings)(arg))
-          ClassDef(mods, newTypeName(name.encoded + order), newTargs, newTemplate)
+          ClassDef(mods, TypeName(name.encodedName.toString + order), newTargs, newTemplate)
         }
 
         val ret = c.Expr(Block(results.toList, Literal(Constant(()))))
@@ -40,13 +40,13 @@ object arityize {
         val maxOrder: Int = extractOrder(c)
 
         val results = for (order <- 1 to maxOrder) yield {
-          val bindings = Map(name.encoded -> order)
+          val bindings = Map(name.encodedName.toString -> order)
 
           val newImpl = expandArity(c, order, bindings)(impl).head
           val newVargs = vargs.map(_.flatMap(arg => expandValDef(c, order, bindings)(arg)))
           val newTargs = targs.flatMap(arg => expandTypeDef(c, order, bindings)(arg))
           val newRet = expandArity(c, order, bindings)(tpt).head
-          DefDef(mods, newTermName(name.encoded + order), newTargs, newVargs, newRet, newImpl)
+          DefDef(mods, TermName(name.encodedName.toString + order), newTargs, newVargs, newRet, newImpl)
         }
 
         val ret = c.Expr(Block(results.toList, Literal(Constant(()))))
@@ -80,10 +80,12 @@ object arityize {
         ann match {
           case q"new arityize.relative($sym)" =>
             tree match {
-              case Ident(nme) if nme.isTypeName => Seq(Ident(newTypeName(nme.encoded + bindings(sym.toString))))
-              case Ident(nme) if nme.isTermName => Seq(Ident(newTermName(nme.encoded + bindings(sym.toString))))
+              case Ident(nme) if nme.isTypeName =>
+                Seq(Ident(TypeName(nme.encodedName.toString + bindings(sym.toString))))
+              case Ident(nme) if nme.isTermName =>
+                Seq(Ident(TermName(nme.encodedName.toString + bindings(sym.toString))))
               case AppliedTypeTree(Ident(nme), targs) =>
-                val newName = Ident(newTypeName(nme.encoded + bindings(sym.toString)))
+                val newName = Ident(TypeName(nme.encodedName.toString + bindings(sym.toString)))
                 val newTargs = targs.flatMap(arg => expandArity(c, order, bindings)(arg))
                 Seq(AppliedTypeTree(newName, newTargs))
               case _ =>
@@ -94,11 +96,11 @@ object arityize {
             tree match {
               case Ident(nme) if nme.isTypeName =>
                 List.tabulate(order) { i =>
-                  Ident(newTypeName(nme.encoded + (i + 1)))
+                  Ident(TypeName(nme.encodedName.toString + (i + 1)))
                 }
               case Ident(nme) if nme.isTermName =>
                 List.tabulate(order) { i =>
-                  Ident(newTermName(nme.encoded + (i + 1)))
+                  Ident(TermName(nme.encodedName.toString + (i + 1)))
                 }
               case _ => ???
             }
@@ -116,9 +118,9 @@ object arityize {
         }
       case Block(stats, ret) =>
         Seq(Block(stats.flatMap(st => expandArity(c, order, bindings)(st)), expandArity(c, order, bindings)(ret).last))
-      case Ident(nme) if nme.encoded == "__order__" => Seq(Literal(Constant(order)))
-      case t @ Ident(x)                             => Seq(t)
-      case t @ Literal(x)                           => Seq(t)
+      case Ident(nme) if nme.encodedName.toString == "__order__" => Seq(Literal(Constant(order)))
+      case t @ Ident(x)                                          => Seq(t)
+      case t @ Literal(x)                                        => Seq(t)
       case Apply(who, args) =>
         for (
           w2 <- expandArity(c, order, bindings)(who);
@@ -149,10 +151,10 @@ object arityize {
     import c.mirror.universe._
     if (shouldExpand(c)(vdef.mods)) {
       List.tabulate(order) { i =>
-        val newBindings = bindings + (vdef.name.encoded -> (i + 1))
+        val newBindings = bindings + (vdef.name.encodedName.toString -> (i + 1))
 //        println(vdef.tpt + " " + expandArity(c, order, newBindings)(vdef.tpt).head)
         ValDef(vdef.mods,
-               newTermName(vdef.name.encoded + (i + 1)),
+               TermName(vdef.name.encodedName.toString + (i + 1)),
                expandArity(c, order, newBindings)(vdef.tpt).head,
                vdef.rhs
         )
@@ -160,9 +162,9 @@ object arityize {
     } else {
       shouldRelativize(c)(vdef.mods) match {
         case Some(x) =>
-          val newBindings = bindings + (vdef.name.encoded -> bindings(x))
+          val newBindings = bindings + (vdef.name.encodedName.toString -> bindings(x))
           val newTpt = expandArity(c, order, newBindings)(vdef.tpt).head
-          List(ValDef(vdef.mods, newTermName(vdef.name.encoded + bindings(x)), newTpt, vdef.rhs))
+          List(ValDef(vdef.mods, TermName(vdef.name.encodedName.toString + bindings(x)), newTpt, vdef.rhs))
         case _ =>
           val newTpt = expandArity(c, order, bindings)(vdef.tpt).head
           List(ValDef(vdef.mods, vdef.name, newTpt, vdef.rhs))
@@ -176,13 +178,15 @@ object arityize {
   ): List[c.universe.TypeDef] = {
     import c.mirror.universe._
     if (shouldExpand(c)(vdef.mods)) {
-      List.tabulate(order)(i => TypeDef(vdef.mods, newTypeName(vdef.name.encoded + (i + 1)), vdef.tparams, vdef.rhs))
+      List.tabulate(order)(i =>
+        TypeDef(vdef.mods, TypeName(vdef.name.encodedName.toString + (i + 1)), vdef.tparams, vdef.rhs)
+      )
     } else if (shouldRepeat(c)(vdef.mods)) {
       List.fill(order)(vdef)
     } else {
       shouldRelativize(c)(vdef.mods) match {
         case Some(x) =>
-          List(TypeDef(vdef.mods, newTypeName(vdef.name.encoded + bindings(x)), vdef.tparams, vdef.rhs))
+          List(TypeDef(vdef.mods, TypeName(vdef.name.encodedName.toString + bindings(x)), vdef.tparams, vdef.rhs))
         case _ =>
           List(vdef)
       }
