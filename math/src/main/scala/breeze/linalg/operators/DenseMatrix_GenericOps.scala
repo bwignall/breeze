@@ -44,7 +44,7 @@ trait DenseMatrix_GenericOps extends MatrixOps {
 
         var j = 0
         while (j < colsB) {
-          var l = 0;
+          var l = 0
           while (l < colsA) {
 
             val v = b(l, j)

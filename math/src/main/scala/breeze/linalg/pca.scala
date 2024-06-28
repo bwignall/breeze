@@ -50,7 +50,7 @@ class PCA(val x: DenseMatrix[Double], val covmat: DenseMatrix[Double]) {
    * principal components.
    */
   lazy val cumuvar: DenseVector[Double] = propvar.map {
-    var c = 0.0;
+    var c = 0.0
     d => { c += d; c }
   }
 

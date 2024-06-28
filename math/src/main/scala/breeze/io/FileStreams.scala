@@ -13,8 +13,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-package breeze;
-package io;
+package breeze
+package io
 
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
@@ -24,7 +24,7 @@ import java.io.FileOutputStream
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.zip.GZIPInputStream
-import java.util.zip.GZIPOutputStream;
+import java.util.zip.GZIPOutputStream
 
 /**
  * Gets input and output streams to a file, wrapping them in
@@ -35,24 +35,24 @@ import java.util.zip.GZIPOutputStream;
 object FileStreams {
 
   /** Use a 16k buffer size. */
-  val BUFFER_SIZE: Int = 16 * 1024;
+  val BUFFER_SIZE: Int = 16 * 1024
 
   /**
    * Gets an input stream with proper buffering (minimum 16k) for the given
    * file, automatically gunziping if the file name ends in .gz.
    */
   def input(path: File): InputStream = {
-    val fis = new FileInputStream(path);
+    val fis = new FileInputStream(path)
     try {
       if (path.getName.endsWith(".gz")) {
-        new BufferedInputStream(new GZIPInputStream(fis, BUFFER_SIZE), BUFFER_SIZE);
+        new BufferedInputStream(new GZIPInputStream(fis, BUFFER_SIZE), BUFFER_SIZE)
       } else {
-        new BufferedInputStream(fis, BUFFER_SIZE);
+        new BufferedInputStream(fis, BUFFER_SIZE)
       }
     } catch {
       case ex: Throwable =>
-        fis.close();
-        throw ex;
+        fis.close()
+        throw ex
     }
   }
 
@@ -61,16 +61,16 @@ object FileStreams {
    * (minimum 16k), automatically gziping if the file name ends in .gz.
    */
   def output(path: File): OutputStream = {
-    val fos = new FileOutputStream(path);
+    val fos = new FileOutputStream(path)
     try {
       if (path.getName.endsWith(".gz")) {
-        new BufferedOutputStream(new GZIPOutputStream(fos, BUFFER_SIZE), BUFFER_SIZE);
+        new BufferedOutputStream(new GZIPOutputStream(fos, BUFFER_SIZE), BUFFER_SIZE)
       } else {
-        new BufferedOutputStream(fos, BUFFER_SIZE);
+        new BufferedOutputStream(fos, BUFFER_SIZE)
       }
     } catch {
       case ex: Throwable =>
-        fos.close();
+        fos.close()
         throw ex;
     }
   }

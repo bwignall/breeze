@@ -1,4 +1,4 @@
-package breeze.stats.distributions;
+package breeze.stats.distributions
 
 /*
  Copyright 2009 David Hall, Daniel Ramage
@@ -24,7 +24,7 @@ import org.scalatestplus.scalacheck._
 
 class BinomialTest extends AnyFunSuite with Checkers with MomentsTestBase[Int] {
   type Distr = Binomial
-  import org.scalacheck.Arbitrary.arbitrary;
+  import org.scalacheck.Arbitrary.arbitrary
 
   override val numSamples: Int = 1000
   override val VARIANCE_TOLERANCE: Double = 1e-1

@@ -337,7 +337,7 @@ package object numerics {
     implicit object sincpiIntImpl extends Impl[Int, Double] {
       def apply(v: Int): Double = if (v == 0) 1d
       else {
-        val temp = v.toDouble * m.Pi;
+        val temp = v.toDouble * m.Pi
         m.sin(temp) / temp
       }
     }
@@ -345,7 +345,7 @@ package object numerics {
     implicit object sincpiDoubleImpl extends Impl[Double, Double] {
       def apply(v: Double): Double = if (v == 0) 1d
       else {
-        val temp = v * m.Pi;
+        val temp = v * m.Pi
         m.sin(temp) / temp
       }
     }
@@ -353,7 +353,7 @@ package object numerics {
     implicit object sincpiFloatImpl extends Impl[Float, Float] {
       def apply(v: Float): Float = if (v == 0) 1f
       else {
-        val temp = v * m.Pi;
+        val temp = v * m.Pi
         (m.sin(temp) / temp).toFloat
       }
     }
