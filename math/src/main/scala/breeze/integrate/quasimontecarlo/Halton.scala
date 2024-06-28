@@ -20,8 +20,6 @@ import breeze.linalg._
 import breeze.macros._
 import breeze.stats.distributions.RandBasis
 
-import scala.reflect.ClassTag
-
 object Halton {
   val HALTON_MAX_DIMENSION = 1229
 

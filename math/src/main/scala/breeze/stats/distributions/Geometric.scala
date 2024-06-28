@@ -70,7 +70,7 @@ object Geometric extends ExponentialFamily[Geometric, Int] with HasConjugatePrio
 
   def predictive(parameter: conjugateFamily.Parameter)(implicit basis: RandBasis) = ???
 
-  def posterior(prior: conjugateFamily.Parameter, evidence: TraversableOnce[Int]): (Double, Double) = {
+  def posterior(prior: conjugateFamily.Parameter, evidence: IterableOnce[Int]): (Double, Double) = {
     evidence.foldLeft(prior) { (acc, x) =>
       (acc._1 + 1, acc._2 + x)
     }

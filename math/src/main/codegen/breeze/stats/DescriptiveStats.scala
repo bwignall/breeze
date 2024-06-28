@@ -611,7 +611,7 @@ object DescriptiveStats {
   /**
    * Returns the estimate of the data at p * it.size after copying and sorting, where p in [0,1].
    */
-  def percentile(it: TraversableOnce[Double], p: Double): Double = {
+  def percentile(it: IterableOnce[Double], p: Double): Double = {
     if (p > 1 || p < 0) throw new IllegalArgumentException("p must be in [0,1]")
     val arr = it.toArray
     Sorting.quickSort(arr)
@@ -645,7 +645,7 @@ object DescriptiveStats {
    * by truncating the longer vector.
    * </p>
    */
-  def meanAndCov[T](it1: TraversableOnce[T], it2: TraversableOnce[T])(implicit frac: Fractional[T]) = {
+  def meanAndCov[T](it1: IterableOnce[T], it2: IterableOnce[T])(implicit frac: Fractional[T]) = {
     import frac.mkNumericOps
     //mu1(n-1), mu2(n-1), Cov(n-1), n-1
     val (mu1, mu2, c, n) = (it1.iterator.to(Iterable), it2.iterator.to(Iterable)).zipped.foldLeft((frac.zero, frac.zero, frac.zero, frac.zero)) { (acc, y) =>

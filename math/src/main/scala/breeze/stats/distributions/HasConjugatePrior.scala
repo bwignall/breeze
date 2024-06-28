@@ -34,5 +34,5 @@ trait HasConjugatePrior[Likelihood <: Density[T], T] extends ExponentialFamily[L
   /**
    * Gives a new parameter for this conjugate prior after observing the evidence. See Dirichlet for an example.
    */
-  def posterior(prior: conjugateFamily.Parameter, evidence: TraversableOnce[T]): conjugateFamily.Parameter
+  def posterior(prior: conjugateFamily.Parameter, evidence: IterableOnce[T]): conjugateFamily.Parameter
 }

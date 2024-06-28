@@ -71,7 +71,8 @@ trait Counter2Like[K1, K2, V, T <: Counter[K2, V], +This <: Counter2[K1, K2, V]]
 
   override def valuesIterator: Iterator[V] = for (m <- data.valuesIterator; v <- m.valuesIterator) yield v
 
-  override def iterator: Iterator[((K1, K2), V)] = for ((k1, m) <- data.iterator; (k2, v) <- m.iterator) yield (k1, k2) -> v
+  override def iterator: Iterator[((K1, K2), V)] = for ((k1, m) <- data.iterator; (k2, v) <- m.iterator)
+    yield (k1, k2) -> v
 
   def activeSize: Int = size
 
@@ -121,14 +122,14 @@ object Counter2 extends LowPriorityCounter2 with Counter2Ops {
     apply(values.iterator)
 
   /** Aggregates the counts in the given items. */
-  def apply[K1, K2, V: Semiring: Zero](values: TraversableOnce[(K1, K2, V)]): Counter2[K1, K2, V] = {
+  def apply[K1, K2, V: Semiring: Zero](values: IterableOnce[(K1, K2, V)]): Counter2[K1, K2, V] = {
     val rv = apply[K1, K2, V]()
     values.iterator.foreach { case (k1, k2, v) => rv(k1, k2) = implicitly[Semiring[V]].+(rv(k1, k2), v) }
     rv
   }
 
   /** Counts the given elements. */
-  def count[K1, K2](values: TraversableOnce[(K1, K2)]): Counter2[K1, K2, Int] = {
+  def count[K1, K2](values: IterableOnce[(K1, K2)]): Counter2[K1, K2, Int] = {
     val rv = apply[K1, K2, Int]()
     values.iterator.foreach { case (k1, k2) => rv(k1, k2) += 1; }
     rv

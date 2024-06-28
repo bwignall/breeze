@@ -65,7 +65,7 @@ object CSVReader {
  */
 object CSVWriter {
   def write(output: Writer,
-            mat: TraversableOnce[IndexedSeq[String]],
+            mat: IterableOnce[IndexedSeq[String]],
             separator: Char = ',',
             quote: Char = '"',
             escape: Char = '\\'

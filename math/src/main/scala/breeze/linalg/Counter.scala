@@ -95,7 +95,7 @@ object Counter extends CounterOps {
     apply(values)
 
   /** Returns a counter by summing all the given values. */
-  def apply[K, V: Zero: Semiring](values: TraversableOnce[(K, V)]): Counter[K, V] = {
+  def apply[K, V: Zero: Semiring](values: IterableOnce[(K, V)]): Counter[K, V] = {
     val rv = apply[K, V]()
     val field = implicitly[Semiring[V]]
     values.iterator.foreach { case (k, v) => rv(k) = field.+(v, rv(k)) }
@@ -103,7 +103,7 @@ object Counter extends CounterOps {
   }
 
   /** Counts each of the given items. */
-  def countTraversable[K](items: TraversableOnce[K]): Counter[K, Int] = {
+  def countTraversable[K](items: IterableOnce[K]): Counter[K, Int] = {
     val rv = apply[K, Int]()
     items.iterator.foreach(rv(_) += 1)
     rv
