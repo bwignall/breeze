@@ -119,12 +119,10 @@ object Poisson extends ExponentialFamily[Poisson, Int] {
 
   def mle(stats: SufficientStatistic): Parameter = stats.sum / stats.n
 
-  def likelihoodFunction(stats: SufficientStatistic): DiffFunction[Parameter] = new DiffFunction[Double] {
-    def calculate(x: Double) = {
-      val obj = math.log(x) * stats.sum - x * stats.n
-      val grad = stats.sum / x - stats.n
-      (-obj, -grad)
-    }
+  def likelihoodFunction(stats: SufficientStatistic): DiffFunction[Parameter] = (x: Double) => {
+    val obj = math.log(x) * stats.sum - x * stats.n
+    val grad = stats.sum / x - stats.n
+    (-obj, -grad)
   }
 
   override def distribution(p: Poisson.Parameter)(implicit rand: RandBasis) = new Poisson(p)

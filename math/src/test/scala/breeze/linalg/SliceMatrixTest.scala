@@ -1,9 +1,5 @@
 package breeze.linalg
 
-import breeze.generic.UFunc
-import breeze.gymnastics._
-import breeze.linalg.operators.HasOps
-import breeze.linalg.operators.OpAdd
 import org.scalatest.funsuite.AnyFunSuite
 
 /**

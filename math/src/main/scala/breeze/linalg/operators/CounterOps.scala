@@ -14,22 +14,18 @@ import breeze.storage.Zero
 import breeze.util.ScalaVersion
 
 trait CounterOps {
-  implicit def canCopy[K1, V: Zero: Semiring]: CanCopy[Counter[K1, V]] = new CanCopy[Counter[K1, V]] {
-    def apply(t: Counter[K1, V]): Counter[K1, V] = {
-      Counter(t.iterator)
-    }
+  implicit def canCopy[K1, V: Zero: Semiring]: CanCopy[Counter[K1, V]] = (t: Counter[K1, V]) => {
+    Counter(t.iterator)
   }
 
   def binaryOpFromBinaryUpdateOp[K, V, Other, Op <: OpType](implicit
     copy: CanCopy[Counter[K, V]],
     op: UFunc.InPlaceImpl2[Op, Counter[K, V], Other]
   ): UFunc.UImpl2[Op, Counter[K, V], Other, Counter[K, V]] = {
-    new UFunc.UImpl2[Op, Counter[K, V], Other, Counter[K, V]] {
-      override def apply(a: Counter[K, V], b: Other) = {
-        val c = copy(a)
-        op(c, b)
-        c
-      }
+    (a: Counter[K, V], b: Other) => {
+      val c = copy(a)
+      op(c, b)
+      c
     }
   }
 
@@ -148,16 +144,14 @@ trait CounterOps {
   implicit def canMulVV[K1, V](implicit
     semiring: Semiring[V]
   ): OpMulScalar.Impl2[Counter[K1, V], Counter[K1, V], Counter[K1, V]] = {
-    new OpMulScalar.Impl2[Counter[K1, V], Counter[K1, V], Counter[K1, V]] {
-      override def apply(a: Counter[K1, V], b: Counter[K1, V]) = {
-        val r = Counter[K1, V]()
-        for ((k, v) <- a.activeIterator) {
-          val vr = semiring.*(v, b(k))
-          if (vr != semiring.zero)
-            r(k) = vr
-        }
-        r
+    (a: Counter[K1, V], b: Counter[K1, V]) => {
+      val r = Counter[K1, V]()
+      for ((k, v) <- a.activeIterator) {
+        val vr = semiring.*(v, b(k))
+        if (vr != semiring.zero)
+          r(k) = vr
       }
+      r
     }
   }
 
@@ -198,30 +192,26 @@ trait CounterOps {
   implicit def canMulVS[K2, K1 <: K2, V](implicit
     semiring: Semiring[V]
   ): OpMulScalar.Impl2[Counter[K1, V], V, Counter[K1, V]] = {
-    new OpMulScalar.Impl2[Counter[K1, V], V, Counter[K1, V]] {
-      override def apply(a: Counter[K1, V], b: V) = {
-        val r = Counter[K1, V]()
-        for ((k, v) <- a.activeIterator) {
-          val vr = semiring.*(v, b)
-          r(k) = vr
-        }
-        r
+    (a: Counter[K1, V], b: V) => {
+      val r = Counter[K1, V]()
+      for ((k, v) <- a.activeIterator) {
+        val vr = semiring.*(v, b)
+        r(k) = vr
       }
+      r
     }
   }
 
   implicit def canMulVS_M[K2, K1 <: K2, V](implicit
     semiring: Semiring[V]
   ): OpMulMatrix.Impl2[Counter[K1, V], V, Counter[K1, V]] = {
-    new OpMulMatrix.Impl2[Counter[K1, V], V, Counter[K1, V]] {
-      override def apply(a: Counter[K1, V], b: V) = {
-        val r = Counter[K1, V]()
-        for ((k, v) <- a.activeIterator) {
-          val vr = semiring.*(v, b)
-          r(k) = vr
-        }
-        r
+    (a: Counter[K1, V], b: V) => {
+      val r = Counter[K1, V]()
+      for ((k, v) <- a.activeIterator) {
+        val vr = semiring.*(v, b)
+        r(k) = vr
       }
+      r
     }
   }
 
@@ -247,15 +237,13 @@ trait CounterOps {
     copy: CanCopy[Counter[K1, V]],
     semiring: Field[V]
   ): OpDiv.Impl2[Counter[K1, V], Counter[K1, V], Counter[K1, V]] = {
-    new OpDiv.Impl2[Counter[K1, V], Counter[K1, V], Counter[K1, V]] {
-      override def apply(a: Counter[K1, V], b: Counter[K1, V]) = {
-        val r = Counter[K1, V]()
-        for ((k, v) <- a.activeIterator) {
-          val vr = semiring./(v, b(k))
-          r(k) = vr
-        }
-        r
+    (a: Counter[K1, V], b: Counter[K1, V]) => {
+      val r = Counter[K1, V]()
+      for ((k, v) <- a.activeIterator) {
+        val vr = semiring./(v, b(k))
+        r(k) = vr
       }
+      r
     }
   }
 
@@ -263,15 +251,13 @@ trait CounterOps {
     copy: CanCopy[Counter[K1, V]],
     semiring: Field[V]
   ): OpDiv.Impl2[Counter[K1, V], V, Counter[K1, V]] = {
-    new OpDiv.Impl2[Counter[K1, V], V, Counter[K1, V]] {
-      override def apply(a: Counter[K1, V], b: V) = {
-        val r = Counter[K1, V]()
-        for ((k, v) <- a.activeIterator) {
-          val vr = semiring./(v, b)
-          r(k) = vr
-        }
-        r
+    (a: Counter[K1, V], b: V) => {
+      val r = Counter[K1, V]()
+      for ((k, v) <- a.activeIterator) {
+        val vr = semiring./(v, b)
+        r(k) = vr
       }
+      r
     }
   }
 
@@ -293,42 +279,36 @@ trait CounterOps {
     }
 
   implicit def impl_OpSet_InPlace_C_C[K1, K2 <: K1, V]: OpSet.InPlaceImpl2[Counter[K1, V], Counter[K2, V]] =
-    new OpSet.InPlaceImpl2[Counter[K1, V], Counter[K2, V]] {
-      def apply(a: Counter[K1, V], b: Counter[K2, V]): Unit = {
-        a.data.clear()
-        for ((k, v) <- b.activeIterator) {
-          a(k) = v
-        }
+    (a: Counter[K1, V], b: Counter[K2, V]) => {
+      a.data.clear()
+      for ((k, v) <- b.activeIterator) {
+        a(k) = v
       }
     }
 
   implicit def canSetIntoVS[K1, V]: OpSet.InPlaceImpl2[Counter[K1, V], V] = {
-    new OpSet.InPlaceImpl2[Counter[K1, V], V] {
-      def apply(a: Counter[K1, V], b: V): Unit = {
-        // scala 2.13 hashmaps invalidate iterators if you change values, even if the keys are already there
-        val it = if (ScalaVersion.is213) {
-          a.keysIterator.toSet.iterator
-        } else {
-          a.keysIterator
-        }
+    (a: Counter[K1, V], b: V) => {
+      // scala 2.13 hashmaps invalidate iterators if you change values, even if the keys are already there
+      val it = if (ScalaVersion.is213) {
+        a.keysIterator.toSet.iterator
+      } else {
+        a.keysIterator
+      }
 
-        for (k <- it) {
-          a(k) = b
-        }
+      for (k <- it) {
+        a(k) = b
       }
     }
   }
 
   implicit def canNegate[K1, V](implicit ring: Ring[V]): OpNeg.Impl[Counter[K1, V], Counter[K1, V]] = {
-    new OpNeg.Impl[Counter[K1, V], Counter[K1, V]] {
-      override def apply(a: Counter[K1, V]) = {
-        val result = Counter[K1, V]()
-        for ((k, v) <- a.activeIterator) {
-          val vr = ring.negate(v)
-          result(k) = vr
-        }
-        result
+    (a: Counter[K1, V]) => {
+      val result = Counter[K1, V]()
+      for ((k, v) <- a.activeIterator) {
+        val vr = ring.negate(v)
+        result(k) = vr
       }
+      result
     }
   }
 

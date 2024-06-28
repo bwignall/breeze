@@ -211,9 +211,7 @@ object Complex { outer =>
     val defaultArrayValue: Zero[Complex] = Zero(Complex(0, 0))
 
     implicit val normImpl: linalg.norm.Impl[Complex, Double] =
-      new linalg.norm.Impl[Complex, Double] {
-        def apply(v: Complex): Double = v.abs
-      }
+      (v: Complex) => v.abs
 
     override def close(a: Complex, b: Complex, tolerance: Double): Boolean = {
       sNorm(a - b) <= tolerance * math.max(sNorm(a), sNorm(b))
@@ -224,9 +222,7 @@ object Complex { outer =>
     def %(a: Complex, b: Complex): Complex = a.%(b)
   }
 
-  implicit val complexNorm: norm.Impl[Complex, Double] = new norm.Impl[Complex, Double] {
-    def apply(v1: Complex): Double = v1.abs
-  }
+  implicit val complexNorm: norm.Impl[Complex, Double] = (v1: Complex) => v1.abs
 
   implicit val ComplexZero: Zero[Complex] = Zero(Complex.zero)
 

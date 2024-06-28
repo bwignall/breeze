@@ -116,15 +116,12 @@ trait DenseVector_TraversalOps extends Vector_TraversalOps {
     }
 
   implicit def DV_canTraverseZipValues[V, W]: CanZipAndTraverseValues[DenseVector[V], DenseVector[W], V, W] =
-    new CanZipAndTraverseValues[DenseVector[V], DenseVector[W], V, W] {
-
-      def traverse(from1: DenseVector[V], from2: DenseVector[W], fn: PairValuesVisitor[V, W]): Unit = {
-        if (from1.size != from2.size) {
-          throw new IllegalArgumentException("Vectors to be zipped must have same size")
-        }
-        cforRange(0 until from1.size) { i =>
-          fn.visit(from1(i), from2(i))
-        }
+    (from1: DenseVector[V], from2: DenseVector[W], fn: PairValuesVisitor[V, W]) => {
+      if (from1.size != from2.size) {
+        throw new IllegalArgumentException("Vectors to be zipped must have same size")
+      }
+      cforRange(0 until from1.size) { i =>
+        fn.visit(from1(i), from2(i))
       }
     }
 

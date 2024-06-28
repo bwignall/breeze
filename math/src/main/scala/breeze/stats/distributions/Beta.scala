@@ -163,17 +163,14 @@ object Beta extends ExponentialFamily[Beta, Double] with ContinuousDistributionU
   override def distribution(ab: Parameter)(implicit rand: RandBasis) = new Beta(ab._1, ab._2)
 
   def likelihoodFunction(stats: SufficientStatistic): DiffFunction[(Double, Double)] =
-    new DiffFunction[(Double, Double)] {
-      import stats.n
-      def calculate(x: (Double, Double)) = {
-        val (a, b) = x
-        if (a < 0 || b < 0) (Double.PositiveInfinity, (0.0, 0.0))
-        else {
-          val obj = n * (lgamma(a) + lgamma(b) - lgamma(a + b) - (a - 1) * stats.meanLog - (b - 1) * stats.meanLog1M)
-          val gradA = n * (digamma(a) - digamma(a + b) - stats.meanLog)
-          val gradB = n * (digamma(b) - digamma(a + b) - stats.meanLog1M)
-          (obj, (gradA, gradB))
-        }
+    (x: (Double, Double)) => {
+      val (a, b) = x
+      if (a < 0 || b < 0) (Double.PositiveInfinity, (0.0, 0.0))
+      else {
+        val obj = n * (lgamma(a) + lgamma(b) - lgamma(a + b) - (a - 1) * stats.meanLog - (b - 1) * stats.meanLog1M)
+        val gradA = n * (digamma(a) - digamma(a + b) - stats.meanLog)
+        val gradB = n * (digamma(b) - digamma(a + b) - stats.meanLog1M)
+        (obj, (gradA, gradB))
       }
     }
 }

@@ -65,12 +65,10 @@ object Exponential
     stats.n / stats.v
   }
 
-  def likelihoodFunction(stats: SufficientStatistic): DiffFunction[Parameter] = new DiffFunction[Double] {
-    def calculate(x: Double) = {
-      val obj = x * stats.v - stats.n * math.log(x)
-      val deriv = stats.v - stats.n / x
-      (obj, deriv)
-    }
+  def likelihoodFunction(stats: SufficientStatistic): DiffFunction[Parameter] = (x: Double) => {
+    val obj = x * stats.v - stats.n * math.log(x)
+    val deriv = stats.v - stats.n / x
+    (obj, deriv)
   }
 
   override def distribution(p: Double)(implicit rand: RandBasis): Exponential = new Exponential(p)

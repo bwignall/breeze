@@ -49,11 +49,9 @@ trait BroadcastedRowsOps {
     handhold: CanCollapseAxis.HandHold[T, Axis._1.type, RowType],
     op: UImpl[Op, RowType, OpResult],
     cc: CanCollapseAxis[T, Axis._1.type, RowType, OpResult, Result]
-  ): UImpl[Op, BroadcastedRows[T, RowType], Result] = {
-    new UImpl[Op, BroadcastedRows[T, RowType], Result] {
-      def apply(v: BroadcastedRows[T, RowType]): Result = {
-        cc(v.underlying, Axis._1) { op(_) }
-      }
+  ): UImpl[Op, BroadcastedRows[T, RowType], Result] = (v: BroadcastedRows[T, RowType]) => {
+    cc(v.underlying, Axis._1) {
+      op(_)
     }
   }
 
@@ -62,9 +60,9 @@ trait BroadcastedRowsOps {
     op: InPlaceImpl[Op, RowType],
     cc: CanTraverseAxis[T, Axis._1.type, RowType]
   ): InPlaceImpl[Op, BroadcastedRows[T, RowType]] = {
-    new InPlaceImpl[Op, BroadcastedRows[T, RowType]] {
-      def apply(v: BroadcastedRows[T, RowType]): Unit = {
-        cc(v.underlying, Axis._1) { op(_) }
+    (v: BroadcastedRows[T, RowType]) => {
+      cc(v.underlying, Axis._1) {
+        op(_)
       }
     }
   }
@@ -74,9 +72,9 @@ trait BroadcastedRowsOps {
     op: UImpl2[Op, RowType, RHS, OpResult],
     cc: CanCollapseAxis[T, Axis._1.type, RowType, OpResult, Result]
   ): UImpl2[Op, BroadcastedRows[T, RowType], RHS, Result] = {
-    new UImpl2[Op, BroadcastedRows[T, RowType], RHS, Result] {
-      def apply(v: BroadcastedRows[T, RowType], v2: RHS): Result = {
-        cc(v.underlying, Axis._1) { op(_, v2) }
+    (v: BroadcastedRows[T, RowType], v2: RHS) => {
+      cc(v.underlying, Axis._1) {
+        op(_, v2)
       }
     }
   }
@@ -86,9 +84,9 @@ trait BroadcastedRowsOps {
     op: UImpl2[Op, LHS, RowType, OpResult],
     cc: CanCollapseAxis[T, Axis._1.type, RowType, OpResult, Result]
   ): UImpl2[Op, LHS, BroadcastedRows[T, RowType], Result] = {
-    new UImpl2[Op, LHS, BroadcastedRows[T, RowType], Result] {
-      def apply(v: LHS, v2: BroadcastedRows[T, RowType]): Result = {
-        cc(v2.underlying, Axis._1) { op(v, _) }
+    (v: LHS, v2: BroadcastedRows[T, RowType]) => {
+      cc(v2.underlying, Axis._1) {
+        op(v, _)
       }
     }
   }
@@ -98,9 +96,9 @@ trait BroadcastedRowsOps {
     op: InPlaceImpl2[Op, RowType, RHS],
     cc: CanTraverseAxis[T, Axis._1.type, RowType]
   ): InPlaceImpl2[Op, BroadcastedRows[T, RowType], RHS] = {
-    new InPlaceImpl2[Op, BroadcastedRows[T, RowType], RHS] {
-      def apply(v: BroadcastedRows[T, RowType], v2: RHS): Unit = {
-        cc(v.underlying, Axis._1) { op(_, v2) }
+    (v: BroadcastedRows[T, RowType], v2: RHS) => {
+      cc(v.underlying, Axis._1) {
+        op(_, v2)
       }
     }
   }

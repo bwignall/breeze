@@ -662,31 +662,23 @@ package object numerics {
    */
   object isOdd extends ZeroPreservingUFunc {
     implicit val isOddImpl_Int: Impl[Int, Boolean] = {
-      new Impl[Int, Boolean] {
-        def apply(v: Int) = {
-          v % 2 == 1
-        }
+      (v: Int) => {
+        v % 2 == 1
       }
     }
     implicit val isOddImpl_Double: Impl[Double, Boolean] = {
-      new Impl[Double, Boolean] {
-        def apply(v: Double) = {
-          v % 2 == 1
-        }
+      (v: Double) => {
+        v % 2 == 1
       }
     }
     implicit val isOddImpl_Float: Impl[Float, Boolean] = {
-      new Impl[Float, Boolean] {
-        def apply(v: Float) = {
-          v % 2 == 1
-        }
+      (v: Float) => {
+        v % 2 == 1
       }
     }
     implicit val isOddImpl_Long: Impl[Long, Boolean] = {
-      new Impl[Long, Boolean] {
-        def apply(v: Long) = {
-          v % 2 == 1
-        }
+      (v: Long) => {
+        v % 2 == 1
       }
     }
   }
@@ -696,31 +688,23 @@ package object numerics {
    */
   object isEven extends MappingUFunc {
     implicit val isEvenImpl_Int: Impl[Int, Boolean] = {
-      new Impl[Int, Boolean] {
-        def apply(v: Int) = {
-          v % 2 == 0
-        }
+      (v: Int) => {
+        v % 2 == 0
       }
     }
     implicit val isEvenImpl_Double: Impl[Double, Boolean] = {
-      new Impl[Double, Boolean] {
-        def apply(v: Double) = {
-          v % 2 == 0
-        }
+      (v: Double) => {
+        v % 2 == 0
       }
     }
     implicit val isEvenImpl_Float: Impl[Float, Boolean] = {
-      new Impl[Float, Boolean] {
-        def apply(v: Float) = {
-          v % 2 == 0
-        }
+      (v: Float) => {
+        v % 2 == 0
       }
     }
     implicit val isEvenImpl_Long: Impl[Long, Boolean] = {
-      new Impl[Long, Boolean] {
-        def apply(v: Long) = {
-          v % 2 == 0
-        }
+      (v: Long) => {
+        v % 2 == 0
       }
     }
   }
@@ -730,34 +714,26 @@ package object numerics {
 
   object isNonfinite extends ZeroPreservingUFunc {
     implicit val isNonfiniteImpl_Double: Impl[Double, Boolean] = {
-      new Impl[Double, Boolean] {
-        override def apply(v: Double): Boolean = {
-          !isFinite(v)
-        }
+      (v: Double) => {
+        !isFinite(v)
       }
     }
     implicit val isNonfiniteImpl_Float: Impl[Float, Boolean] = {
-      new Impl[Float, Boolean] {
-        override def apply(v: Float): Boolean = {
-          !isFinite(v)
-        }
+      (v: Float) => {
+        !isFinite(v)
       }
     }
   }
 
   object isFinite extends MappingUFunc {
     implicit val isFiniteImpl_Double: Impl[Double, Boolean] = {
-      new Impl[Double, Boolean] {
-        override def apply(v: Double): Boolean = {
-          m.abs(v) <= Double.MaxValue
-        }
+      (v: Double) => {
+        m.abs(v) <= Double.MaxValue
       }
     }
     implicit val isFiniteImpl_Float: Impl[Float, Boolean] = {
-      new Impl[Float, Boolean] {
-        override def apply(v: Float): Boolean = {
-          m.abs(v) <= Double.MaxValue
-        }
+      (v: Float) => {
+        m.abs(v) <= Double.MaxValue
       }
     }
   }
@@ -897,28 +873,25 @@ package object numerics {
       }
     }
 
-    implicit def reduceDouble[T](implicit iter: CanTraverseValues[T, Double]): Impl[T, Double] = new Impl[T, Double] {
-      def apply(v: T): Double = {
-        object visit extends ValuesVisitor[Double] {
-          var sum = 0.0
-          var lgSum = 0.0
+    implicit def reduceDouble[T](implicit iter: CanTraverseValues[T, Double]): Impl[T, Double] = (v: T) => {
+      object visit extends ValuesVisitor[Double] {
+        var sum = 0.0
+        var lgSum = 0.0
 
-          def visit(a: Double): Unit = {
-            sum += a
-            lgSum += lgamma(a)
-          }
-
-          def zeros(numZero: Int, zeroValue: Double): Unit = {
-            sum += numZero * zeroValue
-            lgSum += lgamma(zeroValue)
-          }
+        def visit(a: Double): Unit = {
+          sum += a
+          lgSum += lgamma(a)
         }
 
-        iter.traverse(v, visit)
-
-        visit.lgSum - lgamma(visit.sum)
+        def zeros(numZero: Int, zeroValue: Double): Unit = {
+          sum += numZero * zeroValue
+          lgSum += lgamma(zeroValue)
+        }
       }
 
+      iter.traverse(v, visit)
+
+      visit.lgSum - lgamma(visit.sum)
     }
   }
 
@@ -1148,9 +1121,7 @@ package object numerics {
       def apply(b: Boolean): Double = if (b) 1.0 else 0.0
     }
 
-    implicit def vImpl[V: Semiring]: Impl[V, Double] = new Impl[V, Double] {
-      def apply(b: V) = if (b != implicitly[Semiring[V]].zero) 1.0 else 0.0
-    }
+    implicit def vImpl[V: Semiring]: Impl[V, Double] = (b: V) => if (b != implicitly[Semiring[V]].zero) 1.0 else 0.0
   }
 
   /**

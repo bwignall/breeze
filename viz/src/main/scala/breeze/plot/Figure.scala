@@ -113,17 +113,15 @@ class Figure(name: String, private var rows_ : Int = 1, private var cols_ : Int 
       plots.remove(plots.length - 1)
     }
 
-    SwingUtilities.invokeLater(new Runnable {
-      def run(): Unit = {
-        contents.removeAll()
-        contents.setSize(width_, height_)
-        contents.setLayout(new java.awt.GridLayout(rows, cols))
-        for (plot <- plots) {
-          contents.add(plot match { case Some(plot) => plot.panel; case None => new JPanel() })
-        }
-        frame.setSize(width_, height_)
-        frame.setVisible(visible)
+    SwingUtilities.invokeLater(() => {
+      contents.removeAll()
+      contents.setSize(width_, height_)
+      contents.setLayout(new java.awt.GridLayout(rows, cols))
+      for (plot <- plots) {
+        contents.add(plot match { case Some(plot) => plot.panel; case None => new JPanel() })
       }
+      frame.setSize(width_, height_)
+      frame.setVisible(visible)
     })
 
     frame.repaint()
@@ -173,10 +171,8 @@ class Figure(name: String, private var rows_ : Int = 1, private var cols_ : Int 
       plots(i).get
     }
 
-    plot.listen(new Plot.Listener {
-      def refresh(pl: Plot): Unit = {
-        Figure.this.refresh()
-      }
+    plot.listen((pl: Plot) => {
+      Figure.this.refresh()
     })
 
     plot

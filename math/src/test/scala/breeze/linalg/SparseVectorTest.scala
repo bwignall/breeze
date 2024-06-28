@@ -1,9 +1,6 @@
 package breeze.linalg
 
-import breeze.linalg.operators.HasOps
 import breeze.math._
-import breeze.numerics.log
-import breeze.numerics.sin
 import breeze.stats.mean
 import breeze.storage.Zero
 import org.scalacheck.Arbitrary

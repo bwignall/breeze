@@ -180,9 +180,7 @@ object Vector extends VectorConstructors[Vector] {
    */
   def apply[@spec(Double, Int, Float, Long) V](values: Array[V]): Vector[V] = DenseVector(values)
 
-  implicit def canCopy[E]: CanCopy[Vector[E]] = new CanCopy[Vector[E]] {
-    def apply(t: Vector[E]): Vector[E] = t.copy
-  }
+  implicit def canCopy[E]: CanCopy[Vector[E]] = (t: Vector[E]) => t.copy
 
   implicit def space[V: Field: Zero: ClassTag]: MutableFiniteCoordinateField[Vector[V], Int, V] = {
     val f = implicitly[Field[V]]
@@ -233,10 +231,8 @@ trait VectorConstructors[Vec[T] <: Vector[T]] {
   }
 
   implicit def canCreateZeros[V: ClassTag: Zero]: CanCreateZeros[Vec[V], Int] =
-    new CanCreateZeros[Vec[V], Int] {
-      def apply(d: Int): Vec[V] = {
-        zeros[V](d)
-      }
+    (d: Int) => {
+      zeros[V](d)
     }
 
   /**

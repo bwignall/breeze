@@ -115,10 +115,8 @@ object HashVector {
   // implicits
 
   implicit def canCreateZeros[V: ClassTag: Zero]: CanCreateZeros[HashVector[V], Int] =
-    new CanCreateZeros[HashVector[V], Int] {
-      def apply(d: Int): HashVector[V] = {
-        zeros[V](d)
-      }
+    (d: Int) => {
+      zeros[V](d)
     }
 
   // implicits

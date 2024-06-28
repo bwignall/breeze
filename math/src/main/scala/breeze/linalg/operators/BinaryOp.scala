@@ -29,12 +29,10 @@ object BinaryOp {
     op: UFunc.InPlaceImpl2[Op, A, B],
     copy: CanCopy[A]
   ): UFunc.UImpl2[Op, A, B, A] = {
-    new UFunc.UImpl2[Op, A, B, A] {
-      def apply(a: A, b: B): A = {
-        val c = copy(a)
-        op(c, b)
-        c
-      }
+    (a: A, b: B) => {
+      val c = copy(a)
+      op(c, b)
+      c
     }
   }
 

@@ -149,8 +149,6 @@ object LBFGS {
   implicit def multiplyInverseHessian[T](implicit
     vspace: MutableInnerProductModule[T, Double]
   ): OpMulMatrix.Impl2[ApproximateInverseHessian[T], T, T] = {
-    new OpMulMatrix.Impl2[ApproximateInverseHessian[T], T, T] {
-      def apply(a: ApproximateInverseHessian[T], b: T): T = a * b
-    }
+    (a: ApproximateInverseHessian[T], b: T) => a * b
   }
 }

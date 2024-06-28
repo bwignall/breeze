@@ -46,9 +46,7 @@ object Field {
     def %(a: Int, b: Int) = a % b
     def pow(a: Int, b: Int): Int = math.pow(a, b).toInt
 
-    implicit val normImpl: norm.Impl[Int, Double] = new norm.Impl[Int, Double] {
-      def apply(v: Int) = math.abs(v).toDouble
-    }
+    implicit val normImpl: norm.Impl[Int, Double] = (v: Int) => math.abs(v).toDouble
   }
 
   /** Not a field, but whatever. */
@@ -65,9 +63,7 @@ object Field {
     def %(a: Short, b: Short) = (a % b).asInstanceOf[Short]
     def pow(a: Short, b: Short): Short = math.pow(a, b).toShort
 
-    implicit val normImpl: norm.Impl[Short, Double] = new norm.Impl[Short, Double] {
-      def apply(v: Short) = math.abs(v).toDouble
-    }
+    implicit val normImpl: norm.Impl[Short, Double] = (v: Short) => math.abs(v).toDouble
   }
 
   /** Not a field, but whatever. */
@@ -85,9 +81,7 @@ object Field {
     // TODO: bad idea?
     def pow(a: Long, b: Long): Long = math.pow(a.toDouble, b.toDouble).toLong
 
-    implicit val normImpl: norm.Impl[Long, Double] = new norm.Impl[Long, Double] {
-      def apply(v: Long) = math.abs(v).toDouble
-    }
+    implicit val normImpl: norm.Impl[Long, Double] = (v: Long) => math.abs(v).toDouble
   }
 
   /** Not a field, but whatever. */
@@ -104,9 +98,7 @@ object Field {
     def %(a: BigInt, b: BigInt) = a % b
     def pow(a: BigInt, b: BigInt): BigInt = a.pow(b.toInt)
 
-    implicit val normImpl: norm.Impl[BigInt, Double] = new norm.Impl[BigInt, Double] {
-      def apply(v: BigInt) = v.abs.toDouble
-    }
+    implicit val normImpl: norm.Impl[BigInt, Double] = (v: BigInt) => v.abs.toDouble
   }
 
   @SerialVersionUID(1L)
@@ -126,9 +118,7 @@ object Field {
       (a - b).abs <= tolerance * (a.abs.max(b.abs))
     }
 
-    implicit val normImpl: norm.Impl[BigDecimal, Double] = new norm.Impl[BigDecimal, Double] {
-      def apply(v: BigDecimal) = v.abs.toDouble
-    }
+    implicit val normImpl: norm.Impl[BigDecimal, Double] = (v: BigDecimal) => v.abs.toDouble
   }
 
   @SerialVersionUID(1L)
@@ -152,9 +142,7 @@ object Field {
       ) * tolerance) || ((a == 0 || b == 0 || diff < java.lang.Float.MIN_NORMAL) && diff < tolerance * 10 * java.lang.Float.MIN_NORMAL)
     }
 
-    implicit val normImpl: norm.Impl[Float, Double] = new norm.Impl[Float, Double] {
-      def apply(v: Float) = math.abs(v).toDouble
-    }
+    implicit val normImpl: norm.Impl[Float, Double] = (v: Float) => math.abs(v).toDouble
   }
 
   @SerialVersionUID(-5955467582882664220L)
@@ -177,8 +165,6 @@ object Field {
       ) * tolerance) || ((a == 0 || b == 0 || diff < java.lang.Double.MIN_NORMAL) && diff < tolerance * 10 * java.lang.Double.MIN_NORMAL)
     }
 
-    implicit val normImpl: norm.Impl[Double, Double] = new norm.Impl[Double, Double] {
-      def apply(v: Double) = math.abs(v)
-    }
+    implicit val normImpl: norm.Impl[Double, Double] = (v: Double) => math.abs(v)
   }
 }

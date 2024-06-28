@@ -344,8 +344,6 @@ object VectorBuilder extends VectorBuilderOps {
 
   implicit def canZeroBuilder[@spec(Double, Int, Float, Long) V: Semiring: Zero: ClassTag]
     : CanCreateZeros[VectorBuilder[V], Int] = {
-    new CanCreateZeros[VectorBuilder[V], Int] {
-      def apply(d: Int): VectorBuilder[V] = zeros(d)
-    }
+    (d: Int) => zeros(d)
   }
 }

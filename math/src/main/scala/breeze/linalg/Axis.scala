@@ -37,9 +37,7 @@ object Axis {
     impl: UImpl[Tag, TA, VR],
     collapse: CanCollapseAxis[V1, AxisT, TA, VR, Result]
   ): UImpl2[Tag, V1, AxisT, Result] = {
-    new UImpl2[Tag, V1, AxisT, Result] {
-      def apply(v: V1, v2: AxisT): Result = collapse.apply(v, v2)(impl(_))
-    }
+    (v: V1, v2: AxisT) => collapse.apply(v, v2)(impl(_))
   }
 
   implicit def collapseUred3[Tag, V1, AxisT <: Axis, V3, TA, VR, Result](implicit
@@ -47,8 +45,6 @@ object Axis {
     impl: UImpl2[Tag, TA, V3, VR],
     collapse: CanCollapseAxis[V1, AxisT, TA, VR, Result]
   ): UImpl3[Tag, V1, AxisT, V3, Result] = {
-    new UImpl3[Tag, V1, AxisT, V3, Result] {
-      def apply(v: V1, v2: AxisT, v3: V3): Result = collapse.apply(v, v2)(impl(_, v3))
-    }
+    (v: V1, v2: AxisT, v3: V3) => collapse.apply(v, v2)(impl(_, v3))
   }
 }

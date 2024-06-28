@@ -247,10 +247,8 @@ trait MatrixConstructors[Mat[T] <: Matrix[T]] {
   }
 
   implicit def canCreateZeros[T: ClassTag: Zero]: CanCreateZeros[Mat[T], (Int, Int)] =
-    new CanCreateZeros[Mat[T], (Int, Int)] {
-      def apply(dims: (Int, Int)): Mat[T] = {
-        zeros[T](dims._1, dims._2)
-      }
+    (dims: (Int, Int)) => {
+      zeros[T](dims._1, dims._2)
     }
 
   // This method only exists because of trouble in Scala-specialization land.
@@ -269,82 +267,62 @@ trait MatrixConstructors[Mat[T] <: Matrix[T]] {
 trait LowPriorityMatrix {
   implicit def canSliceTensorBooleanRows[V: Semiring: ClassTag]
     : CanSlice2[Matrix[V], Tensor[Int, Boolean], ::.type, SliceMatrix[Int, Int, V]] = {
-    new CanSlice2[Matrix[V], Tensor[Int, Boolean], ::.type, SliceMatrix[Int, Int, V]] {
-      def apply(from: Matrix[V], rows: Tensor[Int, Boolean], cols: ::.type): SliceMatrix[Int, Int, V] = {
-        val cols = 0 until from.cols
-        new SliceMatrix(from, SliceUtils.mapRowSeq(rows.findAll(_ == true), from.rows), cols)
-      }
+    (from: Matrix[V], rows: Tensor[Int, Boolean], cols: ::.type) => {
+      val cols = 0 until from.cols
+      new SliceMatrix(from, SliceUtils.mapRowSeq(rows.findAll(_ == true), from.rows), cols)
     }
   }
 
   implicit def canSliceTensorBooleanCols[V: Semiring: ClassTag]
     : CanSlice2[Matrix[V], ::.type, Tensor[Int, Boolean], SliceMatrix[Int, Int, V]] = {
-    new CanSlice2[Matrix[V], ::.type, Tensor[Int, Boolean], SliceMatrix[Int, Int, V]] {
-      def apply(from: Matrix[V], rows: ::.type, cols: Tensor[Int, Boolean]): SliceMatrix[Int, Int, V] = {
-        val rows = 0 until from.rows
-        new SliceMatrix(from, rows, SliceUtils.mapColumnSeq(cols.findAll(_ == true), from.cols))
-      }
+    (from: Matrix[V], rows: ::.type, cols: Tensor[Int, Boolean]) => {
+      val rows = 0 until from.rows
+      new SliceMatrix(from, rows, SliceUtils.mapColumnSeq(cols.findAll(_ == true), from.cols))
     }
   }
 
   implicit def canSliceTensorBooleanRowsAndCol[V: Semiring: ClassTag]
     : CanSlice2[Matrix[V], Tensor[Int, Boolean], Int, SliceVector[(Int, Int), V]] = {
-    new CanSlice2[Matrix[V], Tensor[Int, Boolean], Int, SliceVector[(Int, Int), V]] {
-      def apply(from: Matrix[V], sliceRows: Tensor[Int, Boolean], sliceCol: Int): SliceVector[(Int, Int), V] = {
-        val rows = SliceUtils.mapRowSeq(sliceRows.findAll(_ == true), from.rows)
-        val col = SliceUtils.mapColumn(sliceCol, from.cols)
-        new SliceVector(from, slices = rows.map(row => (row, col)))
-      }
+    (from: Matrix[V], sliceRows: Tensor[Int, Boolean], sliceCol: Int) => {
+      val rows = SliceUtils.mapRowSeq(sliceRows.findAll(_ == true), from.rows)
+      val col = SliceUtils.mapColumn(sliceCol, from.cols)
+      new SliceVector(from, slices = rows.map(row => (row, col)))
     }
   }
 
   implicit def canSliceRowAndTensorBooleanCols[V: Semiring: ClassTag]
     : CanSlice2[Matrix[V], Int, Tensor[Int, Boolean], Transpose[SliceVector[(Int, Int), V]]] = {
-    new CanSlice2[Matrix[V], Int, Tensor[Int, Boolean], Transpose[SliceVector[(Int, Int), V]]] {
-      def apply(from: Matrix[V],
-                sliceRow: Int,
-                sliceCols: Tensor[Int, Boolean]
-      ): Transpose[SliceVector[(Int, Int), V]] = {
-        val row = SliceUtils.mapRow(sliceRow, from.rows)
-        val cols = SliceUtils.mapColumnSeq(sliceCols.findAll(_ == true), from.cols)
-        new SliceVector(from, slices = cols.map(col => (row, col))).t
-      }
+    (from: Matrix[V], sliceRow: Int, sliceCols: Tensor[Int, Boolean]) => {
+      val row = SliceUtils.mapRow(sliceRow, from.rows)
+      val cols = SliceUtils.mapColumnSeq(sliceCols.findAll(_ == true), from.cols)
+      new SliceVector(from, slices = cols.map(col => (row, col))).t
     }
   }
 
   implicit def canSliceTensorBooleanRowsAndCols[V: Semiring: ClassTag]
     : CanSlice2[Matrix[V], Tensor[Int, Boolean], Tensor[Int, Boolean], SliceMatrix[Int, Int, V]] = {
-    new CanSlice2[Matrix[V], Tensor[Int, Boolean], Tensor[Int, Boolean], SliceMatrix[Int, Int, V]] {
-      def apply(from: Matrix[V],
-                sliceRows: Tensor[Int, Boolean],
-                sliceCols: Tensor[Int, Boolean]
-      ): SliceMatrix[Int, Int, V] = {
-        val rows = SliceUtils.mapRowSeq(sliceRows.findAll(_ == true), from.rows)
-        val cols = SliceUtils.mapColumnSeq(sliceCols.findAll(_ == true), from.cols)
-        new SliceMatrix(from, rows, cols)
-      }
+    (from: Matrix[V], sliceRows: Tensor[Int, Boolean], sliceCols: Tensor[Int, Boolean]) => {
+      val rows = SliceUtils.mapRowSeq(sliceRows.findAll(_ == true), from.rows)
+      val cols = SliceUtils.mapColumnSeq(sliceCols.findAll(_ == true), from.cols)
+      new SliceMatrix(from, rows, cols)
     }
   }
 
   implicit def canSliceTensorBooleanRowsAndWeirdCols[V: Semiring: ClassTag]
     : CanSlice2[Matrix[V], Tensor[Int, Boolean], Seq[Int], SliceMatrix[Int, Int, V]] = {
-    new CanSlice2[Matrix[V], Tensor[Int, Boolean], Seq[Int], SliceMatrix[Int, Int, V]] {
-      def apply(from: Matrix[V], sliceRows: Tensor[Int, Boolean], sliceCols: Seq[Int]): SliceMatrix[Int, Int, V] = {
-        val rows = SliceUtils.mapRowSeq(sliceRows.findAll(_ == true), from.rows)
-        val cols = SliceUtils.mapColumnSeq(sliceCols, from.cols)
-        new SliceMatrix(from, rows, cols)
-      }
+    (from: Matrix[V], sliceRows: Tensor[Int, Boolean], sliceCols: Seq[Int]) => {
+      val rows = SliceUtils.mapRowSeq(sliceRows.findAll(_ == true), from.rows)
+      val cols = SliceUtils.mapColumnSeq(sliceCols, from.cols)
+      new SliceMatrix(from, rows, cols)
     }
   }
 
   implicit def canSliceWeirdRowsAndTensorBooleanCols[V: Semiring: ClassTag]
     : CanSlice2[Matrix[V], Seq[Int], Tensor[Int, Boolean], SliceMatrix[Int, Int, V]] = {
-    new CanSlice2[Matrix[V], Seq[Int], Tensor[Int, Boolean], SliceMatrix[Int, Int, V]] {
-      def apply(from: Matrix[V], sliceRows: Seq[Int], sliceCols: Tensor[Int, Boolean]): SliceMatrix[Int, Int, V] = {
-        val rows = SliceUtils.mapRowSeq(sliceRows, from.rows)
-        val cols = SliceUtils.mapColumnSeq(sliceCols.findAll(_ == true), from.cols)
-        new SliceMatrix(from, rows, cols)
-      }
+    (from: Matrix[V], sliceRows: Seq[Int], sliceCols: Tensor[Int, Boolean]) => {
+      val rows = SliceUtils.mapRowSeq(sliceRows, from.rows)
+      val cols = SliceUtils.mapColumnSeq(sliceCols.findAll(_ == true), from.cols)
+      new SliceMatrix(from, rows, cols)
     }
   }
 }

@@ -5,7 +5,6 @@ import breeze.numerics.isNonfinite
 import breeze.numerics.sin
 import breeze.stats.distributions.RandBasis
 import breeze.stats.mean
-import org.netlib.blas.Ddot
 import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._

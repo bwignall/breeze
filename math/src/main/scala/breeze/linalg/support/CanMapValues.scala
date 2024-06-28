@@ -18,7 +18,6 @@ package breeze.linalg.support
  * /
  */
 
-import breeze.generic.UFunc
 import breeze.macros.cforRange
 import breeze.math.Complex
 
@@ -33,7 +32,6 @@ import scala.{specialized => spec}
  * @author dlwh
  */
 trait CanMapValues[From, @specialized(Int, Float, Long, Double) V, @specialized(Int, Float, Long, Double) V2, +To] {
-//  def apply(from: From, fn: V=>V2): To = map(from, fn)
   def map(from: From, fn: V => V2): To
   def mapActive(from: From, fn: V => V2): To
 }

@@ -18,16 +18,14 @@ object kron extends UFunc {
     man: ClassTag[RV],
     zero: Zero[RV]
   ): Impl2[DenseMatrix[V1], M, DenseMatrix[RV]] = {
-    new Impl2[DenseMatrix[V1], M, DenseMatrix[RV]] {
-      def apply(a: DenseMatrix[V1], b: M): DenseMatrix[RV] = {
+    (a: DenseMatrix[V1], b: M) => {
 
-        val result: DenseMatrix[RV] = DenseMatrix.zeros[RV](a.rows * b.rows, a.cols * b.cols)
+      val result: DenseMatrix[RV] = DenseMatrix.zeros[RV](a.rows * b.rows, a.cols * b.cols)
 
-        for (((r, c), av) <- a.activeIterator) {
-          result((r * b.rows) until ((r + 1) * b.rows), (c * b.cols) until ((c + 1) * b.cols)) := mul(av, b)
-        }
-        result
+      for (((r, c), av) <- a.activeIterator) {
+        result((r * b.rows) until ((r + 1) * b.rows), (c * b.cols) until ((c + 1) * b.cols)) := mul(av, b)
       }
+      result
     }
   }
 

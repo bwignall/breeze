@@ -19,16 +19,11 @@ import breeze.linalg.eig.Eig
 import breeze.linalg.eigSym.EigSym
 import breeze.linalg.qr.QR
 import breeze.linalg.qrp.QRP
-import breeze.linalg.support.CanTraverseValues
 import breeze.linalg.svd.SVD
 import breeze.numerics._
 import breeze.stats.distributions.MultivariateGaussian
 import breeze.stats.distributions.RandBasis
-import breeze.stats.mean
-import breeze.stats.meanAndVariance
-import breeze.stats.median
 import breeze.util.DoubleImplicits
-import breeze.{math => bmath}
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 import org.scalacheck.Prop

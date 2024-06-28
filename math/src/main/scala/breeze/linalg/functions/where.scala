@@ -21,24 +21,22 @@ object where extends UFunc {
     trav: CanTraverseKeyValuePairs[T, K, V],
     semi: Semiring[V]
   ): Impl[T, IndexedSeq[K]] = {
-    new Impl[T, IndexedSeq[K]] {
-      override def apply(v: T): IndexedSeq[K] = {
-        val result = new ArrayBuffer[K]()
-        trav.traverse(
-          v,
-          new KeyValuePairsVisitor[K, V] {
-            override def visit(k: K, a: V): Unit = {
-              if (a != semi.zero) result += k
-            }
-
-            override def zeros(numZero: Int, zeroKeys: Iterator[K], zeroValue: V): Unit = {
-              if (zeroValue != semi.zero) result ++= zeroKeys
-            }
+    (v: T) => {
+      val result = new ArrayBuffer[K]()
+      trav.traverse(
+        v,
+        new KeyValuePairsVisitor[K, V] {
+          override def visit(k: K, a: V): Unit = {
+            if (a != semi.zero) result += k
           }
-        )
 
-        result.toIndexedSeq
-      }
+          override def zeros(numZero: Int, zeroKeys: Iterator[K], zeroValue: V): Unit = {
+            if (zeroValue != semi.zero) result ++= zeroKeys
+          }
+        }
+      )
+
+      result.toIndexedSeq
     }
   }
 
@@ -47,15 +45,12 @@ object where extends UFunc {
     trav: CanMapKeyValuePairs[T, K, V, V2, U],
     semi: Semiring[V]
   ): Impl3[T, Q, Q, U] = {
-    new Impl3[T, Q, Q, U] {
-
-      override def apply(from: T, v2: Q, v3: Q): U = {
-        trav.map(from,
-                 { (k, v) =>
-                   if (v != semi.zero) v2(k) else v3(k)
-                 }
-        )
-      }
+    (from: T, v2: Q, v3: Q) => {
+      trav.map(from,
+        { (k, v) =>
+          if (v != semi.zero) v2(k) else v3(k)
+        }
+      )
     }
   }
 

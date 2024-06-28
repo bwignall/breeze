@@ -10,10 +10,8 @@ object trace extends UFunc {
     diagImpl: diag.Impl[T, U],
     sumImpl: sum.Impl[U, V]
   ): Impl[T, V] = {
-    new Impl[T, V] {
-      def apply(X: T): V = {
-        sumImpl(diagImpl(X))
-      }
+    (X: T) => {
+      sumImpl(diagImpl(X))
     }
   }
 }

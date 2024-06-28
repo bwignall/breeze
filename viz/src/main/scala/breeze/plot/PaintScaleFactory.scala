@@ -59,7 +59,5 @@ object PaintScaleFactory {
    */
   implicit def singletonFactoryForPaintScale[S, T](
     paintScale: S
-  )(implicit view: Conversion[S, PaintScale[T]]): PaintScaleFactory[T] = new PaintScaleFactory[T] {
-    def apply(items: Iterable[T]): PaintScale[T] = view(paintScale)
-  }
+  )(implicit view: Conversion[S, PaintScale[T]]): PaintScaleFactory[T] = (items: Iterable[T]) => view(paintScale)
 }

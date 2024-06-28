@@ -80,10 +80,8 @@ object SliceVector {
   }
 
   implicit def canCreateZerosLike[K, V: ClassTag: Zero]: CanCreateZerosLike[SliceVector[K, V], DenseVector[V]] = {
-    new CanCreateZerosLike[SliceVector[K, V], DenseVector[V]] {
-      def apply(v1: SliceVector[K, V]): DenseVector[V] = {
-        DenseVector.zeros[V](v1.length)
-      }
+    (v1: SliceVector[K, V]) => {
+      DenseVector.zeros[V](v1.length)
     }
   }
 

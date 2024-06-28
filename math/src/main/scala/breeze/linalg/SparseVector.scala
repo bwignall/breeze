@@ -286,18 +286,14 @@ object SparseVector {
   }
 
   implicit def canCreateZeros[V: ClassTag: Zero]: CanCreateZeros[SparseVector[V], Int] = {
-    new CanCreateZeros[SparseVector[V], Int] {
-      def apply(d: Int): SparseVector[V] = {
-        zeros[V](d)
-      }
+    (d: Int) => {
+      zeros[V](d)
     }
   }
 
   implicit def canCreateZerosLike[V: ClassTag: Zero]: CanCreateZerosLike[SparseVector[V], SparseVector[V]] = {
-    new CanCreateZerosLike[SparseVector[V], SparseVector[V]] {
-      def apply(d: SparseVector[V]): SparseVector[V] = {
-        zeros[V](d.length)
-      }
+    (d: SparseVector[V]) => {
+      zeros[V](d.length)
     }
   }
 
@@ -371,9 +367,7 @@ object SparseVector {
 //    }
 //  }
 
-  implicit def canDim[E]: dim.Impl[SparseVector[E], Int] = new dim.Impl[SparseVector[E], Int] {
-    def apply(v: SparseVector[E]): Int = v.size
-  }
+  implicit def canDim[E]: dim.Impl[SparseVector[E], Int] = (v: SparseVector[E]) => v.size
 
   implicit def space[E: Field: ClassTag: Zero]: MutableFiniteCoordinateField[SparseVector[E], Int, E] = {
     MutableFiniteCoordinateField.make[SparseVector[E], Int, E]

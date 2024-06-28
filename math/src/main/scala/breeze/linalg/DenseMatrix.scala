@@ -472,10 +472,8 @@ object DenseMatrix extends MatrixConstructors[DenseMatrix] {
 
   // zerosLike
   implicit def canCreateZerosLike[V: ClassTag: Zero]: CanCreateZerosLike[DenseMatrix[V], DenseMatrix[V]] =
-    new CanCreateZerosLike[DenseMatrix[V], DenseMatrix[V]] {
-      def apply(v1: DenseMatrix[V]): DenseMatrix[V] = {
-        zeros[V](v1.rows, v1.cols)
-      }
+    (v1: DenseMatrix[V]) => {
+      zeros[V](v1.rows, v1.cols)
     }
 
   object FrobeniusInnerProductDenseMatrixSpace {

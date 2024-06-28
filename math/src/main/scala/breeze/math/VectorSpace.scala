@@ -110,9 +110,7 @@ trait MutableLPModule[V, S] extends MutableModule[V, S] with LPModule[V, S]
 
 trait InnerProductModule[V, S] extends NormedModule[V, S] {
   implicit def dotVV: OpMulInner.Impl2[V, V, S]
-  implicit def normImpl: norm.Impl[V, Double] = new norm.Impl[V, Double] {
-    def apply(v: V): Double = math.sqrt(scalars.sNorm(dotVV(v, v)))
-  }
+  implicit def normImpl: norm.Impl[V, Double] = (v: V) => math.sqrt(scalars.sNorm(dotVV(v, v)))
 }
 
 trait MutableInnerProductModule[V, S] extends MutableModule[V, S] with InnerProductModule[V, S]
@@ -1027,28 +1025,20 @@ object MutableOptimizationSpace {
 
 private object FloatDoubleOperatorAdaptors {
   implicit def liftOp2[Op <: UFunc, V, R](op: UImpl2[Op, V, Float, R]): UImpl2[Op, V, Double, R] = {
-    new UImpl2[Op, V, Double, R] {
-      override def apply(v: V, v2: Double): R = op(v, v2.toFloat)
-    }
+    (v: V, v2: Double) => op(v, v2.toFloat)
   }
 
   implicit def liftInPlaceOp2[Op <: UFunc, V](op: InPlaceImpl2[Op, V, Float]): InPlaceImpl2[Op, V, Double] = {
-    new InPlaceImpl2[Op, V, Double] {
-      override def apply(v: V, v2: Double): Unit = op(v, v2.toFloat)
-    }
+    (v: V, v2: Double) => op(v, v2.toFloat)
   }
 
   implicit def liftInPlaceOp3[Op <: UFunc, V, V3](
     op: InPlaceImpl3[Op, V, Float, V3]
   ): InPlaceImpl3[Op, V, Double, V3] = {
-    new InPlaceImpl3[Op, V, Double, V3] {
-      override def apply(v: V, v2: Double, v3: V3): Unit = op(v, v2.toFloat, v3)
-    }
+    (v: V, v2: Double, v3: V3) => op(v, v2.toFloat, v3)
   }
 
   implicit def liftOpReturnFloat[Op <: UFunc, V](op: UImpl2[Op, V, V, Float]): UImpl2[Op, V, V, Double] = {
-    new UImpl2[Op, V, V, Double] {
-      override def apply(v: V, v2: V): Double = op(v, v2)
-    }
+    (v: V, v2: V) => op(v, v2)
   }
 }

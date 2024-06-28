@@ -26,23 +26,21 @@ object rank extends UFunc {
     travS: CanTraverseValues[S, F],
     nF: norm.Impl[F, Double]
   ): Impl[M, Int] = {
-    new Impl[M, Int] {
-      def apply(m: M): Int = {
-        val SVD(u, s, vt) = svd(m)
-        // we called LAPACK for the SVD method, so this is the LAPACK definition of eps.
-        val eps: Double = 2.0 * lapack.dlamch("e")
-        val tol = eps * norm(max(s))
-        var n = 0
-        travS.traverse(s,
-                       new ValuesVisitor[F] {
-                         def visit(a: F): Unit = if (nF(a) > tol) n += 1
+    (m: M) => {
+      val SVD(u, s, vt) = svd(m)
+      // we called LAPACK for the SVD method, so this is the LAPACK definition of eps.
+      val eps: Double = 2.0 * lapack.dlamch("e")
+      val tol = eps * norm(max(s))
+      var n = 0
+      travS.traverse(s,
+        new ValuesVisitor[F] {
+          def visit(a: F): Unit = if (nF(a) > tol) n += 1
 
-                         def zeros(numZero: Int, zeroValue: F): Unit = ()
-                       }
-        )
+          def zeros(numZero: Int, zeroValue: F): Unit = ()
+        }
+      )
 
-        n
-      }
+      n
     }
 
   }
@@ -52,20 +50,18 @@ object rank extends UFunc {
     maxS: max.Impl[S, Double],
     travS: CanTraverseValues[S, Double]
   ): Impl2[M, Double, Int] = {
-    new Impl2[M, Double, Int] {
-      def apply(m: M, tol: Double): Int = {
-        val (u, s, vt) = svd(m)
-        var n = 0
-        travS.traverse(s,
-                       new ValuesVisitor[Double] {
-                         def visit(a: Double): Unit = if (a > tol) n += 1
+    (m: M, tol: Double) => {
+      val (u, s, vt) = svd(m)
+      var n = 0
+      travS.traverse(s,
+        new ValuesVisitor[Double] {
+          def visit(a: Double): Unit = if (a > tol) n += 1
 
-                         def zeros(numZero: Int, zeroValue: Double): Unit = ()
-                       }
-        )
+          def zeros(numZero: Int, zeroValue: Double): Unit = ()
+        }
+      )
 
-        n
-      }
+      n
     }
 
   }

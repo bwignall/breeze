@@ -73,29 +73,21 @@ trait RandomGeneratorUFunc[T] extends UFunc {
   def apply()(implicit basis: RandBasis): T = gen(basis).draw()
 
   implicit def implRandomT_1D(implicit basis: RandBasis): Impl[Int, DenseVector[T]] =
-    new Impl[Int, DenseVector[T]] {
-      def apply(dimensions1: Int): DenseVector[T] = DenseVector.rand(dimensions1, gen)
-    }
+    (dimensions1: Int) => DenseVector.rand(dimensions1, gen)
 
   implicit def implRandomT_1DRange(implicit basis: RandBasis): Impl2[Int, (T, T), DenseVector[T]] =
-    new Impl2[Int, (T, T), DenseVector[T]] {
-      def apply(dimensions1: Int, range: (T, T)): DenseVector[T] = {
-        DenseVector.rand(dimensions1, genRange(range._1, range._2))
-      }
+    (dimensions1: Int, range: (T, T)) => {
+      DenseVector.rand(dimensions1, genRange(range._1, range._2))
     }
 
   implicit def implRandomT_2D(implicit basis: RandBasis): Impl[(Int, Int), DenseMatrix[T]] =
-    new Impl[(Int, Int), DenseMatrix[T]] {
-      def apply(dimensions2: (Int, Int)): DenseMatrix[T] = {
-        DenseMatrix.rand(dimensions2._1, dimensions2._2, gen)
-      }
+    (dimensions2: (Int, Int)) => {
+      DenseMatrix.rand(dimensions2._1, dimensions2._2, gen)
     }
 
   implicit def implRandomT_2DRange(implicit basis: RandBasis): Impl2[(Int, Int), (T, T), DenseMatrix[T]] =
-    new Impl2[(Int, Int), (T, T), DenseMatrix[T]] {
-      def apply(dimensions2: (Int, Int), range: (T, T)): DenseMatrix[T] = {
-        DenseMatrix.rand(dimensions2._1, dimensions2._2, genRange(range._1, range._2))
-      }
+    (dimensions2: (Int, Int), range: (T, T)) => {
+      DenseMatrix.rand(dimensions2._1, dimensions2._2, genRange(range._1, range._2))
     }
 
 }

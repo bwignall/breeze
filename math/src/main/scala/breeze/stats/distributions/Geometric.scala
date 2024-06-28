@@ -54,13 +54,11 @@ object Geometric extends ExponentialFamily[Geometric, Int] with HasConjugatePrio
 
   def mle(stats: SufficientStatistic): Parameter = stats.n / stats.sum
 
-  def likelihoodFunction(stats: SufficientStatistic): DiffFunction[Parameter] = new DiffFunction[Geometric.Parameter] {
-    def calculate(p: Geometric.Parameter) = {
-      val obj = stats.n * math.log(p) + stats.sum * math.log(1 - p)
-      val grad = stats.n / p - stats.sum / (1 - p)
-      (-obj, -grad)
+  def likelihoodFunction(stats: SufficientStatistic): DiffFunction[Parameter] = (p: Geometric.Parameter) => {
+    val obj = stats.n * math.log(p) + stats.sum * math.log(1 - p)
+    val grad = stats.n / p - stats.sum / (1 - p)
+    (-obj, -grad)
 
-    }
   }
 
   override def distribution(p: Geometric.Parameter)(implicit rand: RandBasis) = new Geometric(p)

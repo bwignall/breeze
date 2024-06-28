@@ -177,10 +177,8 @@ trait GenericOps extends GenericOpsLowPrio {
     ring: Ring[V],
     scale: OpMulScalar.Impl2[T, V, U]
   ): OpNeg.Impl[T, U] = {
-    new OpNeg.Impl[T, U] {
-      override def apply(a: T): U = {
-        scale(a, ring.negate(ring.one))
-      }
+    (a: T) => {
+      scale(a, ring.negate(ring.one))
     }
   }
 }

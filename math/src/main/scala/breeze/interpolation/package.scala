@@ -11,9 +11,7 @@ import scala.reflect.ClassTag
 package object interpolation {
 
   object UnivariateInterpolatorImpl extends MappingUFunc {
-    implicit def impl[T]: Impl2[UnivariateInterpolator[T], T, T] = new Impl2[UnivariateInterpolator[T], T, T] {
-      def apply(k: UnivariateInterpolator[T], v: T): T = k(v)
-    }
+    implicit def impl[T]: Impl2[UnivariateInterpolator[T], T, T] = (k: UnivariateInterpolator[T], v: T) => k(v)
   }
 
   trait UnivariateInterpolator[T] extends VariableUFunc[UnivariateInterpolatorImpl.type, UnivariateInterpolator[T]] {

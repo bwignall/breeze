@@ -159,14 +159,12 @@ object Counter extends CounterOps {
     }
 
   implicit def normImplDouble[K, V: Field]: norm.Impl2[Counter[K, V], Double, Double] =
-    new norm.Impl2[Counter[K, V], Double, Double] {
-      override def apply(ctr: Counter[K, V], p: Double): Double = {
-        var result = 0.0
-        for (v <- ctr.valuesIterator) {
-          result += math.pow(implicitly[Field[V]].normImpl(v), p)
-        }
-        math.pow(result, 1 / p)
+    (ctr: Counter[K, V], p: Double) => {
+      var result = 0.0
+      for (v <- ctr.valuesIterator) {
+        result += math.pow(implicitly[Field[V]].normImpl(v), p)
       }
+      math.pow(result, 1 / p)
     }
 
   implicit def canCreateZeros[K, V: Zero: Semiring]: CanCreateZeros[Counter[K, V], K] = {

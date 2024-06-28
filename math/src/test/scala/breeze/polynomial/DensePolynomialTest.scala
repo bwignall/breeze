@@ -21,10 +21,8 @@ import breeze.linalg.DenseVector
 import breeze.linalg.norm
 import breeze.macros._
 import org.scalatest.funsuite.AnyFunSuite
-import spire.algebra._
 import spire.implicits.DoubleAlgebra
 import spire.math._
-import spire.math.poly._
 
 class DensePolynomialTest extends AnyFunSuite {
 

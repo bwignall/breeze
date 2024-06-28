@@ -433,9 +433,7 @@ object CSCMatrix extends MatrixConstructors[CSCMatrix] {
     }
   }
 
-  implicit def canDim[E]: dim.Impl[CSCMatrix[E], (Int, Int)] = new dim.Impl[CSCMatrix[E], (Int, Int)] {
-    def apply(v: CSCMatrix[E]): (Int, Int) = (v.rows, v.cols)
-  }
+  implicit def canDim[E]: dim.Impl[CSCMatrix[E], (Int, Int)] = (v: CSCMatrix[E]) => (v.rows, v.cols)
 
   object FrobeniusInnerProductCSCMatrixSpace {
     implicit def space[S: Field: ClassTag]: MutableFiniteCoordinateField[CSCMatrix[S], (Int, Int), S] = {

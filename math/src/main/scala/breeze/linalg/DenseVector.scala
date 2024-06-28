@@ -400,10 +400,8 @@ object DenseVector extends VectorConstructors[DenseVector] {
   // capabilities
 
   implicit def canCreateZerosLike[V: ClassTag: Zero]: CanCreateZerosLike[DenseVector[V], DenseVector[V]] =
-    new CanCreateZerosLike[DenseVector[V], DenseVector[V]] {
-      def apply(v1: DenseVector[V]): DenseVector[V] = {
-        zeros[V](v1.length)
-      }
+    (v1: DenseVector[V]) => {
+      zeros[V](v1.length)
     }
 
   implicit def canCopyDenseVector[V: ClassTag]: CanCopy[DenseVector[V]] = DenseVectorDeps.canCopyDenseVector[V]
@@ -621,7 +619,5 @@ object DenseVector extends VectorConstructors[DenseVector] {
  * the definitions of implicits that were known to cause deadlock in initialization
  * (see https://github.com/scalanlp/breeze/issues/825). */
 private[linalg] object DenseVectorDeps {
-  implicit def canCopyDenseVector[V: ClassTag]: CanCopy[DenseVector[V]] = new CanCopy[DenseVector[V]] {
-    def apply(v1: DenseVector[V]): DenseVector[V] = v1.copy
-  }
+  implicit def canCopyDenseVector[V: ClassTag]: CanCopy[DenseVector[V]] = (v1: DenseVector[V]) => v1.copy
 }

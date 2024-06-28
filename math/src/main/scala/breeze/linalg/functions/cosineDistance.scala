@@ -13,15 +13,13 @@ object cosineDistance extends UFunc {
     normT: norm.Impl[T, Double],
     normU: norm.Impl[U, Double]
   ): Impl2[T, U, Double] = {
-    new Impl2[T, U, Double] {
-      override def apply(v: T, v2: U): Double = {
-        val denom = norm(v) * norm(v2)
-        val dotProduct = dot(v, v2)
-        if (denom == 0.0) {
-          0.0
-        } else {
-          1 - dotProduct / denom
-        }
+    (v: T, v2: U) => {
+      val denom = norm(v) * norm(v2)
+      val dotProduct = dot(v, v2)
+      if (denom == 0.0) {
+        0.0
+      } else {
+        1 - dotProduct / denom
       }
     }
   }
@@ -31,15 +29,13 @@ object cosineDistance extends UFunc {
     normT: norm.Impl[T, Double],
     normU: norm.Impl[U, Double]
   ): Impl2[T, U, Double] = {
-    new Impl2[T, U, Double] {
-      override def apply(v: T, v2: U): Double = {
-        val denom = norm(v) * norm(v2)
-        val dotProduct = dot(v, v2)
-        if (denom == 0.0) {
-          0.0
-        } else {
-          1 - dotProduct / denom
-        }
+    (v: T, v2: U) => {
+      val denom = norm(v) * norm(v2)
+      val dotProduct = dot(v, v2)
+      if (denom == 0.0) {
+        0.0
+      } else {
+        1 - dotProduct / denom
       }
     }
 

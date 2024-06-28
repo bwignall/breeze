@@ -69,11 +69,9 @@ object ChiSquared
 
   def likelihoodFunction(stats: ChiSquared.SufficientStatistic): DiffFunction[ChiSquared.Parameter] = {
     val inner = Gamma.likelihoodFunction(stats)
-    new DiffFunction[ChiSquared.Parameter] {
-      def calculate(x: ChiSquared.Parameter): (Double, ChiSquared.Parameter) = {
-        val (obj, ggrad) = inner.calculate((x / 2.0, 2.0))
-        obj -> ggrad._1
-      }
+    (x: ChiSquared.Parameter) => {
+      val (obj, ggrad) = inner.calculate((x / 2.0, 2.0))
+      obj -> ggrad._1
     }
   }
 
