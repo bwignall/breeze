@@ -118,9 +118,9 @@ class VectorBuilderTest extends AnyFunSuite with Checkers {
       val sum2 = hv1 + hv2
       hv1 += vb2
       hv2 += vb1
-      (norm(hv1 - hv2) < 1e-4
+      norm(hv1 - hv2) < 1e-4
       && norm(hv1 - sum1) < 1e-4
-      && norm(hv1 - sum2) < 1e-4)
+      && norm(hv1 - sum2) < 1e-4
     })
 
   }

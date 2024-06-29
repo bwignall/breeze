@@ -19,7 +19,6 @@ package breeze.collection.immutable
 import breeze.util.Iterators
 
 import scala.collection._
-import scala.collection.generic.CanBuildFrom
 
 /**
  * From Okasaki's Functional Data Structures. Represents a functional heap
@@ -60,8 +59,8 @@ class BinomialHeap[T]()(implicit ord: Ordering[T])
 
   private def findMin(trees: List[Node[T]]): T = {
     trees match {
-      case (t :: Nil) => t.x
-      case (t :: ts) =>
+      case t :: Nil => t.x
+      case t :: ts =>
         val x = t.x
         val y = findMin(ts)
         if (x < y) x else y
@@ -73,8 +72,8 @@ class BinomialHeap[T]()(implicit ord: Ordering[T])
     if (trees.isEmpty) this
     else {
       def getMin(t: List[Node[T]]): (Node[T], List[Node[T]]) = t match {
-        case (n :: Nil) => (n, Nil)
-        case (n :: ts) => {
+        case n :: Nil => (n, Nil)
+        case n :: ts => {
           val (n2, ts2) = getMin(ts)
           if (n.x <= n2.x) (n, ts) else (n2, n :: ts2)
         }
@@ -89,7 +88,7 @@ class BinomialHeap[T]()(implicit ord: Ordering[T])
   def iterator: Iterator[T] = Iterators.merge(trees.map(treeIterator): _*)(ord.compare)
 
   private def treeIterator(n: Node[T]): Iterator[T] = {
-    Iterators.merge((Iterator.single(n.x) :: (n.children.map(treeIterator))): _*)(ord.compare)
+    Iterators.merge(Iterator.single(n.x) :: (n.children.map(treeIterator)): _*)(ord.compare)
   }
 
   def map[B](f: T => B)(implicit ev: Ordering[B]): BinomialHeap[B] =

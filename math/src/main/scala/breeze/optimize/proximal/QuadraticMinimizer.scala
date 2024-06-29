@@ -121,7 +121,7 @@ class QuadraticMinimizer(nGram: Int,
 
   def getProximal: Proximal = proximal
 
-  private def updateQuasiDefinite = {
+  private def updateQuasiDefinite() = {
     if (linearEquality > 0) {
       wsH(nGram until (nGram + Aeq.rows), 0 until Aeq.cols) := Aeq
       wsH(0 until nGram, nGram until (nGram + Aeq.rows)) := transAeq

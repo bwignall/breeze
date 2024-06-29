@@ -228,8 +228,8 @@ sealed trait ZeroPreservingUFuncLowPrio extends MappingUFuncOps {
 }
 
 object UFunc {
-  def apply[A1, R](f: A1 => R) = new WrappedUFunc1(f)
-  def apply[A1, A2, R](f: (A1, A2) => R) = new WrappedUFunc2(f)
+  def apply[A1, R](f: A1 => R) = WrappedUFunc1(f)
+  def apply[A1, A2, R](f: (A1, A2) => R) = WrappedUFunc2(f)
 
 //  @implicitNotFound("Could not find an implicit implementation for ${Tag} with arguments ${V}")
   trait UImpl[Tag, @specialized(Int, Double, Float) V, @specialized(Int, Double, Float) +VR] extends Serializable {

@@ -121,7 +121,7 @@ object BitVector {
     new DenseCanMapValues[BitVector, Boolean, V2, DenseVector[V2]] {
 
       /**Maps all key-value pairs from the given collection. */
-      def map(from: BitVector, fn: (Boolean) => V2): DenseVector[V2] = {
+      def map(from: BitVector, fn: Boolean => V2): DenseVector[V2] = {
         DenseVector.tabulate(from.length)(i => fn(from(i)))
       }
     }
@@ -159,13 +159,13 @@ object BitVector {
 
   implicit def canTransformValues: CanTransformValues[BitVector, Boolean] =
     new CanTransformValues[BitVector, Boolean] {
-      def transform(from: BitVector, fn: (Boolean) => Boolean): Unit = {
+      def transform(from: BitVector, fn: Boolean => Boolean): Unit = {
         for (i <- 0 until from.length) {
           from(i) = fn(from(i))
         }
       }
 
-      def transformActive(from: BitVector, fn: (Boolean) => Boolean): Unit = {
+      def transformActive(from: BitVector, fn: Boolean => Boolean): Unit = {
         transform(from, fn)
       }
     }

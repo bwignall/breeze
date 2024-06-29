@@ -101,14 +101,14 @@ class SparseVector[@spec(Double, Int, Float, Long) V](val array: SparseArray[V])
     case x: SparseVector[_] => this.array == x.array
     case x: Vector[_] =>
       this.length == x.length &&
-      (valuesIterator.sameElements(x.valuesIterator))
+      valuesIterator.sameElements(x.valuesIterator)
     case _ => false
   }
 
   /**
    * This hashcode is consistent with over [[breeze.linalg.Vector]] hashcodes so long as the hashcode of "0" is 0.
    **/
-  override def hashCode() = array.hashCode
+  override def hashCode(): Int = array.hashCode
 
   def isActive(rawIndex: Int): Boolean = array.isActive(rawIndex)
 
@@ -254,7 +254,7 @@ object SparseVector {
     new CanMapValues[SparseVector[V], V, V2, SparseVector[V2]] {
 
       /**Maps all key-value pairs from the given collection. */
-      override def map(from: SparseVector[V], fn: (V) => V2): SparseVector[V2] = {
+      override def map(from: SparseVector[V], fn: V => V2): SparseVector[V2] = {
         SparseVector.tabulate(from.length)(i => fn(from(i)))
       }
 
@@ -303,7 +303,7 @@ object SparseVector {
       val z: Zero[V] = implicitly[Zero[V]]
 
       /**Transforms all key-value pairs from the given collection. */
-      def transform(from: SparseVector[V], fn: (V) => V): Unit = {
+      def transform(from: SparseVector[V], fn: V => V): Unit = {
         val newData = mutable.ArrayBuilder.make[V]
         val newIndex = mutable.ArrayBuilder.make[Int]
         var used = 0
@@ -321,7 +321,7 @@ object SparseVector {
       }
 
       /**Transforms all active key-value pairs from the given collection. */
-      def transformActive(from: SparseVector[V], fn: (V) => V): Unit = {
+      def transformActive(from: SparseVector[V], fn: V => V): Unit = {
         var i = 0
         while (i < from.activeSize) {
           from.data(i) = fn(from.data(i))

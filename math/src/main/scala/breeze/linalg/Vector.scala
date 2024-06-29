@@ -55,7 +55,7 @@ trait Vector[@spec(Int, Double, Float) V] extends VectorLike[V, Vector[V]] {
   /**
    * @return the set of keys in this vector (0 until length)
    */
-  def keySet: Set[Int] = BitSet((0 until length): _*)
+  def keySet: Set[Int] = BitSet(0 until length: _*)
 
   def length: Int
   override def size: Int = length
@@ -75,7 +75,7 @@ trait Vector[@spec(Int, Double, Float) V] extends VectorLike[V, Vector[V]] {
   override def equals(p1: Any): Boolean = p1 match {
     case x: Vector[_] =>
       this.length == x.length &&
-      (valuesIterator.sameElements(x.valuesIterator))
+      valuesIterator.sameElements(x.valuesIterator)
     case _ => false
   }
 

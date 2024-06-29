@@ -77,7 +77,7 @@ object Field {
     def -(a: Long, b: Long): Long = a - b
     def *(a: Long, b: Long): Long = a * b
     def /(a: Long, b: Long): Long = a / b
-    def %(a: Long, b: Long): Long = a % b.toLong
+    def %(a: Long, b: Long): Long = a % b
     // TODO: bad idea?
     def pow(a: Long, b: Long): Long = math.pow(a.toDouble, b.toDouble).toLong
 
@@ -115,7 +115,7 @@ object Field {
     def pow(a: BigDecimal, b: BigDecimal): BigDecimal = a.pow(b.toInt)
 
     override def close(a: BigDecimal, b: BigDecimal, tolerance: Double): Boolean = {
-      (a - b).abs <= tolerance * (a.abs.max(b.abs))
+      (a - b).abs <= tolerance * a.abs.max(b.abs)
     }
 
     implicit val normImpl: norm.Impl[BigDecimal, Double] = (v: BigDecimal) => v.abs.toDouble

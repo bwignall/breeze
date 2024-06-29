@@ -59,7 +59,7 @@ trait BroadcastedColumnsOps {
     cc: CanCollapseAxis[T, Axis._0.type, ColumnType, ResultColumn, Result]
   ): CanMapValues[BroadcastedColumns[T, ColumnType], ColumnType, ResultColumn, Result] = {
     new CanMapValues[BroadcastedColumns[T, ColumnType], ColumnType, ResultColumn, Result] {
-      def map(from: BroadcastedColumns[T, ColumnType], fn: (ColumnType) => ResultColumn): Result = {
+      def map(from: BroadcastedColumns[T, ColumnType], fn: ColumnType => ResultColumn): Result = {
         cc(from.underlying, Axis._0) { fn }
       }
 
@@ -159,7 +159,7 @@ trait BroadcastedColumnsOps {
     new CanForeachValues[BroadcastedColumns[T, ColumnType], ColumnType] {
 
       /** Maps all key-value pairs from the given collection. */
-      override def foreach[U](from: BroadcastedColumns[T, ColumnType], fn: (ColumnType) => U): Unit = {
+      override def foreach[U](from: BroadcastedColumns[T, ColumnType], fn: ColumnType => U): Unit = {
         iter(from.underlying, Axis._0)(fn)
       }
     }

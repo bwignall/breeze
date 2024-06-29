@@ -39,7 +39,7 @@ case class Bernoulli(p: Double)(implicit rand: RandBasis) extends DiscreteDistr[
     rand.uniform.draw() < p
   }
 
-  override def toString(): String = "Bernoulli(" + p + ")"
+  override def toString: String = "Bernoulli(" + p + ")"
 
   def mean: Double = p
   def variance: Double = p * (1 - p)

@@ -6,7 +6,7 @@ import org.scalatest.funsuite._
 class LPMaxFlowTest extends AnyFunSuite {
 
   test("LPMaxFlowTest") {
-    val g = new FlowGraph[Int] {
+    val g: FlowGraph[Int] = new FlowGraph[Int] {
 
       def source = 0
 

@@ -15,7 +15,7 @@ import java.io.OutputStream
 object ExportGraphics {
 
   /** A Drawable is any function that draws to a Graphics2D context. */
-  type Drawable = ((Graphics2D) => Unit)
+  type Drawable = (Graphics2D) => Unit
 
   /**
    * Writes the given drawable to a new file of the given name with
@@ -70,7 +70,7 @@ object ExportGraphics {
     val g2d = image.createGraphics()
     g2d.scale(scale, scale)
     draw(g2d)
-    g2d.dispose
+    g2d.dispose()
 
     ImageIO.write(image, "png", out)
     ()

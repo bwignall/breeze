@@ -93,7 +93,7 @@ class DenseVector[@spec(Double, Int, Float, Long) V](val data: Array[V],
   private[linalg] val noOffsetOrStride = offset == 0 && stride == 1
 
   private def checkIfSpecialized(): Unit = {
-    if (data.isInstanceOf[Array[Double]] && getClass.getName() == "breeze.linalg.DenseVector")
+    if (data.isInstanceOf[Array[Double]] && getClass.getName == "breeze.linalg.DenseVector")
       throw new Exception("...")
   }
   // uncomment to debug places where specialization fails
@@ -173,7 +173,7 @@ class DenseVector[@spec(Double, Int, Float, Long) V](val data: Array[V],
    * @param fn
    * @tparam U
    */
-  override def foreach[@spec(Unit) U](fn: (V) => U): Unit = {
+  override def foreach[@spec(Unit) U](fn: V => U): Unit = {
     if (stride == 1) { // ABCE stuff
       cforRange(offset until (offset + length)) { j =>
         fn(data(j))
@@ -240,7 +240,7 @@ class DenseVector[@spec(Double, Int, Float, Long) V](val data: Array[V],
 
   @throws(classOf[ObjectStreamException])
   protected def writeReplace(): Object = {
-    new DenseVector.SerializedForm(data, offset, stride, length)
+    DenseVector.SerializedForm(data, offset, stride, length)
   }
 
   /** Returns true if this overlaps any content with the other vector */
@@ -412,7 +412,7 @@ object DenseVector extends VectorConstructors[DenseVector] {
     new DenseCanMapValues[DenseVector[V], V, V2, DenseVector[V2]] {
 
       /**Maps all key-value pairs from the given collection. */
-      def map(from: DenseVector[V], fn: (V) => V2): DenseVector[V2] = {
+      def map(from: DenseVector[V], fn: V => V2): DenseVector[V2] = {
         val out = new Array[V2](from.length)
 
         // threeway fork, following benchmarks and hotspot docs on Array Bounds Check Elimination (ABCE)
@@ -427,19 +427,19 @@ object DenseVector extends VectorConstructors[DenseVector] {
         DenseVector[V2](out)
       }
 
-      private def mediumPath(out: Array[V2], fn: (V) => V2, data: Array[V], off: Int): Unit = {
+      private def mediumPath(out: Array[V2], fn: V => V2, data: Array[V], off: Int): Unit = {
         cforRange(out.indices) { j =>
           out(j) = fn(data(j + off))
         }
       }
 
-      private def fastestPath(out: Array[V2], fn: (V) => V2, data: Array[V]): Unit = {
+      private def fastestPath(out: Array[V2], fn: V => V2, data: Array[V]): Unit = {
         cforRange(out.indices) { j =>
           out(j) = fn(data(j))
         }
       }
 
-      final private def slowPath(out: Array[V2], fn: (V) => V2, data: Array[V], off: Int, stride: Int): Unit = {
+      final private def slowPath(out: Array[V2], fn: V => V2, data: Array[V], off: Int, stride: Int): Unit = {
         var i = 0
         var j = off
         while (i < out.length) {

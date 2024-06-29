@@ -26,7 +26,7 @@ object AutoUpdater {
     new AutoUpdater[M, K, V](map, default)
   def apply[K, V](default: => V): AutoUpdater[Map[K, V], K, V] = apply(Map[K, V](), default)
   def ofKeys[K]: ofKeys[K] = new ofKeys[K]()
-  class ofKeys[K]() extends {
+  class ofKeys[K] extends {
     def andValues[V](v: => V): AutoUpdater[Map[K, V], K, V] = apply[K, V](v)
   }
 }

@@ -131,11 +131,11 @@ object HashVector {
 
   implicit def canMapValues[V, V2: ClassTag: Zero]: CanMapValues[HashVector[V], V, V2, HashVector[V2]] = {
     new CanMapValues[HashVector[V], V, V2, HashVector[V2]] {
-      def map(from: HashVector[V], fn: (V) => V2): HashVector[V2] = {
+      def map(from: HashVector[V], fn: V => V2): HashVector[V2] = {
         HashVector.tabulate(from.length)(i => fn(from(i)))
       }
 
-      def mapActive(from: HashVector[V], fn: (V) => V2): HashVector[V2] = {
+      def mapActive(from: HashVector[V], fn: V => V2): HashVector[V2] = {
         val z = implicitly[Zero[V2]].zero
         val out = new OpenAddressHashArray[V2](from.length)
         cforRange(0 until from.iterableSize) { i =>

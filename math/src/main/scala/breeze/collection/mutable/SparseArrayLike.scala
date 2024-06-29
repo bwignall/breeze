@@ -58,7 +58,7 @@ trait SparseArrayLike[V] {
    * @tparam U
    */
   // TODO: maybe make this iterate all elements?
-  def foreach[U](f: (V) => U): Unit = valuesIterator.foreach(f)
+  def foreach[U](f: V => U): Unit = valuesIterator.foreach(f)
 
   /**
    * Only iterates "active" elements

@@ -60,7 +60,7 @@ object AdaptiveGradientDescent {
       } else {
         newG += oldHistory.sumOfSquaredGradients
       }
-      new History(newG)
+      History(newG)
     }
 
     override protected def takeStep(state: State, dir: T, stepSize: Double): T = {
@@ -78,7 +78,7 @@ object AdaptiveGradientDescent {
     }
 
     override protected def adjust(newX: T, newGrad: T, newVal: Double): (Double, T) = {
-      val av = newVal + (newX.dot(newX)) * regularizationConstant / 2.0
+      val av = newVal + newX.dot(newX) * regularizationConstant / 2.0
       val ag = newGrad + newX * regularizationConstant
       av -> ag
     }
@@ -126,7 +126,7 @@ object AdaptiveGradientDescent {
       } else {
         newG += oldHistory.sumOfSquaredGradients
       }
-      new History(newG)
+      History(newG)
     }
 
     override protected def takeStep(state: State, dir: T, stepSize: Double): T = {

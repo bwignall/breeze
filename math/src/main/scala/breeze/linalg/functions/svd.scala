@@ -81,14 +81,14 @@ object svd extends UFunc {
       case CompleteSVD => DenseMatrix.zeros[Double](n, n)
       case ReducedSVD  => DenseMatrix.zeros[Double](m.min(n), n)
     }
-    val iwork = new Array[Int](8 * (m.min(n)))
-    val workSize = (3L
+    val iwork = new Array[Int](8 * m.min(n))
+    val workSize = 3L
       * scala.math.min(m, n)
       * scala.math.min(m, n)
       + scala.math.max(scala.math.max(m, n),
                        4L * scala.math.min(m, n)
                          * scala.math.min(m, n) + 4L * scala.math.min(m, n)
-      ))
+      )
     if (workSize >= Int.MaxValue) {
       throw new RuntimeException(
         "The param k and numFeatures is too large for SVD computation. " +
@@ -150,14 +150,14 @@ object svd extends UFunc {
       case "A" => DenseMatrix.zeros[Float](n, n)
       case "S" => DenseMatrix.zeros[Float](m.min(n), n)
     }
-    val iwork = new Array[Int](8 * (m.min(n)))
-    val workSize = (3
+    val iwork = new Array[Int](8 * m.min(n))
+    val workSize = 3
       * scala.math.min(m, n)
       * scala.math.min(m, n)
       + scala.math.max(scala.math.max(m, n),
                        4 * scala.math.min(m, n)
                          * scala.math.min(m, n) + 4 * scala.math.min(m, n)
-      ))
+      )
     val work = new Array[Float](workSize)
     val info = new intW(0)
     val cm = copy(mat)

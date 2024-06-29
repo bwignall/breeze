@@ -78,7 +78,7 @@ class NumericsTest extends AnyFunSuite with Checkers {
   test("sum distributes over softmax") {
     check(Prop.forAll { (a: Double, b: Double, c: Double) =>
       Seq(a, b, c).exists(x => x > 1e300 || x < -1e300) ||
-      (a + softmax(b, c)) =~= (softmax(a + b, a + c))
+      (a + softmax(b, c)) =~= softmax(a + b, a + c)
     })
   }
 

@@ -119,7 +119,7 @@ object Counter extends CounterOps {
 
   implicit def canMapValues[K, V, RV: Zero]: CanMapValues[Counter[K, V], V, RV, Counter[K, RV]] = {
     new DenseCanMapValues[Counter[K, V], V, RV, Counter[K, RV]] {
-      override def map(from: Counter[K, V], fn: (V => RV)): Counter[K, RV] = {
+      override def map(from: Counter[K, V], fn: V => RV): Counter[K, RV] = {
         val rv = Counter[K, RV]()
         for ((k, v) <- from.iterator) {
           rv(k) = fn(v)

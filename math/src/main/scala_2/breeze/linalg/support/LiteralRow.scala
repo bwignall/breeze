@@ -51,7 +51,7 @@ object LiteralRow {
   }
 
   implicit def seq[V, S](implicit ev: S <:< Seq[V]): LiteralRow[S, V] = new LiteralRow[S, V] {
-    def foreach[X](arr: S, fn: ((Int, V) => X)): Unit = {
+    def foreach[X](arr: S, fn: (Int, V) => X): Unit = {
       for (i <- 0 until arr.length) {
         fn(i, arr(i))
       }
@@ -61,7 +61,7 @@ object LiteralRow {
   }
 
   implicit def vLiteral[V <: AnyVal]: LiteralRow[V, V] = new LiteralRow[V, V] {
-    def foreach[X](tup: V, fn: ((Int, V) => X)): Unit = {
+    def foreach[X](tup: V, fn: (Int, V) => X): Unit = {
       fn(0, tup)
     }
 
@@ -71,7 +71,7 @@ object LiteralRow {
   @arityize(22)
   implicit def tuple[V]: LiteralRow[Tuple[V @arityize.repeat] @arityize.relative(tuple), V] =
     new LiteralRow[Tuple[V @arityize.repeat] @arityize.relative(tuple), V] {
-      def foreach[X](tup: Tuple[V @arityize.repeat] @arityize.relative(tuple), fn: ((Int, V) => X)): Unit = {
+      def foreach[X](tup: Tuple[V @arityize.repeat] @arityize.relative(tuple), fn: (Int, V) => X): Unit = {
         for ((v, i) <- tup.productIterator.zipWithIndex) {
           fn(i, v.asInstanceOf[V])
         }

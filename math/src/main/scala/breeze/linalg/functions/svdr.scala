@@ -50,7 +50,7 @@ object svdr extends UFunc {
    */
   private def doSVDR_Double(M: DenseMatrix[Double], k: Int, nOversamples: Int = 10, nIter: Int = 0): DenseSVD = {
 
-    require(k <= (M.rows.min(M.cols)), "Number of singular values should be less than min(M.rows, M.cols)")
+    require(k <= M.rows.min(M.cols), "Number of singular values should be less than min(M.rows, M.cols)")
 
     val nRandom = k + nOversamples
 

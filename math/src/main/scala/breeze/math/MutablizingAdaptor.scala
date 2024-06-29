@@ -320,11 +320,11 @@ object MutablizingAdaptor {
 
       implicit def mapValues: CanMapValues[Wrapper, S, S, Wrapper] = new CanMapValues[Wrapper, S, S, Wrapper] {
 
-        override def map(from: Wrapper, fn: (S) => S): Wrapper = {
+        override def map(from: Wrapper, fn: S => S): Wrapper = {
           from.map(canMap.map(_, fn))
         }
 
-        def mapActive(from: Wrapper, fn: (S) => S): Wrapper = {
+        def mapActive(from: Wrapper, fn: S => S): Wrapper = {
           from.map(canMap.mapActive(_, fn))
         }
       }
@@ -457,11 +457,11 @@ object MutablizingAdaptor {
       implicit def mapValues: CanMapValues[Wrapper, S, S, Wrapper] = new CanMapValues[Wrapper, S, S, Wrapper] {
 
         /** Maps all key-value pairs from the given collection. */
-        override def map(from: Wrapper, fn: (S) => S): Wrapper = {
+        override def map(from: Wrapper, fn: S => S): Wrapper = {
           from.map(canMap.map(_, fn))
         }
 
-        override def mapActive(from: Wrapper, fn: (S) => S): Wrapper = {
+        override def mapActive(from: Wrapper, fn: S => S): Wrapper = {
           from.map(canMap.mapActive(_, fn))
         }
       }
@@ -580,11 +580,11 @@ object MutablizingAdaptor {
       }
 
       implicit def mapValues: CanMapValues[Wrapper, S, S, Wrapper] = new CanMapValues[Wrapper, S, S, Wrapper] {
-        override def map(from: Wrapper, fn: (S) => S): Wrapper = {
+        override def map(from: Wrapper, fn: S => S): Wrapper = {
           from.map(canMap.map(_, fn))
         }
 
-        override def mapActive(from: Wrapper, fn: (S) => S): Wrapper = {
+        override def mapActive(from: Wrapper, fn: S => S): Wrapper = {
           from.map(canMap.mapActive(_, fn))
         }
       }

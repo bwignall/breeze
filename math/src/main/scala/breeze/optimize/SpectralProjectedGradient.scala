@@ -70,8 +70,8 @@ class SpectralProjectedGradient[T](val projection: T => T = { (t: T) =>
    */
   protected def bbAlpha(s: T, y: T): Double = {
     var alpha =
-      if (bbType == 1) (s.dot(s)) / (s.dot(y))
-      else (s.dot(y)) / (y.dot(y))
+      if (bbType == 1) s.dot(s) / s.dot(y)
+      else s.dot(y) / y.dot(y)
     if (alpha <= alphaMin || alpha > alphaMax) alpha = 1.0
     if (alpha.isNaN) alpha = 1.0
     alpha
@@ -138,7 +138,7 @@ class SpectralProjectedGradient[T](val projection: T => T = { (t: T) =>
     /** Calculates both the value and the gradient at a point */
     def calculate(alpha: Double): (Double, Double) = {
       val (ff, grad) = f.calculate(x + direction * alpha)
-      ff -> (grad.dot(direction))
+      ff -> grad.dot(direction)
     }
   }
 }

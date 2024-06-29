@@ -143,7 +143,7 @@ trait TensorLike[@spec(Int) K, @spec(Double, Int, Float, Long) V, +This <: Tenso
    * Applies the given function to each value in the map (one for
    * each element of the domain, including zeros).
    */
-  def foreachValue[U](fn: (V => U)): Unit =
+  def foreachValue[U](fn: V => U): Unit =
     foreachKey[U](k => fn(apply(k)))
 
   /** Returns true if and only if the given predicate is true for all elements. */

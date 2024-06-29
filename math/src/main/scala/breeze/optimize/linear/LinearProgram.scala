@@ -148,7 +148,7 @@ class LinearProgram {
       def relation: Relation = LTE
 
       def lhs: Expression = outer
-      def rhs = new Expression {
+      def rhs: Expression = new Expression {
         def coefficients: SparseVector[Double] = SparseVector.zeros[Double](variables.length)
         override def scalarComponent: Double = c
 
@@ -168,7 +168,7 @@ class LinearProgram {
       def relation: Relation = GTE
 
       def lhs: Expression = outer
-      def rhs = new Expression {
+      def rhs: Expression = new Expression {
         def coefficients: SparseVector[Double] = SparseVector.zeros[Double](variables.length)
         override def scalarComponent: Double = c
 
@@ -188,7 +188,7 @@ class LinearProgram {
       def relation: Relation = EQ
 
       def lhs: Expression = outer
-      def rhs = new Expression {
+      def rhs: Expression = new Expression {
         def coefficients: SparseVector[Double] = SparseVector.zeros[Double](variables.length)
         override def scalarComponent: Double = c
 
@@ -219,7 +219,7 @@ class LinearProgram {
     def rhs: Expression
     def relation: Relation
 
-    override def toString(): String = s"$lhs ${relation.operator} $rhs"
+    override def toString: String = s"$lhs ${relation.operator} $rhs"
 
     def standardize: Constraint = new Constraint {
 
@@ -229,7 +229,7 @@ class LinearProgram {
         def coefficients: Vector[Double] = outer.lhs.coefficients - outer.rhs.coefficients
         override def scalarComponent = 0.0
       }
-      def rhs = new Expression {
+      def rhs: Expression = new Expression {
         def coefficients: SparseVector[Double] = SparseVector.zeros[Double](variables.length)
         override def scalarComponent: Double = outer.rhs.scalarComponent - outer.lhs.scalarComponent
       }
@@ -293,7 +293,7 @@ class LinearProgram {
    */
 
   case class Result(result: DenseVector[Double], problem: Problem) {
-    def valueOf(x: Expression): Double = { (result.dot(x.coefficients)) + x.scalarComponent }
+    def valueOf(x: Expression): Double = { result.dot(x.coefficients) + x.scalarComponent }
     def value: Double = valueOf(problem.objective)
   }
 

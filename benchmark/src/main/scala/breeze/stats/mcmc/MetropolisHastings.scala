@@ -47,15 +47,15 @@ class MetropolisHastingsBenchmark extends BreezeBenchmark {
   @Benchmark
   def timeMarkovChainEquiv(reps: Int): Double = run(reps) {
     val m =
-      ArbitraryMetropolisHastings(likelihood _, gaussianJump _, gaussianJumpLogProb _, 0.5, burnIn = 0, dropCount = 0)
+      ArbitraryMetropolisHastings(likelihood, gaussianJump, gaussianJumpLogProb, 0.5, burnIn = 0, dropCount = 0)
     pullAllSamples(m)
   }
 
   @Benchmark
   def timeMetropolisHastings(reps: Int): Double = run(reps) {
-    val m = ArbitraryMetropolisHastings(likelihood _,
+    val m = ArbitraryMetropolisHastings(likelihood,
                                         (_: Double) => Uniform(0, 1),
-                                        gaussianJumpLogProb _,
+      gaussianJumpLogProb,
                                         0.5,
                                         burnIn = burnIn,
                                         dropCount = dropCount
@@ -65,9 +65,9 @@ class MetropolisHastingsBenchmark extends BreezeBenchmark {
 
   @Benchmark
   def timeMetropolisHastingsWithWork(reps: Int): Double = run(reps) {
-    val m = ArbitraryMetropolisHastings(likelihood _,
+    val m = ArbitraryMetropolisHastings(likelihood,
                                         (_: Double) => Uniform(0, 1),
-                                        gaussianJumpLogProb _,
+      gaussianJumpLogProb,
                                         0.5,
                                         burnIn = 0,
                                         dropCount = dropCount
@@ -77,9 +77,9 @@ class MetropolisHastingsBenchmark extends BreezeBenchmark {
 
   @Benchmark
   def timeThreadedBufferedWithWork(reps: Int): Double = run(reps) {
-    val wrapped = ArbitraryMetropolisHastings(likelihood _,
+    val wrapped = ArbitraryMetropolisHastings(likelihood,
                                               (_: Double) => Uniform(0, 1),
-                                              gaussianJumpLogProb _,
+      gaussianJumpLogProb,
                                               0.5,
                                               burnIn = 0,
                                               dropCount = dropCount

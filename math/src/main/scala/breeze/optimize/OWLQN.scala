@@ -85,7 +85,7 @@ class OWLQN[K, T](convergenceCheck: ConvergenceCheck[T], m: Int, l1reg: K => Dou
         // dir should be (newX - state.x) according to the paper and the author.
         // However, in practice, this seems fine.
         // And interestingly the MSR reference implementation does the same thing (but they don't do wolfe condition checks.).
-        adjv -> (adjgrad.dot(dir))
+        adjv -> adjgrad.dot(dir)
       }
     }
     val search = new BacktrackingLineSearch(state.value, shrinkStep = if (iter < 1) 0.1 else 0.5)

@@ -48,7 +48,7 @@ object flipud extends UFunc {
 object rot90 extends UFunc {
 
   implicit def implDM[T]: Impl2[DenseMatrix[T], Int, DenseMatrix[T]] = (v: DenseMatrix[T], k: Int) => {
-    (k % 4) match {
+    k % 4 match {
       case 0      => v.copy
       case 1 | -3 => fliplr(v).t
       case 2 | -2 => fliplr(flipud(v))

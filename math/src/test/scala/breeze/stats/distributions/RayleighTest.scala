@@ -42,7 +42,7 @@ class RayleighTest
       scale <- arbitrary[Double].map { x =>
         math.abs(x) % 8.0 + 1.0
       }
-    ) yield new Rayleigh(scale)(RandBasis.mt0)
+    ) yield Rayleigh(scale)(RandBasis.mt0)
   }
 
   override type Distr = Rayleigh

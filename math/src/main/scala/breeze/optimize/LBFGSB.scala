@@ -105,7 +105,7 @@ class LBFGSB(lowerBounds: DenseVector[Double],
       def calculate(alpha: Double): (Double, Double) = {
         val newX = takeStep(state, direction, alpha)
         val (ff, grad) = f.calculate(newX)
-        ff -> (grad.dot(direction))
+        ff -> grad.dot(direction)
       }
     }
     val wolfeRuleSearch =
@@ -213,8 +213,8 @@ class LBFGSB(lowerBounds: DenseVector[Double],
 
       val bRowOfW: DenseVector[Double] = W(b, ::).t
       fDerivative += deltaT * fSecondDerivative + g(b) * g(b) + theta * g(b) * zb - (bRowOfW.t *:* g(b)) * (M * c)
-      fSecondDerivative += -1.0 * theta * g(b) * g(b) - 2.0 * (g(b) * (bRowOfW
-        .dot(M * p))) - g(b) * g(b) * (bRowOfW.t * (M * bRowOfW))
+      fSecondDerivative += -1.0 * theta * g(b) * g(b) - 2.0 * (g(b) * bRowOfW
+        .dot(M * p)) - g(b) * g(b) * (bRowOfW.t * (M * bRowOfW))
       p += (bRowOfW *:* g(b))
       d(b) = 0.0
       dtMin = -fDerivative / fSecondDerivative
@@ -286,7 +286,7 @@ class LBFGSB(lowerBounds: DenseVector[Double],
     val rc = fullR(freeVariableIndexes)
 
     // step2 && step3 v=M*W^T*Z*rc
-    var v: DenseVector[Double] = M * (WZ.*(rc)(HasOps.castOps_M_V))
+    var v: DenseVector[Double] = M * WZ.*(rc)(HasOps.castOps_M_V)
     // step4 N = 1/theta * W^T*Z * (W^T*Z)^T
     var N: DenseMatrix[Double] = WZ * WZ.t
     N = N *:* invTheta

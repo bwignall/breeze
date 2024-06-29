@@ -377,13 +377,13 @@ object PaintScale {
    * @param numSteps The number of steps in the gradient. 250 is a good number.
    */
   def createGradient(one: Color, two: Color, numSteps: Int): Array[Color] = {
-    val r1 = one.getRed()
-    val g1 = one.getGreen()
-    val b1 = one.getBlue()
+    val r1 = one.getRed
+    val g1 = one.getGreen
+    val b1 = one.getBlue
 
-    val r2 = two.getRed()
-    val g2 = two.getGreen()
-    val b2 = two.getBlue()
+    val r2 = two.getRed
+    val g2 = two.getGreen
+    val b2 = two.getBlue
 
     val gradient = new Array[Color](numSteps)
     var iNorm: Double = 0

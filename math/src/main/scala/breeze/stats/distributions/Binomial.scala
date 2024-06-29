@@ -36,7 +36,7 @@ case class Binomial(n: Int, p: Double)(implicit rand: RandBasis)
   require(p >= 0.0, "p must be non-negative!")
   def probabilityOf(k: Int): Double = exp(logProbabilityOf(k))
 
-  override def toString(): String = "Binomial(" + n + ", " + p + ")"
+  override def toString: String = "Binomial(" + n + ", " + p + ")"
 
   override def logProbabilityOf(k: Int): Double = {
     require(n >= k)

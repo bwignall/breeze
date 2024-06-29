@@ -30,7 +30,7 @@ case class Poisson(mean: Double)(implicit rand: RandBasis) extends DiscreteDistr
 
   private val ell = math.exp(-mean)
 
-  override def toString(): String = "Poisson(" + mean + ")"
+  override def toString: String = "Poisson(" + mean + ")"
 
   // impl from winrand
   def draw(): Int = {

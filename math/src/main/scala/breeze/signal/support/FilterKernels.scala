@@ -57,7 +57,7 @@ class FIRKernel1D[T](val kernel: DenseVector[T], override val multiplier: Double
 //  override def toFloat(): FIRKernel1D[Float] = FIRKernel1D[Float]( kernel.map(_.toFloat), designText )
 //  override def toDouble(): FIRKernel1D[Double] = FIRKernel1D[Double]( kernel.map(_.toDouble), designText )
 
-  override def toString(): String = this.getClass.toString + " multiplier: " + multiplier + ": " + designText
+  override def toString: String = this.getClass.toString + " multiplier: " + multiplier + ": " + designText
 }
 
 /**This immutable class will encapsulate 1D IIR kernels. Not implemented yet.*/

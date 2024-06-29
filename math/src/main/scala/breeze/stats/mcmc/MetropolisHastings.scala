@@ -76,7 +76,7 @@ abstract class BaseMetropolisHastings[T](logLikelihoodFunc: T => Double, init: T
   def total: Long = totalCount
   def acceptanceCount: Long = acceptances
 
-  private def getNext(): T = {
+  private def getNext: T = {
     totalCount += 1
     val maybeNext = proposalDraw(last)
     val logAcceptanceRatio = logLikelihoodRatio(last, maybeNext)

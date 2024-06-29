@@ -33,14 +33,14 @@ package object plot {
                     name: String = null,
                     lines: Boolean = true,
                     shapes: Boolean = false,
-                    labels: (Int) => String = null.asInstanceOf[Int => String],
-                    tips: (Int) => String = null.asInstanceOf[Int => String]
+                    labels: Int => String = null.asInstanceOf[Int => String],
+                    tips: Int => String = null.asInstanceOf[Int => String]
   )(implicit xv: DomainFunction[X, Int, V], yv: DomainFunction[Y, Int, V], vv: V => Double): Series = new Series {
     require(xv.domain(x) == yv.domain(y), "Domains must match!")
 
-    def getChartStuff(defaultName: (Int) => String,
-                      defaultColor: (Int) => Paint,
-                      defaultStroke: (Int) => Stroke
+    def getChartStuff(defaultName: Int => String,
+                      defaultColor: Int => Paint,
+                      defaultStroke: Int => Stroke
     ): (xy.XYDataset, XYItemRenderer) = {
 
       type K = Int
@@ -134,9 +134,9 @@ package object plot {
      * @param defaultStroke series index => default stroke
      * @return
      */
-    def getChartStuff(defaultName: (Int) => String,
-                      defaultColor: (Int) => Paint,
-                      defaultStroke: (Int) => Stroke
+    def getChartStuff(defaultName: Int => String,
+                      defaultColor: Int => Paint,
+                      defaultStroke: Int => Stroke
     ): (xy.XYDataset, XYItemRenderer) = {
 
       val items = xv.domain(x)
@@ -157,7 +157,7 @@ package object plot {
 
       // initialize the series renderer
       import org.jfree.chart.renderer.xy.XYBubbleRenderer
-      val renderer = new XYBubbleRenderer(XYBubbleRenderer.SCALE_ON_DOMAIN_AXIS) {
+      val renderer: XYBubbleRenderer = new XYBubbleRenderer(XYBubbleRenderer.SCALE_ON_DOMAIN_AXIS) {
         val stroke = new java.awt.BasicStroke(0f)
         override def getItemPaint(series: Int, item: Int): java.awt.Paint =
           paintScale(items(item))
@@ -211,9 +211,9 @@ package object plot {
 
     val width: Double = binner.splits.iterator.zip(binner.splits.iterator.drop(1)).map(tup => tup._2 - tup._1).min
 
-    def getChartStuff(defaultName: (Int) => String,
-                      defaultColor: (Int) => Paint,
-                      defaultStroke: (Int) => Stroke
+    def getChartStuff(defaultName: Int => String,
+                      defaultColor: Int => Paint,
+                      defaultStroke: Int => Stroke
     ): (xy.XYDataset, XYItemRenderer) = {
       val dataset = new org.jfree.data.xy.XYBarDataset(
         XYDataset(
@@ -270,9 +270,9 @@ package object plot {
 
       val items: IndexedSeq[(Int, Int)] = img.keysIterator.toIndexedSeq
 
-      def getChartStuff(defaultName: (Int) => String,
-                        defaultColor: (Int) => Paint,
-                        defaultStroke: (Int) => Stroke
+      def getChartStuff(defaultName: Int => String,
+                        defaultColor: Int => Paint,
+                        defaultStroke: Int => Stroke
       ): (xy.XYDataset, XYItemRenderer) = {
         // initialize dataset
         val dataset = XYZDataset(

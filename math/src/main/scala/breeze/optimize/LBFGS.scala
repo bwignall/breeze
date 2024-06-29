@@ -56,7 +56,7 @@ class LBFGS[T](convergenceCheck: ConvergenceCheck[T], m: Int)(implicit space: Mu
     newX
   }
 
-  protected def initialHistory(f: DiffFunction[T], x: T): History = new LBFGS.ApproximateInverseHessian(m)
+  protected def initialHistory(f: DiffFunction[T], x: T): History = LBFGS.ApproximateInverseHessian(m)
   protected def chooseDescentDirection(state: State, fn: DiffFunction[T]): T = {
     state.history * state.grad
   }
@@ -104,7 +104,7 @@ object LBFGS {
       val memStep = (step +: this.memStep).take(m)
       val memGradDelta = (gradDelta +: this.memGradDelta).take(m)
 
-      new ApproximateInverseHessian(m, memStep, memGradDelta)
+      ApproximateInverseHessian(m, memStep, memGradDelta)
     }
 
     def historyLength: Int = memStep.length
@@ -127,7 +127,7 @@ object LBFGS {
 
       for (i <- 0 until historyLength) {
         rho(i) = memStep(i).dot(memGradDelta(i))
-        as(i) = (memStep(i).dot(dir)) / rho(i)
+        as(i) = memStep(i).dot(dir) / rho(i)
         if (as(i).isNaN) {
           throw new NaNHistory
         }
@@ -137,7 +137,7 @@ object LBFGS {
       dir *= diag
 
       for (i <- (historyLength - 1) to 0 by -1) {
-        val beta = (memGradDelta(i).dot(dir)) / rho(i)
+        val beta = memGradDelta(i).dot(dir) / rho(i)
         axpy(as(i) - beta, memStep(i), dir)
       }
 

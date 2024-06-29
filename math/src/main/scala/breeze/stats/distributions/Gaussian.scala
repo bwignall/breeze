@@ -35,7 +35,7 @@ case class Gaussian(mu: Double, sigma: Double)(implicit rand: RandBasis)
   private val inner = rand.gaussian(mu, sigma)
   def draw(): Double = inner.get()
 
-  override def toString(): String = "Gaussian(" + mu + ", " + sigma + ")"
+  override def toString: String = "Gaussian(" + mu + ", " + sigma + ")"
 
   /**
    * Computes the probability that a Gaussian variable Z is within the interval [x, y].

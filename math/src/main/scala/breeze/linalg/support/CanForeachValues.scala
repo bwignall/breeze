@@ -8,6 +8,6 @@ package breeze.linalg.support
 trait CanForeachValues[From, +A] {
 
   /**Maps all key-value pairs from the given collection. */
-  def foreach[U](from: From, fn: (A => U)): Unit
+  def foreach[U](from: From, fn: A => U): Unit
 
 }

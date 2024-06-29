@@ -32,7 +32,7 @@ class SliceVector[@spec(Int) K, @spec(Double, Int, Float, Long) V: ClassTag](val
 
   def update(i: Int, v: V): Unit = { tensor(slices(i)) = v }
 
-  def copy: DenseVector[V] = DenseVector(slices.map(tensor.apply _): _*)
+  def copy: DenseVector[V] = DenseVector(slices.map(tensor.apply): _*)
 
   def length: Int = slices.length
 
@@ -70,11 +70,11 @@ object SliceVector {
   // TODO: should this be dense?
   implicit def canMapValues[K, V, V2: ClassTag]: CanMapValues[SliceVector[K, V], V, V2, DenseVector[V2]] = {
     new CanMapValues[SliceVector[K, V], V, V2, DenseVector[V2]] {
-      override def map(from: SliceVector[K, V], fn: (V) => V2): DenseVector[V2] = {
+      override def map(from: SliceVector[K, V], fn: V => V2): DenseVector[V2] = {
         DenseVector.tabulate(from.length)(i => fn(from(i)))
       }
 
-      override def mapActive(from: SliceVector[K, V], fn: (V) => V2): DenseVector[V2] = map(from, fn)
+      override def mapActive(from: SliceVector[K, V], fn: V => V2): DenseVector[V2] = map(from, fn)
     }
 
   }
@@ -94,7 +94,7 @@ object SliceVector {
       /** Iterates all key-value pairs from the given collection. */
       def traverse(from: SliceVector[K, V], fn: ValuesVisitor[V]): fn.type = {
         from.valuesIterator.foreach {
-          fn.visit(_)
+          fn.visit
         }
         fn
       }
@@ -119,13 +119,13 @@ object SliceVector {
 
   implicit def canTransformValues[K, V]: CanTransformValues[SliceVector[K, V], V] = {
     new CanTransformValues[SliceVector[K, V], V] {
-      def transform(from: SliceVector[K, V], fn: (V) => V): Unit = {
+      def transform(from: SliceVector[K, V], fn: V => V): Unit = {
         for (i <- 0 until from.length) {
           from(i) = fn(from(i))
         }
       }
 
-      def transformActive(from: SliceVector[K, V], fn: (V) => V): Unit = {
+      def transformActive(from: SliceVector[K, V], fn: V => V): Unit = {
         transform(from, fn)
       }
     }

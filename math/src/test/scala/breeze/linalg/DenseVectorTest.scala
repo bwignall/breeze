@@ -365,7 +365,7 @@ class DenseVectorTest extends AnyFunSuite with Checkers {
     val b = DenseVector(3.0, 4.0, 5.0)
     (a: Vector[Double]) += (b: Vector[Double])
     assert(a === DenseVector(4.0, 6.0, 8.0))
-    assert((a: Vector[Double]).dot(b: Vector[Double]) === (a.dot(b)))
+    assert((a: Vector[Double]).dot(b: Vector[Double]) === a.dot(b))
     (a: Vector[Double]) *= (b: Vector[Double])
     assert(a === DenseVector(12.0, 24.0, 40.0))
     a += (b: Vector[Double])
@@ -490,7 +490,7 @@ class DenseVectorTest extends AnyFunSuite with Checkers {
   test("negative step sizes and dot -- Double") {
     val foo = DenseVector(1.0, 2.0, 3.0, 4.0)
     val fneg = foo(3 to 0 by -1)
-    assert((foo.dot(foo(3 to 0 by -1))) === 20.0)
+    assert(foo.dot(foo(3 to 0 by -1)) === 20.0)
   }
 
   test("negative step sizes and + -- Double") {

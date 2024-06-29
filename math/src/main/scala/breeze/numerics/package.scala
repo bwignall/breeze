@@ -1042,7 +1042,7 @@ package object numerics {
    */
   object logit extends MappingUFunc {
     implicit object logitImplInt extends Impl[Int, Double] {
-      def apply(x: Int): Double = -scala.math.log((1d / (x.toDouble)) - 1d)
+      def apply(x: Int): Double = -scala.math.log((1d / x.toDouble) - 1d)
     }
 
     implicit object logitImplDouble extends Impl[Double, Double] {

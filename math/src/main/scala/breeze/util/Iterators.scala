@@ -30,11 +30,11 @@ object Iterators {
    * head of each, according to the given comparator.  Ties go to the element
    * from the first iterator.
    */
-  def merge[T](iters: Iterator[T]*)(compare: ((T, T) => Int)): Iterator[T] =
+  def merge[T](iters: Iterator[T]*)(compare: (T, T) => Int): Iterator[T] =
     new Iterator[T] {
 
       /** Keep track of the top of each list. */
-      val heads: Array[Option[T]] = iters.map(get _).toArray
+      val heads: Array[Option[T]] = iters.map(get).toArray
 
       /** The merged iterator has more if any head is not None. */
       override def hasNext: Boolean =

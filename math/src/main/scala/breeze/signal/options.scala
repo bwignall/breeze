@@ -122,10 +122,10 @@ object OptFilterTaps {
 abstract class OptRange extends Opt
 object OptRange {
   case object All extends OptRange {
-    override def toString() = "OptRange.All"
+    override def toString = "OptRange.All"
   }
   case class RangeOpt(r: Range) extends OptRange {
-    override def toString(): String =
+    override def toString: String =
       "OptRange.RangeOpt( " + r.start + ", " + r.end + ", " + r.step + "), isInclusive=" + r.isInclusive
   }
 //  case class Single(i: Int) extends OptRange {

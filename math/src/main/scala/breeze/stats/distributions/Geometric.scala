@@ -36,7 +36,7 @@ case class Geometric(p: Double)(implicit rand: RandBasis) extends DiscreteDistr[
   def mode = 1
   def entropy: Double = (-(1 - p) * math.log(1 - p) - p * math.log(p)) / p
 
-  override def toString(): String = ScalaRunTime._toString(this)
+  override def toString: String = ScalaRunTime._toString(this)
 }
 
 object Geometric extends ExponentialFamily[Geometric, Int] with HasConjugatePrior[Geometric, Int] {

@@ -29,7 +29,7 @@ trait CounterOps {
     }
   }
 
-  implicit def addIntoVV[K1, V: Semiring]: OpAdd.InPlaceImpl2[Counter[K1, V], Counter[K1, V]] =
+  implicit def addIntoVV[K1, V: Semiring](): OpAdd.InPlaceImpl2[Counter[K1, V], Counter[K1, V]] =
     new OpAdd.InPlaceImpl2[Counter[K1, V], Counter[K1, V]] {
       val field: Semiring[V] = implicitly[Semiring[V]]
       def apply(a: Counter[K1, V], b: Counter[K1, V]): Unit = {
@@ -63,11 +63,11 @@ trait CounterOps {
       }
     }
 
-  implicit def addVV[K1, V: Semiring: Zero]: OpAdd.Impl2[Counter[K1, V], Counter[K1, V], Counter[K1, V]] = {
+  implicit def addVV[K1, V: Semiring: Zero](): OpAdd.Impl2[Counter[K1, V], Counter[K1, V], Counter[K1, V]] = {
     binaryOpFromBinaryUpdateOp(canCopy, addIntoVV)
   }
 
-  implicit def addIntoVS[K1, V: Semiring]: OpAdd.InPlaceImpl2[Counter[K1, V], V] =
+  implicit def addIntoVS[K1, V: Semiring](): OpAdd.InPlaceImpl2[Counter[K1, V], V] =
     new OpAdd.InPlaceImpl2[Counter[K1, V], V] {
       val field: Semiring[V] = implicitly[Semiring[V]]
       def apply(a: Counter[K1, V], b: V): Unit = {
@@ -84,7 +84,7 @@ trait CounterOps {
       }
     }
 
-  implicit def addVS[K1, V: Semiring: Zero]: OpAdd.Impl2[Counter[K1, V], V, Counter[K1, V]] = {
+  implicit def addVS[K1, V: Semiring: Zero](): OpAdd.Impl2[Counter[K1, V], V, Counter[K1, V]] = {
     binaryOpFromBinaryUpdateOp(canCopy, addIntoVS)
   }
 
@@ -374,13 +374,13 @@ trait CounterOps {
 
   implicit def canTransformValues[L, V]: CanTransformValues[Counter[L, V], V] = {
     new CanTransformValues[Counter[L, V], V] {
-      def transform(from: Counter[L, V], fn: (V) => V): Unit = {
+      def transform(from: Counter[L, V], fn: V => V): Unit = {
         for ((k, v) <- from.activeIterator) {
           from(k) = fn(v)
         }
       }
 
-      def transformActive(from: Counter[L, V], fn: (V) => V): Unit = {
+      def transformActive(from: Counter[L, V], fn: V => V): Unit = {
         transform(from, fn)
       }
     }

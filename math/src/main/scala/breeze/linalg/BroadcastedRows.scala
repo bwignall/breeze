@@ -36,7 +36,7 @@ trait BroadcastedRowsOps {
     cc: CanCollapseAxis[T, Axis._1.type, RowType, ResultRow, Result]
   ): CanMapValues[BroadcastedRows[T, RowType], RowType, ResultRow, Result] = {
     new CanMapValues[BroadcastedRows[T, RowType], RowType, ResultRow, Result] {
-      def map(from: BroadcastedRows[T, RowType], fn: (RowType) => ResultRow): Result = {
+      def map(from: BroadcastedRows[T, RowType], fn: RowType => ResultRow): Result = {
         cc(from.underlying, Axis._1) { fn }
       }
 
@@ -109,7 +109,7 @@ trait BroadcastedRowsOps {
     new CanForeachValues[BroadcastedRows[T, RowType], RowType] {
 
       /** Maps all key-value pairs from the given collection. */
-      override def foreach[U](from: BroadcastedRows[T, RowType], fn: (RowType) => U): Unit = {
+      override def foreach[U](from: BroadcastedRows[T, RowType], fn: RowType => U): Unit = {
         iter(from.underlying, Axis._1)(fn)
       }
     }

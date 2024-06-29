@@ -60,12 +60,12 @@ package object hypothesis {
      */
     val meanP = (successControl + successVariant).toDouble / (trialsControl + trialsVariant).toDouble
     val chi2 =
-      (chiSquaredTerm(meanP * trialsControl, successControl.toDouble) + chiSquaredTerm((1 - meanP) * trialsControl,
+      chiSquaredTerm(meanP * trialsControl, successControl.toDouble) + chiSquaredTerm((1 - meanP) * trialsControl,
                                                                                        trialsControl - successControl
       )
         + chiSquaredTerm(meanP * trialsVariant, successVariant) + chiSquaredTerm((1 - meanP) * trialsVariant,
                                                                                  trialsVariant - successVariant
-        ))
+        )
     val pVal = 1.0 - Gamma(0.5, 2.0)(RandBasis.mt0).cdf(chi2)
     Chi2Result(chi2, pVal)
   }

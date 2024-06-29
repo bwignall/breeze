@@ -166,7 +166,7 @@ class RandomAccessFile(file: File, arg0: String = "r")(implicit converter: ByteC
    */
   @throws(classOf[IOException])
   final def writeUInt8(values: Array[Short]): Unit = {
-    rafObj.write(values.map(converter.uInt8ToByte(_)))
+    rafObj.write(values.map(converter.uInt8ToByte))
   }
   // </editor-fold>
 
@@ -323,7 +323,7 @@ class RandomAccessFile(file: File, arg0: String = "r")(implicit converter: ByteC
    */
   @throws(classOf[IOException])
   final def writeUInt16(v: Array[Char]): Unit = {
-    rafObj.write(v.flatMap(converter.uInt16ToBytes(_)))
+    rafObj.write(v.flatMap(converter.uInt16ToBytes))
   }
   // </editor-fold>
 
@@ -435,7 +435,7 @@ class RandomAccessFile(file: File, arg0: String = "r")(implicit converter: ByteC
    */
   @throws(classOf[IOException])
   final def writeInt32(v: Array[Int]): Unit = {
-    rafObj.write(v.flatMap(converter.int32ToBytes(_)))
+    rafObj.write(v.flatMap(converter.int32ToBytes))
   }
 
   // </editor-fold>
@@ -509,7 +509,7 @@ class RandomAccessFile(file: File, arg0: String = "r")(implicit converter: ByteC
    */
   @throws(classOf[IOException])
   final def writeUInt32(v: Array[Long]): Unit = {
-    rafObj.write(v.flatMap(converter.uInt32ToBytes(_)))
+    rafObj.write(v.flatMap(converter.uInt32ToBytes))
   }
   // </editor-fold>
 
@@ -568,7 +568,7 @@ class RandomAccessFile(file: File, arg0: String = "r")(implicit converter: ByteC
    */
   @throws(classOf[IOException])
   final def writeInt64(v: Array[Long]): Unit = {
-    rafObj.write(v.flatMap(converter.int64ToBytes(_)))
+    rafObj.write(v.flatMap(converter.int64ToBytes))
   }
   // </editor-fold>
 
@@ -655,7 +655,7 @@ class RandomAccessFile(file: File, arg0: String = "r")(implicit converter: ByteC
    */
   @throws(classOf[IOException])
   final def writeUInt64(v: Array[ULong]): Unit = {
-    rafObj.write(v.flatMap(converter.uInt64ToBytes(_)))
+    rafObj.write(v.flatMap(converter.uInt64ToBytes))
   }
 
   // </editor-fold>
@@ -714,7 +714,7 @@ class RandomAccessFile(file: File, arg0: String = "r")(implicit converter: ByteC
    */
   @throws(classOf[IOException])
   final def writeUInt64Shifted(v: Array[Long]): Unit = {
-    rafObj.write(v.flatMap(converter.uInt64ShiftedToBytes(_)))
+    rafObj.write(v.flatMap(converter.uInt64ShiftedToBytes))
   }
   // </editor-fold>
 
@@ -879,7 +879,7 @@ class RandomAccessFile(file: File, arg0: String = "r")(implicit converter: ByteC
 
   /** Pass on to [[java.io.RandomAccessFile]]
    */
-  def close: Unit = rafObj.close
+  def close(): Unit = rafObj.close()
 
   /** Pass on to [[java.io.RandomAccessFile]]
    */

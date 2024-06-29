@@ -47,7 +47,7 @@ final class TriangularArray[T: ClassTag](val dimension: Int) extends Serializabl
     def apply(c: Int): T = outer.apply(r, c)
     def update(c: Int, t: T): Unit = outer.update(r, c, t)
     def length: Int = dimension - r
-    def iterator: Iterator[T] = Iterator.range(r, dimension).map(apply _)
+    def iterator: Iterator[T] = Iterator.range(r, dimension).map(apply)
   }
 
   def iterator: Iterator[mutable.Seq[T]] = Iterator.range(0, numElems).map(slice)

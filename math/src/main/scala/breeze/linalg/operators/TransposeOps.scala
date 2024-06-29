@@ -29,7 +29,7 @@ trait TransposeOps_Generic extends TransposeOps_LowPrio {
   }
 
   implicit def transposeTensor[K, V, T](implicit ev: T <:< Tensor[K, V]): CanTranspose[T, Transpose[T]] = { (from: T) =>
-    new Transpose(from)
+    Transpose(from)
   }
 
 }

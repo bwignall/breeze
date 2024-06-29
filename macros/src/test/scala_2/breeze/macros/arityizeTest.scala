@@ -50,7 +50,7 @@ class arityizeTest extends AnyFunSuite {
     @arityize(2)
     def getKernel[@arityize.replicate T](name: String,
                                          blockDims: Array[Int] = Array(32, 1, 1)
-    ): (CuKernel[T @arityize.replicate] @arityize.relative(getKernel)) = {
+    ): CuKernel[T @arityize.replicate] @arityize.relative(getKernel) = {
       new (CuKernel[T @arityize.replicate] @arityize.relative(getKernel))(name, blockDims)
     }
   }
@@ -62,13 +62,13 @@ class arityizeTest extends AnyFunSuite {
     @arityize(6)
     implicit def tuple[V]: LiteralRow[Tuple[V @arityize.repeat] @arityize.relative(tuple), V] =
       new LiteralRow[Tuple[V @arityize.repeat] @arityize.relative(tuple), V] {
-        def foreach[X](tup: Tuple[V @arityize.repeat] @arityize.relative(tuple), fn: ((Int, V) => X)) = {
+        def foreach[X](tup: Tuple[V @arityize.repeat] @arityize.relative(tuple), fn: (Int, V) => X): Any = {
           for ((v, i) <- tup.productIterator.zipWithIndex) {
             fn(i, v.asInstanceOf[V])
           }
         }
 
-        def length(tup: Tuple[V @arityize.repeat] @arityize.relative(tuple)) = __order__
+        def length(tup: Tuple[V @arityize.repeat] @arityize.relative(tuple)): Int = __order__
       }
   }
 
@@ -77,7 +77,9 @@ class arityizeTest extends AnyFunSuite {
     case class TupleToDenseVector(tuple: Tuple[Any @arityize.repeat] @arityize.relative(TupleToDenseVector))
 
     @arityize(22)
-    implicit def tupleToDenseVector(tuple: Tuple[Any @arityize.repeat] @arityize.relative(tupleToDenseVector)) = {
+    implicit def tupleToDenseVector(
+      tuple: Tuple[Any @arityize.repeat] @arityize.relative(tupleToDenseVector)
+    ): DenseVector[Double] = {
       new (TupleToDenseVector @arityize.relative(tupleToDenseVector))(tuple)
     }
   }

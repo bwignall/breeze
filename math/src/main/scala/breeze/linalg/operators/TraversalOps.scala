@@ -36,14 +36,14 @@ trait Vector_TraversalOps {
   // TODO: probably should have just made this virtual and not a typeclass??
   implicit def canMapValues_V[V, V2: Zero](implicit man: ClassTag[V2]): CanMapValues[Vector[V], V, V2, Vector[V2]] = {
     new CanMapValues[Vector[V], V, V2, Vector[V2]] {
-      def map(from: Vector[V], fn: (V) => V2): Vector[V2] = from match {
+      def map(from: Vector[V], fn: V => V2): Vector[V2] = from match {
         case sv: SparseVector[V] => sv.mapValues(fn)(SparseVector.canMapValues)
         case hv: HashVector[V]   => hv.mapValues(fn)
         case dv: DenseVector[V]  => dv.mapValues(fn)
         case _                   => DenseVector.tabulate(from.length)(i => fn(from(i)))
       }
 
-      def mapActive(from: Vector[V], fn: (V) => V2): Vector[V2] = from match {
+      def mapActive(from: Vector[V], fn: V => V2): Vector[V2] = from match {
         case sv: SparseVector[V] => sv.mapActiveValues(fn)
         case hv: HashVector[V]   => hv.mapActiveValues(fn)
         case dv: DenseVector[V]  => dv.mapActiveValues(fn)
@@ -139,7 +139,7 @@ trait DenseVector_TraversalOps extends Vector_TraversalOps {
 
   implicit def DV_canTransformValues[@specialized(Int, Float, Double) V]: CanTransformValues[DenseVector[V], V] =
     new CanTransformValues[DenseVector[V], V] {
-      def transform(from: DenseVector[V], fn: (V) => V): Unit = {
+      def transform(from: DenseVector[V], fn: V => V): Unit = {
         val data = from.data
         val length = from.length
         val stride = from.stride
@@ -154,7 +154,7 @@ trait DenseVector_TraversalOps extends Vector_TraversalOps {
         }
       }
 
-      private def slowPath(fn: (V) => V, data: Array[V], length: Int, stride: Int, offset: Int): Unit = {
+      private def slowPath(fn: V => V, data: Array[V], length: Int, stride: Int, offset: Int): Unit = {
         val end = offset + stride * length
         var j = offset
         while (j != end) {
@@ -163,7 +163,7 @@ trait DenseVector_TraversalOps extends Vector_TraversalOps {
         }
       }
 
-      def transformActive(from: DenseVector[V], fn: (V) => V): Unit = {
+      def transformActive(from: DenseVector[V], fn: V => V): Unit = {
         transform(from, fn)
       }
     }
@@ -278,7 +278,7 @@ trait DenseMatrix_TraversalOps extends TensorLowPrio {
 
   implicit def canTransformValues_DM[@specialized(Int, Float, Double) V]: CanTransformValues[DenseMatrix[V], V] = {
     new CanTransformValues[DenseMatrix[V], V] {
-      def transform(from: DenseMatrix[V], fn: (V) => V): Unit = {
+      def transform(from: DenseMatrix[V], fn: V => V): Unit = {
         if (from.isContiguous) {
           val d = from.data
           cforRange(from.offset until from.offset + from.size) { j =>
@@ -289,7 +289,7 @@ trait DenseMatrix_TraversalOps extends TensorLowPrio {
         }
       }
 
-      private def slowPath(from: DenseMatrix[V], fn: (V) => V): Unit = {
+      private def slowPath(from: DenseMatrix[V], fn: V => V): Unit = {
         var off = from.offset
         val d = from.data
         cforRange(0 until from.majorSize) { big =>
@@ -300,7 +300,7 @@ trait DenseMatrix_TraversalOps extends TensorLowPrio {
         }
       }
 
-      def transformActive(from: DenseMatrix[V], fn: (V) => V): Unit = {
+      def transformActive(from: DenseMatrix[V], fn: V => V): Unit = {
         transform(from, fn)
       }
     }
@@ -309,7 +309,7 @@ trait DenseMatrix_TraversalOps extends TensorLowPrio {
   implicit def canMapKeyValuePairs_DM[V, R: ClassTag]
     : CanMapKeyValuePairs[DenseMatrix[V], (Int, Int), V, R, DenseMatrix[R]] = {
     new CanMapKeyValuePairs[DenseMatrix[V], (Int, Int), V, R, DenseMatrix[R]] {
-      override def map(from: DenseMatrix[V], fn: (((Int, Int), V) => R)): DenseMatrix[R] = {
+      override def map(from: DenseMatrix[V], fn: ((Int, Int), V) => R): DenseMatrix[R] = {
         val data = new Array[R](from.data.length)
         var off = 0
         cforRange(0 until from.cols) { j =>
@@ -321,7 +321,7 @@ trait DenseMatrix_TraversalOps extends TensorLowPrio {
         DenseMatrix.create(from.rows, from.cols, data, 0, from.rows)
       }
 
-      override def mapActive(from: DenseMatrix[V], fn: (((Int, Int), V) => R)): DenseMatrix[R] =
+      override def mapActive(from: DenseMatrix[V], fn: ((Int, Int), V) => R): DenseMatrix[R] =
         map(from, fn)
     }
   }
@@ -330,7 +330,7 @@ trait DenseMatrix_TraversalOps extends TensorLowPrio {
     : CanMapValues[DenseMatrix[V], V, R, DenseMatrix[R]] = {
     new DenseCanMapValues[DenseMatrix[V], V, R, DenseMatrix[R]] {
 
-      override def map(from: DenseMatrix[V], fn: (V => R)): DenseMatrix[R] = {
+      override def map(from: DenseMatrix[V], fn: V => R): DenseMatrix[R] = {
         if (from.isContiguous) {
           mapContiguous(from, fn)
         } else {

@@ -339,7 +339,7 @@ final class DenseMatrix[@spec(Double, Int, Float, Long) V](val rows: Int,
   }
 
   private def checkIsSpecialized(): Unit = {
-    if (data.isInstanceOf[Array[Double]] && getClass.getName() == "breeze.linalg.DenseMatrix")
+    if (data.isInstanceOf[Array[Double]] && getClass.getName == "breeze.linalg.DenseMatrix")
       throw new Exception("...")
   }
   // uncomment to debug places where specialization fails

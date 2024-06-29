@@ -46,7 +46,7 @@ class LaplaceTest
       scale <- arbitrary[Double].map { x =>
         math.abs(x) % 8.0 + 1.0
       }
-    ) yield new Laplace(location, scale)(new RandBasis(new MersenneTwister(0)))
+    ) yield Laplace(location, scale)(new RandBasis(new MersenneTwister(0)))
   }
 
   override type Distr = Laplace

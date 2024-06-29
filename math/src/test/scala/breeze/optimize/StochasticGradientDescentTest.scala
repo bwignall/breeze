@@ -44,7 +44,7 @@ class StochasticGradientDescentTest extends OptimizeTestBase {
     val sgd = StochasticGradientDescent[Counter[String, Double]](1.0, 100)
 
     def optimizeThis(init: Counter[String, Double]) = {
-      val f = new BatchDiffFunction[Counter[String, Double]] {
+      val f: BatchDiffFunction = new BatchDiffFunction[Counter[String, Double]] {
         def calculate(x: Counter[String, Double], r: IndexedSeq[Int]): (Double, Counter[String, Double]) = {
           val r = x - 3.0
           (r.dot(r), (x * 2.0) - 6.0)

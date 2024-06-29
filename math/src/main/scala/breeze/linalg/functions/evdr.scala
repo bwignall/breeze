@@ -48,7 +48,7 @@ object evdr extends UFunc {
    */
   private def doEigSymDouble(M: DenseMatrix[Double], s: Int, nOversamples: Int = 10, nIter: Int = 0): DenseEigSym = {
 
-    require(s <= (M.rows.min(M.cols)),
+    require(s <= M.rows.min(M.cols),
             "Number of columns in orthonormal matrix should be less than min(M.rows, M.cols)"
     )
     require(s >= 1, "Sketch size should be greater than 1")

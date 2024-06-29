@@ -34,7 +34,7 @@ class argtopkTest extends AnyFunSuite {
   }
 
   test("#679") {
-    var a = DenseMatrix((3, 1), (-1, -2), (2, 2), (5, 5))
+    val a = DenseMatrix((3, 1), (-1, -2), (2, 2), (5, 5))
     for (i <- 0 until 10)
       assert(argtopk(a(::, 0), 4).toIndexedSeq == argtopk(a(::, 0), 4).toIndexedSeq)
   }

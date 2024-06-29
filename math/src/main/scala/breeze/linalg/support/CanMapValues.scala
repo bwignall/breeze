@@ -58,7 +58,7 @@ object CanMapValues extends CanMapValuesLowPrio {
       extends CanMapValues[Array[A], A, B, Array[B]] {
 
     /**Maps all values from the given collection. */
-    def map(from: Array[A], fn: (A) => B): Array[B] = {
+    def map(from: Array[A], fn: A => B): Array[B] = {
       val arr = new Array[B](from.length)
       cforRange(from.indices) { i =>
         arr(i) = fn(from(i))
@@ -98,8 +98,8 @@ sealed trait CanMapValuesLowPrio { self: CanMapValues.type =>
 
   def canMapSelf[V, V2]: CanMapValues[V, V, V2, V2] = {
     new CanMapValues[V, V, V2, V2] {
-      def map(from: V, fn: (V) => V2): V2 = fn(from)
-      def mapActive(from: V, fn: (V) => V2): V2 = fn(from)
+      def map(from: V, fn: V => V2): V2 = fn(from)
+      def mapActive(from: V, fn: V => V2): V2 = fn(from)
     }
   }
 

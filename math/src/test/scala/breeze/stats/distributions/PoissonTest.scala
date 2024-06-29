@@ -41,7 +41,7 @@ class PoissonTest extends AnyFunSuite with Checkers with MomentsTestBase[Int] wi
     val mean = 5.0
     import breeze.numerics._
     val poi = new Poisson(mean)
-    assert(closeTo(poi.cdf(0), exp(-mean)), "" + (poi.cdf(0)) + " " + exp(-mean))
+    assert(closeTo(poi.cdf(0), exp(-mean)), "" + poi.cdf(0) + " " + exp(-mean))
   }
 
   override type Distr = Poisson

@@ -38,7 +38,7 @@ case class MultivariateGaussian(mean: DenseVector[Double], covariance: DenseMatr
 
   private val root: DenseMatrix[Double] = cholesky(covariance)
 
-  override def toString(): String = ScalaRunTime._toString(this)
+  override def toString: String = ScalaRunTime._toString(this)
 
   override def unnormalizedLogPdf(t: DenseVector[Double]): Double = {
     val centered = t - mean

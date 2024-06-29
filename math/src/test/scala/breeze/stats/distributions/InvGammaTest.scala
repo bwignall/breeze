@@ -15,7 +15,7 @@ class InvGammaTest extends AnyFunSuite with MomentsTestBase[Double] {
     for {
       shape <- arbitrary[Double].map { x => math.abs(x) % 10.0 + 3.1 } // Gamma pdf at 0 not defined when shape == 1
       scale <- arbitrary[Double].map { x => math.abs(x) % 8.0 + 0.1 }
-    } yield new InvGamma(shape, scale)
+    } yield InvGamma(shape, scale)
   }
 
   override def asDouble(x: Double): Double = x

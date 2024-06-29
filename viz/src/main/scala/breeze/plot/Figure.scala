@@ -148,7 +148,7 @@ class Figure(name: String, private var rows_ : Int = 1, private var cols_ : Int 
     refresh()
 
     ExportGraphics.writeFile(new java.io.File(filename),
-                             draw = drawPlots _,
+                             draw = drawPlots,
                              width = contents.getWidth,
                              height = contents.getHeight,
                              dpi = dpi

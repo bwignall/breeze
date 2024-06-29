@@ -35,7 +35,7 @@ class AffineScaling extends SerializableLogging {
       val xn = x + hx * alpha
       val cvn = xn.dot(c)
       logger.info("Current obj: " + cvn)
-      if ((cvn - cv).abs / (1.0.max(cvn)) < eps) converged = true
+      if ((cvn - cv).abs / 1.0.max(cvn) < eps) converged = true
       cv = cvn
       x = xn
     }

@@ -28,7 +28,7 @@ import collection.mutable
  *
  * @author dlwh
  */
-class Plot() {
+class Plot {
   private val datasets = new ArrayBuffer[xy.XYDataset]
   private val renderers = new ArrayBuffer[XYItemRenderer]
   private var series = 0
@@ -76,7 +76,7 @@ class Plot() {
 
   // Sigh, I hate the listener pattern
   def listen(l: Plot.Listener): Unit = {
-    listeners += (l -> (()))
+    listeners += (l -> ())
   }
 
   def unlisten(l: Plot.Listener): Unit = {
@@ -96,7 +96,7 @@ class Plot() {
   def xlim_=(lowerUpper: (Double, Double)): Unit = {
     xlim(lowerUpper._1, lowerUpper._2)
   }
-  def xlim: (Double, Double) = plot.getDomainAxis.getLowerBound -> plot.getDomainAxis.getUpperBound()
+  def xlim: (Double, Double) = plot.getDomainAxis.getLowerBound -> plot.getDomainAxis.getUpperBound
 
   /** Sets the lower and upper bounds of the current plot. */
   def xlim(lower: Double, upper: Double): Unit = {
@@ -107,7 +107,7 @@ class Plot() {
   def ylim_=(lowerUpper: (Double, Double)): Unit = {
     ylim(lowerUpper._1, lowerUpper._2)
   }
-  def ylim: (Double, Double) = plot.getRangeAxis.getLowerBound -> plot.getRangeAxis.getUpperBound()
+  def ylim: (Double, Double) = plot.getRangeAxis.getLowerBound -> plot.getRangeAxis.getUpperBound
   def ylim(lower: Double, upper: Double): Unit = {
     plot.getRangeAxis.setLowerBound(lower)
     plot.getRangeAxis.setUpperBound(upper)

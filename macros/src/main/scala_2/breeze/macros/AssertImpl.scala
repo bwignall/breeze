@@ -106,7 +106,7 @@ object AssertImpl {
     def newValDef(name: String, rhs: Tree, tpe: Type = null): ValDef = {
       ValDef(
         NoMods,
-        newTermName(c.fresh(name)),
+        TermName(c.fresh(name)),
         TypeTree(Option(tpe).getOrElse(rhs.tpe.normalize)),
         rhs
       )
@@ -126,7 +126,7 @@ object AssertImpl {
       case _                    => false
     }
 
-    val typedCondition = c.typeCheck(condition.tree) // , typeOf[Boolean])
+    val typedCondition = c.typecheck(condition.tree) // , typeOf[Boolean])
     c.Expr[Unit](
       typedCondition match {
         case Apply(Select(left, op @ EqualityOpName(isEqual)), List(right)) =>

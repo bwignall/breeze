@@ -38,7 +38,7 @@ class WaldTest extends AnyFunSuite with Checkers with UnivariateContinuousDistrT
       scale <- arbitrary[Double].map { x =>
         math.abs(x) % 4.0 + 1.0
       }
-    ) yield new Wald(location, scale)(RandBasis.mt0)
+    ) yield Wald(location, scale)(RandBasis.mt0)
   }
 
 }

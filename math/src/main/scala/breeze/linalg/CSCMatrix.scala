@@ -165,7 +165,7 @@ class CSCMatrix[@spec(Double, Int, Float, Long) V: Zero](private var _data: Arra
 
   override def toString(maxLines: Int, maxWidth: Int): String = {
     val buf = new StringBuilder()
-    buf ++= ("%d x %d CSCMatrix".format(rows, cols))
+    buf ++= "%d x %d CSCMatrix".format(rows, cols)
     activeIterator.take(maxLines - 1).foreach { case ((r, c), v) =>
       buf += '\n'
       buf ++= "(%d,%d) ".format(r, c)

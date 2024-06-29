@@ -47,7 +47,7 @@ class TruncatedNewtonMinimizer[T, H](maxIterations: Int = -1,
     val (v, grad, h) = f.calculate2(initial)
     val adjgrad = grad + initial * l2Regularization
     val initDelta = norm(adjgrad)
-    val adjfval = v + 0.5 * l2Regularization * (initial.dot(initial))
+    val adjfval = v + 0.5 * l2Regularization * initial.dot(initial)
     val f_too_small = if (adjfval < -1.0e+32) true else false
     State(0, initDelta, initDelta, initial, v, grad, h, adjfval, adjgrad, f_too_small, true, initialHistory(f, initial))
   }
@@ -77,12 +77,12 @@ class TruncatedNewtonMinimizer[T, H](maxIterations: Int = -1,
       val x_new = x + step
 
       val gs = adjGrad.dot(step)
-      val predictedReduction = -0.5 * (gs - (step.dot(residual)))
+      val predictedReduction = -0.5 * (gs - step.dot(residual))
 
       val (newv, newg, newh) = f.calculate2(x_new)
 
       val adjNewG = newg + x_new * l2Regularization
-      val adjNewV = newv + 0.5 * l2Regularization * (x_new.dot(x_new))
+      val adjNewV = newv + 0.5 * l2Regularization * x_new.dot(x_new)
 
       val actualReduction = adjFval - adjNewV
 
@@ -141,7 +141,7 @@ class TruncatedNewtonMinimizer[T, H](maxIterations: Int = -1,
   // LBFGS history
   case class History(memStep: IndexedSeq[T] = IndexedSeq.empty, memGradDelta: IndexedSeq[T] = IndexedSeq.empty)
 
-  protected def initialHistory(f: DiffFunction[T], x: T): History = new History()
+  protected def initialHistory(f: DiffFunction[T], x: T): History = History()
   protected def chooseDescentDirection(state: State): T = {
     val grad = state.adjGrad
     val memStep = state.history.memStep
@@ -158,7 +158,7 @@ class TruncatedNewtonMinimizer[T, H](maxIterations: Int = -1,
 
     for (i <- (memStep.length - 1) to 0 by -1) {
       rho(i) = memStep(i).dot(memGradDelta(i))
-      as(i) = (memStep(i).dot(dir)) / rho(i)
+      as(i) = memStep(i).dot(dir) / rho(i)
       if (as(i).isNaN) {
         throw new NaNHistory
       }
@@ -168,7 +168,7 @@ class TruncatedNewtonMinimizer[T, H](maxIterations: Int = -1,
     dir *= diag
 
     for (i <- memStep.indices) {
-      val beta = (memGradDelta(i).dot(dir)) / rho(i)
+      val beta = memGradDelta(i).dot(dir) / rho(i)
       dir += memStep(i) * (as(i) - beta)
     }
 
@@ -190,7 +190,7 @@ class TruncatedNewtonMinimizer[T, H](maxIterations: Int = -1,
     val memStep = (step +: oldState.history.memStep).take(m)
     val memGradDelta = (gradDelta +: oldState.history.memGradDelta).take(m)
 
-    new History(memStep, memGradDelta)
+    History(memStep, memGradDelta)
   }
 
 }

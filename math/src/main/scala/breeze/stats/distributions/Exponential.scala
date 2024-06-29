@@ -15,7 +15,7 @@ case class Exponential(rate: Double)(implicit basis: RandBasis)
     with Moments[Double, Double]
     with HasCdf
     with HasInverseCdf {
-  override def toString(): String = ScalaRunTime._toString(this)
+  override def toString: String = ScalaRunTime._toString(this)
   require(rate > 0)
 
   def unnormalizedLogPdf(x: Double): Double = -rate * x

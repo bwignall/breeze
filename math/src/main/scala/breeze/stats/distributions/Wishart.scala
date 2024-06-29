@@ -22,9 +22,9 @@ case class Wishart(df: Double, scale: DenseMatrix[Double])(implicit randBasis: R
   }
 
   def logNormalizer: Double = {
-    (math.log(2) * dims * 0.5 * df
+    math.log(2) * dims * 0.5 * df
       + math.log(det(scale)) * 0.5 * df
-      + multidigammalog(0.5 * df, dims))
+      + multidigammalog(0.5 * df, dims)
   }
 
   def mean: DenseMatrix[Double] = scale *:* df
@@ -36,9 +36,9 @@ case class Wishart(df: Double, scale: DenseMatrix[Double])(implicit randBasis: R
 
   def entropy: Double = {
     val elnx = multidigamma(df / 2, dims) + dims * math.log(2) + math.log(det(scale))
-    (-logNormalizer
+    -logNormalizer
       - ((df - dims - 1) / 2) * elnx
-      + (df * dims) / 2)
+      + (df * dims) / 2
   }
 
   def mode: DenseMatrix[Double] = {

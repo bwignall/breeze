@@ -1,16 +1,15 @@
 package breeze.util
 
-import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable
+import scala.collection.{mutable, BuildFrom}
 
 /**
  * Stores various implicits, also available by importing breeze.util._
  */
 object Implicits extends DoubleImplicits with IteratorImplicits {
-  implicit class scEnrichColl[Coll <: Traversable[(_, _)]](val __this: Coll) extends AnyVal {
+  implicit class scEnrichColl[Coll <: Iterable[(_, _)]](val __this: Coll) extends AnyVal {
     def toMultiMap[Result, A, B](implicit
-      view: Coll <:< Traversable[(A, B)],
-      cbf: CanBuildFrom[Coll, B, Result]
+      view: Coll <:< Iterable[(A, B)],
+      cbf: BuildFrom[Coll, B, Result]
     ): Map[A, Result] = {
       var result = collection.mutable.Map[A, mutable.Builder[B, Result]]()
       result = result.withDefault { a =>
@@ -21,12 +20,12 @@ object Implicits extends DoubleImplicits with IteratorImplicits {
         result(a) += b
       }
 
-      result.mapValues(_.result()).toMap
+      result.view.mapValues(_.result()).toMap
     }
   }
 
   implicit class scEnrichArray[A, B](val __this: Array[(A, B)]) extends AnyVal {
-    def toMultiMap[Result](implicit cbf: CanBuildFrom[Array[(A, B)], B, Result]): Map[A, Result] = {
+    def toMultiMap[Result](implicit cbf: BuildFrom[Array[(A, B)], B, Result]): Map[A, Result] = {
       var result = collection.mutable.Map[A, mutable.Builder[B, Result]]()
       result = result.withDefault { a =>
         val r = cbf(__this); result.update(a, r); r
@@ -36,7 +35,7 @@ object Implicits extends DoubleImplicits with IteratorImplicits {
         result(a) += b
       }
 
-      Map.empty ++ result.mapValues(_.result())
+      Map.empty ++ result.view.mapValues(_.result())
     }
 
   }

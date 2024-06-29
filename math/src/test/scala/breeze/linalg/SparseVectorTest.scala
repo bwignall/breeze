@@ -90,7 +90,7 @@ class SparseVectorTest extends AnyFunSuite {
     val b = SparseVector(3.0, 4.0, 5.0)
     (a: Vector[Double]) += (b: Vector[Double])
     assert(a === SparseVector(4.0, 6.0, 8.0))
-    assert((a: Vector[Double]).dot(b: Vector[Double]) === (a.dot(b)))
+    assert((a: Vector[Double]).dot(b: Vector[Double]) === a.dot(b))
     (a: Vector[Double]) *= (b: Vector[Double])
     assert(a === SparseVector(12.0, 24.0, 40.0))
   }

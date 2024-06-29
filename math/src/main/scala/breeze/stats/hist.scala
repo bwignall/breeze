@@ -97,7 +97,7 @@ object hist extends UFunc {
 
       val visitor = new PairValuesVisitor[S, Double] {
         def visit(a: S, w: Double): Unit = {
-          val ad = conv(a).toDouble
+          val ad = conv(a)
           val i: Int = math.floor(bins * ((ad - minimum) / (maximum - minimum))).toInt
           if ((i >= 0) && (i < bins)) {
             result(i) += w

@@ -47,7 +47,7 @@ case class GradientPaintScaleFactory[T](gradient: Array[Color] = PaintScale.Whit
 case class CategoricalPaintScaleFactory[T]() extends PaintScaleFactory[T] {
   override def apply(items: Iterable[T]): PaintScale[T] = {
     val distinct = items.toList.distinct
-    CategoricalPaintScale[T](Map() ++ (distinct.zip(LazyList.continually(PaintScale.Category20.values.toList).flatten)))
+    CategoricalPaintScale[T](Map() ++ distinct.zip(LazyList.continually(PaintScale.Category20.values.toList).flatten))
   }
 }
 

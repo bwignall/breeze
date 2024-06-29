@@ -510,7 +510,7 @@ object SparseArray {
     rv
   }
 
-  def tabulate[@specialized(Int, Float, Double) T: ClassTag: Zero](length: Int)(fn: (Int => T)): SparseArray[T] = {
+  def tabulate[@specialized(Int, Float, Double) T: ClassTag: Zero](length: Int)(fn: Int => T): SparseArray[T] = {
     val rv = new SparseArray[T](length)
     var i = 0
     while (i < length) {

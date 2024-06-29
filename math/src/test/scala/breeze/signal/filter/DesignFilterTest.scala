@@ -11,6 +11,20 @@ import org.scalatest.funsuite._
  */
 class DesignFilterTest extends AnyFunSuite {
 
+  val testFirwin1: DenseVector[Double] = DenseVector(-0.0077763127191025679, 0.064454645578710029, 0.44332166714039256,
+                                                     0.44332166714039256, 0.064454645578710029, -0.0077763127191025679)
+  val testFirwin2: DenseVector[Double] = DenseVector(0.022053155816871686, 0.66666666666666663, 0.022053155816871686)
+  val testFirwin3: DenseVector[Double] = DenseVector(-0.018510492178744953, -0.01461577162249808, 0.26666666666666661,
+                                                     -0.01461577162249808, -0.018510492178744953)
+  val testFirwin4: DenseVector[Double] = DenseVector(-0.000000000000000000e+00,
+                                                     3.794040820411270776e-01,
+                                                     3.794040820411272441e-01,
+                                                     -0.000000000000000000e+00
+  )
+  val testFirwin5: DenseVector[Double] =
+    DenseVector(-2.596504355380610970e-18, 6.948495923029152088e-02, 4.999999999999998335e-01, 6.948495923029154864e-02,
+                -2.596504355380610970e-18)
+
   test("designFilterFirwin tested against output from scipy.signal.firwin (0.13.2-1)") {
 
     val testNormThreshold = 1.0e-10
@@ -64,19 +78,4 @@ class DesignFilterTest extends AnyFunSuite {
     )
     assert(norm(testFirwin5 - firwin5.kernel) < testNormThreshold)
   }
-
-  val testFirwin1: DenseVector[Double] = DenseVector(-0.0077763127191025679, 0.064454645578710029, 0.44332166714039256,
-                                                     0.44332166714039256, 0.064454645578710029, -0.0077763127191025679)
-  val testFirwin2: DenseVector[Double] = DenseVector(0.022053155816871686, 0.66666666666666663, 0.022053155816871686)
-  val testFirwin3: DenseVector[Double] = DenseVector(-0.018510492178744953, -0.01461577162249808, 0.26666666666666661,
-                                                     -0.01461577162249808, -0.018510492178744953)
-  val testFirwin4: DenseVector[Double] = DenseVector(-0.000000000000000000e+00,
-                                                     3.794040820411270776e-01,
-                                                     3.794040820411272441e-01,
-                                                     -0.000000000000000000e+00
-  )
-  val testFirwin5: DenseVector[Double] =
-    DenseVector(-2.596504355380610970e-18, 6.948495923029152088e-02, 4.999999999999998335e-01, 6.948495923029154864e-02,
-                -2.596504355380610970e-18)
-
 }

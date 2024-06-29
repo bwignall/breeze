@@ -46,7 +46,7 @@ trait Coordinated[V, S] {
 
 trait AdditiveTensorAbelianGroup[V, S] {
   implicit def scalars: Semiring[S]
-  implicit def addVV: OpAdd.Impl2[V, V, V] // Abelian Group operator (addition)
+  implicit def addVV(): OpAdd.Impl2[V, V, V] // Abelian Group operator (addition)
 }
 
 trait Normed[V] {
@@ -84,9 +84,9 @@ trait MutableModule[V, S] extends Module[V, S] {
   implicit def copy: CanCopy[V]
   implicit def mulIntoVS: OpMulScalar.InPlaceImpl2[V, S]
   implicit def mulIntoVS_M: OpMulMatrix.InPlaceImpl2[V, S] = mulIntoVS.asInstanceOf[OpMulMatrix.InPlaceImpl2[V, S]]
-  implicit def addIntoVV: OpAdd.InPlaceImpl2[V, V]
+  implicit def addIntoVV(): OpAdd.InPlaceImpl2[V, V]
   implicit def subIntoVV: OpSub.InPlaceImpl2[V, V]
-  implicit def setIntoVV: OpSet.InPlaceImpl2[V, V]
+  implicit def setIntoVV(): OpSet.InPlaceImpl2[V, V]
   implicit def scaleAddVV: scaleAdd.InPlaceImpl3[V, S, V]
 }
 
@@ -217,7 +217,7 @@ trait FiniteCoordinateField[V, I, S] extends EnumeratedCoordinateField[V, I, S] 
   implicit def zero: CanCreateZeros[V, I]
   implicit def canDim: dim.Impl[V, I]
 
-  implicit def addVS: OpAdd.Impl2[V, S, V] // Implicitly Broadcast scalars to vector-space
+  implicit def addVS(): OpAdd.Impl2[V, S, V] // Implicitly Broadcast scalars to vector-space
   implicit def subVS: OpSub.Impl2[V, S, V]
 }
 
@@ -225,9 +225,9 @@ trait MutableFiniteCoordinateField[V, I, S]
     extends FiniteCoordinateField[V, I, S]
     with MutableEnumeratedCoordinateField[V, I, S] {
 
-  implicit def addIntoVS: OpAdd.InPlaceImpl2[V, S]
+  implicit def addIntoVS(): OpAdd.InPlaceImpl2[V, S]
   implicit def subIntoVS: OpSub.InPlaceImpl2[V, S]
-  implicit def setIntoVS: OpSet.InPlaceImpl2[V, S]
+  implicit def setIntoVS(): OpSet.InPlaceImpl2[V, S]
 }
 
 trait MutableOptimizationSpace[M, V, S] extends MutableFiniteCoordinateField[V, Int, S] {
@@ -253,21 +253,21 @@ trait MutableOptimizationSpace[M, V, S] extends MutableFiniteCoordinateField[V, 
   implicit def mulMS: OpMulScalar.Impl2[M, S, M]
   implicit def mulMSMat: OpMulMatrix.Impl2[M, S, M]
   implicit def zeroLikeM: CanCreateZerosLike[M, M]
-  implicit def addMS: OpAdd.Impl2[M, S, M]
-  implicit def addMM: OpAdd.Impl2[M, M, M]
+  implicit def addMS(): OpAdd.Impl2[M, S, M]
+  implicit def addMM(): OpAdd.Impl2[M, M, M]
   implicit def divMS: OpDiv.Impl2[M, S, M]
   implicit def dotMM: OpMulInner.Impl2[M, M, S]
   implicit def divIntoMM: OpDiv.InPlaceImpl2[M, M]
   implicit def divIntoMS: OpDiv.InPlaceImpl2[M, S]
   implicit def copyM: CanCopy[M]
   implicit def mulIntoMS: OpMulScalar.InPlaceImpl2[M, S]
-  implicit def addIntoMM: OpAdd.InPlaceImpl2[M, M]
+  implicit def addIntoMM(): OpAdd.InPlaceImpl2[M, M]
   implicit def subIntoMM: OpSub.InPlaceImpl2[M, M]
-  implicit def addIntoMS: OpAdd.InPlaceImpl2[M, S]
+  implicit def addIntoMS(): OpAdd.InPlaceImpl2[M, S]
   implicit def subIntoMS: OpSub.InPlaceImpl2[M, S]
-  implicit def setIntoMM: OpSet.InPlaceImpl2[M, M]
+  implicit def setIntoMM(): OpSet.InPlaceImpl2[M, M]
   implicit def scaleAddMM: scaleAdd.InPlaceImpl3[M, S, M]
-  implicit def setIntoMS: OpSet.InPlaceImpl2[M, S]
+  implicit def setIntoMS(): OpSet.InPlaceImpl2[M, S]
   implicit def mulIntoMM: OpMulScalar.InPlaceImpl2[M, M]
   implicit def scalarOfM: ScalarOf[M, S]
   implicit def mapValuesM: CanMapValues[M, S, S, M]

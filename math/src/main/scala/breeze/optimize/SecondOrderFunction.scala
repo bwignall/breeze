@@ -167,7 +167,7 @@ class FisherMatrix[T](grads: IndexedSeq[T])(implicit vs: MutableInnerProductVect
   import vs._
 
   def *(t: T): T = {
-    grads.view.map(g => g * (g.dot(t))).reduceLeft(_ += _) /= grads.length.toDouble
+    grads.view.map(g => g * g.dot(t)).reduceLeft(_ += _) /= grads.length.toDouble
   }
 }
 

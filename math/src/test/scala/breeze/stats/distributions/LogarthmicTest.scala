@@ -49,7 +49,7 @@ class LogarthmicTest extends AnyFunSuite with Checkers with MomentsTestBase[Int]
       p <- arbitrary[Double].map { m =>
         (math.abs(m) % 1.0) + 1e-3
       }
-    ) yield new Logarthmic(p)(RandBasis.mt0)
+    ) yield Logarthmic(p)(RandBasis.mt0)
   }
 
   def asDouble(x: Int): Double = x.toDouble
