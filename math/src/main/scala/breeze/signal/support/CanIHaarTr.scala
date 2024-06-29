@@ -32,7 +32,7 @@ object CanIHaarTr {
           val hs = v.length / 2
           v.slice(0, hs) := _ifht(v.slice(0, hs))
           val x = v.slice(0, hs).toArray.zip(v.slice(hs, v.length).toArray)
-          DenseVector(x.flatMap(e => List((e._1 + e._2) * nFactor, (e._1 - e._2) * nFactor)).toArray)
+          DenseVector(x.flatMap(e => List((e._1 + e._2) * nFactor, (e._1 - e._2) * nFactor)))
         } else {
           v
         }

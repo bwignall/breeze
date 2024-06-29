@@ -150,7 +150,7 @@ class FisherDiffFunction[T](df: BatchDiffFunction[T], gradientsToKeep: Int = 100
     //    val fullGrad = toKeep.view.map(_._2).foldLeft(otherGradient * (df.fullRange.size - subset.size).toDouble )(_ += _ ) /df.fullRange.size.toDouble
     //    val fullV = toKeep.view.map(_._1).foldLeft(v * (df.fullRange.size - subset.size) )(_ + _) / df.fullRange.size
 
-    (v, otherGradient, new FisherMatrix(toKeep.map(_._2).toIndexedSeq))
+    (v, otherGradient, new FisherMatrix(toKeep.map(_._2)))
   }
 }
 

@@ -387,8 +387,8 @@ object svd extends UFunc {
         mp = mp.sortBy(-1 * _._1)
         val sp = mp.map(_._1)
 
-        val s = DenseVector(sp.toArray)
-        val siMatrix: DenseMatrix[Double] = diag(DenseVector(sp.map(u => 1 / u).toArray))
+        val s = DenseVector(sp)
+        val siMatrix: DenseMatrix[Double] = diag(DenseVector(sp.map(u => 1 / u)))
 
         val va = mp.map { case (ek, ev) => ev }
         val uOutput = DenseMatrix(va.map(r => r.toArray).toSeq: _*).t

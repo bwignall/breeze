@@ -11,7 +11,7 @@ class argsortTest extends AnyFunSuite with Checkers {
   test("argsort dv") {
     check(Prop.forAll { (array: Array[Double]) =>
       val ax = argsort(new DenseVector(array))
-      ax.toIndexedSeq.map(array) == array.sorted.toIndexedSeq
+      ax.map(array) == array.sorted.toIndexedSeq
     })
   }
 
