@@ -9,11 +9,14 @@ import optimize.DiffFunction
  * @author dlwh
  */
 trait ExponentialFamily[D, T] {
-  type Parameter;
-  type SufficientStatistic <: distributions.SufficientStatistic[SufficientStatistic];
-  def emptySufficientStatistic: SufficientStatistic;
-  def sufficientStatisticFor(t: T): SufficientStatistic;
+  type Parameter
+  type SufficientStatistic <: distributions.SufficientStatistic[SufficientStatistic]
+
+  def emptySufficientStatistic: SufficientStatistic
+
+  def sufficientStatisticFor(t: T): SufficientStatistic
+
   def mle(stats: SufficientStatistic): Parameter
   def likelihoodFunction(stats: SufficientStatistic): DiffFunction[Parameter]
-  def distribution(p: Parameter)(implicit rand: RandBasis): D;
+  def distribution(p: Parameter)(implicit rand: RandBasis): D
 }

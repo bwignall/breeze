@@ -1,4 +1,4 @@
-package breeze.linalg;
+package breeze.linalg
 
 import breeze.macros.expand
 import breeze.math.Complex

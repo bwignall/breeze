@@ -59,7 +59,7 @@ class VonMisesTest
       scale <- arbitrary[Double].map { x =>
         math.abs(x) % 3.0 + 1.1
       }
-    ) yield new VonMises(shape, scale);
+    ) yield new VonMises(shape, scale)
   }
 
   type Distr = VonMises

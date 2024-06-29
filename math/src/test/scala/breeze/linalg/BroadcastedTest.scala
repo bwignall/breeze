@@ -109,7 +109,7 @@ class BroadcastedTest extends AnyFunSuite {
   }
 
   test("broadcasted min/max") {
-    val b = DenseMatrix.rand(3, 3);
+    val b = DenseMatrix.rand(3, 3)
     val b2 = DenseVector(3.0, 4.0, 5.0)
 
     val c = max(b(*, ::), b2)

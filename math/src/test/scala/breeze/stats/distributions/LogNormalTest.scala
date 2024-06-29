@@ -71,7 +71,7 @@ class LogNormalTest
 
   test("pdf should return the correct value") {
     val dist = LogNormal(0.0, 1.0)
-    assert(dist.pdf(1.0) == (1.0 / Math.sqrt(2 * Math.PI)));
+    assert(dist.pdf(1.0) == (1.0 / Math.sqrt(2 * Math.PI)))
   }
 
   test("the probability of non-positive numbers should be 0.0") {

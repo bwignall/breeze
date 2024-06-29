@@ -51,22 +51,22 @@ object KuhnMunkres extends BipartiteMatching {
         (costs, false)
       }
 
-    val C: Array[Array[Double]] = padMatrix(costs2);
-    val n = C.size;
-    val rowCovered = Array.fill(n)(false);
-    val colCovered = Array.fill(n)(false);
+    val C: Array[Array[Double]] = padMatrix(costs2)
+    val n = C.size
+    val rowCovered = Array.fill(n)(false)
+    val colCovered = Array.fill(n)(false)
 
-    var primeR = 0;
-    var primeC = 0;
-    val path = Array.fill(2 * n, 2 * n)(0);
-    val marked = Array.fill(n, n)(0);
+    var primeR = 0
+    var primeC = 0
+    val path = Array.fill(2 * n, 2 * n)(0)
+    val marked = Array.fill(n, n)(0)
 
     def findSmallestNotCovered() = {
       val mins = for {
         i <- Iterator.range(0, n)
         j <- Iterator.range(0, n)
         if !rowCovered(i) && !colCovered(j)
-      } yield C(i)(j);
+      } yield C(i)(j)
       mins.reduceLeft(_.min(_))
     }
 
@@ -82,7 +82,7 @@ object KuhnMunkres extends BipartiteMatching {
           if (C(i)(j) == 0 && !rowCovered(i) && !colCovered(j)) {
             row = i
             col = j
-            done = true;
+            done = true
           }
           j += 1
         }
@@ -95,7 +95,7 @@ object KuhnMunkres extends BipartiteMatching {
 
     def erasePrimes(): Unit = {
       for (i <- 0 until n; j <- 0 until n if marked(i)(j) == 2) {
-        marked(i)(j) = 0;
+        marked(i)(j) = 0
       }
     }
 
@@ -123,35 +123,35 @@ object KuhnMunkres extends BipartiteMatching {
 
     def step1() = {
       for {
-        i <- 0 until n;
-        min = C(i).reduceLeft(_.min(_));
+        i <- 0 until n
+        min = C(i).reduceLeft(_.min(_))
         j <- 0 until n
       } {
-        C(i)(j) -= min;
+        C(i)(j) -= min
       }
 
-      2;
+      2
     }
 
     def step2() = {
       for {
-        r <- 0 until n;
+        r <- 0 until n
         c <- 0 until n
         if C(r)(c) == 0 && !rowCovered(r) && !colCovered(c)
       } {
-        marked(r)(c) = 1;
-        rowCovered(r) = true;
-        colCovered(c) = true;
+        marked(r)(c) = 1
+        rowCovered(r) = true
+        colCovered(c) = true
       }
-      java.util.Arrays.fill(rowCovered, false);
-      java.util.Arrays.fill(colCovered, false);
-      3;
+      java.util.Arrays.fill(rowCovered, false)
+      java.util.Arrays.fill(colCovered, false)
+      3
     }
 
     def step3() = {
-      var count = 0;
+      var count = 0
       for {
-        i <- 0 until n;
+        i <- 0 until n
         j <- 0 until n
         if marked(i)(j) == 1
       } {
@@ -167,25 +167,25 @@ object KuhnMunkres extends BipartiteMatching {
     }
 
     def step4() = {
-      var star_col = -1;
-      var done = false;
-      var step = 0;
+      var star_col = -1
+      var done = false
+      var step = 0
       while (!done) {
-        val (row, col) = findZero();
+        val (row, col) = findZero()
         if (row == -1) {
-          done = true;
-          step = 6;
+          done = true
+          step = 6
         } else {
-          marked(row)(col) = 2;
-          val starredCol = findStarInRow(row);
+          marked(row)(col) = 2
+          val starredCol = findStarInRow(row)
           if (starredCol == -1) {
-            done = true;
-            primeR = row;
-            primeC = col;
-            step = 5;
+            done = true
+            primeR = row
+            primeC = col
+            step = 5
           } else {
-            rowCovered(row) = true;
-            colCovered(starredCol) = false;
+            rowCovered(row) = true
+            colCovered(starredCol) = false
           }
         }
       }
@@ -193,50 +193,50 @@ object KuhnMunkres extends BipartiteMatching {
     }
 
     def step5() = {
-      var count = 0;
-      path(count)(0) = primeR;
-      path(count)(1) = primeC;
-      var done = false;
+      var count = 0
+      path(count)(0) = primeR
+      path(count)(1) = primeC
+      var done = false
       while (!done) {
-        val row = findStarInCol(path(count)(1));
+        val row = findStarInCol(path(count)(1))
         if (row >= 0) {
-          count += 1;
-          path(count)(0) = row;
-          path(count)(1) = path(count - 1)(1);
+          count += 1
+          path(count)(0) = row
+          path(count)(1) = path(count - 1)(1)
         } else {
-          done = true;
+          done = true
         }
 
         if (!done) {
-          val col = findPrimeInRow(path(count)(0));
+          val col = findPrimeInRow(path(count)(0))
           count += 1
-          path(count)(0) = path(count - 1)(0);
-          path(count)(1) = col;
+          path(count)(0) = path(count - 1)(0)
+          path(count)(1) = col
         }
       }
 
-      convertPath(path, count);
-      java.util.Arrays.fill(rowCovered, false);
-      java.util.Arrays.fill(colCovered, false);
-      erasePrimes();
+      convertPath(path, count)
+      java.util.Arrays.fill(rowCovered, false)
+      java.util.Arrays.fill(colCovered, false)
+      erasePrimes()
 
       3
     }
 
     def step6() = {
-      val min = findSmallestNotCovered();
+      val min = findSmallestNotCovered()
       for {
-        r <- 0 until n;
+        r <- 0 until n
         c <- 0 until n
       } {
-        if (rowCovered(r)) C(r)(c) += min;
-        if (!colCovered(c)) C(r)(c) -= min;
+        if (rowCovered(r)) C(r)(c) += min
+        if (!colCovered(c)) C(r)(c) -= min
       }
 
       4
     }
 
-    var step = 1;
+    var step = 1
     while (step < 7) {
       step = step match {
         case 1 => step1();
@@ -248,13 +248,13 @@ object KuhnMunkres extends BipartiteMatching {
       }
     }
 
-    var answers = Array.fill(costs2.length)(-1);
-    var cost = 0.0;
+    var answers = Array.fill(costs2.length)(-1)
+    var cost = 0.0
     for (i <- 0 until answers.length) {
-      val j = marked(i).indexWhere(_ == 1);
+      val j = marked(i).indexWhere(_ == 1)
       if (j >= 0) {
-        cost += costs2(i)(j);
-        answers(i) = j;
+        cost += costs2(i)(j)
+        answers(i) = j
       }
     }
 
@@ -274,11 +274,11 @@ object KuhnMunkres extends BipartiteMatching {
   }
 
   private def padMatrix(costs: Seq[Seq[Double]]) = {
-    val rows = costs.length;
-    val cols = costs(0).length;
-    val n = rows.max(cols);
+    val rows = costs.length
+    val cols = costs(0).length
+    val n = rows.max(cols)
     val ret = Array.tabulate(n, n) { (i, j) =>
-      if (i >= rows) 0.0;
+      if (i >= rows) 0.0
       else if (j >= costs(i).length) 0.0
       else costs(i)(j);
     }

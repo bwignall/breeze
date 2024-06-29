@@ -1,4 +1,4 @@
-package breeze.stats.distributions;
+package breeze.stats.distributions
 
 /*
  Copyright 2009 David Hall, Daniel Ramage
@@ -41,7 +41,7 @@ class GammaTest
     for (
       shape <- arbitrary[Double].map { _.abs % 200.0 + 0.2 }; // Gamma pdf at 0 not defined when shape == 1
       scale <- arbitrary[Double].map { _.abs % 8.0 + 1.0 }
-    ) yield (shape, scale);
+    ) yield (shape, scale)
   }
 
   def paramsClose(p: (Double, Double), b: (Double, Double)): Boolean = {

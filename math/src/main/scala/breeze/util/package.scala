@@ -97,7 +97,7 @@ package object util {
               s.append("local serialVersionUID = ").append(localSUID)
               s.append(" stream serialVersionUID = ").append(streamSUID)
               val e = new InvalidClassException(s.toString())
-              logger.error(s"Potentially Fatal Deserialization Operation while deserializing $localClass", e);
+              logger.error(s"Potentially Fatal Deserialization Operation while deserializing $localClass", e)
               resultClassDescriptor = localClassDescriptor; // Use local class descriptor for deserialization
             }
 

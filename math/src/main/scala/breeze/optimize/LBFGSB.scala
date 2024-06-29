@@ -92,7 +92,7 @@ class LBFGSB(lowerBounds: DenseVector[Double],
         val subspaceMin = subspaceMinimization(state.history, cauchyPoint, x, c, g)
         adjustWithinBound(subspaceMin)
         subspaceMin - x
-      };
+      }
 
     dirk
   }
@@ -190,7 +190,7 @@ class LBFGSB(lowerBounds: DenseVector[Double],
     }
 
     // Initialize
-    val xCauchy = x.copy;
+    val xCauchy = x.copy
     var p = W.t * d
     var c = DenseVector.zeros[Double](M.rows)
     var fDerivative: Double = g.dot(d)
@@ -215,7 +215,7 @@ class LBFGSB(lowerBounds: DenseVector[Double],
       fDerivative += deltaT * fSecondDerivative + g(b) * g(b) + theta * g(b) * zb - (bRowOfW.t *:* g(b)) * (M * c)
       fSecondDerivative += -1.0 * theta * g(b) * g(b) - 2.0 * (g(b) * (bRowOfW
         .dot(M * p))) - g(b) * g(b) * (bRowOfW.t * (M * bRowOfW))
-      p += (bRowOfW *:* g(b));
+      p += (bRowOfW *:* g(b))
       d(b) = 0.0
       dtMin = -fDerivative / fSecondDerivative
       oldT = minT
