@@ -21,9 +21,9 @@ class ExponentialTest
   val expFam: Exponential.type = Exponential
   override val numSamples = 40000
 
-  def asDouble(x: Double) = x
+  def asDouble(x: Double): Double = x
 
-  def fromDouble(x: Double) = x
+  def fromDouble(x: Double): Double = x
 
   def arbParameter: Arbitrary[Double] = Arbitrary {
     for (rate <- arbitrary[Double].map(_.abs % 200.0 + Double.MinPositiveValue)) yield rate

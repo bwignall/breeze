@@ -1,12 +1,6 @@
 package breeze.linalg
 
-import breeze.math._
-import breeze.storage.Zero
-import org.scalacheck._
-import org.scalatest._
 import org.scalatest.funsuite._
-
-import scala.reflect.ClassTag
 
 /**
  *

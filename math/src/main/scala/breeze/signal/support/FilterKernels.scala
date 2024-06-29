@@ -44,7 +44,7 @@ object FIRKernel1D {
 class FIRKernel1D[T](val kernel: DenseVector[T], override val multiplier: Double, override val designText: String)
     extends FilterKernel1D[T] {
   // lazy val kernelFourier: DenseVector[Complex] = fourierTr( kernel )
-  lazy val length = kernel.length
+  lazy val length: Int = kernel.length
 
   /**Amount of overhang to prepend for convolution, to conserve output length.*/
   lazy val overhangPre: Int = (length - 1) / 2
@@ -57,7 +57,7 @@ class FIRKernel1D[T](val kernel: DenseVector[T], override val multiplier: Double
 //  override def toFloat(): FIRKernel1D[Float] = FIRKernel1D[Float]( kernel.map(_.toFloat), designText )
 //  override def toDouble(): FIRKernel1D[Double] = FIRKernel1D[Double]( kernel.map(_.toDouble), designText )
 
-  override def toString(): String = this.getClass.toString + " multiplier: " + multiplier + ": " + designText
+  override def toString: String = this.getClass.toString + " multiplier: " + multiplier + ": " + designText
 }
 
 /**This immutable class will encapsulate 1D IIR kernels. Not implemented yet.*/

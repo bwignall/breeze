@@ -18,7 +18,6 @@ package breeze.linalg.support
  * /
  */
 
-import breeze.generic.UFunc
 import breeze.macros.cforRange
 import breeze.math.Complex
 
@@ -33,7 +32,6 @@ import scala.{specialized => spec}
  * @author dlwh
  */
 trait CanMapValues[From, @specialized(Int, Float, Long, Double) V, @specialized(Int, Float, Long, Double) V2, +To] {
-//  def apply(from: From, fn: V=>V2): To = map(from, fn)
   def map(from: From, fn: V => V2): To
   def mapActive(from: From, fn: V => V2): To
 }
@@ -60,9 +58,9 @@ object CanMapValues extends CanMapValuesLowPrio {
       extends CanMapValues[Array[A], A, B, Array[B]] {
 
     /**Maps all values from the given collection. */
-    def map(from: Array[A], fn: (A) => B): Array[B] = {
+    def map(from: Array[A], fn: A => B): Array[B] = {
       val arr = new Array[B](from.length)
-      cforRange(0 until from.length) { i =>
+      cforRange(from.indices) { i =>
         arr(i) = fn(from(i))
       }
       arr
@@ -100,8 +98,8 @@ sealed trait CanMapValuesLowPrio { self: CanMapValues.type =>
 
   def canMapSelf[V, V2]: CanMapValues[V, V, V2, V2] = {
     new CanMapValues[V, V, V2, V2] {
-      def map(from: V, fn: (V) => V2): V2 = fn(from)
-      def mapActive(from: V, fn: (V) => V2): V2 = fn(from)
+      def map(from: V, fn: V => V2): V2 = fn(from)
+      def mapActive(from: V, fn: V => V2): V2 = fn(from)
     }
   }
 

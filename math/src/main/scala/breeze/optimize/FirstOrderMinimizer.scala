@@ -7,10 +7,8 @@ import breeze.math.MutableFiniteCoordinateField
 import breeze.math.NormedModule
 import breeze.optimize.FirstOrderMinimizer.ConvergenceCheck
 import breeze.stats.distributions.RandBasis
-import breeze.stats.distributions.ThreadLocalRandomGenerator
 import breeze.util.Implicits._
 import breeze.util.SerializableLogging
-import org.apache.commons.math3.random.MersenneTwister
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -69,9 +67,9 @@ abstract class FirstOrderMinimizer[T, DF <: StochasticDiffFunction[T]](val conve
         val x = takeStep(state, dir, stepSize)
         val (value, grad) = calculateObjective(adjustedFun, x, state.history)
         val (adjValue, adjGrad) = adjust(x, grad, value)
-        val oneOffImprovement = (state.adjustedValue - adjValue) / (state.adjustedValue.abs
+        val oneOffImprovement = (state.adjustedValue - adjValue) / state.adjustedValue.abs
           .max(adjValue.abs)
-          .max(1e-6 * state.initialAdjVal.abs))
+          .max(1e-6 * state.initialAdjVal.abs)
         logger.info(f"Val and Grad Norm: $adjValue%.6g (rel: $oneOffImprovement%.3g) ${norm(adjGrad)}%.6g")
         val history = updateHistory(x, grad, value, adjustedFun, state)
         val newCInfo = convergenceCheck.update(x, adjGrad, adjValue, state, state.convergenceInfo)
@@ -192,7 +190,7 @@ object FirstOrderMinimizer {
     override def update(newX: T, newGrad: T, newVal: Double, oldState: State[T, _, _], oldInfo: Info): Info = {
       require(oldInfo.length == checks.length)
       val out = ArrayBuffer[ConvergenceCheck[T]#Info]()
-      cforRange(0 until checks.length) { j =>
+      cforRange(checks.indices) { j =>
         val c = checks(j)
         val i = oldInfo(j)
         out += c.update(newX, newGrad, newVal, oldState, i.asInstanceOf[c.Info])
@@ -201,7 +199,7 @@ object FirstOrderMinimizer {
     }
 
     override def apply(state: State[T, _, _], info: IndexedSeq[ConvergenceCheck[T]#Info]): Option[ConvergenceReason] = {
-      checks.zip(info).iterator.flatMap { case (c, i) => c(state, i.asInstanceOf[c.Info]) }.toStream.headOption
+      checks.zip(info).iterator.flatMap { case (c, i) => c(state, i.asInstanceOf[c.Info]) }.to(LazyList).headOption
     }
   }
 
@@ -280,19 +278,19 @@ object FirstOrderMinimizer {
   }
 
   /**
-   * Runs the function, and if it fails to decreased by at least improvementRequirement numFailures times in a row,
+   * Runs the function, and if it fails to decrease by at least improvementRequirement numFailures times in a row,
    * then we abort
-   * @param f
-   * @param numFailures
+   * @param f function
+   * @param numFailures how many times we can fail to improve
    * @param evalFrequency how often we run the evaluation
-   * @tparam T
+   * @tparam T input type
    */
   def monitorFunctionValues[T](f: T => Double,
                                numFailures: Int = 5,
                                improvementRequirement: Double = 1e-2,
                                evalFrequency: Int = 10
   ): ConvergenceCheck[T] =
-    new MonitorFunctionValuesCheck(f, numFailures, improvementRequirement, evalFrequency)
+    MonitorFunctionValuesCheck(f, numFailures, improvementRequirement, evalFrequency)
 
   case class MonitorFunctionValuesCheck[T](f: T => Double,
                                            numFailures: Int,
@@ -306,11 +304,11 @@ object FirstOrderMinimizer {
       if (oldState.iter % evalFrequency == 0) {
         val newValue = f(newX)
         if (newValue <= oldInfo.bestValue * (1 - improvementRequirement)) {
-          logger.info(f"External function improved: current ${newValue}%.3f old: ${oldInfo.bestValue}%.3f")
+          logger.info(f"External function improved: current $newValue%.3f old: ${oldInfo.bestValue}%.3f")
           Info(numFailures = 0, bestValue = newValue)
         } else {
           logger.info(
-            f"External function failed to improve sufficiently! current ${newValue}%.3f old: ${oldInfo.bestValue}%.3f"
+            f"External function failed to improve sufficiently! current $newValue%.3f old: ${oldInfo.bestValue}%.3f"
           )
           oldInfo.copy(numFailures = oldInfo.numFailures + 1)
         }
@@ -406,7 +404,7 @@ object FirstOrderMinimizer {
     ): Iterator[LBFGS[T]#State] = {
       if (useL1) new OWLQN[K, T](maxIterations, 5, regularization, tolerance)(space).iterations(f, init)
       else
-        (new LBFGS[T](maxIterations, 5, tolerance = tolerance)(space))
+        new LBFGS[T](maxIterations, 5, tolerance = tolerance)(space)
           .iterations(DiffFunction.withL2Regularization(f, regularization), init)
     }
   }

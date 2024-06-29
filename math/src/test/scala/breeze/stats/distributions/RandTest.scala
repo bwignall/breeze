@@ -29,7 +29,7 @@ class RandTest extends AnyFunSuite {
   test("RandBasis.withSeed ensures distinct seeds in different threads") {
     implicit val basis: RandBasis = RandBasis.withSeed(2)
     var t2 = new Gaussian(0, 1).sample(10)
-    var t3 = new Gaussian(0, 1).sample(10)
+    val t3 = new Gaussian(0, 1).sample(10)
 
     assert { t2 != t3 } // sanity check
 
@@ -38,8 +38,8 @@ class RandTest extends AnyFunSuite {
         yield new Thread {
           override def run(): Unit = { t2 = new Gaussian(0, 1).sample(10) }
         }
-    threads.map(_.start)
-    threads.map(_.join)
+    threads.foreach(_.start)
+    threads.foreach(_.join)
 
     // ensure that both threads use different seeds
     assert { t2 != t3 }

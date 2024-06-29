@@ -19,16 +19,11 @@ import breeze.linalg.eig.Eig
 import breeze.linalg.eigSym.EigSym
 import breeze.linalg.qr.QR
 import breeze.linalg.qrp.QRP
-import breeze.linalg.support.CanTraverseValues
 import breeze.linalg.svd.SVD
 import breeze.numerics._
 import breeze.stats.distributions.MultivariateGaussian
 import breeze.stats.distributions.RandBasis
-import breeze.stats.mean
-import breeze.stats.meanAndVariance
-import breeze.stats.median
 import breeze.util.DoubleImplicits
-import breeze.{math => bmath}
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 import org.scalacheck.Prop
@@ -712,7 +707,7 @@ class LinearAlgebraTest extends AnyFunSuite with Checkers with DoubleImplicits {
                        (1.5, 0.0, 2.0, 0.0, 5.0)
     )
 
-    def checkCols(m1: DenseMatrix[Double], m2: DenseMatrix[Double]) = {
+    def checkCols(m1: DenseMatrix[Double], m2: DenseMatrix[Double]): Unit = {
       for (i <- 0 until m1.cols) {
         val v1 = if (m1(::, i).valueAt(0) > 0) m1(::, i) else -m1(::, i)
         val v2 = if (m2(::, i).valueAt(0) > 0) m2(::, i) else -m2(::, i)
@@ -850,22 +845,22 @@ class LinearAlgebraTest extends AnyFunSuite with Checkers with DoubleImplicits {
   test("pca") {
 
     // The data
-    val smithData = DenseMatrix((2.5, 2.4),
-                                (0.5, 0.7),
-                                (2.2, 2.9),
-                                (1.9, 2.2),
-                                (3.1, 3.0),
-                                (2.3, 2.7),
-                                (2.0, 1.6),
-                                (1.0, 1.1),
-                                (1.5, 1.6),
-                                (1.1, 0.9)
+    val smithData: DenseMatrix[Double] = DenseMatrix((2.5, 2.4),
+                                                     (0.5, 0.7),
+                                                     (2.2, 2.9),
+                                                     (1.9, 2.2),
+                                                     (3.1, 3.0),
+                                                     (2.3, 2.7),
+                                                     (2.0, 1.6),
+                                                     (1.0, 1.1),
+                                                     (1.5, 1.6),
+                                                     (1.1, 0.9)
     )
 
     // The correct answers bundled up.
     object smithTruth {
 
-      val centeredData = DenseMatrix(
+      val centeredData: DenseMatrix[Double] = DenseMatrix(
         (0.69, 0.4900000000000002),
         (-1.31, -1.2099999999999997),
         (0.3900000000000001, 0.9900000000000002),
@@ -878,15 +873,16 @@ class LinearAlgebraTest extends AnyFunSuite with Checkers with DoubleImplicits {
         (-0.71, -1.0099999999999998)
       )
 
-      val covmat = DenseMatrix((0.6165555555555556, 0.6154444444444445), (0.6154444444444445, 0.7165555555555555))
+      val covmat: DenseMatrix[Double] =
+        DenseMatrix((0.6165555555555556, 0.6154444444444445), (0.6154444444444445, 0.7165555555555555))
 
-      val eigenvalues =
+      val eigenvalues: DenseVector[Double] =
         DenseVector(1.2840277121727839, 0.04908339893832735)
 
-      val eigenvectors =
+      val eigenvectors: DenseMatrix[Double] =
         DenseMatrix((-0.6778733985280118, -0.735178655544408), (-0.735178655544408, 0.6778733985280118))
 
-      val scores = DenseMatrix(
+      val scores: DenseMatrix[Double] = DenseMatrix(
         (-0.8279701862010882, -0.17511530704691552),
         (1.7775803252804288, 0.14285722654428046),
         (-0.9921974944148888, 0.3843749888804126),

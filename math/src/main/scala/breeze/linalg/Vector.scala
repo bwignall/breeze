@@ -55,33 +55,33 @@ trait Vector[@spec(Int, Double, Float) V] extends VectorLike[V, Vector[V]] {
   /**
    * @return the set of keys in this vector (0 until length)
    */
-  def keySet: Set[Int] = BitSet((0 until length): _*)
+  def keySet: Set[Int] = BitSet(0 until length: _*)
 
   def length: Int
-  override def size = length
+  override def size: Int = length
 
-  def iterator = Iterator.range(0, size).map { i =>
+  def iterator: Iterator[(Int, V)] = Iterator.range(0, size).map { i =>
     i -> apply(i)
   }
 
-  def valuesIterator = Iterator.range(0, size).map { i =>
+  def valuesIterator: Iterator[V] = Iterator.range(0, size).map { i =>
     apply(i)
   }
 
-  def keysIterator = Iterator.range(0, size)
+  def keysIterator: Iterator[Int] = Iterator.range(0, size)
 
   def copy: Vector[V]
 
-  override def equals(p1: Any) = p1 match {
+  override def equals(p1: Any): Boolean = p1 match {
     case x: Vector[_] =>
       this.length == x.length &&
-      (valuesIterator.sameElements(x.valuesIterator))
+      valuesIterator.sameElements(x.valuesIterator)
     case _ => false
   }
 
   override def hashCode(): Int = throw new UnsupportedOperationException("hashCode has to be overridden for Vectors")
 
-  def toDenseVector(implicit cm: ClassTag[V]) = {
+  def toDenseVector(implicit cm: ClassTag[V]): DenseVector[V] = {
     DenseVector(toArray)
   }
 
@@ -89,7 +89,7 @@ trait Vector[@spec(Int, Double, Float) V] extends VectorLike[V, Vector[V]] {
   def toScalaVector: scala.Vector[V] = scala.Vector.empty ++ valuesIterator
 
   /**Returns copy of this [[breeze.linalg.Vector]] as a [[scala.Array]]*/
-  def toArray(implicit cm: ClassTag[V]) = {
+  def toArray(implicit cm: ClassTag[V]): Array[V] = {
     val result = new Array[V](length)
     var i = 0
     while (i < length) {
@@ -101,7 +101,7 @@ trait Vector[@spec(Int, Double, Float) V] extends VectorLike[V, Vector[V]] {
 
   // ToDo 2: Should this be deprecated and changed to `toScalaVector`?
   /**Returns copy of this [[breeze.linalg.Vector]] as a [[scala.Vector]]*/
-  def toVector(implicit cm: ClassTag[V]) = Vector[V](toArray)
+  def toVector(implicit cm: ClassTag[V]): Vector[V] = Vector[V](toArray)
 
   // ToDo 2: implement fold/scan/reduce to operate along one axis of a matrix/tensor
   // <editor-fold defaultstate="collapsed" desc=" scala.collection -like padTo, fold/scan/reduce ">
@@ -110,8 +110,8 @@ trait Vector[@spec(Int, Double, Float) V] extends VectorLike[V, Vector[V]] {
    */
   def padTo(len: Int, elem: V)(implicit cm: ClassTag[V]): Vector[V] = Vector[V](toArray.padTo(len, elem))
 
-  def exists(f: V => Boolean) = valuesIterator.exists(f)
-  override def forall(f: V => Boolean) = valuesIterator.forall(f)
+  def exists(f: V => Boolean): Boolean = valuesIterator.exists(f)
+  override def forall(f: V => Boolean): Boolean = valuesIterator.forall(f)
 
   /** See [[scala.collection.mutable.ArrayOps.fold]].
    */
@@ -180,9 +180,7 @@ object Vector extends VectorConstructors[Vector] {
    */
   def apply[@spec(Double, Int, Float, Long) V](values: Array[V]): Vector[V] = DenseVector(values)
 
-  implicit def canCopy[E]: CanCopy[Vector[E]] = new CanCopy[Vector[E]] {
-    def apply(t: Vector[E]): Vector[E] = t.copy
-  }
+  implicit def canCopy[E]: CanCopy[Vector[E]] = (t: Vector[E]) => t.copy
 
   implicit def space[V: Field: Zero: ClassTag]: MutableFiniteCoordinateField[Vector[V], Int, V] = {
     val f = implicitly[Field[V]]
@@ -233,10 +231,8 @@ trait VectorConstructors[Vec[T] <: Vector[T]] {
   }
 
   implicit def canCreateZeros[V: ClassTag: Zero]: CanCreateZeros[Vec[V], Int] =
-    new CanCreateZeros[Vec[V], Int] {
-      def apply(d: Int): Vec[V] = {
-        zeros[V](d)
-      }
+    (d: Int) => {
+      zeros[V](d)
     }
 
   /**

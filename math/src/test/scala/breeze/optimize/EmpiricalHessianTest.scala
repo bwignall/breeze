@@ -14,7 +14,7 @@ class EmpiricalHessianTest extends OptimizeTestBase with DoubleImplicits {
     val A = DenseMatrix((802d, -400d), (-400d, 200d))
 
     val f = new DiffFunction[DenseVector[Double]] {
-      def calculate(x: DenseVector[Double]) = {
+      def calculate(x: DenseVector[Double]): (Double, DenseVector[Double]) = {
         val n = x.length
         val value = 100 * Math.pow(x(1) - x(0) * x(0), 2) + Math.pow(1 - x(0), 2)
         val grad = DenseVector(-400 * x(0) * (x(1) - x(0) * x(0)) - 2 * (1 - x(0)), 200 * (x(1) - x(0) * x(0)))
@@ -40,7 +40,7 @@ class EmpiricalHessianTest extends OptimizeTestBase with DoubleImplicits {
     )
 
     val f = new DiffFunction[DenseVector[Double]] {
-      def calculate(x: DenseVector[Double]) = {
+      def calculate(x: DenseVector[Double]): (Double, DenseVector[Double]) = {
         val n = x.length
         val value = sum(exp(x) - x) / n
         val grad = exp(x) - 1d

@@ -61,50 +61,44 @@ trait Vector_GenericOps extends GenericOps with Vector_TraversalOps {
 
   implicit def impl_OpMulScalar_InPlace_V_V_Generic[T](implicit
     field: Semiring[T]
-  ): OpMulScalar.InPlaceImpl2[Vector[T], Vector[T]] = {
-    new OpMulScalar.InPlaceImpl2[Vector[T], Vector[T]] {
-      override def apply(v: Vector[T], v2: Vector[T]) = {
-        for (i <- 0 until v.length) v(i) = field.*(v(i), v2(i))
-      }
+  ): OpMulScalar.InPlaceImpl2[Vector[T], Vector[T]] = { (v: Vector[T], v2: Vector[T]) =>
+    {
+      for (i <- 0 until v.length) v(i) = field.*(v(i), v2(i))
     }
 
   }
 
   implicit def impl_OpDiv_InPlace_V_V_Generic[T](implicit field: Field[T]): OpDiv.InPlaceImpl2[Vector[T], Vector[T]] = {
-    new OpDiv.InPlaceImpl2[Vector[T], Vector[T]] {
-      override def apply(v: Vector[T], v2: Vector[T]) = {
+    (v: Vector[T], v2: Vector[T]) =>
+      {
         for (i <- 0 until v.length) v(i) = field./(v(i), v2(i))
       }
-    }
 
   }
 
   implicit def impl_OpPow_InPlace_V_V_Generic[T](implicit
     pow: OpPow.Impl2[T, T, T]
-  ): OpPow.InPlaceImpl2[Vector[T], Vector[T]] = {
-    new OpPow.InPlaceImpl2[Vector[T], Vector[T]] {
-      override def apply(v: Vector[T], v2: Vector[T]) = {
-        for ((i, vv) <- v.activeIterator) v(i) = pow(vv, v2(i))
-      }
+  ): OpPow.InPlaceImpl2[Vector[T], Vector[T]] = { (v: Vector[T], v2: Vector[T]) =>
+    {
+      for ((i, vv) <- v.activeIterator) v(i) = pow(vv, v2(i))
     }
 
   }
 
   implicit def impl_OpAdd_InPlace_V_S_Generic[T](implicit field: Semiring[T]): OpAdd.InPlaceImpl2[Vector[T], T] = {
-    new OpAdd.InPlaceImpl2[Vector[T], T] {
-      override def apply(v: Vector[T], v2: T) = {
+    (v: Vector[T], v2: T) =>
+      {
         if (v2 != field.zero) {
           cforRange(0 until v.length) { i =>
             v(i) = field.+(v(i), v2)
           }
         }
       }
-    }
   }
 
   implicit def impl_OpSub_InPlace_V_S_Generic[T](implicit field: Ring[T]): OpSub.InPlaceImpl2[Vector[T], T] = {
-    new OpSub.InPlaceImpl2[Vector[T], T] {
-      override def apply(v: Vector[T], v2: T) = {
+    (v: Vector[T], v2: T) =>
+      {
         if (v2 != field.zero) {
           cforRange(0 until v.length) { i =>
             v(i) = field.-(v(i), v2)
@@ -112,56 +106,50 @@ trait Vector_GenericOps extends GenericOps with Vector_TraversalOps {
         }
 
       }
-    }
 
   }
 
   implicit def impl_OpMulScalar_InPlace_V_S_Generic[T](implicit
     field: Semiring[T]
-  ): OpMulScalar.InPlaceImpl2[Vector[T], T] = {
-    new OpMulScalar.InPlaceImpl2[Vector[T], T] {
-      override def apply(v: Vector[T], v2: T) = {
-        if (v2 == field.zero) {
-          v := v2
-        } else if (GenericOps.sparseEnoughForActiveIterator(v)) {
-          for ((i, vv) <- v.activeIterator) v(i) = field.*(vv, v2)
-        } else {
-          cforRange(0 until v.length) { i =>
-            v(i) = field.*(v(i), v2)
-          }
+  ): OpMulScalar.InPlaceImpl2[Vector[T], T] = { (v: Vector[T], v2: T) =>
+    {
+      if (v2 == field.zero) {
+        v := v2
+      } else if (GenericOps.sparseEnoughForActiveIterator(v)) {
+        for ((i, vv) <- v.activeIterator) v(i) = field.*(vv, v2)
+      } else {
+        cforRange(0 until v.length) { i =>
+          v(i) = field.*(v(i), v2)
         }
       }
     }
   }
 
   implicit def impl_OpDiv_InPlace_V_S_Generic[T](implicit field: Field[T]): OpDiv.InPlaceImpl2[Vector[T], T] = {
-    new OpDiv.InPlaceImpl2[Vector[T], T] {
-      override def apply(v: Vector[T], v2: T) = {
+    (v: Vector[T], v2: T) =>
+      {
         for (i <- 0 until v.length) v(i) = field./(v(i), v2)
       }
-    }
   }
 
   implicit def impl_OpPow_InPlace_V_S_Generic[T](implicit
     pow: OpPow.Impl2[T, T, T],
     zero: Zero[T]
-  ): OpPow.InPlaceImpl2[Vector[T], T] = {
-    new OpPow.InPlaceImpl2[Vector[T], T] {
-      override def apply(v: Vector[T], v2: T) = {
-        if (v2 == zero.zero || !GenericOps.sparseEnoughForActiveIterator(v)) {
-          cforRange(0 until v.length) { i =>
-            v(i) = pow(v(i), v2)
-          }
-        } else {
-          for ((i, vv) <- v.activeIterator) v(i) = pow(vv, v2)
+  ): OpPow.InPlaceImpl2[Vector[T], T] = { (v: Vector[T], v2: T) =>
+    {
+      if (v2 == zero.zero || !GenericOps.sparseEnoughForActiveIterator(v)) {
+        cforRange(0 until v.length) { i =>
+          v(i) = pow(v(i), v2)
         }
+      } else {
+        for ((i, vv) <- v.activeIterator) v(i) = pow(vv, v2)
       }
     }
   }
 
   implicit def impl_OpMulInner_V_V_eq_S[T](implicit field: Semiring[T]): OpMulInner.Impl2[Vector[T], Vector[T], T] = {
-    new OpMulInner.Impl2[Vector[T], Vector[T], T] {
-      override def apply(v: Vector[T], v2: Vector[T]): T = {
+    (v: Vector[T], v2: Vector[T]) =>
+      {
         var acc = field.zero
         if (v.activeSize < v2.activeSize && GenericOps.sparseEnoughForActiveIterator(v)) {
           for ((i, vv) <- v.activeIterator) {
@@ -178,29 +166,23 @@ trait Vector_GenericOps extends GenericOps with Vector_TraversalOps {
         }
         acc
       }
-    }
   }
 
-  implicit def impl_OpSet_V_V_InPlace[V]: OpSet.InPlaceImpl2[Vector[V], Vector[V]] = {
+  implicit def impl_OpSet_V_V_InPlace[V]: OpSet.InPlaceImpl2[Vector[V], Vector[V]] = { (a: Vector[V], b: Vector[V]) =>
+    {
+      require(b.length == a.length, "Vectors must be the same length!")
 
-    new OpSet.InPlaceImpl2[Vector[V], Vector[V]] {
-      def apply(a: Vector[V], b: Vector[V]): Unit = {
-        require(b.length == a.length, "Vectors must be the same length!")
-
-        cforRange(0 until a.length) { i =>
-          a(i) = b(i)
-        }
-
+      cforRange(0 until a.length) { i =>
+        a(i) = b(i)
       }
+
     }
   }
 
-  implicit def impl_OpSet_V_S_InPlace[V]: OpSet.InPlaceImpl2[Vector[V], V] = {
-    new OpSet.InPlaceImpl2[Vector[V], V] {
-      def apply(a: Vector[V], b: V): Unit = {
-        cforRange(0 until a.length) { i =>
-          a(i) = b
-        }
+  implicit def impl_OpSet_V_S_InPlace[V]: OpSet.InPlaceImpl2[Vector[V], V] = { (a: Vector[V], b: V) =>
+    {
+      cforRange(0 until a.length) { i =>
+        a(i) = b
       }
     }
   }
@@ -222,7 +204,7 @@ trait Vector_GenericOps extends GenericOps with Vector_TraversalOps {
   // todo: try deleting
   implicit def impl_OpSub_V_V_eq_V_Generic[T: Ring]: OpSub.Impl2[Vector[T], Vector[T], Vector[T]] =
     new OpSub.Impl2[Vector[T], Vector[T], Vector[T]] {
-      val r = implicitly[Ring[T]]
+      val r: Ring[T] = implicitly[Ring[T]]
       def apply(a: Vector[T], b: Vector[T]): Vector[T] = {
         require(b.length == a.length, "Vectors must be the same length!")
         val result = a.copy
@@ -236,7 +218,7 @@ trait Vector_GenericOps extends GenericOps with Vector_TraversalOps {
   // todo: try deleting
   implicit def impl_OpAdd_V_V_eq_V_Generic[T: Semiring]: OpAdd.Impl2[Vector[T], Vector[T], Vector[T]] =
     new OpAdd.Impl2[Vector[T], Vector[T], Vector[T]] {
-      val r = implicitly[Semiring[T]]
+      val r: Semiring[T] = implicitly[Semiring[T]]
       def apply(a: Vector[T], b: Vector[T]): Vector[T] = {
         require(b.length == a.length, "Vectors must be the same length!")
         val result = a.copy
@@ -250,26 +232,23 @@ trait Vector_GenericOps extends GenericOps with Vector_TraversalOps {
 
 trait SparseVector_GenericOps extends GenericOps {
   implicit def impl_OpSet_InPlace_SV_SV_Generic[T]: OpSet.InPlaceImpl2[SparseVector[T], SparseVector[T]] = {
-    new OpSet.InPlaceImpl2[SparseVector[T], SparseVector[T]] {
-      def apply(a: SparseVector[T], b: SparseVector[T]): Unit = {
+    (a: SparseVector[T], b: SparseVector[T]) =>
+      {
         val result = b.copy
         a.use(result.index, result.data, result.activeSize)
       }
-    }
   }
 
   implicit def impl_OpSet_InPlace_SV_S_Generic[T: Zero]: OpSet.InPlaceImpl2[SparseVector[T], T] = {
     val zero = implicitly[Zero[T]].zero
-    new OpSet.InPlaceImpl2[SparseVector[T], T] {
-      def apply(a: SparseVector[T], b: T): Unit = {
-        implicit val ct: ClassTag[T] = ReflectionUtil.elemClassTagFromArray(a.data)
-        if (b == zero) {
-          a.use(new Array[Int](2), new Array[T](2), 0)
-        } else {
-          val data = Array.fill(a.length)(b)
-          val index = Array.range(0, a.length)
-          a.use(index, data, a.length)
-        }
+    (a: SparseVector[T], b: T) => {
+      implicit val ct: ClassTag[T] = ReflectionUtil.elemClassTagFromArray(a.data)
+      if (b == zero) {
+        a.use(new Array[Int](2), new Array[T](2), 0)
+      } else {
+        val data = Array.fill(a.length)(b)
+        val index = Array.range(0, a.length)
+        a.use(index, data, a.length)
       }
     }
   }
@@ -297,7 +276,7 @@ trait SparseVector_GenericOps extends GenericOps {
         if (r != f.zero)
           result.add(i, r)
       }
-      result.toSparseVector(true, true)
+      result.toSparseVector(alreadySorted = true, keysAlreadyUnique = true)
     }
   }
 
@@ -315,7 +294,7 @@ trait SparseVector_GenericOps extends GenericOps {
             if (r != f.zero)
               result.add(i, r)
           }
-          result.toSparseVector(true, true)
+          result.toSparseVector(alreadySorted = true, keysAlreadyUnique = true)
         }
       }
   }
@@ -334,7 +313,7 @@ trait SparseVector_GenericOps extends GenericOps {
             if (r != f.zero)
               result.add(i, r)
           }
-          result.toSparseVector(true, true)
+          result.toSparseVector(alreadySorted = true, keysAlreadyUnique = true)
         }
       }
   }
@@ -349,7 +328,7 @@ trait SparseVector_GenericOps extends GenericOps {
           result.add(a.indexAt(i), f.*(a.valueAt(i), b))
         }
       }
-      result.toSparseVector(true, true)
+      result.toSparseVector(alreadySorted = true, keysAlreadyUnique = true)
     }
 
   implicit def impl_Op_SV_S_eq_SV_Generic_OpMulMatrix[T: Semiring: ClassTag]
@@ -362,14 +341,14 @@ trait SparseVector_GenericOps extends GenericOps {
           result.add(a.indexAt(i), f.*(a.valueAt(i), b))
         }
       }
-      result.toSparseVector(true, true)
+      result.toSparseVector(alreadySorted = true, keysAlreadyUnique = true)
     }
 
   implicit def impl_Op_SV_SV_eq_SV_Generic_OpMulScalar[T](implicit
     ring: Semiring[T]
   ): OpMulScalar.Impl2[SparseVector[T], SparseVector[T], SparseVector[T]] =
     new OpMulScalar.Impl2[SparseVector[T], SparseVector[T], SparseVector[T]] {
-      def apply(a: SparseVector[T], b: SparseVector[T]) = {
+      def apply(a: SparseVector[T], b: SparseVector[T]): SparseVector[T] = {
         implicit val ct: ClassTag[T] = ReflectionUtil.elemClassTagFromArray(a.data)
         if (b.activeSize < a.activeSize) {
           apply(b, a)
@@ -504,7 +483,7 @@ trait SparseVector_GenericOps extends GenericOps {
           result.add(i, r)
         i += 1
       }
-      result.toSparseVector(true, true)
+      result.toSparseVector(alreadySorted = true, keysAlreadyUnique = true)
     }
 
 }
@@ -512,17 +491,15 @@ trait SparseVector_GenericOps extends GenericOps {
 trait DenseVector_GenericOps extends VectorOps {
 
   implicit def impl_OpSet_InPlace_DV_V_Generic[V]: OpSet.InPlaceImpl2[DenseVector[V], V] =
-    new OpSet.InPlaceImpl2[DenseVector[V], V] {
-      def apply(a: DenseVector[V], b: V): Unit = {
-        val ad: Array[V] = a.data
-        if (a.stride == 1) {
-          ArrayUtil.fill(ad, a.offset, a.length, b)
-        } else {
-          var aoff = a.offset
-          cforRange(0 until a.length) { i =>
-            ad(aoff) = b
-            aoff += a.stride
-          }
+    (a: DenseVector[V], b: V) => {
+      val ad: Array[V] = a.data
+      if (a.stride == 1) {
+        ArrayUtil.fill(ad, a.offset, a.length, b)
+      } else {
+        var aoff = a.offset
+        cforRange(0 until a.length) { i =>
+          ad(aoff) = b
+          aoff += a.stride
         }
       }
     }
@@ -554,7 +531,7 @@ trait DenseVector_GenericOps extends VectorOps {
   implicit def impl_scaleAdd_InPlace_DV_S_DV_Generic[T: Semiring]
     : scaleAdd.InPlaceImpl3[DenseVector[T], T, DenseVector[T]] =
     new scaleAdd.InPlaceImpl3[DenseVector[T], T, DenseVector[T]] {
-      val ring = implicitly[Semiring[T]]
+      val ring: Semiring[T] = implicitly[Semiring[T]]
       def apply(a: DenseVector[T], s: T, b: DenseVector[T]): Unit = {
         if (a.overlaps(b)) {
           apply(a, s, b.copy)
@@ -579,31 +556,26 @@ trait DenseVector_GenericOps extends VectorOps {
   implicit def impl_OpSet_InPlace_DV_V[T, Vec](implicit
     ev: Vec <:< Vector[T]
   ): OpSet.InPlaceImpl2[DenseVector[T], Vec] =
-    new OpSet.InPlaceImpl2[DenseVector[T], Vec] {
-      def apply(a: DenseVector[T], b: Vec): Unit = {
-        val ad: Array[T] = a.data
-        var aoff: Int = a.offset
+    (a: DenseVector[T], b: Vec) => {
+      val ad: Array[T] = a.data
+      var aoff: Int = a.offset
 
-        var i = 0
-        while (i < a.length) {
-          ad(aoff) = b(i)
-          aoff += a.stride
-          i += 1
-        }
+      var i = 0
+      while (i < a.length) {
+        ad(aoff) = b(i)
+        aoff += a.stride
+        i += 1
       }
-      //    implicitly[BinaryUpdateRegistry[Vector[T], Vector[T], OpSet.type]].register(this)
     }
 
   implicit def impl_Op_LHS_DVt_eq_R_cast[Tag, V, LHS, R](implicit
     op: UFunc.UImpl2[Tag, LHS, DenseMatrix[V], R]
   ): UFunc.UImpl2[Tag, LHS, Transpose[DenseVector[V]], R] =
-    new UFunc.UImpl2[Tag, LHS, Transpose[DenseVector[V]], R] {
-      def apply(v: LHS, v2: Transpose[DenseVector[V]]): R = {
-        val dv: DenseVector[V] = v2.inner
-        val dm: DenseMatrix[V] =
-          DenseMatrix.create(data = dv.data, offset = dv.offset, cols = dv.length, rows = 1, majorStride = dv.stride)
-        op(v, dm)
-      }
+    (v: LHS, v2: Transpose[DenseVector[V]]) => {
+      val dv: DenseVector[V] = v2.inner
+      val dm: DenseMatrix[V] =
+        DenseMatrix.create(data = dv.data, offset = dv.offset, cols = dv.length, rows = 1, majorStride = dv.stride)
+      op(v, dm)
     }
 
   //  TODO: try removing
@@ -611,7 +583,7 @@ trait DenseVector_GenericOps extends VectorOps {
     field: Semiring[T]
   ): OpAdd.InPlaceImpl2[DenseVector[T], DenseVector[T]] = {
     new OpAdd.InPlaceImpl2[DenseVector[T], DenseVector[T]] {
-      override def apply(v: DenseVector[T], v2: DenseVector[T]) = {
+      override def apply(v: DenseVector[T], v2: DenseVector[T]): Unit = {
         if (v.overlaps(v2)) {
           apply(v, v2.copy)
         } else {
@@ -627,7 +599,7 @@ trait DenseVector_GenericOps extends VectorOps {
     field: Ring[T]
   ): OpSub.InPlaceImpl2[DenseVector[T], DenseVector[T]] = {
     new OpSub.InPlaceImpl2[DenseVector[T], DenseVector[T]] {
-      override def apply(v: DenseVector[T], v2: DenseVector[T]) = {
+      override def apply(v: DenseVector[T], v2: DenseVector[T]): Unit = {
         if (v.overlaps(v2)) {
           apply(v, v2.copy)
         } else {
@@ -637,14 +609,13 @@ trait DenseVector_GenericOps extends VectorOps {
         }
       }
     }
-
   }
 
   implicit def impl_OpMulScalar_InPlace_DV_DV_Generic[T](implicit
     field: Semiring[T]
   ): OpMulScalar.InPlaceImpl2[DenseVector[T], DenseVector[T]] = {
     new OpMulScalar.InPlaceImpl2[DenseVector[T], DenseVector[T]] {
-      override def apply(v: DenseVector[T], v2: DenseVector[T]) = {
+      override def apply(v: DenseVector[T], v2: DenseVector[T]): Unit = {
         if (v.overlaps(v2)) {
           apply(v, v2.copy)
         } else {
@@ -654,14 +625,13 @@ trait DenseVector_GenericOps extends VectorOps {
         }
       }
     }
-
   }
 
   implicit def impl_OpDiv_InPlace_DV_DV_Generic[T](implicit
     field: Field[T]
   ): OpDiv.InPlaceImpl2[DenseVector[T], DenseVector[T]] = {
     new OpDiv.InPlaceImpl2[DenseVector[T], DenseVector[T]] {
-      override def apply(v: DenseVector[T], v2: DenseVector[T]) = {
+      override def apply(v: DenseVector[T], v2: DenseVector[T]): Unit = {
         if (v.overlaps(v2)) {
           apply(v, v2.copy)
         } else {
@@ -671,14 +641,13 @@ trait DenseVector_GenericOps extends VectorOps {
         }
       }
     }
-
   }
 
   implicit def impl_OpPow_InPlace_DV_DV_Generic[T](implicit
     pow: OpPow.Impl2[T, T, T]
   ): OpPow.InPlaceImpl2[DenseVector[T], DenseVector[T]] = {
     new OpPow.InPlaceImpl2[DenseVector[T], DenseVector[T]] {
-      override def apply(v: DenseVector[T], v2: DenseVector[T]) = {
+      override def apply(v: DenseVector[T], v2: DenseVector[T]): Unit = {
         if (v.overlaps(v2)) {
           apply(v, v2.copy)
         } else {
@@ -688,63 +657,54 @@ trait DenseVector_GenericOps extends VectorOps {
         }
       }
     }
-
   }
 
   implicit def impl_OpAdd_InPlace_DV_S_Generic[T](implicit
     field: Semiring[T]
-  ): OpAdd.InPlaceImpl2[DenseVector[T], T] = {
-    new OpAdd.InPlaceImpl2[DenseVector[T], T] {
-      override def apply(v: DenseVector[T], v2: T) = {
-        cforRange(0 until v.length) { i =>
-          v(i) = field.+(v(i), v2)
-        }
+  ): OpAdd.InPlaceImpl2[DenseVector[T], T] = { (v: DenseVector[T], v2: T) =>
+    {
+      cforRange(0 until v.length) { i =>
+        v(i) = field.+(v(i), v2)
       }
     }
 
   }
 
   implicit def impl_OpSub_InPlace_DV_S_Generic[T](implicit field: Ring[T]): OpSub.InPlaceImpl2[DenseVector[T], T] = {
-    new OpSub.InPlaceImpl2[DenseVector[T], T] {
-      override def apply(v: DenseVector[T], v2: T) = {
+    (v: DenseVector[T], v2: T) =>
+      {
         cforRange(0 until v.length) { i =>
           v(i) = field.-(v(i), v2)
         }
       }
-    }
 
   }
 
   implicit def impl_OpMulScalar_InPlace_DV_S_Generic[T](implicit
     field: Semiring[T]
-  ): OpMulScalar.InPlaceImpl2[DenseVector[T], T] = {
-    new OpMulScalar.InPlaceImpl2[DenseVector[T], T] {
-      override def apply(v: DenseVector[T], v2: T) = {
-        cforRange(0 until v.length) { i =>
-          v(i) = field.*(v(i), v2)
-        }
+  ): OpMulScalar.InPlaceImpl2[DenseVector[T], T] = { (v: DenseVector[T], v2: T) =>
+    {
+      cforRange(0 until v.length) { i =>
+        v(i) = field.*(v(i), v2)
       }
     }
   }
 
   implicit def impl_OpDiv_InPlace_DV_S_Generic[T](implicit field: Field[T]): OpDiv.InPlaceImpl2[DenseVector[T], T] = {
-    new OpDiv.InPlaceImpl2[DenseVector[T], T] {
-      override def apply(v: DenseVector[T], v2: T) = {
+    (v: DenseVector[T], v2: T) =>
+      {
         cforRange(0 until v.length) { i =>
           v(i) = field./(v(i), v2)
         }
       }
-    }
   }
 
   implicit def impl_OpPow_InPlace_DV_S_Generic[T](implicit
     pow: OpPow.Impl2[T, T, T]
-  ): OpPow.InPlaceImpl2[DenseVector[T], T] = {
-    new OpPow.InPlaceImpl2[DenseVector[T], T] {
-      override def apply(v: DenseVector[T], v2: T) = {
-        cforRange(0 until v.length) { i =>
-          v(i) = pow(v(i), v2)
-        }
+  ): OpPow.InPlaceImpl2[DenseVector[T], T] = { (v: DenseVector[T], v2: T) =>
+    {
+      cforRange(0 until v.length) { i =>
+        v(i) = pow(v(i), v2)
       }
     }
   }
@@ -752,55 +712,49 @@ trait DenseVector_GenericOps extends VectorOps {
   // todo: try removing
   implicit def impl_OpMulInner_DV_DV_eq_S_Generic[T](implicit
     field: Semiring[T]
-  ): OpMulInner.Impl2[DenseVector[T], DenseVector[T], T] = {
-    new OpMulInner.Impl2[DenseVector[T], DenseVector[T], T] {
-      override def apply(v: DenseVector[T], v2: DenseVector[T]): T = {
-        var acc = field.zero
-        cforRange(0 until v.length) { i =>
-          acc = field.+(acc, field.*(v(i), v2(i)))
-        }
-        acc
+  ): OpMulInner.Impl2[DenseVector[T], DenseVector[T], T] = { (v: DenseVector[T], v2: DenseVector[T]) =>
+    {
+      var acc = field.zero
+      cforRange(0 until v.length) { i =>
+        acc = field.+(acc, field.*(v(i), v2(i)))
       }
+      acc
     }
   }
 }
 
 trait HashVector_GenericOps extends GenericOps {
 
-  implicit def impl_OpSet_InPlace_HV_S_Generic[V]: OpSet.InPlaceImpl2[HashVector[V], V] = {
-    new OpSet.InPlaceImpl2[HashVector[V], V] {
-      def apply(a: HashVector[V], b: V): Unit = {
-        if (b == a.default) {
-          a.clear()
-        } else {
-          cforRange(0 until a.length) { i =>
-            a(i) = b
-          }
+  implicit def impl_OpSet_InPlace_HV_S_Generic[V]: OpSet.InPlaceImpl2[HashVector[V], V] = { (a: HashVector[V], b: V) =>
+    {
+      if (b == a.default) {
+        a.clear()
+      } else {
+        cforRange(0 until a.length) { i =>
+          a(i) = b
         }
       }
     }
   }
 
   implicit def impl_OpSet_InPlace_HV_V_Generic[V]: OpSet.InPlaceImpl2[HashVector[V], Vector[V]] = {
-    new OpSet.InPlaceImpl2[HashVector[V], Vector[V]] {
-      def apply(a: HashVector[V], b: Vector[V]): Unit = {
+    (a: HashVector[V], b: Vector[V]) =>
+      {
         require(b.length == a.length, "Vectors must be the same length!")
         a.clear()
         for ((k, v) <- b.activeIterator) {
           a(k) = v
         }
       }
-    }
   }
 
   implicit def impl_OpSet_InPlace_HV_HV_Generic[V]: OpSet.InPlaceImpl2[HashVector[V], HashVector[V]] = {
-    new OpSet.InPlaceImpl2[HashVector[V], HashVector[V]] {
-      def apply(a: HashVector[V], b: HashVector[V]): Unit = {
+    (a: HashVector[V], b: HashVector[V]) =>
+      {
         require(b.length == a.length, "HashVectors must be the same length!")
         a.clear()
         b.array.copyTo(a.array)
       }
-    }
   }
 
   implicit def impl_scaleAdd_InPlace_HV_V_HV[V: Semiring]: scaleAdd.InPlaceImpl3[HashVector[V], V, HashVector[V]] = {
@@ -859,10 +813,10 @@ trait HashVector_GenericOps extends GenericOps {
                                   @specialized(Int, Double) RV: ClassTag: Zero
   ] extends CanZipMapValues[HashVector[V], V, RV, HashVector[RV]] {
 
-    def create(length: Int) = HashVector.zeros(length)
+    def create(length: Int): HashVector[RV] = HashVector.zeros(length)
 
     /**Maps all corresponding values from the two collections. */
-    def map(from: HashVector[V], from2: HashVector[V], fn: (V, V) => RV) = {
+    def map(from: HashVector[V], from2: HashVector[V], fn: (V, V) => RV): HashVector[RV] = {
       require(from.length == from2.length, "Vector lengths must match!")
       val result = create(from.length)
       var i = 0
@@ -873,7 +827,7 @@ trait HashVector_GenericOps extends GenericOps {
       result
     }
 
-    def mapActive(from: HashVector[V], from2: HashVector[V], fn: (V, V) => RV) = {
+    def mapActive(from: HashVector[V], from2: HashVector[V], fn: (V, V) => RV): HashVector[RV] = {
       map(from, from2, fn)
     }
 
@@ -887,10 +841,10 @@ trait HashVector_GenericOps extends GenericOps {
                                      @specialized(Int, Double) RV: ClassTag: Zero
   ] extends CanZipMapKeyValues[HashVector[V], Int, V, RV, HashVector[RV]] {
 
-    def create(length: Int) = HashVector.zeros(length)
+    def create(length: Int): HashVector[RV] = HashVector.zeros(length)
 
     /**Maps all corresponding values from the two collections. */
-    def map(from: HashVector[V], from2: HashVector[V], fn: (Int, V, V) => RV) = {
+    def map(from: HashVector[V], from2: HashVector[V], fn: (Int, V, V) => RV): HashVector[RV] = {
       require(from.length == from2.length, "Vector lengths must match!")
       val result = create(from.length)
       var i = 0
@@ -911,63 +865,54 @@ trait HashVector_GenericOps extends GenericOps {
   implicit def impl_OpMulScalar_InPlace_HV_HV_Generic[T](implicit
     field: Field[T],
     ct: ClassTag[T]
-  ): OpMulScalar.InPlaceImpl2[HashVector[T], HashVector[T]] = {
-    new OpMulScalar.InPlaceImpl2[HashVector[T], HashVector[T]] {
-      override def apply(v: HashVector[T], v2: HashVector[T]) = {
-        for (i <- 0 until v.length) v(i) = field.*(v(i), v2(i))
-      }
+  ): OpMulScalar.InPlaceImpl2[HashVector[T], HashVector[T]] = { (v: HashVector[T], v2: HashVector[T]) =>
+    {
+      for (i <- 0 until v.length) v(i) = field.*(v(i), v2(i))
     }
 
   }
 
   implicit def impl_OpDiv_InPlace_HV_HV_Generic[T](implicit
     field: Field[T]
-  ): OpDiv.InPlaceImpl2[HashVector[T], HashVector[T]] = {
-    new OpDiv.InPlaceImpl2[HashVector[T], HashVector[T]] {
-      override def apply(v: HashVector[T], v2: HashVector[T]) = {
-        for (i <- 0 until v.length) v(i) = field./(v(i), v2(i))
-      }
+  ): OpDiv.InPlaceImpl2[HashVector[T], HashVector[T]] = { (v: HashVector[T], v2: HashVector[T]) =>
+    {
+      for (i <- 0 until v.length) v(i) = field./(v(i), v2(i))
     }
 
   }
 
   implicit def impl_OpMulScalar_InPlace_HV_S_Generic[T](implicit
     field: Semiring[T]
-  ): OpMulScalar.InPlaceImpl2[HashVector[T], T] = {
-    new OpMulScalar.InPlaceImpl2[HashVector[T], T] {
-      override def apply(v: HashVector[T], v2: T): Unit = {
-        if (v2 == field.zero) {
-          v.clear()
-        } else if (v2 == field.one) {
-          return
-        } else {
-          cforRange(0 until v.length) { i =>
-            v(i) = field.*(v(i), v2)
-          }
+  ): OpMulScalar.InPlaceImpl2[HashVector[T], T] = { (v: HashVector[T], v2: T) =>
+    {
+      if (v2 == field.zero) {
+        v.clear()
+      } else if (v2 == field.one) {
+        ()
+      } else {
+        cforRange(0 until v.length) { i =>
+          v(i) = field.*(v(i), v2)
         }
       }
     }
   }
 
   implicit def impl_OpDiv_InPlace_HV_S_Generic[T](implicit field: Field[T]): OpDiv.InPlaceImpl2[HashVector[T], T] = {
-    new OpDiv.InPlaceImpl2[HashVector[T], T] {
-      override def apply(v: HashVector[T], v2: T) = {
+    (v: HashVector[T], v2: T) =>
+      {
         cforRange(0 until v.length) { i =>
           v(i) = field./(v(i), v2)
         }
       }
-    }
   }
 
   // TODO try removing
   implicit def impl_OpPow_InPlace_HV_S_Generic[T](implicit
     pow: OpPow.Impl2[T, T, T]
-  ): OpPow.InPlaceImpl2[HashVector[T], T] = {
-    new OpPow.InPlaceImpl2[HashVector[T], T] {
-      override def apply(v: HashVector[T], v2: T) = {
-        cforRange(0 until v.length) { i =>
-          v(i) = pow(v(i), v2)
-        }
+  ): OpPow.InPlaceImpl2[HashVector[T], T] = { (v: HashVector[T], v2: T) =>
+    {
+      cforRange(0 until v.length) { i =>
+        v(i) = pow(v(i), v2)
       }
     }
   }

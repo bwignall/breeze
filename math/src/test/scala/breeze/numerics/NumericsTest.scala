@@ -60,7 +60,7 @@ class NumericsTest extends AnyFunSuite with Checkers {
   import Arbitrary._
 
   implicit class ae(x: Double) {
-    def =~=(y: Double) = breeze.numerics.closeTo(x, y, 1e-6)
+    def =~=(y: Double): Boolean = breeze.numerics.closeTo(x, y, 1e-6)
   }
 
   // TODO 2.9 filter out Double.MaxValue.
@@ -78,7 +78,7 @@ class NumericsTest extends AnyFunSuite with Checkers {
   test("sum distributes over softmax") {
     check(Prop.forAll { (a: Double, b: Double, c: Double) =>
       Seq(a, b, c).exists(x => x > 1e300 || x < -1e300) ||
-      (a + softmax(b, c)) =~= (softmax(a + b, a + c))
+      (a + softmax(b, c)) =~= softmax(a + b, a + c)
     })
   }
 
@@ -223,9 +223,9 @@ class AAA {
 
   def foo(): Unit = {
     import breeze.numerics.{lgamma => lg}
-    val a1 = lg(DenseVector(3.0, 3.0), 4.0)
-    val a2 = DenseVector(lg(3.0, 4.0), lg(3.0, 4.0))
-    val b1 = lg(DenseVector(3.0, 3.0), DenseVector(4.0, 1.0))
-    val b2 = DenseVector(lg(3.0, 4.0), lg(3.0, 1.0))
+    lg(DenseVector(3.0, 3.0), 4.0)
+    DenseVector(lg(3.0, 4.0), lg(3.0, 4.0))
+    lg(DenseVector(3.0, 3.0), DenseVector(4.0, 1.0))
+    DenseVector(lg(3.0, 4.0), lg(3.0, 1.0))
   }
 }

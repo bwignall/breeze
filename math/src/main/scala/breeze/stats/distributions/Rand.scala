@@ -137,11 +137,7 @@ private trait PredicateRandDraws[@specialized(Int, Double) T] extends Rand[T] {
 
   override def drawOpt(): Option[T] = {
     val x = rand.get()
-    if (predicate(x)) {
-      Some(x)
-    } else {
-      None
-    }
+    Some(x).filter(predicate)
   }
 }
 
@@ -162,7 +158,7 @@ final private case class MultiplePredicatesRand[@specialized(Int, Double) T](ran
 ) extends PredicateRandDraws[T] {
   override def condition(p: T => Boolean): Rand[T] = {
     val newPredicates = new Array[T => Boolean](predicates.length + 1)
-    cforRange(0 until predicates.length)(i => {
+    cforRange(predicates.indices)(i => {
       newPredicates(i) = predicates(i)
     })
     newPredicates(predicates.length) = p
@@ -189,18 +185,16 @@ class RandBasis(val generator: RandomGenerator) extends Serializable {
   /**
    * Chooses an element from a collection.
    */
-  def choose[T](c: Iterable[T]): Rand[T] = new Rand[T] {
-    def draw(): T = {
-      val sz = uniform.draw() * c.size
-      val elems = c.iterator
-      var i = 1
-      var e = elems.next()
-      while (i < sz) {
-        e = elems.next()
-        i += 1
-      }
-      e
+  def choose[T](c: Iterable[T]): Rand[T] = () => {
+    val sz = uniform.draw() * c.size
+    val elems = c.iterator
+    var i = 1
+    var e = elems.next()
+    while (i < sz) {
+      e = elems.next()
+      i += 1
     }
+    e
   }
 
   def choose[T](c: Seq[T]): Rand[T] = randInt(c.size).map(c(_))
@@ -208,16 +202,12 @@ class RandBasis(val generator: RandomGenerator) extends Serializable {
   /**
    * The trivial random generator: always returns the argument
    */
-  def always[T](t: T): Rand[T] = new Rand[T] {
-    def draw(): T = t
-  }
+  def always[T](t: T): Rand[T] = () => t
 
   /**
    * Simply reevaluate the body every time get is called
    */
-  def fromBody[T](f: => T): Rand[T] = new Rand[T] {
-    def draw(): T = f
-  }
+  def fromBody[T](f: => T): Rand[T] = () => f
 
   /**
    * Convert an Seq of Rand[T] into a Rand[Seq[T]]
@@ -234,37 +224,27 @@ class RandBasis(val generator: RandomGenerator) extends Serializable {
   /**
    * Uniformly samples in [0,1)
    */
-  val uniform: Rand[Double] = new Rand[Double] {
-    def draw(): Double = generator.nextDouble
-  }
+  val uniform: Rand[Double] = () => generator.nextDouble
 
   /**
    * Uniformly samples an integer in [0,MAX_INT]
    */
-  val randInt: Rand[Int] = new Rand[Int] {
-    def draw(): Int = generator.nextInt & Int.MaxValue
-  }
+  val randInt: Rand[Int] = () => generator.nextInt & Int.MaxValue
 
   /**
    * Uniformly samples an integer in [0,n)
    */
-  def randInt(n: Int): Rand[Int] = new Rand[Int] {
-    def draw(): Int = generator.nextInt(n)
-  }
+  def randInt(n: Int): Rand[Int] = () => generator.nextInt(n)
 
   /**
    * Uniformly samples an integer in [n,m)
    */
-  def randInt(n: Int, m: Int): Rand[Int] = new Rand[Int] {
-    def draw(): Int = generator.nextInt(m - n) + n
-  }
+  def randInt(n: Int, m: Int): Rand[Int] = () => generator.nextInt(m - n) + n
 
   /**
    * Uniformly samples a long integer in [0,MAX_LONG]
    */
-  val randLong: Rand[Long] = new Rand[Long] {
-    def draw(): Long = generator.nextLong & Long.MaxValue
-  }
+  val randLong: Rand[Long] = () => generator.nextLong & Long.MaxValue
 
   /**
    * Uniformly samples a long integer in [0,n)
@@ -294,52 +274,44 @@ class RandBasis(val generator: RandomGenerator) extends Serializable {
   /**
    * Samples a gaussian with 0 mean and 1 std
    */
-  val gaussian: Rand[Double] = new Rand[Double] {
-    def draw(): Double = generator.nextGaussian()
-  }
+  val gaussian: Rand[Double] = () => generator.nextGaussian()
 
   /**
    * Samples a gaussian with m mean and s std
    */
-  def gaussian(m: Double, s: Double): Rand[Double] = new Rand[Double] {
-    def draw(): Double = m + s * gaussian.draw()
-  }
+  def gaussian(m: Double, s: Double): Rand[Double] = () => m + s * gaussian.draw()
 
   /**
    * Implements the Knuth shuffle of numbers from 0 to n.
    */
-  def permutation(n: Int): Rand[IndexedSeq[Int]] = new Rand[IndexedSeq[Int]] {
-    def draw(): IndexedSeq[Int] = {
-      val arr = new ArrayBuffer[Int]()
-      arr ++= (0 until n)
-      var i = n
-      while (i > 1) {
-        val k = generator.nextInt(i)
-        i -= 1
-        val tmp = arr(i)
-        arr(i) = arr(k)
-        arr(k) = tmp
-      }
-      arr.toIndexedSeq
+  def permutation(n: Int): Rand[IndexedSeq[Int]] = () => {
+    val arr = new ArrayBuffer[Int]()
+    arr ++= (0 until n)
+    var i = n
+    while (i > 1) {
+      val k = generator.nextInt(i)
+      i -= 1
+      val tmp = arr(i)
+      arr(i) = arr(k)
+      arr(k) = tmp
     }
+    arr.toIndexedSeq
   }
 
   /**
    * Knuth shuffle of a subset of size n from a set
    */
-  def subsetsOfSize[T](set: IndexedSeq[T], n: Int): Rand[IndexedSeq[T]] = new Rand[IndexedSeq[T]] {
-    def draw(): IndexedSeq[T] = {
-      val arr = Array.range(0, set.size)
-      var i = 0
-      while (i < n.min(set.size)) {
-        val k = generator.nextInt(set.size - i) + i
-        val temp = arr(i)
-        arr(i) = arr(k)
-        arr(k) = temp
-        i += 1
-      }
-      arr.take(n).toIndexedSeq.map(set)
+  def subsetsOfSize[T](set: IndexedSeq[T], n: Int): Rand[IndexedSeq[T]] = () => {
+    val arr = Array.range(0, set.size)
+    var i = 0
+    while (i < n.min(set.size)) {
+      val k = generator.nextInt(set.size - i) + i
+      val temp = arr(i)
+      arr(i) = arr(k)
+      arr(k) = temp
+      i += 1
     }
+    arr.take(n).toIndexedSeq.map(set)
   }
 }
 

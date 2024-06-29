@@ -68,7 +68,7 @@ class DenseVector[@spec(Double, Int, Float, Long) V](val data: Array[V],
 
   def repr: DenseVector[V] = this
 
-  def activeSize = length
+  def activeSize: Int = length
 
   def apply(i: Int): V = {
     if (i < -size || i >= size) throw new IndexOutOfBoundsException(s"$i not in [-$size,$size)")
@@ -93,7 +93,7 @@ class DenseVector[@spec(Double, Int, Float, Long) V](val data: Array[V],
   private[linalg] val noOffsetOrStride = offset == 0 && stride == 1
 
   private def checkIfSpecialized(): Unit = {
-    if (data.isInstanceOf[Array[Double]] && getClass.getName() == "breeze.linalg.DenseVector")
+    if (data.isInstanceOf[Array[Double]] && getClass.getName == "breeze.linalg.DenseVector")
       throw new Exception("...")
   }
   // uncomment to debug places where specialization fails
@@ -173,7 +173,7 @@ class DenseVector[@spec(Double, Int, Float, Long) V](val data: Array[V],
    * @param fn
    * @tparam U
    */
-  override def foreach[@spec(Unit) U](fn: (V) => U): Unit = {
+  override def foreach[@spec(Unit) U](fn: V => U): Unit = {
     if (stride == 1) { // ABCE stuff
       cforRange(offset until (offset + length)) { j =>
         fn(data(j))
@@ -240,7 +240,7 @@ class DenseVector[@spec(Double, Int, Float, Long) V](val data: Array[V],
 
   @throws(classOf[ObjectStreamException])
   protected def writeReplace(): Object = {
-    new DenseVector.SerializedForm(data, offset, stride, length)
+    DenseVector.SerializedForm(data, offset, stride, length)
   }
 
   /** Returns true if this overlaps any content with the other vector */
@@ -333,9 +333,10 @@ object DenseVector extends VectorConstructors[DenseVector] {
    * Creates a new DenseVector using the provided array (not making a copy!). In generic contexts, prefer to
    * use this (or apply) instead of `new DenseVector[V](data, offset, stride, length)`, which in general
    * won't give specialized implementations.
-   * @param rows
-   * @param cols
    * @param data
+   * @param offset
+   * @param stride
+   * @param length
    * @tparam V
    * @return
    */
@@ -399,10 +400,8 @@ object DenseVector extends VectorConstructors[DenseVector] {
   // capabilities
 
   implicit def canCreateZerosLike[V: ClassTag: Zero]: CanCreateZerosLike[DenseVector[V], DenseVector[V]] =
-    new CanCreateZerosLike[DenseVector[V], DenseVector[V]] {
-      def apply(v1: DenseVector[V]): DenseVector[V] = {
-        zeros[V](v1.length)
-      }
+    (v1: DenseVector[V]) => {
+      zeros[V](v1.length)
     }
 
   implicit def canCopyDenseVector[V: ClassTag]: CanCopy[DenseVector[V]] = DenseVectorDeps.canCopyDenseVector[V]
@@ -413,7 +412,7 @@ object DenseVector extends VectorConstructors[DenseVector] {
     new DenseCanMapValues[DenseVector[V], V, V2, DenseVector[V2]] {
 
       /**Maps all key-value pairs from the given collection. */
-      def map(from: DenseVector[V], fn: (V) => V2): DenseVector[V2] = {
+      def map(from: DenseVector[V], fn: V => V2): DenseVector[V2] = {
         val out = new Array[V2](from.length)
 
         // threeway fork, following benchmarks and hotspot docs on Array Bounds Check Elimination (ABCE)
@@ -428,19 +427,19 @@ object DenseVector extends VectorConstructors[DenseVector] {
         DenseVector[V2](out)
       }
 
-      private def mediumPath(out: Array[V2], fn: (V) => V2, data: Array[V], off: Int): Unit = {
-        cforRange(0 until out.length) { j =>
+      private def mediumPath(out: Array[V2], fn: V => V2, data: Array[V], off: Int): Unit = {
+        cforRange(out.indices) { j =>
           out(j) = fn(data(j + off))
         }
       }
 
-      private def fastestPath(out: Array[V2], fn: (V) => V2, data: Array[V]): Unit = {
-        cforRange(0 until out.length) { j =>
+      private def fastestPath(out: Array[V2], fn: V => V2, data: Array[V]): Unit = {
+        cforRange(out.indices) { j =>
           out(j) = fn(data(j))
         }
       }
 
-      final private def slowPath(out: Array[V2], fn: (V) => V2, data: Array[V], off: Int, stride: Int): Unit = {
+      final private def slowPath(out: Array[V2], fn: V => V2, data: Array[V], off: Int, stride: Int): Unit = {
         var i = 0
         var j = off
         while (i < out.length) {
@@ -612,7 +611,7 @@ object DenseVector extends VectorConstructors[DenseVector] {
 
   // used to make sure the operators are loaded
   @noinline
-  private def init() = {}
+  private def init(): Unit = {}
 }
 
 /** Static initialization of [[DenseVector]] depends on initializing [[operators.HasOps]], whose static
@@ -620,7 +619,5 @@ object DenseVector extends VectorConstructors[DenseVector] {
  * the definitions of implicits that were known to cause deadlock in initialization
  * (see https://github.com/scalanlp/breeze/issues/825). */
 private[linalg] object DenseVectorDeps {
-  implicit def canCopyDenseVector[V: ClassTag]: CanCopy[DenseVector[V]] = new CanCopy[DenseVector[V]] {
-    def apply(v1: DenseVector[V]): DenseVector[V] = v1.copy
-  }
+  implicit def canCopyDenseVector[V: ClassTag]: CanCopy[DenseVector[V]] = (v1: DenseVector[V]) => v1.copy
 }

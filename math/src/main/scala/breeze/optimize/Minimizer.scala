@@ -1,4 +1,4 @@
-package breeze.optimize;
+package breeze.optimize
 
 /*
  Copyright 2009 David Hall, Daniel Ramage

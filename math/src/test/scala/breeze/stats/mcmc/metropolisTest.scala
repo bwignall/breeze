@@ -8,8 +8,6 @@ import org.scalatest.funsuite.AnyFunSuite
 
 /**Tests for breeze.stats.mcmc.MetropolisHastings
  * Test for clip is currently located in "DenseVectorTest.scala"
- * @author stucchio
- * @date 3/13/14.
  */
 class metropolisTest extends AnyFunSuite {
 
@@ -37,7 +35,7 @@ class metropolisTest extends AnyFunSuite {
   val TOLERANCE = 0.10
 
   test("stupidly simple mcmc") {
-    val mh = ArbitraryMetropolisHastings(logLikelihood _,
+    val mh = ArbitraryMetropolisHastings(logLikelihood,
                                          (_: State) => proposal,
                                          (_: State, _: State) => 0.0,
                                          A,
@@ -69,9 +67,9 @@ class metropolisTest extends AnyFunSuite {
   }
 
   test("stupidly simple mcmc, anisotropic") {
-    val mh = ArbitraryMetropolisHastings(logLikelihood _,
-                                         skewedProposal _,
-                                         logSkewedTransitionProbability _,
+    val mh = ArbitraryMetropolisHastings(logLikelihood,
+      skewedProposal,
+      logSkewedTransitionProbability,
                                          A,
                                          burnIn = 30000,
                                          dropCount = DROP_COUNT

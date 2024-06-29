@@ -40,8 +40,8 @@ class StochasticAveragedGradient[T](maxIter: Int = -1,
     f.calculate(x, IndexedSeq(history.nextPos))
   }
 
-  override protected def adjust(newX: T, newGrad: T, newVal: Double) = {
-    val av = newVal + (newX.dot(newX)) * l2Regularization / 2.0
+  override protected def adjust(newX: T, newGrad: T, newVal: Double): (Double, T) = {
+    val av = newVal + newX.dot(newX) * l2Regularization / 2.0
     val ag = newGrad + newX * l2Regularization
     av -> ag
   }
@@ -65,8 +65,8 @@ class StochasticAveragedGradient[T](maxIter: Int = -1,
       if (
         (f.valueAt(newX, IndexedSeq(nextPos)) + l2Regularization / 2 * norm(
           newX
-        ) - oldState.adjustedValue) > (oldState.adjustedGradient
-          .dot(xdiff)) + (xdiff.dot(xdiff)) / (2 * stepSize)
+        ) - oldState.adjustedValue) > oldState.adjustedGradient
+          .dot(xdiff) + xdiff.dot(xdiff) / (2 * stepSize)
       ) {
         stepSize / 2
       } else {

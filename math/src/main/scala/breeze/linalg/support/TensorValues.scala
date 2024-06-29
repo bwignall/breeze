@@ -22,11 +22,11 @@ package support
  */
 class TensorValues[K, V, +This](private val tensor: This,
                                 active: Boolean = false,
-                                f: (V) => Boolean = { (x: Any) =>
+                                f: V => Boolean = { (x: Any) =>
                                   true
                                 }
 )(implicit ev: This <:< Tensor[K, V]) {
-  def size = tensor.size
+  def size: Int = tensor.size
 
   def iterator: Iterator[V] = { if (active) tensor.activeValuesIterator else tensor.valuesIterator }.filter(f)
 
@@ -45,7 +45,7 @@ class TensorValues[K, V, +This](private val tensor: This,
     case _                        => false
   }
 
-  def map[TT >: This, O, That](fn: (V) => O)(implicit bf: CanMapValues[TT, V, O, That]): That = {
+  def map[TT >: This, O, That](fn: V => O)(implicit bf: CanMapValues[TT, V, O, That]): That = {
     tensor.mapValues(fn)(bf.asInstanceOf[CanMapValues[Tensor[K, V], V, O, That]])
   }
 

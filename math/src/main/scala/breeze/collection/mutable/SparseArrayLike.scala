@@ -48,7 +48,7 @@ trait SparseArrayLike[V] {
 
   def size: Int
 
-  def length = size
+  def length: Int = size
 
   /**
    * Only iterates "active" elements. I'm not sure how I feel
@@ -58,7 +58,7 @@ trait SparseArrayLike[V] {
    * @tparam U
    */
   // TODO: maybe make this iterate all elements?
-  def foreach[U](f: (V) => U): Unit = valuesIterator.foreach(f)
+  def foreach[U](f: V => U): Unit = valuesIterator.foreach(f)
 
   /**
    * Only iterates "active" elements

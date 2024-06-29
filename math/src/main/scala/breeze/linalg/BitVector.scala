@@ -11,7 +11,7 @@ import java.util
 import scala.reflect.ClassTag
 
 /**
- * A BitVector is a Vector of Booleans backed by a [[java.util.Bitset]]. Much better memory usage
+ * A BitVector is a Vector of Booleans backed by a [[java.util.BitSet]]. Much better memory usage
  * and sometimes faster.
  *
  * @param enforceLength if false, then the BitVector won't throw exceptions if it's used in
@@ -46,7 +46,7 @@ class BitVector(val data: java.util.BitSet, val length: Int, val enforceLength: 
 
     new Iterator[Int] {
       var nextReady = true
-      var _next = firstBit
+      var _next: Int = firstBit
       def hasNext: Boolean =
         (_next >= 0) && (nextReady || {
           _next += 1
@@ -121,7 +121,7 @@ object BitVector {
     new DenseCanMapValues[BitVector, Boolean, V2, DenseVector[V2]] {
 
       /**Maps all key-value pairs from the given collection. */
-      def map(from: BitVector, fn: (Boolean) => V2): DenseVector[V2] = {
+      def map(from: BitVector, fn: Boolean => V2): DenseVector[V2] = {
         DenseVector.tabulate(from.length)(i => fn(from(i)))
       }
     }
@@ -159,13 +159,13 @@ object BitVector {
 
   implicit def canTransformValues: CanTransformValues[BitVector, Boolean] =
     new CanTransformValues[BitVector, Boolean] {
-      def transform(from: BitVector, fn: (Boolean) => Boolean): Unit = {
+      def transform(from: BitVector, fn: Boolean => Boolean): Unit = {
         for (i <- 0 until from.length) {
           from(i) = fn(from(i))
         }
       }
 
-      def transformActive(from: BitVector, fn: (Boolean) => Boolean): Unit = {
+      def transformActive(from: BitVector, fn: Boolean => Boolean): Unit = {
         transform(from, fn)
       }
     }

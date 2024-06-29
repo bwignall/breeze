@@ -1,6 +1,5 @@
 package breeze
 
-import breeze.compat.Scala3Compat._
 import org.jfree.chart.renderer.xy.XYItemRenderer
 import org.jfree.chart.ui.RectangleAnchor
 import org.jfree.data.xy
@@ -34,14 +33,14 @@ package object plot {
                     name: String = null,
                     lines: Boolean = true,
                     shapes: Boolean = false,
-                    labels: (Int) => String = null.asInstanceOf[Int => String],
-                    tips: (Int) => String = null.asInstanceOf[Int => String]
+                    labels: Int => String = null.asInstanceOf[Int => String],
+                    tips: Int => String = null.asInstanceOf[Int => String]
   )(implicit xv: DomainFunction[X, Int, V], yv: DomainFunction[Y, Int, V], vv: V => Double): Series = new Series {
     require(xv.domain(x) == yv.domain(y), "Domains must match!")
 
-    def getChartStuff(defaultName: (Int) => String,
-                      defaultColor: (Int) => Paint,
-                      defaultStroke: (Int) => Stroke
+    def getChartStuff(defaultName: Int => String,
+                      defaultColor: Int => Paint,
+                      defaultStroke: Int => Stroke
     ): (xy.XYDataset, XYItemRenderer) = {
 
       type K = Int
@@ -112,7 +111,7 @@ package object plot {
    * @param x The x coordinates to draw as provided by anything that can be seen as a Tensor1.
    * @param y The y coordinates to draw as provided by anything that can be seen as a Tensor1.
    * @param size The size of each circle (on the same scale as the domain axis)
-   * @param c A partial function (e.g. a Map) from item ids to the color to draw the bubble.
+   * @param colors A partial function (e.g. a Map) from item ids to the color to draw the bubble.
    *   Missing colors are drawn with a hashed pattern.
    * @param labels Labels to draw next to each point.
    * @param tips Tooltips to show on mouseover for each point.
@@ -132,15 +131,15 @@ package object plot {
      * returns data needed by jfreechart.
      * @param defaultName series index => default name
      * @param defaultColor series index => default color
-     * @param defaultStroke
+     * @param defaultStroke series index => default stroke
      * @return
      */
-    def getChartStuff(defaultName: (Int) => String,
-                      defaultColor: (Int) => Paint,
-                      defaultStroke: (Int) => Stroke
+    def getChartStuff(defaultName: Int => String,
+                      defaultColor: Int => Paint,
+                      defaultStroke: Int => Stroke
     ): (xy.XYDataset, XYItemRenderer) = {
 
-      val items = xv.domain(x).toIndexedSeq
+      val items = xv.domain(x)
 
       val paintScale = CategoricalPaintScale[K](colors)
 
@@ -158,11 +157,11 @@ package object plot {
 
       // initialize the series renderer
       import org.jfree.chart.renderer.xy.XYBubbleRenderer
-      val renderer = new XYBubbleRenderer(XYBubbleRenderer.SCALE_ON_DOMAIN_AXIS) {
+      val renderer: XYBubbleRenderer = new XYBubbleRenderer(XYBubbleRenderer.SCALE_ON_DOMAIN_AXIS) {
         val stroke = new java.awt.BasicStroke(0f)
         override def getItemPaint(series: Int, item: Int): java.awt.Paint =
           paintScale(items(item))
-        override def getItemStroke(series: Int, item: Int) = stroke
+        override def getItemStroke(series: Int, item: Int): Stroke = stroke
 
         // i dunno why we need this all of a sudden
         override def clone(): AnyRef = super.clone()
@@ -197,7 +196,7 @@ package object plot {
     xv: DomainFunction[D, Int, V],
     vv: V => Double
   ): Series = new Series {
-    val values = xv.domain(data).map(xv(data, _)).map(vv)
+    val values: Seq[Double] = xv.domain(data).map(xv(data, _)).map(vv)
     val (min, max) = (values.min, values.max)
     val binner: StaticHistogramBins = bins match {
       case static: StaticHistogramBins => static
@@ -210,11 +209,11 @@ package object plot {
       counts(binner.bin(value)) += 1
     }
 
-    val width = binner.splits.iterator.zip(binner.splits.iterator.drop(1)).map(tup => tup._2 - tup._1).min
+    val width: Double = binner.splits.iterator.zip(binner.splits.iterator.drop(1)).map(tup => tup._2 - tup._1).min
 
-    def getChartStuff(defaultName: (Int) => String,
-                      defaultColor: (Int) => Paint,
-                      defaultStroke: (Int) => Stroke
+    def getChartStuff(defaultName: Int => String,
+                      defaultColor: Int => Paint,
+                      defaultStroke: Int => Stroke
     ): (xy.XYDataset, XYItemRenderer) = {
       val dataset = new org.jfree.data.xy.XYBarDataset(
         XYDataset(
@@ -227,8 +226,8 @@ package object plot {
               binner.splits(i) - width / 2.0
             },
           y = (i: Int) => counts(i),
-          label = (i: Int) => null,
-          tip = (i: Int) => null
+          label = (_: Int) => null,
+          tip = (_: Int) => null
         ),
         width
       )
@@ -267,16 +266,13 @@ package object plot {
   ): Series =
     new Series {
 
-      val mt = img
+      val mt: Matrix[Double] = img
 
-      val (minx, maxx) = (0, img.cols)
-      val (miny, maxy) = (0, img.rows)
+      val items: IndexedSeq[(Int, Int)] = img.keysIterator.toIndexedSeq
 
-      val items = img.keysIterator.toIndexedSeq
-
-      def getChartStuff(defaultName: (Int) => String,
-                        defaultColor: (Int) => Paint,
-                        defaultStroke: (Int) => Stroke
+      def getChartStuff(defaultName: Int => String,
+                        defaultColor: Int => Paint,
+                        defaultStroke: Int => Stroke
       ): (xy.XYDataset, XYItemRenderer) = {
         // initialize dataset
         val dataset = XYZDataset(
@@ -322,9 +318,9 @@ package object plot {
         }
 
         val paintScale = new org.jfree.chart.renderer.PaintScale {
-          override def getLowerBound = staticScale.lower
-          override def getUpperBound = staticScale.upper
-          override def getPaint(value: Double) =
+          override def getLowerBound: Double = staticScale.lower
+          override def getUpperBound: Double = staticScale.upper
+          override def getPaint(value: Double): Paint =
             staticScale(value)
         }
 

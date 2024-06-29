@@ -26,9 +26,9 @@ class WaldTest extends AnyFunSuite with Checkers with UnivariateContinuousDistrT
   import Arbitrary.arbitrary
   override val numSamples = 40000
 
-  def asDouble(x: Double) = x
+  def asDouble(x: Double): Double = x
 
-  def fromDouble(x: Double) = x
+  def fromDouble(x: Double): Double = x
 
   implicit def arbDistr: Arbitrary[Distr] = Arbitrary {
     for (
@@ -38,7 +38,7 @@ class WaldTest extends AnyFunSuite with Checkers with UnivariateContinuousDistrT
       scale <- arbitrary[Double].map { x =>
         math.abs(x) % 4.0 + 1.0
       }
-    ) yield new Wald(location, scale)(RandBasis.mt0)
+    ) yield Wald(location, scale)(RandBasis.mt0)
   }
 
 }

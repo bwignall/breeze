@@ -86,7 +86,7 @@ class NonlinearMinimizer(proximal: Proximal,
 
     val resultState = lbfgs.minimizeAndReturnState(primal, xHat)
     val admmIters = if (maxIters < 0) max(400, 20 * z.length) else maxIters
-    State(resultState, u, z, xHat, zOld, residual, s, admmIters, 0, false)
+    State(resultState, u, z, xHat, zOld, residual, s, admmIters, 0, converged = false)
   }
 
   def iterations(primal: DiffFunction[BDV], init: BDV): Iterator[State] =
@@ -150,9 +150,9 @@ class NonlinearMinimizer(proximal: Proximal,
         val epsDual = scale + reltol * norm(s)
 
         if (residualNorm < epsPrimal && sNorm < epsDual || iter > admmIters) {
-          State(resultState, u, z, xHat, zOld, residual, s, admmIters, iter + 1, true)
+          State(resultState, u, z, xHat, zOld, residual, s, admmIters, iter + 1, converged = true)
         } else {
-          State(resultState, u, z, xHat, zOld, residual, s, admmIters, iter + 1, false)
+          State(resultState, u, z, xHat, zOld, residual, s, admmIters, iter + 1, converged = false)
         }
       }
       .takeUpToWhere { _.converged }

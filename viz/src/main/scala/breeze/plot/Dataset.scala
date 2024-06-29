@@ -17,9 +17,9 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110 USA
  */
-package breeze.plot;;;
+package breeze.plot
 
-import scala.collection.mutable.ArrayBuffer;
+import scala.collection.mutable.ArrayBuffer
 
 /**
  * An XY dataset consisting of some number of named series, each consisting
@@ -30,13 +30,13 @@ import scala.collection.mutable.ArrayBuffer;
  */
 class XYDataset[Item](x: Item => Number, y: Item => Number, label: Item => String, tip: Item => String)
     extends org.jfree.data.xy.AbstractXYDataset {
-  val names: ArrayBuffer[String] = ArrayBuffer[String]();
-  val items: ArrayBuffer[IndexedSeq[Item]] = ArrayBuffer[IndexedSeq[Item]]();
+  val names: ArrayBuffer[String] = ArrayBuffer[String]()
+  val items: ArrayBuffer[IndexedSeq[Item]] = ArrayBuffer[IndexedSeq[Item]]()
 
   override def getSeriesKey(series: Int): Comparable[_ <: Object] =
     names(series)
 
-  override def getSeriesCount =
+  override def getSeriesCount: Int =
     names.length
 
   override def getItemCount(series: Int): Int =
@@ -64,10 +64,10 @@ object XYDataset {
                   label: Item => String,
                   tip: Item => String
   ): XYDataset[Item] = {
-    val rv = new XYDataset(x, y, label, tip);
-    rv.names += name;
-    rv.items += items;
-    rv;
+    val rv = new XYDataset(x, y, label, tip)
+    rv.names += name
+    rv.items += items
+    rv
   }
 }
 
@@ -84,32 +84,32 @@ class XYZDataset[Item](x: Item => Number,
                        label: Item => String,
                        tip: Item => String
 ) extends org.jfree.data.xy.AbstractXYZDataset {
-  val names: ArrayBuffer[String] = ArrayBuffer[String]();
-  val items: ArrayBuffer[IndexedSeq[Item]] = ArrayBuffer[IndexedSeq[Item]]();
+  val names: ArrayBuffer[String] = ArrayBuffer[String]()
+  val items: ArrayBuffer[IndexedSeq[Item]] = ArrayBuffer[IndexedSeq[Item]]()
 
   override def getSeriesKey(series: Int): Comparable[_ <: Object] =
-    names(series);
+    names(series)
 
-  override def getSeriesCount =
-    names.length;
+  override def getSeriesCount: Int =
+    names.length
 
   override def getItemCount(series: Int): Int =
-    items(series).length;
+    items(series).length
 
   override def getX(series: Int, item: Int): Number =
-    x(items(series)(item));
+    x(items(series)(item))
 
   override def getY(series: Int, item: Int): Number =
-    y(items(series)(item));
+    y(items(series)(item))
 
   override def getZ(series: Int, item: Int): Number =
-    z(items(series)(item));
+    z(items(series)(item))
 
   def getLabel(series: Int, item: Int): String =
-    label(items(series)(item));
+    label(items(series)(item))
 
   def getTip(series: Int, item: Int): String =
-    tip(items(series)(item));
+    tip(items(series)(item))
 }
 
 object XYZDataset {
@@ -121,9 +121,9 @@ object XYZDataset {
                   label: Item => String,
                   tip: Item => String
   ): XYZDataset[Item] = {
-    val rv = new XYZDataset(x, y, z, label, tip);
-    rv.names += name;
-    rv.items += items;
-    rv;
+    val rv = new XYZDataset(x, y, z, label, tip)
+    rv.names += name
+    rv.items += items
+    rv
   }
 }

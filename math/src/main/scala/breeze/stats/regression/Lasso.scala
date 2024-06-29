@@ -3,7 +3,6 @@ package breeze.stats.regression
 import breeze.generic.UFunc
 import breeze.linalg._
 import breeze.macros.cforRange
-import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
 
 private case class LassoCalculator(data: DenseMatrix[Double],
                                    outputs: DenseVector[Double],
@@ -20,7 +19,7 @@ private case class LassoCalculator(data: DenseMatrix[Double],
   require(data.rows == outputs.size)
   require(data.rows > data.cols)
   require(data.rows == outputs.size)
-  require(workArray.size >= 2 * data.rows * data.cols)
+  require(workArray.length >= 2 * data.rows * data.cols)
 
   private val outputCopy = DenseVector.zeros[Double](outputs.size)
   private val singleColumnMatrix = new DenseMatrix[Double](data.rows, 1)
@@ -116,27 +115,14 @@ object lasso extends UFunc {
    */
   implicit val matrixVectorWithWorkArray
     : Impl4[DenseMatrix[Double], DenseVector[Double], Double, Array[Double], LassoResult] =
-    new Impl4[DenseMatrix[Double], DenseVector[Double], Double, Array[Double], LassoResult] {
-      def apply(data: DenseMatrix[Double],
-                outputs: DenseVector[Double],
-                lambda: Double,
-                workArray: Array[Double]
-      ): LassoResult = LassoCalculator(data, outputs, lambda, workArray).result
-    }
+    (data: DenseMatrix[Double], outputs: DenseVector[Double], lambda: Double, workArray: Array[Double]) =>
+      LassoCalculator(data, outputs, lambda, workArray).result
 
   implicit val matrixVectorSpecifiedWork: Impl4[DenseMatrix[Double], DenseVector[Double], Double, Int, LassoResult] =
-    new Impl4[DenseMatrix[Double], DenseVector[Double], Double, Int, LassoResult] {
-      def apply(data: DenseMatrix[Double], outputs: DenseVector[Double], lambda: Double, workSize: Int): LassoResult =
-        LassoCalculator(data, outputs, lambda, new Array[Double](workSize)).result
-    }
+    (data: DenseMatrix[Double], outputs: DenseVector[Double], lambda: Double, workSize: Int) =>
+      LassoCalculator(data, outputs, lambda, new Array[Double](workSize)).result
 
   implicit val matrixVector: Impl3[DenseMatrix[Double], DenseVector[Double], Double, LassoResult] =
-    new Impl3[DenseMatrix[Double], DenseVector[Double], Double, LassoResult] {
-      def apply(data: DenseMatrix[Double], outputs: DenseVector[Double], lambda: Double): LassoResult =
-        LassoCalculator(data.copy,
-                        outputs.copy,
-                        lambda,
-                        new Array[Double](math.max(1, data.rows * data.cols * 2))
-        ).result
-    }
+    (data: DenseMatrix[Double], outputs: DenseVector[Double], lambda: Double) =>
+      LassoCalculator(data.copy, outputs.copy, lambda, new Array[Double](math.max(1, data.rows * data.cols * 2))).result
 }

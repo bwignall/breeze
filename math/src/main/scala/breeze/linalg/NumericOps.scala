@@ -32,36 +32,36 @@ trait ImmutableNumericOps[+This] extends Any with HasOps {
 
   // Immutable
   /** Element-wise sum of this and b. */
-  final def +:+[B, That](b: B)(implicit op: OpAdd.Impl2[This @uncheckedVariance, B, That]) = op(repr, b)
+  final def +:+[B, That](b: B)(implicit op: OpAdd.Impl2[This @uncheckedVariance, B, That]): That = op(repr, b)
 
   /** Element-wise product of this and b. */
-  final def *:*[B, That](b: B)(implicit op: OpMulScalar.Impl2[This @uncheckedVariance, B, That]) = op(repr, b)
+  final def *:*[B, That](b: B)(implicit op: OpMulScalar.Impl2[This @uncheckedVariance, B, That]): That = op(repr, b)
 
   /** Element-wise equality comparator of this and b. */
-  final def :==[B, That](b: B)(implicit op: OpEq.Impl2[This @uncheckedVariance, B, That]) = op(repr, b)
+  final def :==[B, That](b: B)(implicit op: OpEq.Impl2[This @uncheckedVariance, B, That]): That = op(repr, b)
 
   /** Element-wise inequality comparator of this and b. */
-  final def :!=[B, That](b: B)(implicit op: OpNe.Impl2[This @uncheckedVariance, B, That]) = op(repr, b)
+  final def :!=[B, That](b: B)(implicit op: OpNe.Impl2[This @uncheckedVariance, B, That]): That = op(repr, b)
 
   /*
    * Ring Element Ops
    */
   // Immutable
-  final def unary_-[That](implicit op: OpNeg.Impl[This @uncheckedVariance, That]) = op(repr)
+  final def unary_-[That](implicit op: OpNeg.Impl[This @uncheckedVariance, That]): That = op(repr)
 
   /** Element-wise difference of this and b. */
-  final def -:-[B, That](b: B)(implicit op: OpSub.Impl2[This @uncheckedVariance, B, That]) = op(repr, b)
+  final def -:-[B, That](b: B)(implicit op: OpSub.Impl2[This @uncheckedVariance, B, That]): That = op(repr, b)
 
   /** Alias for -:-(b) for all b. */
-  final def -[B, That](b: B)(implicit op: OpSub.Impl2[This @uncheckedVariance, B, That]) = {
+  final def -[B, That](b: B)(implicit op: OpSub.Impl2[This @uncheckedVariance, B, That]): That = {
     op(repr, b)
   }
 
   /** Element-wise modulo of this and b. */
-  final def %:%[B, That](b: B)(implicit op: OpMod.Impl2[This @uncheckedVariance, B, That]) = op(repr, b)
+  final def %:%[B, That](b: B)(implicit op: OpMod.Impl2[This @uncheckedVariance, B, That]): That = op(repr, b)
 
   /** Alias for :%(b) when b is a scalar. */
-  final def %[B, That](b: B)(implicit op: OpMod.Impl2[This @uncheckedVariance, B, That]) = {
+  final def %[B, That](b: B)(implicit op: OpMod.Impl2[This @uncheckedVariance, B, That]): That = {
     op(repr, b)
   }
 
@@ -71,41 +71,42 @@ trait ImmutableNumericOps[+This] extends Any with HasOps {
 
   // Immutable
   /** Element-wise quotient of this and b. */
-  final def /:/[B, That](b: B)(implicit op: OpDiv.Impl2[This @uncheckedVariance, B, That]) = op(repr, b)
+  final def /:/[B, That](b: B)(implicit op: OpDiv.Impl2[This @uncheckedVariance, B, That]): That = op(repr, b)
 
   /** Alias for :/(b) when b is a scalar. */
-  final def /[B, That](b: B)(implicit op: OpDiv.Impl2[This @uncheckedVariance, B, That]) = {
+  final def /[B, That](b: B)(implicit op: OpDiv.Impl2[This @uncheckedVariance, B, That]): That = {
     op(repr, b)
   }
 
   /** Element-wise exponentiation of this and b. */
-  final def ^:^[B, That](b: B)(implicit op: OpPow.Impl2[This @uncheckedVariance, B, That]) = op(repr, b)
+  final def ^:^[B, That](b: B)(implicit op: OpPow.Impl2[This @uncheckedVariance, B, That]): That = op(repr, b)
 
   /** Inner product of this and b. */
-  final def dot[B, BB >: B, That](b: B)(implicit op: OpMulInner.Impl2[This @uncheckedVariance, BB, That]) = op(repr, b)
+  final def dot[B, BB >: B, That](b: B)(implicit op: OpMulInner.Impl2[This @uncheckedVariance, BB, That]): That =
+    op(repr, b)
 
   /*
    * Logical Ops
    */
 
-  final def unary_![That](implicit op: OpNot.Impl[This @uncheckedVariance, That]) = op(repr)
+  final def unary_![That](implicit op: OpNot.Impl[This @uncheckedVariance, That]): That = op(repr)
 
   /** Element-wise logical "and" operator -- returns true if corresponding elements are non-zero. */
-  final def &:&[B, That](b: B)(implicit op: OpAnd.Impl2[This @uncheckedVariance, B, That]) = op(repr, b)
+  final def &:&[B, That](b: B)(implicit op: OpAnd.Impl2[This @uncheckedVariance, B, That]): That = op(repr, b)
 
   /** Element-wise logical "or" operator -- returns true if either element is non-zero. */
-  final def |:|[B, That](b: B)(implicit op: OpOr.Impl2[This @uncheckedVariance, B, That]) = op(repr, b)
+  final def |:|[B, That](b: B)(implicit op: OpOr.Impl2[This @uncheckedVariance, B, That]): That = op(repr, b)
 
   /** Element-wise logical "xor" operator -- returns true if only one of the corresponding elements is non-zero. */
-  final def ^^:^^[B, That](b: B)(implicit op: OpXor.Impl2[This @uncheckedVariance, B, That]) = op(repr, b)
+  final def ^^:^^[B, That](b: B)(implicit op: OpXor.Impl2[This @uncheckedVariance, B, That]): That = op(repr, b)
 
   /** Alias for &:&(b) for all b. */
-  final def &[B, That](b: B)(implicit op: OpAnd.Impl2[This @uncheckedVariance, B, That]) = {
+  final def &[B, That](b: B)(implicit op: OpAnd.Impl2[This @uncheckedVariance, B, That]): That = {
     op(repr, b)
   }
 
   /** Alias for :||(b) for all b. */
-  final def |[B, That](b: B)(implicit op: OpOr.Impl2[This @uncheckedVariance, B, That]) = {
+  final def |[B, That](b: B)(implicit op: OpOr.Impl2[This @uncheckedVariance, B, That]): That = {
     op(repr, b)
   }
 
@@ -118,16 +119,16 @@ trait ImmutableNumericOps[+This] extends Any with HasOps {
    * Matrix-y ops
    */
   /** Matrix multiplication */
-  final def *[B, That](b: B)(implicit op: OpMulMatrix.Impl2[This @uncheckedVariance, B, That]) = {
+  final def *[B, That](b: B)(implicit op: OpMulMatrix.Impl2[This @uncheckedVariance, B, That]): That = {
     op(repr, b)
   }
 
   /** A transposed view of this object. */
-  final def t[That](implicit op: CanTranspose[This @uncheckedVariance, That]) =
+  final def t[That](implicit op: CanTranspose[This @uncheckedVariance, That]): That =
     op.apply(repr)
 
   /** Shaped solve of this by b. */
-  def \[B, That](b: B)(implicit op: OpSolveMatrixBy.Impl2[This @uncheckedVariance, B, That]) =
+  def \[B, That](b: B)(implicit op: OpSolveMatrixBy.Impl2[This @uncheckedVariance, B, That]): That =
     op.apply(repr, b)
 
   /** A transposed view of this object, followed by a slice. Sadly frequently necessary. */
@@ -155,7 +156,7 @@ trait NumericOps[+This] extends ImmutableNumericOps[This] {
 
   // We move this here because of ambiguities with any2stringadd
   /** Alias for :+(b) for all b. */
-  final def +[B, C, That](b: B)(implicit op: OpAdd.Impl2[This @uncheckedVariance, B, That]) = {
+  final def +[B, C, That](b: B)(implicit op: OpAdd.Impl2[This @uncheckedVariance, B, That]): That = {
     op(repr, b)
   }
 
@@ -179,11 +180,11 @@ trait NumericOps[+This] extends ImmutableNumericOps[This] {
   }
 
   /** Alias for :+=(b) for all b. */
-  final def +=[B](b: B)(implicit op: OpAdd.InPlaceImpl2[This @uncheckedVariance, B]) =
+  final def +=[B](b: B)(implicit op: OpAdd.InPlaceImpl2[This @uncheckedVariance, B]): This =
     this.:+=[B](b)
 
   /** Alias for :*=(b) when b is a scalar. */
-  final def *=[B](b: B)(implicit op: OpMulScalar.InPlaceImpl2[This @uncheckedVariance, B]) =
+  final def *=[B](b: B)(implicit op: OpMulScalar.InPlaceImpl2[This @uncheckedVariance, B]): This =
     this.:*=[B](b)
 
   // Mutable
@@ -200,11 +201,11 @@ trait NumericOps[+This] extends ImmutableNumericOps[This] {
   }
 
   /** Alias for :%=(b) when b is a scalar. */
-  final def %=[B](b: B)(implicit op: OpMod.InPlaceImpl2[This @uncheckedVariance, B]) =
+  final def %=[B](b: B)(implicit op: OpMod.InPlaceImpl2[This @uncheckedVariance, B]): This =
     this.:%=[B](b)
 
   /** Alias for :-=(b) for all b. */
-  final def -=[B](b: B)(implicit op: OpSub.InPlaceImpl2[This @uncheckedVariance, B]) =
+  final def -=[B](b: B)(implicit op: OpSub.InPlaceImpl2[This @uncheckedVariance, B]): This =
     this.:-=[B](b)
 
   // Mutable
@@ -221,7 +222,7 @@ trait NumericOps[+This] extends ImmutableNumericOps[This] {
   }
 
   /** Alias for :/=(b) when b is a scalar. */
-  final def /=[B](b: B)(implicit op: OpDiv.InPlaceImpl2[This @uncheckedVariance, B]) =
+  final def /=[B](b: B)(implicit op: OpDiv.InPlaceImpl2[This @uncheckedVariance, B]): This =
     this.:/=[B](b)
 
   /*
@@ -229,16 +230,16 @@ trait NumericOps[+This] extends ImmutableNumericOps[This] {
    */
 
   /** Element-wise less=than comparator of this and b. */
-  final def <:<[B, That](b: B)(implicit op: OpLT.Impl2[This @uncheckedVariance, B, That]) = op(repr, b)
+  final def <:<[B, That](b: B)(implicit op: OpLT.Impl2[This @uncheckedVariance, B, That]): That = op(repr, b)
 
   /** Element-wise less-than-or-equal-to comparator of this and b. */
-  final def <:=[B, That](b: B)(implicit op: OpLTE.Impl2[This @uncheckedVariance, B, That]) = op(repr, b)
+  final def <:=[B, That](b: B)(implicit op: OpLTE.Impl2[This @uncheckedVariance, B, That]): That = op(repr, b)
 
   /** Element-wise greater-than comparator of this and b. */
-  final def >:>[B, That](b: B)(implicit op: OpGT.Impl2[This @uncheckedVariance, B, That]) = op(repr, b)
+  final def >:>[B, That](b: B)(implicit op: OpGT.Impl2[This @uncheckedVariance, B, That]): That = op(repr, b)
 
   /** Element-wise greater-than-or-equal-to comparator of this and b. */
-  final def >:=[B, That](b: B)(implicit op: OpGTE.Impl2[This @uncheckedVariance, B, That]) = op(repr, b)
+  final def >:=[B, That](b: B)(implicit op: OpGTE.Impl2[This @uncheckedVariance, B, That]): That = op(repr, b)
 
   /** Mutates this by element-wise and of this and b. */
   final def :&=[B](b: B)(implicit op: OpAnd.InPlaceImpl2[This @uncheckedVariance, B]): This = {
@@ -292,76 +293,66 @@ object NumericOps {
   object Arrays extends ArraysLowPriority {
 
     implicit class ArrayIsNumericOps[V](arr: Array[V]) extends NumericOps[Array[V]] {
-      def repr = arr
+      def repr: Array[V] = arr
     }
 
     // TODO these two really shouldn't be necessary, but there's interference(?) from any2StringAdd, or something.
     implicit def binaryOpFromDVOp2Add[V](implicit
       op: OpAdd.Impl2[DenseVector[V], DenseVector[V], DenseVector[V]]
-    ): OpAdd.Impl2[Array[V], Array[V], Array[V]] = {
-      new OpAdd.Impl2[Array[V], Array[V], Array[V]] {
-        def apply(a: Array[V], b: Array[V]): Array[V] = {
-          val r = op(DenseVector(a), DenseVector[V](b))
-          if (r.offset != 0 || r.stride != 1) {
-            r.copy.data
-          } else {
-            r.data
-          }
+    ): OpAdd.Impl2[Array[V], Array[V], Array[V]] = { (a: Array[V], b: Array[V]) =>
+      {
+        val r = op(DenseVector(a), DenseVector[V](b))
+        if (r.offset != 0 || r.stride != 1) {
+          r.copy.data
+        } else {
+          r.data
         }
       }
     }
 
     implicit def binaryOpAddFromDVUOpAdd2[V](implicit
       op: OpAdd.Impl2[DenseVector[V], V, DenseVector[V]]
-    ): OpAdd.Impl2[Array[V], V, Array[V]] = {
-      new OpAdd.Impl2[Array[V], V, Array[V]] {
-        def apply(a: Array[V], b: V): Array[V] = {
-          val r = op(DenseVector(a), b)
-          if (r.offset != 0 || r.stride != 1) {
-            r.copy.data
-          } else {
-            r.data
-          }
+    ): OpAdd.Impl2[Array[V], V, Array[V]] = { (a: Array[V], b: V) =>
+      {
+        val r = op(DenseVector(a), b)
+        if (r.offset != 0 || r.stride != 1) {
+          r.copy.data
+        } else {
+          r.data
         }
       }
     }
 
     implicit def binaryOpFromDVOp2[V, Op <: OpType](implicit
       op: UFunc.UImpl2[Op, DenseVector[V], DenseVector[V], DenseVector[V]]
-    ): UFunc.UImpl2[Op, Array[V], Array[V], Array[V]] = {
-      new UFunc.UImpl2[Op, Array[V], Array[V], Array[V]] {
-        def apply(a: Array[V], b: Array[V]): Array[V] = {
-          val r = op(DenseVector(a), DenseVector[V](b))
-          if (r.offset != 0 || r.stride != 1) {
-            r.copy.data
-          } else {
-            r.data
-          }
+    ): UFunc.UImpl2[Op, Array[V], Array[V], Array[V]] = { (a: Array[V], b: Array[V]) =>
+      {
+        val r = op(DenseVector(a), DenseVector[V](b))
+        if (r.offset != 0 || r.stride != 1) {
+          r.copy.data
+        } else {
+          r.data
         }
       }
     }
 
     implicit def binaryUpdateOpFromDVDVOp[V, Op <: OpType](implicit
       op: UFunc.InPlaceImpl2[Op, DenseVector[V], DenseVector[V]]
-    ): UFunc.InPlaceImpl2[Op, Array[V], Array[V]] = {
-      new UFunc.InPlaceImpl2[Op, Array[V], Array[V]] {
-        def apply(a: Array[V], b: Array[V]): Unit = {
-          op(DenseVector(a), DenseVector(b))
-        }
+    ): UFunc.InPlaceImpl2[Op, Array[V], Array[V]] = { (a: Array[V], b: Array[V]) =>
+      {
+        op(DenseVector(a), DenseVector(b))
       }
     }
 
     implicit def binaryOpFromDVUOp2[V, Op <: OpType](implicit
       op: UFunc.UImpl2[Op, DenseVector[V], V, DenseVector[V]]
-    ): UFunc.UImpl2[Op, Array[V], V, Array[V]] = {
-      new UFunc.UImpl2[Op, Array[V], V, Array[V]] {
-        def apply(a: Array[V], b: V): Array[V] = {
-          val r = op(DenseVector(a), b)
-          if (r.offset != 0 || r.stride != 1) {
-            r.copy.data
-          } else {
-            r.data
-          }
+    ): UFunc.UImpl2[Op, Array[V], V, Array[V]] = { (a: Array[V], b: V) =>
+      {
+        val r = op(DenseVector(a), b)
+        if (r.offset != 0 || r.stride != 1) {
+          r.copy.data
+        } else {
+          r.data
         }
       }
     }
@@ -371,11 +362,9 @@ object NumericOps {
   sealed trait ArraysLowPriority {
     implicit def binaryUpdateOpFromDVOp[V, Other, Op](implicit
       op: UFunc.InPlaceImpl2[Op, DenseVector[V], Other]
-    ): UFunc.InPlaceImpl2[Op, Array[V], Other] = {
-      new UFunc.InPlaceImpl2[Op, Array[V], Other] {
-        def apply(a: Array[V], b: Other): Unit = {
-          op(DenseVector(a), b)
-        }
+    ): UFunc.InPlaceImpl2[Op, Array[V], Other] = { (a: Array[V], b: Other) =>
+      {
+        op(DenseVector(a), b)
       }
     }
 
@@ -383,17 +372,15 @@ object NumericOps {
       op: UFunc.UImpl2[Op, DenseVector[V], Other, DenseVector[U]],
       man: ClassTag[U],
       zero: Zero[U]
-    ): UFunc.UImpl2[Op, Array[V], Other, Array[U]] = {
-      new UFunc.UImpl2[Op, Array[V], Other, Array[U]] {
-        def apply(a: Array[V], b: Other): Array[U] = {
-          val r = op(DenseVector(a), b)
-          if (r.offset != 0 || r.stride != 1) {
-            val z = DenseVector.zeros[U](r.length)
-            z := r
-            z.data
-          } else {
-            r.data
-          }
+    ): UFunc.UImpl2[Op, Array[V], Other, Array[U]] = { (a: Array[V], b: Other) =>
+      {
+        val r = op(DenseVector(a), b)
+        if (r.offset != 0 || r.stride != 1) {
+          val z = DenseVector.zeros[U](r.length)
+          z := r
+          z.data
+        } else {
+          r.data
         }
       }
     }
@@ -401,11 +388,9 @@ object NumericOps {
 
   implicit def binaryUpdateOpFromDVVOp[V, Op, U](implicit
     op: UFunc.InPlaceImpl2[Op, DenseVector[V], U]
-  ): UFunc.InPlaceImpl2[Op, Array[V], U] = {
-    new UFunc.InPlaceImpl2[Op, Array[V], U] {
-      def apply(a: Array[V], b: U): Unit = {
-        op(DenseVector(a), b)
-      }
+  ): UFunc.InPlaceImpl2[Op, Array[V], U] = { (a: Array[V], b: U) =>
+    {
+      op(DenseVector(a), b)
     }
   }
 

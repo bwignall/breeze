@@ -1,13 +1,9 @@
-package breeze.linalg;
+package breeze.linalg
 
 import breeze.macros.expand
 import breeze.math.Complex
 import breeze.util.Opt
 
-/**
- * @author ktakagaki
- * @date 04/17/2014.
- */
 object Options {
 
   // Options for CanPad

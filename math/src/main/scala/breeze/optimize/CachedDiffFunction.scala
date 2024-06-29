@@ -15,7 +15,7 @@ class CachedDiffFunction[T: CanCopy](obj: DiffFunction[T]) extends DiffFunction[
   /** calculates the value at a point */
   override def valueAt(x: T): Double = calculate(x)._1
 
-  private var lastData: (T, Double, T) = null
+  private var lastData: (T, Double, T) = _
 
   /** Calculates both the value and the gradient at a point */
   def calculate(x: T): (Double, T) = {
@@ -42,9 +42,9 @@ class CachedBatchDiffFunction[T: CanCopy](obj: BatchDiffFunction[T]) extends Bat
   /** calculates the value at a point */
   override def valueAt(x: T, range: IndexedSeq[Int]): Double = calculate(x, range)._1
 
-  private var lastData: (T, Double, T, IndexedSeq[Int]) = null
+  private var lastData: (T, Double, T, IndexedSeq[Int]) = _
 
-  def fullRange = obj.fullRange
+  def fullRange: IndexedSeq[Int] = obj.fullRange
 
   /** Calculates both the value and the gradient at a point */
   override def calculate(x: T, range: IndexedSeq[Int]): (Double, T) = {

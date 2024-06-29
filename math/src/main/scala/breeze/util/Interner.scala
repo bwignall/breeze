@@ -40,7 +40,7 @@ class Interner[T] extends (T => T) with Serializable {
   }
 
   def clear(): Unit = inner.clear()
-  def size = inner.size
+  def size: Int = inner.size
 
   def internAll(c: List[T]): List[T] = c.map(apply)
   def internAll(c: Array[T])(implicit ct: ClassTag[T]): Array[T] = c.map(apply)

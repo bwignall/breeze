@@ -49,9 +49,9 @@ class BitVectorTest extends AnyFunSuite {
     val b = SparseVector(1, 0, 2, 0, 3, 4, 0)
     val bd = DenseVector(1, 0, 2, 0, 3, 4, 0)
     b.compact()
-    assert((a.dot(b)) === (b.dot(a)))
-    assert((a.dot(b)) === 6)
-    assert((a.dot(bd)) === 6)
+    assert(a.dot(b) === b.dot(a))
+    assert(a.dot(b) === 6)
+    assert(a.dot(bd) === 6)
   }
 
   test("axpy") {

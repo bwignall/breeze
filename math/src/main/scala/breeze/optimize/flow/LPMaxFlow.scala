@@ -51,7 +51,7 @@ class LPMaxFlow[N](val g: FlowGraph[N]) {
     val total = incoming(sink).reduceLeft(_ + _)
     val solution = maximize { total.subjectTo(constraints.result(): _*) }
 
-    (Map.empty ++ edgeMap.mapValues(solution.valueOf(_)), solution.value)
+    (Map.empty ++ edgeMap.view.mapValues(solution.valueOf(_)), solution.value)
   }
 
   def minCostFlow(minimumFlow: Double = -1): (Map[Edge, Double], Double) = {
@@ -104,6 +104,6 @@ class LPMaxFlow[N](val g: FlowGraph[N]) {
     val total = costs.reduceLeft(_ + _)
     val solution = maximize { (total * -1.0).subjectTo(constraints.result(): _*) }
 
-    (Map.empty ++ edgeMap.mapValues(solution.valueOf(_)), -solution.value)
+    (Map.empty ++ edgeMap.view.mapValues(solution.valueOf(_)), -solution.value)
   }
 }

@@ -4,8 +4,6 @@ import breeze.generic.MappingUFunc
 import breeze.generic.UFunc
 
 /**Package for common unit conversions.
- * @author ktakagaki
- * @date 1/31/14.
  */
 object Conversions {
 

@@ -22,7 +22,7 @@ import breeze.numerics.pow
  * Created by fanming.chen on 2015/3/14 0014.
  */
 class LBFGSBTest extends OptimizeTestBase {
-  val EPS = 1e-4;
+  val EPS = 1e-4
 
   test("L-BFGS-B should solve with bound constraint") {
     val solver = new LBFGSB(DenseVector[Double](-100, -100), DenseVector[Double](1200, 100))
@@ -39,7 +39,7 @@ class LBFGSBTest extends OptimizeTestBase {
       }
     }
 
-    var optX = solver.minimize(f, nearX0)
+    val optX = solver.minimize(f, nearX0)
 
     val expectFx = 0.0
     assert(norm(f(optX)) < EPS)
@@ -65,7 +65,6 @@ class LBFGSBTest extends OptimizeTestBase {
     }
 
     var optX = solver.minimize(f, nearX0)
-    val expectFx = 0.0
     assert(norm(f(optX)) < EPS)
 
     val farX0 = DenseVector[Double](12.0, 8.2)

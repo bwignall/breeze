@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory
  **/
 trait SerializableLogging extends Serializable {
   @transient @volatile
-  private var _the_logger: LazyLogger = null
+  private var _the_logger: LazyLogger = _
 
   protected def logger: LazyLogger = {
     var logger = _the_logger

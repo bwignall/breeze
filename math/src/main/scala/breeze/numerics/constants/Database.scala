@@ -3,16 +3,12 @@ package breeze.numerics.constants
 import scala.collection.immutable.HashMap
 import scala.util.matching.Regex
 
-/**Object encapsulating CODATA2010 constants.
- *
- * @author ktakagaki
- * @date 3/12/14.
- */
+/** Object encapsulating CODATA2010 constants. */
 object Database {
 
   /** Return a vector containing all database keys.
    */
-  def list() = databaseHM.keys.toVector
+  def list(): Seq[String] = databaseHM.keys.toVector
 
   /** Look up the value of a specific entry.
    * Name must be an exact match with the entry.

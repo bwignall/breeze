@@ -41,7 +41,7 @@ class OWLQN[K, T](convergenceCheck: ConvergenceCheck[T], m: Int, l1reg: K => Dou
 
   import space._
 
-  override protected def chooseDescentDirection(state: State, fn: DiffFunction[T]) = {
+  override protected def chooseDescentDirection(state: State, fn: DiffFunction[T]): T = {
     val descentDir = super.chooseDescentDirection(state.copy(grad = state.adjustedGradient), fn)
 
     // The original paper requires that the descent direction be corrected to be
@@ -58,7 +58,7 @@ class OWLQN[K, T](convergenceCheck: ConvergenceCheck[T], m: Int, l1reg: K => Dou
     correctedDir
   }
 
-  override protected def determineStepSize(state: State, f: DiffFunction[T], dir: T) = {
+  override protected def determineStepSize(state: State, f: DiffFunction[T], dir: T): Double = {
     val iter = state.iter
 
     val normGradInDir = {
@@ -75,7 +75,7 @@ class OWLQN[K, T](convergenceCheck: ConvergenceCheck[T], m: Int, l1reg: K => Dou
     }
 
     val ff = new DiffFunction[Double] {
-      def calculate(alpha: Double) = {
+      def calculate(alpha: Double): (Double, Double) = {
         val newX = takeStep(state, dir, alpha)
         val (v, newG) = f.calculate(newX)
         val (adjv, adjgrad) = adjust(newX, newG, v)
@@ -85,7 +85,7 @@ class OWLQN[K, T](convergenceCheck: ConvergenceCheck[T], m: Int, l1reg: K => Dou
         // dir should be (newX - state.x) according to the paper and the author.
         // However, in practice, this seems fine.
         // And interestingly the MSR reference implementation does the same thing (but they don't do wolfe condition checks.).
-        adjv -> (adjgrad.dot(dir))
+        adjv -> adjgrad.dot(dir)
       }
     }
     val search = new BacktrackingLineSearch(state.value, shrinkStep = if (iter < 1) 0.1 else 0.5)
@@ -97,7 +97,7 @@ class OWLQN[K, T](convergenceCheck: ConvergenceCheck[T], m: Int, l1reg: K => Dou
   // projects x to be on the same orthant as y
   // this basically requires that x'_i = x_i if sign(x_i) == sign(y_i), and 0 otherwise.
 
-  override protected def takeStep(state: State, dir: T, stepSize: Double) = {
+  override protected def takeStep(state: State, dir: T, stepSize: Double): T = {
     val stepped = state.x + dir * stepSize
     val orthant = computeOrthant(state.x, state.adjustedGradient)
     space.zipMapValues.map(stepped,

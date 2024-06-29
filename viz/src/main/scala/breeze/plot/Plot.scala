@@ -28,7 +28,7 @@ import collection.mutable
  *
  * @author dlwh
  */
-class Plot() {
+class Plot {
   private val datasets = new ArrayBuffer[xy.XYDataset]
   private val renderers = new ArrayBuffer[XYItemRenderer]
   private var series = 0
@@ -40,7 +40,7 @@ class Plot() {
   }
 
   def +=(nameSeries: (String, Series)): Plot = {
-    val (d, r) = nameSeries._2.getChartStuff({ i =>
+    val (d, r) = nameSeries._2.getChartStuff({ _ =>
                                                nameSeries._1
                                              },
                                              { i =>
@@ -57,15 +57,15 @@ class Plot() {
     this
   }
 
-  def ++=(pl: TraversableOnce[Series]) = {
-    pl.foreach(this += _)
+  def ++=(pl: IterableOnce[Series]): Plot = {
+    pl.iterator.foreach(this += _)
     refresh()
     this
   }
 
   def refresh(): Unit = {
     var series = 0
-    for ((d, r) <- datasets.zip(renderers); s <- 0 until d.getSeriesCount) {
+    for ((d, r) <- datasets.zip(renderers); _ <- 0 until d.getSeriesCount) {
       plot.setDataset(series, d)
       plot.setRenderer(series, r)
       series += 1
@@ -76,19 +76,19 @@ class Plot() {
 
   // Sigh, I hate the listener pattern
   def listen(l: Plot.Listener): Unit = {
-    listeners += (l -> (()))
+    listeners += (l -> ())
   }
 
   def unlisten(l: Plot.Listener): Unit = {
     listeners -= l
   }
 
-  def xlabel = xaxis.getLabel
+  def xlabel: String = xaxis.getLabel
   def xlabel_=(label: String): Unit = {
     xaxis.setLabel(label)
   }
 
-  def ylabel = yaxis.getLabel
+  def ylabel: String = yaxis.getLabel
   def ylabel_=(label: String): Unit = {
     yaxis.setLabel(label)
   }
@@ -96,7 +96,7 @@ class Plot() {
   def xlim_=(lowerUpper: (Double, Double)): Unit = {
     xlim(lowerUpper._1, lowerUpper._2)
   }
-  def xlim: (Double, Double) = plot.getDomainAxis.getLowerBound -> plot.getDomainAxis.getUpperBound()
+  def xlim: (Double, Double) = plot.getDomainAxis.getLowerBound -> plot.getDomainAxis.getUpperBound
 
   /** Sets the lower and upper bounds of the current plot. */
   def xlim(lower: Double, upper: Double): Unit = {
@@ -107,14 +107,14 @@ class Plot() {
   def ylim_=(lowerUpper: (Double, Double)): Unit = {
     ylim(lowerUpper._1, lowerUpper._2)
   }
-  def ylim: (Double, Double) = plot.getRangeAxis.getLowerBound -> plot.getRangeAxis.getUpperBound()
+  def ylim: (Double, Double) = plot.getRangeAxis.getLowerBound -> plot.getRangeAxis.getUpperBound
   def ylim(lower: Double, upper: Double): Unit = {
     plot.getRangeAxis.setLowerBound(lower)
     plot.getRangeAxis.setUpperBound(upper)
   }
 
-  def xaxis = _xaxis
-  def yaxis = _yaxis
+  def xaxis: NumberAxis = _xaxis
+  def yaxis: NumberAxis = _yaxis
 
   private var _xaxis: NumberAxis = new NumberAxis(null)
   private var _yaxis: NumberAxis = new NumberAxis(null)
@@ -236,7 +236,7 @@ object Plot {
     val units = new TickUnits()
     val df = new java.text.DecimalFormat("0")
     for (b <- Seq(1, 2, 5); e <- Seq(0, 1, 2, 3, 4, 5, 6, 7, 8)) {
-      units.add(new NumberTickUnit(b * math.pow(10, e).toInt, df))
+      units.add(new NumberTickUnit(b.toDouble * math.pow(10.0, e).toInt, df))
     }
     units
   }
@@ -247,23 +247,23 @@ object Plot {
   def paint(series: Int): Paint =
     paints(series % paints.length)
 
-  val shapes = DefaultDrawingSupplier.DEFAULT_SHAPE_SEQUENCE
+  val shapes: Array[Shape] = DefaultDrawingSupplier.DEFAULT_SHAPE_SEQUENCE
   def shape(series: Int): Shape =
     shapes(series % shapes.length)
 
-  val strokes = DefaultDrawingSupplier.DEFAULT_STROKE_SEQUENCE
+  val strokes: Array[Stroke] = DefaultDrawingSupplier.DEFAULT_STROKE_SEQUENCE
   def stroke(series: Int): Stroke =
     strokes(series % strokes.length)
 
-  val fillPaints = paints; // DefaultDrawingSupplier.DEFAULT_FILL_PAINT_SEQUENCE
+  val fillPaints: Array[Paint] = paints; // DefaultDrawingSupplier.DEFAULT_FILL_PAINT_SEQUENCE
   def fillPaint(series: Int): Paint =
     fillPaints(series % fillPaints.length)
 
-  val outlinePaints = paints; // DefaultDrawingSupplier.DEFAULT_OUTLINE_PAINT_SEQUENCE
+  val outlinePaints: Array[Paint] = paints; // DefaultDrawingSupplier.DEFAULT_OUTLINE_PAINT_SEQUENCE
   def outlinePaint(series: Int): Paint =
     outlinePaints(series % outlinePaints.length)
 
-  val outlineStrokes = DefaultDrawingSupplier.DEFAULT_OUTLINE_STROKE_SEQUENCE
+  val outlineStrokes: Array[Stroke] = DefaultDrawingSupplier.DEFAULT_OUTLINE_STROKE_SEQUENCE
   def outlineStroke(series: Int): Stroke =
     outlineStrokes(series % outlineStrokes.length)
 
@@ -307,7 +307,7 @@ object Plot {
 
     def +=(d: xy.XYDataset): Unit = {
       datasets += d
-      for (i <- 0 until d.getSeriesCount) {
+      for (_ <- 0 until d.getSeriesCount) {
         seriesDelegates += (datasets.size - 1)
       }
       datasetSeriesOffsets += seriesDelegates.length
@@ -352,7 +352,7 @@ object Plot {
 
     def +=(d: xy.XYItemRenderer, numSeries: Int, autocolor: Boolean, autostroke: Boolean): Unit = {
       renderers += d
-      for (i <- 0 until numSeries) {
+      for (_ <- 0 until numSeries) {
         seriesDelegates += (renderers.size - 1)
         autopaint += autocolor
         this.autostroke += autostroke

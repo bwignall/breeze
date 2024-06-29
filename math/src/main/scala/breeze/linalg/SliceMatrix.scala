@@ -81,7 +81,7 @@ object SliceMatrix extends LowPrioritySliceMatrix with SliceMatrixOps {
                             @specialized(Int, Float, Double) V2: ClassTag: Zero
   ]: CanMapValues[SliceMatrix[K1, K2, V], V, V2, DenseMatrix[V2]] = {
     new DenseCanMapValues[SliceMatrix[K1, K2, V], V, V2, DenseMatrix[V2]] {
-      override def map(from: SliceMatrix[K1, K2, V], fn: (V) => V2): DenseMatrix[V2] = {
+      override def map(from: SliceMatrix[K1, K2, V], fn: V => V2): DenseMatrix[V2] = {
         DenseMatrix.tabulate(from.rows, from.cols)((i, j) => fn(from(i, j)))
       }
 
@@ -89,11 +89,9 @@ object SliceMatrix extends LowPrioritySliceMatrix with SliceMatrixOps {
   }
 
   implicit def canCreateZerosLike[K1, K2, V: ClassTag: Zero]
-    : CanCreateZerosLike[SliceMatrix[K1, K2, V], DenseMatrix[V]] = {
-    new CanCreateZerosLike[SliceMatrix[K1, K2, V], DenseMatrix[V]] {
-      def apply(v1: SliceMatrix[K1, K2, V]): DenseMatrix[V] = {
-        DenseMatrix.zeros[V](v1.rows, v1.cols)
-      }
+    : CanCreateZerosLike[SliceMatrix[K1, K2, V], DenseMatrix[V]] = { (v1: SliceMatrix[K1, K2, V]) =>
+    {
+      DenseMatrix.zeros[V](v1.rows, v1.cols)
     }
   }
 
@@ -104,7 +102,7 @@ object SliceMatrix extends LowPrioritySliceMatrix with SliceMatrixOps {
 
       def traverse(from: SliceMatrix[K1, K2, V], fn: ValuesVisitor[V]): fn.type = {
         from.valuesIterator.foreach {
-          fn.visit(_)
+          fn.visit
         }
         fn
       }
@@ -129,13 +127,13 @@ object SliceMatrix extends LowPrioritySliceMatrix with SliceMatrixOps {
 
   implicit def canTransformValues[K1, K2, V]: CanTransformValues[SliceMatrix[K1, K2, V], V] = {
     new CanTransformValues[SliceMatrix[K1, K2, V], V] {
-      def transform(from: SliceMatrix[K1, K2, V], fn: (V) => V): Unit = {
+      def transform(from: SliceMatrix[K1, K2, V], fn: V => V): Unit = {
         for (j <- 0 until from.cols; i <- 0 until from.rows) {
           from(i, j) = fn(from(i, j))
         }
       }
 
-      def transformActive(from: SliceMatrix[K1, K2, V], fn: (V) => V): Unit = {
+      def transformActive(from: SliceMatrix[K1, K2, V], fn: V => V): Unit = {
         transform(from, fn)
       }
     }
@@ -144,24 +142,22 @@ object SliceMatrix extends LowPrioritySliceMatrix with SliceMatrixOps {
   // slices
   implicit def canSliceRow[K1, K2, V: Semiring: ClassTag]
     : CanSlice2[SliceMatrix[K1, K2, V], Int, ::.type, Transpose[SliceVector[(K1, K2), V]]] = {
-    new CanSlice2[SliceMatrix[K1, K2, V], Int, ::.type, Transpose[SliceVector[(K1, K2), V]]] {
-      def apply(from: SliceMatrix[K1, K2, V], sliceRow: Int, ignored: ::.type): Transpose[SliceVector[(K1, K2), V]] = {
+    (from: SliceMatrix[K1, K2, V], sliceRow: Int, ignored: ::.type) =>
+      {
         val row = SliceUtils.mapRow(sliceRow, from.rows)
         val k1: K1 = from.slice1(row)
         new SliceVector(from.tensor, from.slice2.map(k1 -> _)).t
       }
-    }
   }
 
   implicit def canSliceCol[K1, K2, V: Semiring: ClassTag]
     : CanSlice2[SliceMatrix[K1, K2, V], ::.type, Int, SliceVector[(K1, K2), V]] = {
-    new CanSlice2[SliceMatrix[K1, K2, V], ::.type, Int, SliceVector[(K1, K2), V]] {
-      def apply(from: SliceMatrix[K1, K2, V], ignored: ::.type, sliceCol: Int): SliceVector[(K1, K2), V] = {
+    (from: SliceMatrix[K1, K2, V], ignored: ::.type, sliceCol: Int) =>
+      {
         val col = SliceUtils.mapColumn(sliceCol, from.cols)
         val k2: K2 = from.slice2(col)
         new SliceVector(from.tensor, from.slice1.map(_ -> k2))
       }
-    }
   }
 }
 
@@ -171,11 +167,10 @@ trait LowPrioritySliceMatrix { self: SliceMatrix.type =>
   // return a SliceMatrix
   implicit def canSliceWeirdRows_SM[K1, K2, V: Semiring: ClassTag]
     : CanSlice2[SliceMatrix[K1, K2, V], Seq[Int], ::.type, SliceMatrix[K1, K2, V]] = {
-    new CanSlice2[SliceMatrix[K1, K2, V], Seq[Int], ::.type, SliceMatrix[K1, K2, V]] {
-      def apply(from: SliceMatrix[K1, K2, V], rows: Seq[Int], ignored: ::.type): SliceMatrix[K1, K2, V] = {
+    (from: SliceMatrix[K1, K2, V], rows: Seq[Int], ignored: ::.type) =>
+      {
         new SliceMatrix(from.tensor, SliceUtils.mapRowSeq(rows, from.rows).map(from.slice1), from.slice2)
       }
-    }
   }
 
   // Note: can't have a separate implicit for Range and Seq since they will be ambiguous as both will return a
@@ -183,11 +178,10 @@ trait LowPrioritySliceMatrix { self: SliceMatrix.type =>
   // return a SliceMatrix
   implicit def canSliceWeirdCols_SM[K1, K2, V: Semiring: ClassTag]
     : CanSlice2[SliceMatrix[K1, K2, V], ::.type, Seq[Int], SliceMatrix[K1, K2, V]] = {
-    new CanSlice2[SliceMatrix[K1, K2, V], ::.type, Seq[Int], SliceMatrix[K1, K2, V]] {
-      def apply(from: SliceMatrix[K1, K2, V], ignored: ::.type, cols: Seq[Int]): SliceMatrix[K1, K2, V] = {
+    (from: SliceMatrix[K1, K2, V], ignored: ::.type, cols: Seq[Int]) =>
+      {
         new SliceMatrix(from.tensor, from.slice1, SliceUtils.mapColumnSeq(cols, from.cols).map(from.slice2))
       }
-    }
   }
 
   implicit def handholdCanMapRows_SM[K1, K2, V]
@@ -200,7 +194,7 @@ trait LowPrioritySliceMatrix { self: SliceMatrix.type =>
   implicit def canCollapseRows_SliceMatrix[K1, K2, V: Semiring: ClassTag, R: ClassTag: Zero]
     : CanCollapseAxis[SliceMatrix[K1, K2, V], Axis._0.type, Vector[V], R, Transpose[Vector[R]]] =
     new CanCollapseAxis[SliceMatrix[K1, K2, V], Axis._0.type, Vector[V], R, Transpose[Vector[R]]] {
-      def apply(from: SliceMatrix[K1, K2, V], axis: Axis._0.type)(f: (Vector[V]) => R): Transpose[Vector[R]] = {
+      def apply(from: SliceMatrix[K1, K2, V], axis: Axis._0.type)(f: Vector[V] => R): Transpose[Vector[R]] = {
         val result = Vector.zeros[R](from.cols)
         cforRange(0 until from.cols) { c =>
           result(c) = f(from(::, c)(canSliceCol[K1, K2, V]))
@@ -212,7 +206,7 @@ trait LowPrioritySliceMatrix { self: SliceMatrix.type =>
   implicit def canCollapseCols_SliceMatrix[K1, K2, V: Semiring: ClassTag, R: ClassTag: Zero]
     : CanCollapseAxis[SliceMatrix[K1, K2, V], Axis._1.type, Vector[V], R, Vector[R]] = {
     new CanCollapseAxis[SliceMatrix[K1, K2, V], Axis._1.type, Vector[V], R, Vector[R]] {
-      def apply(from: SliceMatrix[K1, K2, V], axis: Axis._1.type)(f: (Vector[V]) => R): Vector[R] = {
+      def apply(from: SliceMatrix[K1, K2, V], axis: Axis._1.type)(f: Vector[V] => R): Vector[R] = {
         val result = Vector.zeros[R](from.rows)
         for (r <- 0 until from.rows) {
           result(r) = f(from(r, ::).t)

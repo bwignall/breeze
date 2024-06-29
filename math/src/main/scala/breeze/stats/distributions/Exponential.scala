@@ -15,7 +15,7 @@ case class Exponential(rate: Double)(implicit basis: RandBasis)
     with Moments[Double, Double]
     with HasCdf
     with HasInverseCdf {
-  override def toString(): String = ScalaRunTime._toString(this)
+  override def toString: String = ScalaRunTime._toString(this)
   require(rate > 0)
 
   def unnormalizedLogPdf(x: Double): Double = -rate * x
@@ -52,9 +52,9 @@ object Exponential
   type Parameter = Double
   case class SufficientStatistic(n: Double, v: Double)
       extends breeze.stats.distributions.SufficientStatistic[SufficientStatistic] {
-    def +(t: SufficientStatistic) = copy(n + t.n, v + t.v)
+    def +(t: SufficientStatistic): SufficientStatistic = copy(n + t.n, v + t.v)
 
-    def *(weight: Double) = copy(n * weight, v * weight)
+    def *(weight: Double): SufficientStatistic = copy(n * weight, v * weight)
   }
 
   def emptySufficientStatistic: SufficientStatistic = SufficientStatistic(0, 0)
@@ -65,12 +65,10 @@ object Exponential
     stats.n / stats.v
   }
 
-  def likelihoodFunction(stats: SufficientStatistic): DiffFunction[Parameter] = new DiffFunction[Double] {
-    def calculate(x: Double) = {
-      val obj = x * stats.v - stats.n * math.log(x)
-      val deriv = stats.v - stats.n / x
-      (obj, deriv)
-    }
+  def likelihoodFunction(stats: SufficientStatistic): DiffFunction[Parameter] = (x: Double) => {
+    val obj = x * stats.v - stats.n * math.log(x)
+    val deriv = stats.v - stats.n / x
+    (obj, deriv)
   }
 
   override def distribution(p: Double)(implicit rand: RandBasis): Exponential = new Exponential(p)

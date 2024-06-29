@@ -32,12 +32,9 @@ trait NormBasedDistance extends UFunc {
   implicit def distanceFromNormAndSub[T, U, V](implicit
     subImpl: OpSub.Impl2[T, U, V],
     normImpl: norm.Impl2[V, Double, Double]
-  ): Impl2[T, U, Double] = {
-
-    new Impl2[T, U, Double] {
-      def apply(v: T, v2: U): Double = {
-        norm(subImpl(v, v2), normConstant)
-      }
+  ): Impl2[T, U, Double] = { (v: T, v2: U) =>
+    {
+      norm(subImpl(v, v2), normConstant)
     }
   }
 

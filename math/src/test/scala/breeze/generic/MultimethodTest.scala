@@ -48,7 +48,7 @@ class MultimethodTest extends AnyFunSuite with Checkers {
     for (a <- all; b <- all) {
       intercept[UnsupportedOperationException] {
         mm(a, b)
-        assert(false, "Shouldn't be here!")
+        assert(condition = false, "Shouldn't be here!")
       }
     }
 
@@ -58,7 +58,7 @@ class MultimethodTest extends AnyFunSuite with Checkers {
     for (a <- all; b <- all if a != dv && b != dv) {
       intercept[UnsupportedOperationException] {
         mm(a, b)
-        assert(false, "Shouldn't be here!")
+        assert(condition = false, "Shouldn't be here!")
       }
     }
   }

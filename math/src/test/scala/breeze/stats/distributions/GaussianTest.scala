@@ -1,4 +1,4 @@
-package breeze.stats.distributions;
+package breeze.stats.distributions
 
 /*
  Copyright 2009 David Hall, Daniel Ramage
@@ -31,7 +31,7 @@ class GaussianTest
     with HasCdfTestBase {
   override type Distr = Gaussian
   val expFam: Gaussian.type = Gaussian
-  import org.scalacheck.Arbitrary.arbitrary;
+  import org.scalacheck.Arbitrary.arbitrary
 
   def arbParameter: Arbitrary[(Double, Double)] = Arbitrary {
     for {
@@ -51,8 +51,8 @@ class GaussianTest
   test("Probability of mean") {
     check(Prop.forAll { (m: Double, s: Double) =>
       (s == 0) || {
-        val b = new Gaussian(mu = m, sigma = s.abs);
-        b.unnormalizedLogPdf(m) == 0.0;
+        val b = new Gaussian(mu = m, sigma = s.abs)
+        b.unnormalizedLogPdf(m) == 0.0
       }
     })
   }
@@ -60,7 +60,7 @@ class GaussianTest
   test("#295, cdf/inverseCdf broken") {
     val gaussian = Gaussian(0, 1)
     assert((gaussian.cdf(gaussian.inverseCdf(0.1)) - 0.1).abs <= 1e-3,
-           "" + (gaussian.cdf(gaussian.inverseCdf(0.1))) + " was not close to " + 0.1
+           "" + gaussian.cdf(gaussian.inverseCdf(0.1)) + " was not close to " + 0.1
     )
   }
 
@@ -84,10 +84,10 @@ class GaussianTest
       std <- arbitrary[Double].map { x =>
         math.abs(x) % 8.0 + .1
       }
-    ) yield new Gaussian(mean, std);
+    ) yield new Gaussian(mean, std)
   }
 
-  def asDouble(x: Double) = x
+  def asDouble(x: Double): Double = x
 
-  def fromDouble(x: Double) = x
+  def fromDouble(x: Double): Double = x
 }

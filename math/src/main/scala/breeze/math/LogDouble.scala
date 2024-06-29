@@ -54,7 +54,7 @@ class LogDouble(val logValue: Double) {
     case _             => false
   }
 
-  override def hashCode = logValue.hashCode
+  override def hashCode: Int = logValue.hashCode
 }
 
 object LogDouble {

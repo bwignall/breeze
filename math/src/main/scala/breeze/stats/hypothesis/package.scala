@@ -18,9 +18,9 @@ package object hypothesis {
    * Implements two tailed Welch's T Test (equivalent to t.test in R)
    * Returns a p value
    */
-  def tTest[T](it1: TraversableOnce[T], it2: Traversable[T])(implicit numeric: Numeric[T]): Double =
-    tTest[TraversableOnce[Double]](it1.map(numeric.toDouble),
-                                   it2.map(numeric.toDouble)
+  def tTest[T](it1: IterableOnce[T], it2: Iterable[T])(implicit numeric: Numeric[T]): Double =
+    tTest[IterableOnce[Double]](it1.iterator.map(numeric.toDouble),
+                                it2.map(numeric.toDouble)
     ) // explicit type annotation ensures that the compiler runs the CanTraverseValues implementation of it
 
   def tTest[X](it1: X, it2: X)(implicit ct: CanTraverseValues[X, Double]): Double = {
@@ -38,8 +38,8 @@ package object hypothesis {
     new StudentsT(dof)(RandBasis.mt0).cdf(tScore) // return p value
   }
 
-  def tTest[T](it1: Traversable[T])(implicit numeric: Numeric[T]): Double =
-    tTest[TraversableOnce[Double]](
+  def tTest[T](it1: Iterable[T])(implicit numeric: Numeric[T]): Double =
+    tTest[IterableOnce[Double]](
       it1.map(numeric.toDouble)
     ) // explicit type annotation ensures that the compiler runs the CanTraverseValues implementation of it
   def tTest[X](it1: X)(implicit ct: CanTraverseValues[X, Double]): Double = {
@@ -59,12 +59,13 @@ package object hypothesis {
      * between control and a variant.
      */
     val meanP = (successControl + successVariant).toDouble / (trialsControl + trialsVariant).toDouble
-    val chi2 = (chiSquaredTerm(meanP * trialsControl, successControl) + chiSquaredTerm((1 - meanP) * trialsControl,
+    val chi2 =
+      chiSquaredTerm(meanP * trialsControl, successControl.toDouble) + chiSquaredTerm((1 - meanP) * trialsControl,
                                                                                        trialsControl - successControl
-    )
-      + chiSquaredTerm(meanP * trialsVariant, successVariant) + chiSquaredTerm((1 - meanP) * trialsVariant,
-                                                                               trialsVariant - successVariant
-      ))
+      )
+        + chiSquaredTerm(meanP * trialsVariant, successVariant) + chiSquaredTerm((1 - meanP) * trialsVariant,
+                                                                                 trialsVariant - successVariant
+        )
     val pVal = 1.0 - Gamma(0.5, 2.0)(RandBasis.mt0).cdf(chi2)
     Chi2Result(chi2, pVal)
   }

@@ -55,7 +55,7 @@ class ConjugateGradient[T, M](maxNormValue: Double = Double.PositiveInfinity,
         var rtr = state.rtr
         val Bd = mult(B, d)
         val dtd = d.dot(d)
-        val alpha = math.pow(norm(r), 2.0) / ((d.dot(Bd)) + normSquaredPenalty * dtd)
+        val alpha = math.pow(norm(r), 2.0) / (d.dot(Bd) + normSquaredPenalty * dtd)
         val nextX = x + d * alpha
 
         val xnorm: Double = norm(nextX)

@@ -47,9 +47,9 @@ class VonMisesTest
     y1 && y2
   }
 
-  def asDouble(x: Double) = x
+  def asDouble(x: Double): Double = x
 
-  def fromDouble(x: Double) = x
+  def fromDouble(x: Double): Double = x
 
   implicit def arbDistr: Arbitrary[VonMises] = Arbitrary {
     for (
@@ -59,7 +59,7 @@ class VonMisesTest
       scale <- arbitrary[Double].map { x =>
         math.abs(x) % 3.0 + 1.1
       }
-    ) yield new VonMises(shape, scale);
+    ) yield new VonMises(shape, scale)
   }
 
   type Distr = VonMises

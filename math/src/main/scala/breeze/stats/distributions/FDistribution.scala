@@ -18,8 +18,6 @@ package distributions
 import org.apache.commons.math3.distribution.{FDistribution => ApacheFDistribution}
 import org.apache.commons.math3.distribution.{RealDistribution => ApacheRealDistribution}
 
-import math.log
-
 /**
  * The F-distribution - ratio of two scaled chi^2 variables
  *

@@ -34,9 +34,9 @@ class LaplaceTest
 
   override val numSamples = 50000
 
-  def asDouble(x: Double) = x
+  def asDouble(x: Double): Double = x
 
-  def fromDouble(x: Double) = x
+  def fromDouble(x: Double): Double = x
 
   implicit def arbDistr: Arbitrary[Laplace] = Arbitrary {
     for (
@@ -46,7 +46,7 @@ class LaplaceTest
       scale <- arbitrary[Double].map { x =>
         math.abs(x) % 8.0 + 1.0
       }
-    ) yield new Laplace(location, scale)(new RandBasis(new MersenneTwister(0)))
+    ) yield Laplace(location, scale)(new RandBasis(new MersenneTwister(0)))
   }
 
   override type Distr = Laplace

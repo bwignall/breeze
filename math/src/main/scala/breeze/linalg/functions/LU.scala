@@ -25,12 +25,10 @@ object LU extends UFunc {
     prim: primitive.Impl[DenseMatrix[T], (DenseMatrix[U], Array[Int])],
     ct: ClassTag[U],
     semi: Semiring[U]
-  ): Impl[DenseMatrix[T], DenseLU[U]] = {
-    new Impl[DenseMatrix[T], DenseLU[U]] {
-      override def apply(v: DenseMatrix[T]): DenseLU[U] = {
-        val (m, p) = prim(v)
-        decompose(m, p)
-      }
+  ): Impl[DenseMatrix[T], DenseLU[U]] = { (v: DenseMatrix[T]) =>
+    {
+      val (m, p) = prim(v)
+      decompose(m, p)
     }
   }
 
@@ -38,12 +36,10 @@ object LU extends UFunc {
     prim: primitive.Impl[DenseMatrix[T], (DenseMatrix[T], Array[Int])],
     ct: ClassTag[T],
     semi: Semiring[T]
-  ): Impl[DenseMatrix[T], DenseLU[T]] = {
-    new Impl[DenseMatrix[T], DenseLU[T]] {
-      override def apply(v: DenseMatrix[T]): DenseLU[T] = {
-        val (m, p) = prim(v)
-        decompose(m, p)
-      }
+  ): Impl[DenseMatrix[T], DenseLU[T]] = { (v: DenseMatrix[T]) =>
+    {
+      val (m, p) = prim(v)
+      decompose(m, p)
     }
   }
 
@@ -89,12 +85,10 @@ object LU extends UFunc {
 
     implicit def LU_DM_Cast_Impl_Double[T](implicit
       cast: T => Double
-    ): Impl[DenseMatrix[T], (DenseMatrix[Double], Array[Int])] = {
-      new Impl[DenseMatrix[T], (DenseMatrix[Double], Array[Int])] {
-        def apply(v: DenseMatrix[T]): (DenseMatrix[Double], Array[Int]) = {
-//          import DenseMatrix.canMapValues
-          LU_DM_Impl_Double(v.mapValues(cast))
-        }
+    ): Impl[DenseMatrix[T], (DenseMatrix[Double], Array[Int])] = { (v: DenseMatrix[T]) =>
+      {
+        //          import DenseMatrix.canMapValues
+        LU_DM_Impl_Double(v.mapValues(cast))
       }
     }
 
@@ -140,7 +134,7 @@ object LU extends UFunc {
       indices(i) = i
     }
 
-    for (i <- 0 until ipiv.length) {
+    for (i <- ipiv.indices) {
       val j = ipiv(i) - 1
       val t = indices(i)
       indices(i) = indices(j)

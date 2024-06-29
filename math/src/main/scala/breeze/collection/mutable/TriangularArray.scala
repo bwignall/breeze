@@ -15,6 +15,7 @@ package breeze.collection.mutable
  limitations under the License.
  */
 
+import scala.collection.mutable
 import scala.collection.mutable.Seq
 import scala.reflect.ClassTag
 
@@ -37,24 +38,24 @@ final class TriangularArray[T: ClassTag](val dimension: Int) extends Serializabl
   def update(r: Int, c: Int, t: T): Unit = { data(index(r, c)) = t }
 
   @inline
-  def apply(r: Int, c: Int) = data(index(r, c))
+  def apply(r: Int, c: Int): T = data(index(r, c))
 
   @inline
-  def apply(r: Int) = slice(r)
+  def apply(r: Int): mutable.Seq[T] = slice(r)
 
   private def slice(r: Int): Seq[T] = new Seq[T] {
-    def apply(c: Int) = outer.apply(r, c)
-    def update(c: Int, t: T) = outer.update(r, c, t)
-    def length = dimension - r
-    def iterator = Iterator.range(r, dimension).map(apply _)
+    def apply(c: Int): T = outer.apply(r, c)
+    def update(c: Int, t: T): Unit = outer.update(r, c, t)
+    def length: Int = dimension - r
+    def iterator: Iterator[T] = Iterator.range(r, dimension).map(apply)
   }
 
-  def iterator = Iterator.range(0, numElems).map(slice)
+  def iterator: Iterator[mutable.Seq[T]] = Iterator.range(0, numElems).map(slice)
   def foreach(f: T => Unit): Unit = { data.foreach(f) }
 
-  def map[U: ClassTag](f: T => U) = tabulate(dimension)((i, j) => f(apply(i, j)))
+  def map[U: ClassTag](f: T => U): TriangularArray[U] = tabulate(dimension)((i, j) => f(apply(i, j)))
 
-  override def toString = {
+  override def toString: String = {
     val buffer = new StringBuilder()
     for (r <- 0 until dimension) {
       val columns = for (c <- 0 until dimension) yield {
@@ -68,7 +69,7 @@ final class TriangularArray[T: ClassTag](val dimension: Int) extends Serializabl
 
 object TriangularArray {
 
-  def tabulate[T: ClassTag](dim: Int)(fill: (Int, Int) => T) = {
+  def tabulate[T: ClassTag](dim: Int)(fill: (Int, Int) => T): TriangularArray[T] = {
     val array = new TriangularArray[T](dim)
     for (c <- 0 until dim; r <- 0 to c) {
       array.data(index(r, c)) = fill(r, c)
@@ -76,7 +77,7 @@ object TriangularArray {
     array
   }
 
-  def fill[T: ClassTag](dim: Int)(fill: => T) = {
+  def fill[T: ClassTag](dim: Int)(fill: => T): TriangularArray[T] = {
     val array = new TriangularArray[T](dim)
     for (c <- 0 until dim; r <- 0 to c) {
       array.data(index(r, c)) = fill
@@ -85,12 +86,12 @@ object TriangularArray {
   }
 
   @inline
-  def index(r: Int, c: Int) = {
+  def index(r: Int, c: Int): Int = {
     if (r > c) require(r <= c, "row must be less than column!")
     c * (c + 1) / 2 + r
   }
 
-  def raw[T: ClassTag](dim: Int, fill: => T) = {
+  def raw[T: ClassTag](dim: Int, fill: => T): Array[T] = {
     val numElems = arraySize(dim)
     val data = Array.fill[T](numElems)(fill)
     data

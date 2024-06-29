@@ -21,10 +21,8 @@ import breeze.linalg.DenseVector
 import breeze.linalg.norm
 import breeze.macros._
 import org.scalatest.funsuite.AnyFunSuite
-import spire.algebra._
 import spire.implicits.DoubleAlgebra
 import spire.math._
-import spire.math.poly._
 
 class DensePolynomialTest extends AnyFunSuite {
 
@@ -57,7 +55,7 @@ class DensePolynomialTest extends AnyFunSuite {
   }
   test("PolyDenseUfuncWrapper applied to subdiagonal dense matrix") {
     val p = Polynomial.dense(Array[Double](1, 2, 4))
-    var M = 100
+    val M = 100
 
     val x = DenseMatrix.zeros[Double](M, M)
     cforRange(0 until M)(i => { //   x is matrix with 1's just below the diagonal

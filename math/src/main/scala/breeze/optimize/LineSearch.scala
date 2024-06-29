@@ -51,7 +51,7 @@ object LineSearch {
       val newX = direction * alpha
       newX :+= x
       val (ff, grad) = f.calculate(newX)
-      ff -> (grad.dot(direction))
+      ff -> grad.dot(direction)
     }
   }
 }

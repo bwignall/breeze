@@ -136,8 +136,8 @@ object Beta extends ExponentialFamily[Beta, Double] with ContinuousDistributionU
   type Parameter = (Double, Double)
   case class SufficientStatistic(n: Double, meanLog: Double, meanLog1M: Double)
       extends distributions.SufficientStatistic[SufficientStatistic] {
-    def *(weight: Double) = SufficientStatistic(n * weight, meanLog, meanLog1M)
-    def +(t: SufficientStatistic) = {
+    def *(weight: Double): SufficientStatistic = SufficientStatistic(n * weight, meanLog, meanLog1M)
+    def +(t: SufficientStatistic): SufficientStatistic = {
       val delta = t.meanLog - meanLog
       val newMeanLog = meanLog + delta * (t.n / (t.n + n))
       val logDelta = t.meanLog1M - meanLog1M
@@ -163,17 +163,15 @@ object Beta extends ExponentialFamily[Beta, Double] with ContinuousDistributionU
   override def distribution(ab: Parameter)(implicit rand: RandBasis) = new Beta(ab._1, ab._2)
 
   def likelihoodFunction(stats: SufficientStatistic): DiffFunction[(Double, Double)] =
-    new DiffFunction[(Double, Double)] {
-      import stats.n
-      def calculate(x: (Double, Double)) = {
-        val (a, b) = x
-        if (a < 0 || b < 0) (Double.PositiveInfinity, (0.0, 0.0))
-        else {
-          val obj = n * (lgamma(a) + lgamma(b) - lgamma(a + b) - (a - 1) * stats.meanLog - (b - 1) * stats.meanLog1M)
-          val gradA = n * (digamma(a) - digamma(a + b) - stats.meanLog)
-          val gradB = n * (digamma(b) - digamma(a + b) - stats.meanLog1M)
-          (obj, (gradA, gradB))
-        }
+    (x: (Double, Double)) => {
+      val (a, b) = x
+      if (a < 0 || b < 0) (Double.PositiveInfinity, (0.0, 0.0))
+      else {
+        val obj =
+          stats.n * (lgamma(a) + lgamma(b) - lgamma(a + b) - (a - 1) * stats.meanLog - (b - 1) * stats.meanLog1M)
+        val gradA = stats.n * (digamma(a) - digamma(a + b) - stats.meanLog)
+        val gradB = stats.n * (digamma(b) - digamma(a + b) - stats.meanLog1M)
+        (obj, (gradA, gradB))
       }
     }
 }

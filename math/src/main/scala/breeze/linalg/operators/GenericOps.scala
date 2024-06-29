@@ -61,10 +61,10 @@ trait CastOps extends GenericOpsLowPrio3 {
   }
 
   implicit def castUpdateOps_V_S[M1 <: Vector[T], T, Op <: OpType](implicit
-    v2: ScalarOf[M1, T],
-    v1lt: M1 <:< Vector[T],
-    v1ne: NotGiven[(M1 =:= Vector[T])],
-    op: UFunc.InPlaceImpl2[Op, Vector[T], T]
+                                                                   v2: ScalarOf[M1, T],
+                                                                   v1lt: M1 <:< Vector[T],
+                                                                   v1ne: NotGiven[M1 =:= Vector[T]],
+                                                                   op: UFunc.InPlaceImpl2[Op, Vector[T], T]
   ): UFunc.InPlaceImpl2[Op, M1, T] = {
     op.asInstanceOf[UFunc.InPlaceImpl2[Op, M1, T]]
   }
@@ -176,11 +176,9 @@ trait GenericOps extends GenericOpsLowPrio {
     scalarOf: ScalarOf[T, V],
     ring: Ring[V],
     scale: OpMulScalar.Impl2[T, V, U]
-  ): OpNeg.Impl[T, U] = {
-    new OpNeg.Impl[T, U] {
-      override def apply(a: T): U = {
-        scale(a, ring.negate(ring.one))
-      }
+  ): OpNeg.Impl[T, U] = { (a: T) =>
+    {
+      scale(a, ring.negate(ring.one))
     }
   }
 }

@@ -41,12 +41,11 @@ class NNLS(val maxIters: Int = -1) extends SerializableLogging {
 
   // stopping condition
   private def stop(step: Double, ndir: Double, nx: Double): Boolean = {
-    ((step.isNaN) // NaN
+    step.isNaN // NaN
     || (step < 1e-7) // too small or negative
     || (step > 1e40) // too small; almost certainly numerical problems
     || (ndir < 1e-12 * nx) // gradient relatively too small
     || (ndir < 1e-32) // gradient absolutely too small; numerical issues may lurk
-    )
   }
 
   /**
@@ -72,10 +71,10 @@ class NNLS(val maxIters: Int = -1) extends SerializableLogging {
     val tmp = DenseVector.zeros[Double](n)
     val lastNorm = 0.0
     val lastWall = 0
-    State(x, grad, dir, lastDir, res, tmp, lastNorm, lastWall, 0, false)
+    State(x, grad, dir, lastDir, res, tmp, lastNorm, lastWall, 0, converged = false)
   }
 
-  def reset(ata: DenseMatrix[Double], atb: DenseVector[Double], state: State) = {
+  def reset(ata: DenseMatrix[Double], atb: DenseVector[Double], state: State): State = {
     import state._
     require(ata.cols == ata.rows, s"NNLS:iterations gram matrix must be symmetric")
     require(ata.rows == state.x.length, s"NNLS:iterations gram and linear dimension mismatch")
@@ -85,7 +84,7 @@ class NNLS(val maxIters: Int = -1) extends SerializableLogging {
     lastDir := 0.0
     res := 0.0
     tmp := 0.0
-    State(x, grad, dir, lastDir, res, tmp, 0.0, 0, 0, false)
+    State(x, grad, dir, lastDir, res, tmp, 0.0, 0, 0, converged = false)
   }
 
   /**
@@ -152,7 +151,7 @@ class NNLS(val maxIters: Int = -1) extends SerializableLogging {
 
       // terminate?
       if (stop(step, ndir, nx)) {
-        return State(x, grad, dir, lastDir, res, tmp, nextNorm, nextWall, nextIter, true)
+        return State(x, grad, dir, lastDir, res, tmp, nextNorm, nextWall, nextIter, converged = true)
       } else {
         // don't run through the walls
         cforRange(0 until n) { i =>
@@ -174,7 +173,7 @@ class NNLS(val maxIters: Int = -1) extends SerializableLogging {
       }
       nextIter += 1
     }
-    State(x, grad, dir, lastDir, res, tmp, nextNorm, nextWall, nextIter, false)
+    State(x, grad, dir, lastDir, res, tmp, nextNorm, nextWall, nextIter, converged = false)
   }
 
   def minimizeAndReturnState(ata: DenseMatrix[Double], atb: DenseVector[Double]): State = {

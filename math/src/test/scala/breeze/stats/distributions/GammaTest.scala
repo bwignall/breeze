@@ -1,4 +1,4 @@
-package breeze.stats.distributions;
+package breeze.stats.distributions
 
 /*
  Copyright 2009 David Hall, Daniel Ramage
@@ -41,7 +41,7 @@ class GammaTest
     for (
       shape <- arbitrary[Double].map { _.abs % 200.0 + 0.2 }; // Gamma pdf at 0 not defined when shape == 1
       scale <- arbitrary[Double].map { _.abs % 8.0 + 1.0 }
-    ) yield (shape, scale);
+    ) yield (shape, scale)
   }
 
   def paramsClose(p: (Double, Double), b: (Double, Double)): Boolean = {
@@ -50,9 +50,9 @@ class GammaTest
     y1 && y2
   }
 
-  def asDouble(x: Double) = x
+  def asDouble(x: Double): Double = x
 
-  def fromDouble(x: Double) = x
+  def fromDouble(x: Double): Double = x
 
   implicit def arbDistr: Arbitrary[Gamma] = Arbitrary {
     for (
@@ -75,7 +75,7 @@ class GammaTest
 
   test("logDraw for small values") {
     val g = new Gamma(0.0001, 1)
-    val mav = breeze.stats.meanAndVariance(Array.fill(100000)(g.logDraw()).map(math.exp _))
+    val mav = breeze.stats.meanAndVariance(Array.fill(100000)(g.logDraw()).map(math.exp))
     assert(paramsClose(mav.mean -> mav.variance, g.mean -> g.variance),
            (mav.mean -> mav.variance) -> (g.mean -> g.variance)
     )

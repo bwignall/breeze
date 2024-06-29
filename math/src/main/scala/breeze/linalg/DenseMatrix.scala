@@ -90,13 +90,13 @@ final class DenseMatrix[@spec(Double, Int, Float, Long) V](val rows: Int,
   if (majorStride > 0) {
     if (data.length < linearIndex(rows - 1, cols - 1)) {
       throw new IndexOutOfBoundsException(
-        "Storage array has size " + data.size + " but indices can grow as large as " + linearIndex(rows - 1, cols - 1)
+        "Storage array has size " + data.length + " but indices can grow as large as " + linearIndex(rows - 1, cols - 1)
       )
     }
   } else if (majorStride < 0) {
     if (data.length < linearIndex(rows - 1, 0)) {
       throw new IndexOutOfBoundsException(
-        "Storage array has size " + data.size + " but indices can grow as large as " + linearIndex(rows - 1, cols - 1)
+        "Storage array has size " + data.length + " but indices can grow as large as " + linearIndex(rows - 1, cols - 1)
       )
     }
     if (linearIndex(0, cols - 1) < 0) {
@@ -106,7 +106,7 @@ final class DenseMatrix[@spec(Double, Int, Float, Long) V](val rows: Int,
     }
   }
 
-  def apply(row: Int, col: Int) = {
+  def apply(row: Int, col: Int): V = {
     if (row < -rows || row >= rows)
       throw new IndexOutOfBoundsException(s"${(row, col)} not in [-$rows,$rows) x [-$cols,$cols)")
     if (col < -cols || col >= cols)
@@ -232,12 +232,12 @@ final class DenseMatrix[@spec(Double, Int, Float, Long) V](val rows: Int,
 
   def activeKeysIterator: Iterator[(Int, Int)] = keysIterator
 
-  def activeSize = data.length
+  def activeSize: Int = data.length
 
   def valueAt(i: Int): V = data(i)
   def valueAt(row: Int, col: Int): V = apply(row, col)
 
-  def indexAt(i: Int) = i
+  def indexAt(i: Int): Int = i
 
   def isActive(i: Int) = true
   def allVisitableIndicesActive = true
@@ -339,7 +339,7 @@ final class DenseMatrix[@spec(Double, Int, Float, Long) V](val rows: Int,
   }
 
   private def checkIsSpecialized(): Unit = {
-    if (data.isInstanceOf[Array[Double]] && getClass.getName() == "breeze.linalg.DenseMatrix")
+    if (data.isInstanceOf[Array[Double]] && getClass.getName == "breeze.linalg.DenseMatrix")
       throw new Exception("...")
   }
   // uncomment to debug places where specialization fails
@@ -433,7 +433,12 @@ object DenseMatrix extends MatrixConstructors[DenseMatrix] {
   /** Horizontally tiles some matrices. They must have the same number of rows */
   def horzcat[M, V](
     matrices: M*
-  )(implicit ev: M <:< Matrix[V], opset: OpSet.InPlaceImpl2[DenseMatrix[V], M], vman: ClassTag[V], zero: Zero[V]) = {
+  )(implicit
+    ev: M <:< Matrix[V],
+    opset: OpSet.InPlaceImpl2[DenseMatrix[V], M],
+    vman: ClassTag[V],
+    zero: Zero[V]
+  ): DenseMatrix[V] = {
     if (matrices.isEmpty) zeros[V](0, 0)
     else {
       require(matrices.forall(m => m.rows == matrices(0).rows), "Not all matrices have the same number of rows")
@@ -452,7 +457,11 @@ object DenseMatrix extends MatrixConstructors[DenseMatrix] {
   /** Vertically tiles some matrices. They must have the same number of columns */
   def vertcat[V](
     matrices: DenseMatrix[V]*
-  )(implicit opset: OpSet.InPlaceImpl2[DenseMatrix[V], DenseMatrix[V]], vman: ClassTag[V], zero: Zero[V]) = {
+  )(implicit
+    opset: OpSet.InPlaceImpl2[DenseMatrix[V], DenseMatrix[V]],
+    vman: ClassTag[V],
+    zero: Zero[V]
+  ): DenseMatrix[V] = {
     if (matrices.isEmpty) zeros[V](0, 0)
     else {
       require(matrices.forall(m => m.cols == matrices(0).cols), "Not all matrices have the same number of columns")
@@ -472,10 +481,8 @@ object DenseMatrix extends MatrixConstructors[DenseMatrix] {
 
   // zerosLike
   implicit def canCreateZerosLike[V: ClassTag: Zero]: CanCreateZerosLike[DenseMatrix[V], DenseMatrix[V]] =
-    new CanCreateZerosLike[DenseMatrix[V], DenseMatrix[V]] {
-      def apply(v1: DenseMatrix[V]): DenseMatrix[V] = {
-        zeros[V](v1.rows, v1.cols)
-      }
+    (v1: DenseMatrix[V]) => {
+      zeros[V](v1.rows, v1.cols)
     }
 
   object FrobeniusInnerProductDenseMatrixSpace {
@@ -487,5 +494,5 @@ object DenseMatrix extends MatrixConstructors[DenseMatrix] {
   }
 
   @noinline
-  private def init() = {}
+  private def init(): Unit = {}
 }

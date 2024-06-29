@@ -74,7 +74,7 @@ trait ProvidesTransformedQuasiMonteCarlo {
       require(alpha > 0)
       require(beta > 0)
       if (alpha == 1.0) {
-        new DistributionRandomVariableSpec(Exponential(1 / beta)(RandBasis.mt0))
+        DistributionRandomVariableSpec(Exponential(1 / beta)(RandBasis.mt0))
       } else if (alpha > 1) {
         GammaQuasiRandomVariableSpecAlphaGeq1(alpha, beta)
       } else {
@@ -151,7 +151,7 @@ trait ProvidesTransformedQuasiMonteCarlo {
     def this(inVariables: QuasiRandomVariableSpec*) = this(inVariables.toList)
     val variables: Array[QuasiRandomVariableSpec] = inVariables.map(x => x.copy).toArray
 
-    val dimension = variables.size
+    val dimension: Int = variables.length
     val inputDimension: Int = variables.map(x => x.numInputs).sum
     private val baseGenerator = new BaseUniformHaltonGenerator(inputDimension)
 
@@ -160,9 +160,7 @@ trait ProvidesTransformedQuasiMonteCarlo {
     private var generatedCount: Long = 0
     def numGenerated: Long = generatedCount
 
-    private var rejectedCount: Array[Long] = new Array[Long](dimension)
-    def numRejections: Long = rejectedCount.sum
-    def numRejectionsByVariable: Array[Long] = rejectedCount.clone
+    private val rejectedCount: Array[Long] = new Array[Long](dimension)
 
     def getNextUnsafe: Array[Double] = {
       var accepted = false
@@ -173,8 +171,8 @@ trait ProvidesTransformedQuasiMonteCarlo {
         var i = 0
         while ((i < dimension) && accepted) {
           variables(i) match {
-            case (v: TransformingQuasiRandomVariableSpec) => { currentValue(i) = v.transform(next, inputPosition) }
-            case (v: RejectionQuasiRandomVariableSpec) => {
+            case v: TransformingQuasiRandomVariableSpec => { currentValue(i) = v.transform(next, inputPosition) }
+            case v: RejectionQuasiRandomVariableSpec => {
               if (v.accept(next, inputPosition)) {
                 currentValue(i) = v.compute(next, inputPosition)
               } else {

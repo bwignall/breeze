@@ -1,17 +1,10 @@
 package breeze.linalg.operators
 
 import breeze.linalg._
-import breeze.linalg.support.CanCopy
 import breeze.linalg.support.CanSlice
 import breeze.linalg.support.CanSlice2
-import breeze.linalg.support.CanTranspose
 import breeze.macros.require
-import breeze.math.Complex
-import breeze.math.EntrywiseMatrixNorms
-import breeze.math.Field
-import breeze.math.MutableFiniteCoordinateField
 import breeze.math.Semiring
-import breeze.storage.Zero
 
 import scala.reflect.ClassTag
 
@@ -20,20 +13,18 @@ trait DenseVector_SlicingOps extends TensorLowPrio {
   // slicing
   // specialize to get the good class
   implicit def canSlice_DV_Range_eq_DV[@specialized(Int, Float, Long, Double) V]
-    : CanSlice[DenseVector[V], Range, DenseVector[V]] = {
-    new CanSlice[DenseVector[V], Range, DenseVector[V]] {
-      def apply(v: DenseVector[V], re: Range): DenseVector[V] = {
+    : CanSlice[DenseVector[V], Range, DenseVector[V]] = { (v: DenseVector[V], re: Range) =>
+    {
 
-        val range: Range = re.getRangeWithoutNegativeIndexes(v.length)
+      val range: Range = re.getRangeWithoutNegativeIndexes(v.length)
 
-        require(range.isEmpty || range.last < v.length)
-        require(range.isEmpty || range.start >= 0)
-        DenseVector.create(v.data,
-                           offset = v.offset + v.stride * range.start,
-                           stride = v.stride * range.step,
-                           length = range.length
-        )
-      }
+      require(range.isEmpty || range.last < v.length)
+      require(range.isEmpty || range.start >= 0)
+      DenseVector.create(v.data,
+                         offset = v.offset + v.stride * range.start,
+                         stride = v.stride * range.step,
+                         length = range.length
+      )
     }
   }
 
@@ -42,8 +33,8 @@ trait DenseVector_SlicingOps extends TensorLowPrio {
 trait DenseMatrix_SlicingOps extends DenseMatrix_SlicingOps_LowPrio with DenseMatrix_TraversalOps {
 
   implicit def canSliceCol[V]: CanSlice2[DenseMatrix[V], ::.type, Int, DenseVector[V]] = {
-    new CanSlice2[DenseMatrix[V], ::.type, Int, DenseVector[V]] {
-      def apply(m: DenseMatrix[V], ignored: ::.type, colWNegative: Int) = {
+    (m: DenseMatrix[V], ignored: ::.type, colWNegative: Int) =>
+      {
 
         if (colWNegative < -m.cols || colWNegative >= m.cols)
           throw new ArrayIndexOutOfBoundsException("Column must be in bounds for slice!")
@@ -54,20 +45,18 @@ trait DenseMatrix_SlicingOps extends DenseMatrix_SlicingOps_LowPrio with DenseMa
         else
           DenseVector.create(m.data, length = m.rows, offset = m.offset + col, stride = m.majorStride)
       }
-    }
   }
 
   implicit def canSliceRow[V]: CanSlice2[DenseMatrix[V], Int, ::.type, Transpose[DenseVector[V]]] = {
-    new CanSlice2[DenseMatrix[V], Int, ::.type, Transpose[DenseVector[V]]] {
-      def apply(m: DenseMatrix[V], rowWNegative: Int, ignored: ::.type) = {
+    (m: DenseMatrix[V], rowWNegative: Int, ignored: ::.type) =>
+      {
         canSliceCol[V].apply(m.t, ::, rowWNegative).t
       }
-    }
   }
 
   implicit def canSliceRows[V]: CanSlice2[DenseMatrix[V], Range, ::.type, DenseMatrix[V]] = {
-    new CanSlice2[DenseMatrix[V], Range, ::.type, DenseMatrix[V]] {
-      def apply(m: DenseMatrix[V], rowsWNegative: Range, ignored: ::.type) = {
+    (m: DenseMatrix[V], rowsWNegative: Range, ignored: ::.type) =>
+      {
 
         val rows = rowsWNegative.getRangeWithoutNegativeIndexes(m.rows)
 
@@ -84,12 +73,11 @@ trait DenseMatrix_SlicingOps extends DenseMatrix_SlicingOps_LowPrio with DenseMa
           canSliceCols(m.t, ::, rows).t
         }
       }
-    }
   }
 
   implicit def canSliceCols[V]: CanSlice2[DenseMatrix[V], ::.type, Range, DenseMatrix[V]] = {
-    new CanSlice2[DenseMatrix[V], ::.type, Range, DenseMatrix[V]] {
-      def apply(m: DenseMatrix[V], ignored: ::.type, colsWNegative: Range) = {
+    (m: DenseMatrix[V], ignored: ::.type, colsWNegative: Range) =>
+      {
 
         val cols = colsWNegative.getRangeWithoutNegativeIndexes(m.cols)
 
@@ -105,12 +93,11 @@ trait DenseMatrix_SlicingOps extends DenseMatrix_SlicingOps_LowPrio with DenseMa
           canSliceRows(m.t, cols, ::).t
         }
       }
-    }
   }
 
   implicit def canSliceColsAndRows[V]: CanSlice2[DenseMatrix[V], Range, Range, DenseMatrix[V]] = {
-    new CanSlice2[DenseMatrix[V], Range, Range, DenseMatrix[V]] {
-      def apply(m: DenseMatrix[V], rowsWNegative: Range, colsWNegative: Range) = {
+    (m: DenseMatrix[V], rowsWNegative: Range, colsWNegative: Range) =>
+      {
 
         val rows = rowsWNegative.getRangeWithoutNegativeIndexes(m.rows)
         val cols = colsWNegative.getRangeWithoutNegativeIndexes(m.cols)
@@ -140,12 +127,11 @@ trait DenseMatrix_SlicingOps extends DenseMatrix_SlicingOps_LowPrio with DenseMa
           canSliceColsAndRows(m.t, cols, rows).t
         }
       }
-    }
   }
 
   implicit def canSlicePartOfCol[V]: CanSlice2[DenseMatrix[V], Range, Int, DenseVector[V]] = {
-    new CanSlice2[DenseMatrix[V], Range, Int, DenseVector[V]] {
-      def apply(m: DenseMatrix[V], rowsWNegative: Range, colWNegative: Int) = {
+    (m: DenseMatrix[V], rowsWNegative: Range, colWNegative: Int) =>
+      {
 
         val rows: Range = rowsWNegative.getRangeWithoutNegativeIndexes(m.rows)
         if (colWNegative < -m.cols || colWNegative >= m.cols)
@@ -165,15 +151,13 @@ trait DenseMatrix_SlicingOps extends DenseMatrix_SlicingOps_LowPrio with DenseMa
           DenseVector.create(m.data, m.offset + col + rows.head * m.majorStride, m.majorStride * rows.step, rows.length)
         }
       }
-    }
   }
 
   implicit def canSlicePartOfRow[V]: CanSlice2[DenseMatrix[V], Int, Range, Transpose[DenseVector[V]]] = {
-    new CanSlice2[DenseMatrix[V], Int, Range, Transpose[DenseVector[V]]] {
-      def apply(m: DenseMatrix[V], rowWNegative: Int, colsWNegative: Range) = {
+    (m: DenseMatrix[V], rowWNegative: Int, colsWNegative: Range) =>
+      {
         canSlicePartOfCol[V].apply(m.t, colsWNegative, rowWNegative).t
       }
-    }
   }
 
 }
@@ -182,38 +166,33 @@ trait DenseMatrix_SlicingOps_LowPrio extends LowPriorityDenseMatrix1 with Generi
 
   implicit def canSliceWeirdRows[V: Semiring: ClassTag]
     : CanSlice2[DenseMatrix[V], Seq[Int], ::.type, SliceMatrix[Int, Int, V]] = {
-    new CanSlice2[DenseMatrix[V], Seq[Int], ::.type, SliceMatrix[Int, Int, V]] {
-      def apply(from: DenseMatrix[V], slice: Seq[Int], slice2: ::.type): SliceMatrix[Int, Int, V] = {
+    (from: DenseMatrix[V], slice: Seq[Int], slice2: ::.type) =>
+      {
         new SliceMatrix(from, slice.toIndexedSeq, 0 until from.cols)
       }
-    }
   }
 
   implicit def canSliceWeirdCols[V: Semiring: ClassTag]
     : CanSlice2[DenseMatrix[V], ::.type, Seq[Int], SliceMatrix[Int, Int, V]] = {
-    new CanSlice2[DenseMatrix[V], ::.type, Seq[Int], SliceMatrix[Int, Int, V]] {
-      def apply(from: DenseMatrix[V], slice2: ::.type, slice: Seq[Int]): SliceMatrix[Int, Int, V] = {
+    (from: DenseMatrix[V], slice2: ::.type, slice: Seq[Int]) =>
+      {
         new SliceMatrix(from, 0 until from.rows, slice.toIndexedSeq)
       }
-    }
   }
 
   implicit def canSliceTensorBooleanRows[V: Semiring: ClassTag]
     : CanSlice2[DenseMatrix[V], Tensor[Int, Boolean], ::.type, SliceMatrix[Int, Int, V]] = {
-    new CanSlice2[DenseMatrix[V], Tensor[Int, Boolean], ::.type, SliceMatrix[Int, Int, V]] {
-      def apply(from: DenseMatrix[V], rows: Tensor[Int, Boolean], cols: ::.type): SliceMatrix[Int, Int, V] = {
+    (from: DenseMatrix[V], rows: Tensor[Int, Boolean], cols: ::.type) =>
+      {
         new SliceMatrix(from, rows.findAll(_ == true), 0 until from.cols)
       }
-    }
   }
 
   implicit def canSliceTensorBooleanCols[V: Semiring: ClassTag]
     : CanSlice2[DenseMatrix[V], ::.type, Tensor[Int, Boolean], SliceMatrix[Int, Int, V]] = {
-    new CanSlice2[DenseMatrix[V], ::.type, Tensor[Int, Boolean], SliceMatrix[Int, Int, V]] {
-      def apply(from: DenseMatrix[V], rows: ::.type, cols: Tensor[Int, Boolean]): SliceMatrix[Int, Int, V] = {
+    (from: DenseMatrix[V], rows: ::.type, cols: Tensor[Int, Boolean]) =>
+      {
         new SliceMatrix(from, 0 until from.rows, cols.findAll(_ == true))
       }
-    }
   }
-
 }

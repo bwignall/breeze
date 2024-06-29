@@ -32,35 +32,27 @@ trait SecondOrderFunction[T, H] extends DiffFunction[T] {
 object SecondOrderFunction {
   def empirical[T, I](f: DiffFunction[T], eps: Double = 1e-5)(implicit
     vs: VectorSpace[T, Double]
-  ): SecondOrderFunction[T, EmpiricalHessian[T]] = {
-    new SecondOrderFunction[T, EmpiricalHessian[T]] {
-
-      /** Calculates the value, the gradient, and the Hessian at a point */
-      def calculate2(x: T): (Double, T, EmpiricalHessian[T]) = {
-        val (v, grad) = f.calculate(x)
-        val h = new EmpiricalHessian(f, x, grad, eps)
-        (v, grad, h)
-      }
+  ): SecondOrderFunction[T, EmpiricalHessian[T]] = { (x: T) =>
+    {
+      val (v, grad) = f.calculate(x)
+      val h = new EmpiricalHessian(f, x, grad, eps)
+      (v, grad, h)
     }
   }
 
   def minibatchEmpirical[T, I](f: BatchDiffFunction[T], eps: Double = 1e-5, batchSize: Int = 30000)(implicit
     vs: InnerProductVectorSpace[T, Double]
-  ): SecondOrderFunction[T, EmpiricalHessian[T]] = {
-    new SecondOrderFunction[T, EmpiricalHessian[T]] {
-
-      /** Calculates the value, the gradient, and the Hessian at a point */
-      def calculate2(x: T): (Double, T, EmpiricalHessian[T]) = {
-        val subset = Rand.subsetsOfSize(f.fullRange, batchSize).draw()
-        val (v, grad) = f.calculate(x)
-        val newf = new DiffFunction[T] {
-          def calculate(x: T): (Double, T) = {
-            f.calculate(x, subset)
-          }
+  ): SecondOrderFunction[T, EmpiricalHessian[T]] = { (x: T) =>
+    {
+      val subset = Rand.subsetsOfSize(f.fullRange, batchSize).draw()
+      val (v, grad) = f.calculate(x)
+      val newf = new DiffFunction[T] {
+        def calculate(x: T): (Double, T) = {
+          f.calculate(x, subset)
         }
-        val h = new EmpiricalHessian(newf, x, newf.gradientAt(x), eps)
-        (v, grad, h)
       }
+      val h = new EmpiricalHessian(newf, x, newf.gradientAt(x), eps)
+      (v, grad, h)
     }
   }
 }
@@ -88,11 +80,9 @@ class EmpiricalHessian[T](df: DiffFunction[T], x: T, grad: T, eps: Double = 1e-5
 }
 
 object EmpiricalHessian {
-  implicit def product[T, I]: OpMulMatrix.Impl2[EmpiricalHessian[T], T, T] = {
-    new OpMulMatrix.Impl2[EmpiricalHessian[T], T, T] {
-      def apply(a: EmpiricalHessian[T], b: T): T = {
-        a * b
-      }
+  implicit def product[T, I]: OpMulMatrix.Impl2[EmpiricalHessian[T], T, T] = { (a: EmpiricalHessian[T], b: T) =>
+    {
+      a * b
     }
   }
 
@@ -160,7 +150,7 @@ class FisherDiffFunction[T](df: BatchDiffFunction[T], gradientsToKeep: Int = 100
     //    val fullGrad = toKeep.view.map(_._2).foldLeft(otherGradient * (df.fullRange.size - subset.size).toDouble )(_ += _ ) /df.fullRange.size.toDouble
     //    val fullV = toKeep.view.map(_._1).foldLeft(v * (df.fullRange.size - subset.size) )(_ + _) / df.fullRange.size
 
-    (v, otherGradient, new FisherMatrix(toKeep.map(_._2).toIndexedSeq))
+    (v, otherGradient, new FisherMatrix(toKeep.map(_._2)))
   }
 }
 
@@ -177,16 +167,14 @@ class FisherMatrix[T](grads: IndexedSeq[T])(implicit vs: MutableInnerProductVect
   import vs._
 
   def *(t: T): T = {
-    grads.view.map(g => g * (g.dot(t))).reduceLeft(_ += _) /= grads.length.toDouble
+    grads.view.map(g => g * g.dot(t)).reduceLeft(_ += _) /= grads.length.toDouble
   }
 }
 
 object FisherMatrix {
-  implicit def product[T, I]: OpMulMatrix.Impl2[FisherMatrix[T], T, T] = {
-    new OpMulMatrix.Impl2[FisherMatrix[T], T, T] {
-      def apply(a: FisherMatrix[T], b: T): T = {
-        a * b
-      }
+  implicit def product[T, I]: OpMulMatrix.Impl2[FisherMatrix[T], T, T] = { (a: FisherMatrix[T], b: T) =>
+    {
+      a * b
     }
   }
 

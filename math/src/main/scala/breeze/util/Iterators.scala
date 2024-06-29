@@ -30,15 +30,15 @@ object Iterators {
    * head of each, according to the given comparator.  Ties go to the element
    * from the first iterator.
    */
-  def merge[T](iters: Iterator[T]*)(compare: ((T, T) => Int)): Iterator[T] =
+  def merge[T](iters: Iterator[T]*)(compare: (T, T) => Int): Iterator[T] =
     new Iterator[T] {
 
       /** Keep track of the top of each list. */
-      val heads = iters.map(get _).toArray
+      val heads: Array[Option[T]] = iters.map(get).toArray
 
       /** The merged iterator has more if any head is not None. */
       override def hasNext: Boolean =
-        heads.map(_ != None).foldLeft(false)(_ || _)
+        heads.map(_.isDefined).foldLeft(false)(_ || _)
 
       /** Return the smallest element that is currently a list head. */
       override def next: T = {
@@ -55,7 +55,7 @@ object Iterators {
 
         // update the top list and return its value
         heads(top._2) = get(iters(top._2))
-        return top._1.get
+        top._1.get
       }
 
       def get(iter: Iterator[T]): Option[T] =

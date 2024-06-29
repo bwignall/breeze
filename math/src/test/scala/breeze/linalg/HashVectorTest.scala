@@ -83,7 +83,7 @@ class HashVectorTest extends AnyFunSuite {
     val b = HashVector(3.0, 4.0, 5.0)
     (a: Vector[Double]) += (b: Vector[Double])
     assert(a === HashVector(4.0, 6.0, 8.0))
-    assert((a: Vector[Double]).dot(b: Vector[Double]) === (a.dot(b)))
+    assert((a: Vector[Double]).dot(b: Vector[Double]) === a.dot(b))
     (a: Vector[Double]) *= (b: Vector[Double])
     assert(a === HashVector(12.0, 24.0, 40.0))
   }
@@ -189,12 +189,12 @@ class HashVectorTest extends AnyFunSuite {
     assert(a.copy === a)
     intercept[IndexOutOfBoundsException] {
       a(3) = ":("
-      assert(false, "Shouldn't be here!")
+      assert(condition = false, "Shouldn't be here!")
     }
     assert(a(0) === "SSS")
     intercept[IndexOutOfBoundsException] {
       a(3)
-      assert(false, "Shouldn't be here!")
+      assert(condition = false, "Shouldn't be here!")
     }
 
   }

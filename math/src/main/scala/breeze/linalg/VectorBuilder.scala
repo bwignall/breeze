@@ -64,17 +64,17 @@ class VectorBuilder[@spec(Double, Int, Float, Long) E](private var _index: Array
 
   def this()(implicit ring: Semiring[E], man: ClassTag[E], zero: Zero[E]) = this(-1)
 
-  def size = length
+  def size: Int = length
 
-  def data = _data
-  def index = _index
-  def activeSize = used
+  def data: Array[E] = _data
+  def index: Array[Int] = _index
+  def activeSize: Int = used
 
-  def repr = this
+  def repr: VectorBuilder[E] = this
 
-  def contains(i: Int) = _index.contains(i)
+  def contains(i: Int): Boolean = _index.contains(i)
 
-  def apply(i: Int) = {
+  def apply(i: Int): E = {
     boundsCheck(i)
 
     var off = 0
@@ -120,19 +120,19 @@ class VectorBuilder[@spec(Double, Int, Float, Long) E](private var _index: Array
     used += 1
   }
 
-  def activeIterator = toHashVector.activeIterator
+  def activeIterator: Iterator[(Int, E)] = toHashVector.activeIterator
 
-  def activeValuesIterator = toHashVector.activeValuesIterator
+  def activeValuesIterator: Iterator[E] = toHashVector.activeValuesIterator
 
-  def activeKeysIterator = toHashVector.activeKeysIterator
+  def activeKeysIterator: Iterator[Int] = toHashVector.activeKeysIterator
 
   // TODO: allow this to vary
   /** This is always assumed to be equal to 0, for now. */
-  def default = ring.zero
+  def default: E = ring.zero
 
-  def isActive(rawIndex: Int) = rawIndex < used && rawIndex > 0
+  def isActive(rawIndex: Int): Boolean = rawIndex < used && rawIndex > 0
 
-  override def toString = {
+  override def toString: String = {
     index.iterator.zip(data.iterator).take(used).mkString(s"VectorBuilder($length)(", ", ", ")")
   }
 
@@ -313,7 +313,7 @@ object VectorBuilder extends VectorBuilderOps {
   def tabulate[@spec(Double, Int, Float, Long) V: ClassTag: Semiring: Zero](size: Int)(f: Int => V): VectorBuilder[V] =
     apply(Array.tabulate(size)(f))
 
-  def apply[V: ClassTag: Semiring: Zero](length: Int)(values: (Int, V)*) = {
+  def apply[V: ClassTag: Semiring: Zero](length: Int)(values: (Int, V)*): VectorBuilder[V] = {
     val r = zeros[V](length)
     for ((i, v) <- values) {
       r.add(i, v)
@@ -323,14 +323,14 @@ object VectorBuilder extends VectorBuilderOps {
 
   // implicits
   class CanCopyBuilder[@spec(Double, Int, Float, Long) V: ClassTag: Semiring: Zero] extends CanCopy[VectorBuilder[V]] {
-    def apply(v1: VectorBuilder[V]) = {
+    def apply(v1: VectorBuilder[V]): VectorBuilder[V] = {
       v1.copy
     }
   }
 
   class CanZerosBuilder[@spec(Double, Int, Float, Long) V: ClassTag: Semiring: Zero]
       extends CanCreateZerosLike[VectorBuilder[V], VectorBuilder[V]] {
-    def apply(v1: VectorBuilder[V]) = {
+    def apply(v1: VectorBuilder[V]): VectorBuilder[V] = {
       v1.zerosLike
     }
   }
@@ -343,9 +343,7 @@ object VectorBuilder extends VectorBuilderOps {
   }
 
   implicit def canZeroBuilder[@spec(Double, Int, Float, Long) V: Semiring: Zero: ClassTag]
-    : CanCreateZeros[VectorBuilder[V], Int] = {
-    new CanCreateZeros[VectorBuilder[V], Int] {
-      def apply(d: Int): VectorBuilder[V] = zeros(d)
-    }
+    : CanCreateZeros[VectorBuilder[V], Int] = { (d: Int) =>
+    zeros(d)
   }
 }

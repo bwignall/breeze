@@ -25,7 +25,7 @@ import org.scalatest.funsuite.AnyFunSuite
  */
 class FinancialTest extends AnyFunSuite {
 
-  val DOUBLE_ROUND5_MIN = 1e-5;
+  val DOUBLE_ROUND5_MIN = 1e-5
 
   test("NetPresentValue") {
     assert(netPresentValue(1.0, Seq(1)) == 1.0)
@@ -64,10 +64,10 @@ class FinancialTest extends AnyFunSuite {
   test("IRR vs MIRR") {
 
     // Some(0.2809484211599611)
-    var expectNormalIRR = DenseVector[Double](-100, 39, 59, 55, 20);
+    var expectNormalIRR = DenseVector[Double](-100, 39, 59, 55, 20)
     assert(math.abs(interalRateReturn(expectNormalIRR).get - 0.2809484211599611) < DOUBLE_ROUND5_MIN)
     // Some(0.08859833852775578)
-    expectNormalIRR = DenseVector[Double](-5, 10.5, 1, -8, 1);
+    expectNormalIRR = DenseVector[Double](-5, 10.5, 1, -8, 1)
     assert(math.abs(interalRateReturn(expectNormalIRR).get - 0.08859833852775578) < DOUBLE_ROUND5_MIN)
     // Some(-0.09549583034897258)
     val expectNegativeIRR = DenseVector[Double](-100, 0, 0, 74)
@@ -76,11 +76,11 @@ class FinancialTest extends AnyFunSuite {
     val expectZeroIRR = DenseVector[Double](-2000, 500, 500, 1000)
     assert(math.abs(interalRateReturn(expectZeroIRR).get) < DOUBLE_ROUND5_MIN)
 
-    val expectNormalMIRR = modifiedInternalRateReturn(DenseVector[Double](-180, 42, 39, 40, 32, 48), 0.08, 0.11);
+    val expectNormalMIRR = modifiedInternalRateReturn(DenseVector[Double](-180, 42, 39, 40, 32, 48), 0.08, 0.11)
     assert(math.abs(expectNormalMIRR - 0.06782) < DOUBLE_ROUND5_MIN)
     val expectNegativeMIRR = modifiedInternalRateReturn(DenseVector[Double](-180, 42, 39, 40), 0.08, 0.11)
     assert(math.abs(expectNegativeMIRR + 0.091354) < DOUBLE_ROUND5_MIN)
-    val withMultiNegMIRR = modifiedInternalRateReturn(DenseVector[Double](-180, 42, 39, -50, 40, 32, 48), 0.08, 0.11);
+    val withMultiNegMIRR = modifiedInternalRateReturn(DenseVector[Double](-180, 42, 39, -50, 40, 32, 48), 0.08, 0.11)
     assert(math.abs(withMultiNegMIRR - 0.0303) < DOUBLE_ROUND5_MIN)
   }
 

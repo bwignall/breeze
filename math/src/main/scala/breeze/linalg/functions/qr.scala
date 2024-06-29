@@ -68,12 +68,7 @@ object qr extends UFunc {
       }
     }
 
-    implicit def canJustQIfWeCanQR[T, M](implicit qrImpl: qr.Impl[T, QR[M]]): Impl[T, M] = {
-      new Impl[T, M] {
-        def apply(v: T): M = qrImpl(v).r
-      }
-
-    }
+    implicit def canJustQIfWeCanQR[T, M](implicit qrImpl: qr.Impl[T, QR[M]]): Impl[T, M] = (v: T) => qrImpl(v).r
   }
 
   /**
@@ -81,10 +76,8 @@ object qr extends UFunc {
    */
   object justQ extends UFunc {
 
-    implicit def canJustQIfWeCanQR[T, M](implicit qrImpl: qr.Impl[T, QR[M]]): Impl[T, M] = {
-      new Impl[T, M] {
-        def apply(v: T): M = qrImpl(v).q
-      }
+    implicit def canJustQIfWeCanQR[T, M](implicit qrImpl: qr.Impl[T, QR[M]]): Impl[T, M] = { (v: T) =>
+      qrImpl(v).q
 
     }
   }
@@ -125,10 +118,8 @@ object qr extends UFunc {
         }
       }
 
-      implicit def canJustQIfWeCanQR[T, M](implicit qrImpl: qr.reduced.Impl[T, QR[M]]): Impl[T, M] = {
-        new Impl[T, M] {
-          def apply(v: T): M = qrImpl(v).r
-        }
+      implicit def canJustQIfWeCanQR[T, M](implicit qrImpl: qr.reduced.Impl[T, QR[M]]): Impl[T, M] = { (v: T) =>
+        qrImpl(v).r
       }
     }
 
@@ -136,10 +127,8 @@ object qr extends UFunc {
      * QR that just returns Q with reduced size.
      */
     object justQ extends UFunc {
-      implicit def canJustQIfWeCanQR[T, M](implicit qrImpl: qr.reduced.Impl[T, QR[M]]): Impl[T, M] = {
-        new Impl[T, M] {
-          def apply(v: T): M = qrImpl(v).q
-        }
+      implicit def canJustQIfWeCanQR[T, M](implicit qrImpl: qr.reduced.Impl[T, QR[M]]): Impl[T, M] = { (v: T) =>
+        qrImpl(v).q
       }
     }
 
@@ -309,7 +298,7 @@ object qrp extends UFunc {
       // Get optimal workspace size
       // we do this by sending -1 as lwork to the lapack function
       val scratch, work = new Array[Double](1)
-      var info = new intW(0)
+      val info = new intW(0)
       lapack.dgeqrf(m, n, scratch, m, scratch, work, -1, info)
       val lwork1 = if (info.`val` != 0) n else work(0).toInt
       lapack.dorgqr(m, m, scala.math.min(m, n), scratch, m, scratch, work, -1, info)

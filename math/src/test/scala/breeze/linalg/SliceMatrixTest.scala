@@ -1,9 +1,5 @@
 package breeze.linalg
 
-import breeze.generic.UFunc
-import breeze.gymnastics._
-import breeze.linalg.operators.HasOps
-import breeze.linalg.operators.OpAdd
 import org.scalatest.funsuite.AnyFunSuite
 
 /**
@@ -69,12 +65,12 @@ class SliceMatrixTest extends AnyFunSuite {
     assert(sliceMatrix(::, 1) == DenseVector(2, 7, 12, 22), "Failed> b(::, 1) = " + sliceMatrix(::, 1))
 
     // check arb row slice
-    assert(sliceMatrix(Seq(1, 3), ::) == DenseMatrix.create(2, 4, Array(6, 7, 9, 10, 21, 22, 24, 25), 0, 4, true),
+    assert(sliceMatrix(Seq(1, 3), ::) == DenseMatrix.create(2, 4, Array(6, 7, 9, 10, 21, 22, 24, 25), 0, 4, isTranspose = true),
            "Failed> b(Seq(1, 3), ::) = " + sliceMatrix(Seq(1, 3), ::)
     )
 
     // check arb col slice
-    assert(sliceMatrix(::, Seq(1, 3)) == DenseMatrix.create(4, 2, Array(2, 7, 12, 22, 5, 10, 15, 25), 0, 4, false),
+    assert(sliceMatrix(::, Seq(1, 3)) == DenseMatrix.create(4, 2, Array(2, 7, 12, 22, 5, 10, 15, 25), 0, 4, isTranspose = false),
            "Failed> b(::, Seq(1,3) = " + sliceMatrix(Seq(1, 3), ::)
     )
   }
@@ -117,11 +113,11 @@ class SliceMatrixTest extends AnyFunSuite {
 
   test("canSliceTensorBoolean") {
     val booleanTensor = BitVector(true, false, true, false)
-    assert(sliceMatrix(booleanTensor, ::) == DenseMatrix.create(2, 4, Array(1, 2, 4, 5, 11, 12, 14, 15), 0, 4, true))
+    assert(sliceMatrix(booleanTensor, ::) == DenseMatrix.create(2, 4, Array(1, 2, 4, 5, 11, 12, 14, 15), 0, 4, isTranspose = true))
 
-    assert(sliceMatrix(::, booleanTensor) == DenseMatrix.create(4, 2, Array(1, 6, 11, 21, 4, 9, 14, 24), 0, 4, false))
+    assert(sliceMatrix(::, booleanTensor) == DenseMatrix.create(4, 2, Array(1, 6, 11, 21, 4, 9, 14, 24), 0, 4, isTranspose = false))
 
-    assert(sliceMatrix(booleanTensor, booleanTensor) == DenseMatrix.create(2, 2, Array(1, 4, 11, 14), 0, 2, true))
+    assert(sliceMatrix(booleanTensor, booleanTensor) == DenseMatrix.create(2, 2, Array(1, 4, 11, 14), 0, 2, isTranspose = true))
 
     assert(sliceMatrix(booleanTensor, 0) == DenseVector(1, 11))
     assert(sliceMatrix(booleanTensor, 1) == DenseVector(2, 12))

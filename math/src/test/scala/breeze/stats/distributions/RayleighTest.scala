@@ -33,16 +33,16 @@ class RayleighTest
 
   override val numSamples = 40000
 
-  def asDouble(x: Double) = x
+  def asDouble(x: Double): Double = x
 
-  def fromDouble(x: Double) = x
+  def fromDouble(x: Double): Double = x
 
   implicit def arbDistr: Arbitrary[Rayleigh] = Arbitrary {
     for (
       scale <- arbitrary[Double].map { x =>
         math.abs(x) % 8.0 + 1.0
       }
-    ) yield new Rayleigh(scale)(RandBasis.mt0)
+    ) yield Rayleigh(scale)(RandBasis.mt0)
   }
 
   override type Distr = Rayleigh

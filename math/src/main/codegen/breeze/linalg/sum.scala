@@ -9,7 +9,6 @@ import breeze.linalg.support.CanTraverseValues.ValuesVisitor
 import breeze.math.Semiring
 import breeze.storage.Zero
 
-import scala.collection.TraversableOnce
 import scala.reflect.ClassTag
 import breeze.macros._
 import scala.collection.compat._

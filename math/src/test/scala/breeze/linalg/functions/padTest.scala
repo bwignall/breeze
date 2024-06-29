@@ -2,10 +2,6 @@ package breeze.linalg
 
 import org.scalatest.funsuite.AnyFunSuite
 
-/**
- * @author ktakagaki
- * @date 04/16/2014.
- */
 class padTest extends AnyFunSuite {
 
   val testDVI: DenseVector[Int] = DenseVector(1, 2, 3, 4, 5)

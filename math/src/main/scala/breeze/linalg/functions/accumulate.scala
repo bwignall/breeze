@@ -18,11 +18,9 @@ object accumulate extends UFunc {
     zero: Zero[T],
     add: OpAdd.Impl2[T, T, T]
   ): Impl[DenseVector[T], DenseVector[T]] =
-    new Impl[DenseVector[T], DenseVector[T]] {
-      def apply(dv: DenseVector[T]): DenseVector[T] = {
-        implicit val ct: ClassTag[T] = ReflectionUtil.elemClassTagFromArray(dv.data)
-        DenseVector(dv.valuesIterator.scanLeft(zero.zero)(add(_, _)).drop(1).toArray)
-      }
+    (dv: DenseVector[T]) => {
+      implicit val ct: ClassTag[T] = ReflectionUtil.elemClassTagFromArray(dv.data)
+      DenseVector(dv.valuesIterator.scanLeft(zero.zero)(add(_, _)).drop(1).toArray)
     }
 
 }

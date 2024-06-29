@@ -3,7 +3,6 @@ package breeze.polynomial
 import algebra.instances.all.doubleAlgebra
 import breeze.benchmark._
 import breeze.linalg.BuildsRandomVectors
-import breeze.linalg.DenseMatrix
 import breeze.macros._
 import breeze.stats.distributions._
 import com.google.caliper.Benchmark

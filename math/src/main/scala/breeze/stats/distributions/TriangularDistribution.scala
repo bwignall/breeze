@@ -27,7 +27,7 @@ class TriangularDistribution(a: Double, c: Double, b: Double)
     extends ApacheContinuousDistribution
     with Moments[Double, Double] {
   final protected val inner = new ApacheTriangularDistribution(a, c, b)
-  def mode = c
+  def mode: Double = c
   def entropy: Double = 0.5 + math.log((b - a) / 2)
 }
 

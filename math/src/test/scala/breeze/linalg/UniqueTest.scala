@@ -7,7 +7,7 @@ import org.scalatest.funsuite._
 /**
  * @author stucchio
  */
-class uniqueTest extends AnyFunSuite {
+class UniqueTest extends AnyFunSuite {
   test("unique works") {
     val v = DenseVector(1.0, 1.0, 2.0, 3.0, 3.0, 1.0, 5.0)
     assert(unique(v) == DenseVector(1.0, 2.0, 3.0, 5.0))

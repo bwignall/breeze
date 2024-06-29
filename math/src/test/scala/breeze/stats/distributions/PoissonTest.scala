@@ -31,8 +31,8 @@ class PoissonTest extends AnyFunSuite with Checkers with MomentsTestBase[Int] wi
   def arbParameter: Arbitrary[Double] = Arbitrary(arbitrary[Double].map(x => math.abs(x) % 5 + 0.5))
   def paramsClose(p: Double, b: Double): Boolean = if (b == 0.0) p < 1e-4 else (p - b).abs / b.abs.max(1e-4) < 1e-1
 
-  def asDouble(x: Int) = x.toDouble
-  def fromDouble(x: Double) = x.toInt
+  def asDouble(x: Int): Double = x.toDouble
+  def fromDouble(x: Double): Int = x.toInt
 
   override val VARIANCE_TOLERANCE: Double = 1e-1
   val TOL = 1e-1
@@ -41,7 +41,7 @@ class PoissonTest extends AnyFunSuite with Checkers with MomentsTestBase[Int] wi
     val mean = 5.0
     import breeze.numerics._
     val poi = new Poisson(mean)
-    assert(closeTo(poi.cdf(0), exp(-mean)), "" + (poi.cdf(0)) + " " + exp(-mean))
+    assert(closeTo(poi.cdf(0), exp(-mean)), "" + poi.cdf(0) + " " + exp(-mean))
   }
 
   override type Distr = Poisson

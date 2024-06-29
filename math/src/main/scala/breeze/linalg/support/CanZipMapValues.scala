@@ -33,11 +33,7 @@ trait CanZipMapValues[From, @spec(Double, Int, Float, Long) V, @spec(Double, Int
 
 object CanZipMapValues {
 
-  def canZipMapSelf[S]: CanZipMapValues[S, S, S, S] = new CanZipMapValues[S, S, S, S] {
-
-    /** Maps all corresponding values from the two collections. */
-    def map(from: S, from2: S, fn: (S, S) => S): S = fn(from, from2)
-  }
+  def canZipMapSelf[S]: CanZipMapValues[S, S, S, S] = (from: S, from2: S, fn: (S, S) => S) => fn(from, from2)
 
   type Op[From, V, RV, To] = CanZipMapValues[From, V, RV, To]
 
@@ -52,7 +48,7 @@ object CanZipMapValues {
     def map(from: Array[V], from2: Array[V], fn: (V, V) => RV): Array[RV] = {
       require(from.length == from2.length, "Array lengths don't match!")
       val arr = new Array[RV](from.length)
-      for (i <- 0 until from.length) {
+      for (i <- from.indices) {
         arr(i) = fn(from(i), from2(i))
       }
       arr

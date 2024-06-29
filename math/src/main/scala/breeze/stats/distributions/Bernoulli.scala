@@ -39,9 +39,9 @@ case class Bernoulli(p: Double)(implicit rand: RandBasis) extends DiscreteDistr[
     rand.uniform.draw() < p
   }
 
-  override def toString(): String = "Bernoulli(" + p + ")"
+  override def toString: String = "Bernoulli(" + p + ")"
 
-  def mean = p
+  def mean: Double = p
   def variance: Double = p * (1 - p)
   def mode: Double = I(p >= 0.5)
   def entropy: Double = -p * math.log(p) - (1 - p) * math.log1p(-p)
@@ -56,7 +56,7 @@ object Bernoulli extends ExponentialFamily[Bernoulli, Boolean] with HasConjugate
   )
 
   override def posterior(prior: Beta.Parameter, evidence: IterableOnce[Boolean]): (Double, Double) = {
-    evidence.foldLeft(prior) { (acc, ev) =>
+    evidence.iterator.foldLeft(prior) { (acc, ev) =>
       if (ev) acc.copy(_1 = acc._1 + 1)
       else acc.copy(_2 = acc._2 + 1)
     }
@@ -65,8 +65,8 @@ object Bernoulli extends ExponentialFamily[Bernoulli, Boolean] with HasConjugate
   type Parameter = Double
   case class SufficientStatistic(numYes: Double, n: Double)
       extends distributions.SufficientStatistic[SufficientStatistic] {
-    def *(weight: Double) = SufficientStatistic(numYes * weight, n * weight)
-    def +(t: SufficientStatistic) = SufficientStatistic(numYes + t.numYes, n + t.n)
+    def *(weight: Double): SufficientStatistic = SufficientStatistic(numYes * weight, n * weight)
+    def +(t: SufficientStatistic): SufficientStatistic = SufficientStatistic(numYes + t.numYes, n + t.n)
   }
 
   def emptySufficientStatistic: SufficientStatistic = SufficientStatistic(0, 0)
@@ -79,8 +79,8 @@ object Bernoulli extends ExponentialFamily[Bernoulli, Boolean] with HasConjugate
 
   def likelihoodFunction(stats: SufficientStatistic): DiffFunction[Parameter] = new DiffFunction[Double] {
     val SufficientStatistic(yes, num) = stats
-    val no = num - yes
-    def calculate(p: Double) = {
+    val no: Double = num - yes
+    def calculate(p: Double): (Double, Double) = {
       import math._
       val obj = yes * log(p) + no * log1p(-p)
       val grad = yes / p - no / (1 - p)

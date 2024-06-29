@@ -6,10 +6,6 @@ import breeze.stats.distributions.RandBasis
 import breeze.stats.mean
 import org.scalatest.funsuite.AnyFunSuite
 
-/**
- * @author ktakagaki
- * @date 04/30/2014.
- */
 class randomTest extends AnyFunSuite {
 
   implicit val basis: RandBasis = RandBasis.mt0

@@ -57,7 +57,7 @@ object CanTraverseKeyValuePairs {
 
     /** Traverses all values from the given collection. */
     def traverse(from: Array[A], fn: KeyValuePairsVisitor[Int, A]): Unit = {
-      fn.visitArray(0 until from.length, from)
+      fn.visitArray(from.indices, from)
     }
 
     def isTraversableAgain(from: Array[A]): Boolean = true

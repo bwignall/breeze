@@ -31,7 +31,7 @@ class ProbMonadBenchmark extends BreezeBenchmark {
     /* The purpose of this benchmark is to compare monadic usage of rand to non-monadic usage (see timeMonad).
      */
     val nonmonadic = new Rand[Double] {
-      def draw() = gaussian.draw() + gaussian.draw()
+      def draw(): Double = gaussian.draw() + gaussian.draw()
     }
     nonmonadic.samplesVector(size)
   }

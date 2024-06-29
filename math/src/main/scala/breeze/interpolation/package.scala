@@ -11,9 +11,7 @@ import scala.reflect.ClassTag
 package object interpolation {
 
   object UnivariateInterpolatorImpl extends MappingUFunc {
-    implicit def impl[T]: Impl2[UnivariateInterpolator[T], T, T] = new Impl2[UnivariateInterpolator[T], T, T] {
-      def apply(k: UnivariateInterpolator[T], v: T): T = k(v)
-    }
+    implicit def impl[T]: Impl2[UnivariateInterpolator[T], T, T] = (k: UnivariateInterpolator[T], v: T) => k(v)
   }
 
   trait UnivariateInterpolator[T] extends VariableUFunc[UnivariateInterpolatorImpl.type, UnivariateInterpolator[T]] {
@@ -44,7 +42,7 @@ package object interpolation {
     import ord.mkOrderingOps
 
     def apply(x: T): T = {
-      if (x < X(0) || x > X(X.size - 1))
+      if (x < X(0) || x > X(X.length - 1))
         extrapolate(x)
       else
         interpolate(x)
@@ -53,7 +51,7 @@ package object interpolation {
     protected def interpolate(x: T): T
 
     protected def extrapolate(x: T): T = {
-      throw new IndexOutOfBoundsException("Out of the domain [" + X(0) + "," + X(X.size - 1) + "]")
+      throw new IndexOutOfBoundsException("Out of the domain [" + X(0) + "," + X(X.length - 1) + "]")
     }
 
     protected def bisearch(x: T): Int = bisearch(0, X.length - 1, x)

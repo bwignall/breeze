@@ -43,10 +43,10 @@ trait CounterLike[K, V, +M <: scala.collection.mutable.Map[K, V], +This <: Count
 
   def repr: This = this.asInstanceOf[This]
 
-  override def size = data.size
-  def activeSize = data.size
+  override def size: Int = data.size
+  def activeSize: Int = data.size
 
-  def isEmpty = data.isEmpty
+  def isEmpty: Boolean = data.isEmpty
 
   def contains(k: K): Boolean = data.contains(k)
 
@@ -58,17 +58,17 @@ trait CounterLike[K, V, +M <: scala.collection.mutable.Map[K, V], +This <: Count
 
   def get(k: K): Option[V] = data.get(k)
 
-  override def keysIterator = data.keysIterator
+  override def keysIterator: Iterator[K] = data.keysIterator
 
-  override def valuesIterator = data.valuesIterator
+  override def valuesIterator: Iterator[V] = data.valuesIterator
 
-  override def iterator = data.iterator
+  override def iterator: Iterator[(K, V)] = data.iterator
 
-  def activeIterator = iterator
+  def activeIterator: Iterator[(K, V)] = iterator
 
-  def activeValuesIterator = valuesIterator
+  def activeValuesIterator: Iterator[V] = valuesIterator
 
-  def activeKeysIterator = keysIterator
+  def activeKeysIterator: Iterator[K] = keysIterator
 
   override def toString: String = data.mkString("Counter(", ", ", ")")
 
@@ -79,7 +79,7 @@ trait CounterLike[K, V, +M <: scala.collection.mutable.Map[K, V], +This <: Count
 
   override def hashCode(): Int = data.hashCode()
 
-  def toMap = data.toMap
+  def toMap: Map[K, V] = data.toMap
 }
 
 trait Counter[K, V] extends Tensor[K, V] with CounterLike[K, V, collection.mutable.Map[K, V], Counter[K, V]] {}
@@ -95,7 +95,7 @@ object Counter extends CounterOps {
     apply(values)
 
   /** Returns a counter by summing all the given values. */
-  def apply[K, V: Zero: Semiring](values: TraversableOnce[(K, V)]): Counter[K, V] = {
+  def apply[K, V: Zero: Semiring](values: IterableOnce[(K, V)]): Counter[K, V] = {
     val rv = apply[K, V]()
     val field = implicitly[Semiring[V]]
     values.iterator.foreach { case (k, v) => rv(k) = field.+(v, rv(k)) }
@@ -103,7 +103,7 @@ object Counter extends CounterOps {
   }
 
   /** Counts each of the given items. */
-  def countTraversable[K](items: TraversableOnce[K]): Counter[K, Int] = {
+  def countTraversable[K](items: IterableOnce[K]): Counter[K, Int] = {
     val rv = apply[K, Int]()
     items.iterator.foreach(rv(_) += 1)
     rv
@@ -114,12 +114,12 @@ object Counter extends CounterOps {
   @SerialVersionUID(2872445575657408160L)
   class Impl[K, V](override val data: scala.collection.mutable.Map[K, V])(implicit zero: Zero[V])
       extends Counter[K, V] {
-    def default = zero.zero
+    def default: V = zero.zero
   }
 
   implicit def canMapValues[K, V, RV: Zero]: CanMapValues[Counter[K, V], V, RV, Counter[K, RV]] = {
     new DenseCanMapValues[Counter[K, V], V, RV, Counter[K, RV]] {
-      override def map(from: Counter[K, V], fn: (V => RV)): Counter[K, RV] = {
+      override def map(from: Counter[K, V], fn: V => RV): Counter[K, RV] = {
         val rv = Counter[K, RV]()
         for ((k, v) <- from.iterator) {
           rv(k) = fn(v)
@@ -159,14 +159,12 @@ object Counter extends CounterOps {
     }
 
   implicit def normImplDouble[K, V: Field]: norm.Impl2[Counter[K, V], Double, Double] =
-    new norm.Impl2[Counter[K, V], Double, Double] {
-      override def apply(ctr: Counter[K, V], p: Double): Double = {
-        var result = 0.0
-        for (v <- ctr.valuesIterator) {
-          result += math.pow(implicitly[Field[V]].normImpl(v), p)
-        }
-        math.pow(result, 1 / p)
+    (ctr: Counter[K, V], p: Double) => {
+      var result = 0.0
+      for (v <- ctr.valuesIterator) {
+        result += math.pow(implicitly[Field[V]].normImpl(v), p)
       }
+      math.pow(result, 1 / p)
     }
 
   implicit def canCreateZeros[K, V: Zero: Semiring]: CanCreateZeros[Counter[K, V], K] = {

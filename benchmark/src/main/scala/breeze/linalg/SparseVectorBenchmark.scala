@@ -18,8 +18,9 @@
 
 package breeze.linalg
 
-import breeze.benchmark._
+import breeze.benchmark.*
 import breeze.stats.distributions.RandBasis
+import com.google.caliper.Benchmark
 
 object SparseVectorBenchmark extends MyRunner(classOf[SparseVectorBenchmark])
 
@@ -40,17 +41,34 @@ class SparseVectorBenchmark extends BreezeBenchmark with BuildsRandomVectors {
     }
   }
 
-  def timeDotSmall1_%(reps: Int) = dotProductBench(reps, 1000, 0.01)
-  def timeDotSmall10_%(reps: Int) = dotProductBench(reps, 1000, 0.10)
-  def timeDotSmall30_%(reps: Int) = dotProductBench(reps, 1000, 0.30)
+  @Benchmark
+  def timeDotSmall1_%(reps: Int): Double = dotProductBench(reps, 1000, 0.01)
 
-  def timeDotLargeUneven_10__0_1_%(reps: Int) = dotProductBench(reps, 1000000, 0.1, 0.001)
-  def timeDotLargeUneven_10_1_%(reps: Int) = dotProductBench(reps, 1000000, 0.1, 0.01)
-  def timeDotLargeUneven_10_30_%(reps: Int) = dotProductBench(reps, 1000000, 0.10, 0.3)
-  def timeDotLargeUneven_1_30_%(reps: Int) = dotProductBench(reps, 1000000, 0.01, 0.3)
+  @Benchmark
+  def timeDotSmall10_%(reps: Int): Double = dotProductBench(reps, 1000, 0.10)
 
-  def timeDotLarge1_%(reps: Int) = dotProductBench(reps, 1000000, 0.01)
-  def timeDotLarge10_%(reps: Int) = dotProductBench(reps, 1000000, 0.10)
-  def timeDotLarge30_%(reps: Int) = dotProductBench(reps, 1000000, 0.30)
+  @Benchmark
+  def timeDotSmall30_%(reps: Int): Double = dotProductBench(reps, 1000, 0.30)
+
+  @Benchmark
+  def timeDotLargeUneven_10__0_1_%(reps: Int): Double = dotProductBench(reps, 1000000, 0.1, 0.001)
+
+  @Benchmark
+  def timeDotLargeUneven_10_1_%(reps: Int): Double = dotProductBench(reps, 1000000, 0.1, 0.01)
+
+  @Benchmark
+  def timeDotLargeUneven_10_30_%(reps: Int): Double = dotProductBench(reps, 1000000, 0.10, 0.3)
+
+  @Benchmark
+  def timeDotLargeUneven_1_30_%(reps: Int): Double = dotProductBench(reps, 1000000, 0.01, 0.3)
+
+  @Benchmark
+  def timeDotLarge1_%(reps: Int): Double = dotProductBench(reps, 1000000, 0.01)
+
+  @Benchmark
+  def timeDotLarge10_%(reps: Int): Double = dotProductBench(reps, 1000000, 0.10)
+
+  @Benchmark
+  def timeDotLarge30_%(reps: Int): Double = dotProductBench(reps, 1000000, 0.30)
 
 }

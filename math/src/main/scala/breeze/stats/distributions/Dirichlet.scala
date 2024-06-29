@@ -44,7 +44,7 @@ case class Dirichlet[T, @specialized(Int) I](params: T)(implicit
   /**
    * Returns unnormalized probabilities for a Multinomial distribution.
    */
-  def unnormalizedDraw() = {
+  def unnormalizedDraw(): T = {
     mapValues.mapActive(params,
                         { (v: Double) =>
                           if (v == 0.0) 0.0 else new Gamma(v, 1).draw()
@@ -55,7 +55,7 @@ case class Dirichlet[T, @specialized(Int) I](params: T)(implicit
   /**
    * Returns logNormalized probabilities. Use this if you're worried about underflow
    */
-  def logDraw() = {
+  def logDraw(): T = {
     val x = mapValues.mapActive(params,
                                 { (v: Double) =>
                                   if (v == 0.0) 0.0 else new Gamma(v, 1).logDraw()
@@ -70,12 +70,12 @@ case class Dirichlet[T, @specialized(Int) I](params: T)(implicit
   /**
    * Returns the log pdf function of the Dirichlet up to a constant evaluated at m
    */
-  override def unnormalizedLogPdf(m: T) = {
+  override def unnormalizedLogPdf(m: T): Double = {
     val parts = for ((k, v) <- params.activeIterator) yield (v - 1) * math.log(m(k))
     parts.sum
   }
 
-  lazy val logNormalizer = lbeta(params)
+  override lazy val logNormalizer: Double = lbeta(params)
 
   /**
    * Returns a Polya Distribution
@@ -114,33 +114,33 @@ object Dirichlet {
     case class SufficientStatistic(n: Double, t: T)
         extends breeze.stats.distributions.SufficientStatistic[SufficientStatistic] {
       // TODO: use online mean here
-      def +(tt: SufficientStatistic) = SufficientStatistic(n + tt.n, t + tt.t)
-      def *(w: Double) = SufficientStatistic(n * w, t * w)
+      def +(tt: SufficientStatistic): SufficientStatistic = SufficientStatistic(n + tt.n, t + tt.t)
+      def *(w: Double): SufficientStatistic = SufficientStatistic(n * w, t * w)
     }
 
-    def emptySufficientStatistic = SufficientStatistic(0, zeroLike(exemplar))
+    def emptySufficientStatistic: SufficientStatistic = SufficientStatistic(0, zeroLike(exemplar))
 
-    def sufficientStatisticFor(t: T) = {
+    def sufficientStatisticFor(t: T): SufficientStatistic = {
       SufficientStatistic(1, numerics.log(normalize(t, 1.0)))
     }
 
-    def mle(stats: SufficientStatistic) = {
-      val likelihood = likelihoodFunction(stats)
+    def mle(stats: SufficientStatistic): T = {
+      val likelihood: DiffFunction[T] = likelihoodFunction(stats)
       val result = minimize(likelihood, zeroLike(stats.t) +:+ 1.0)
       result
     }
 
-    def likelihoodFunction(stats: SufficientStatistic) = new DiffFunction[T] {
-      val p = stats.t / stats.n
-      def calculate(x: T) = {
-        val lp = -stats.n * (-lbeta(x) + ((x - 1.0).dot(p)))
-        val grad: T = (digamma(x) - digamma(sum(x)) - p) * (stats.n)
+    def likelihoodFunction(stats: SufficientStatistic): DiffFunction[T] = new DiffFunction[T] {
+      val p: T = stats.t / stats.n
+      def calculate(x: T): (Double, T) = {
+        val lp = -stats.n * (-lbeta(x) + (x - 1.0).dot(p))
+        val grad: T = (digamma(x) - digamma(sum(x)) - p) * stats.n
         if (lp.isNaN) (Double.PositiveInfinity, grad)
         else (lp, grad)
       }
     }
 
-    override def distribution(p: Parameter)(implicit rand: RandBasis) = {
+    override def distribution(p: Parameter)(implicit rand: RandBasis): Dirichlet[T, I] = {
       new Dirichlet(p)
     }
   }

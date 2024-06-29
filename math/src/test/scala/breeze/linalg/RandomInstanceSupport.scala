@@ -18,9 +18,7 @@
 
 package breeze.linalg
 
-import breeze.linalg.operators.OpAdd
 import breeze.math.Semiring
-import breeze.numerics.abs
 import breeze.storage.Zero
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen

@@ -4,15 +4,12 @@ import breeze.math.Complex
 import breeze.util.JavaArrayOps._
 
 /**This class is a converter for using breeze.signal functions on Arrays of Double and Complex, from Java/Matlab/Mathematica.
- *
- * @author ktakagaki
- * @date 3/11/14.
  */
 object JavaCompatible {
 
-  def convolve(data: Array[Double], kernel: Array[Double]) =
+  def convolve(data: Array[Double], kernel: Array[Double]): Array[Double] =
     dvDToArray(breeze.signal.convolve(arrayDToDv(data), arrayDToDv(kernel)))
-  def correlate(data: Array[Double], kernel: Array[Double]) =
+  def correlate(data: Array[Double], kernel: Array[Double]): Array[Double] =
     dvDToArray(breeze.signal.correlate(arrayDToDv(data), arrayDToDv(kernel)))
 
   // <editor-fold defaultstate="collapsed" desc=" discrete Fourier transforms ">
@@ -80,7 +77,7 @@ object JavaCompatible {
 
   /**See [[fourierFreq]]. shifted = false
    */
-  def fourierFreqD(windowLength: Int, fs: Double): Array[Double] = fourierFreqD(windowLength, fs, false)
+  def fourierFreqD(windowLength: Int, fs: Double): Array[Double] = fourierFreqD(windowLength, fs, shifted = false)
 
   // </editor-fold>
 
@@ -187,11 +184,11 @@ object JavaCompatible {
    * @see https://en.wikipedia.org/wiki/Haar_wavelet
    * @param data data to be transformed.
    */
-  def haarTrD(data: Array[Double]) = dvDToArray(breeze.signal.haarTr(arrayDToDv(data)))
+  def haarTrD(data: Array[Double]): Array[Double] = dvDToArray(breeze.signal.haarTr(arrayDToDv(data)))
 
   /**See [[haarTrD]]
    */
-  def haarTr2D(data: Array[Array[Double]]) = dmDToArray2(breeze.signal.haarTr(array2DToDm(data)))
+  def haarTr2D(data: Array[Array[Double]]): Array[Array[Double]] = dmDToArray2(breeze.signal.haarTr(array2DToDm(data)))
 
   // </editor-fold>
 
@@ -203,7 +200,7 @@ object JavaCompatible {
    * @param windowLength only supports odd windowLength values, since even values would cause half-frame time shifts in one or the other direction,
    *                     and would also lead to floating point values even for integer input
    */
-  def filterMedianD(data: Array[Double], windowLength: Int) =
+  def filterMedianD(data: Array[Double], windowLength: Int): Array[Double] =
     dvDToArray(breeze.signal.filterMedian(arrayDToDv(data), windowLength))
 
 }

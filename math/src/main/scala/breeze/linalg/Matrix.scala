@@ -42,7 +42,7 @@ trait MatrixLike[@spec(Double, Int, Float, Long) V, +Self <: Matrix[V]]
 
 trait Matrix[@spec(Double, Int, Float, Long) V] extends MatrixLike[V, Matrix[V]] {
 
-  final def apply(i: (Int, Int)) = apply(i._1, i._2)
+  final def apply(i: (Int, Int)): V = apply(i._1, i._2)
   final def update(i: (Int, Int), e: V): Unit = {
     update(i._1, i._2, e)
   }
@@ -50,17 +50,18 @@ trait Matrix[@spec(Double, Int, Float, Long) V] extends MatrixLike[V, Matrix[V]]
   def apply(i: Int, j: Int): V
   def update(i: Int, j: Int, e: V): Unit
 
-  def size = rows * cols
+  def size: Int = rows * cols
   def rows: Int
   def cols: Int
 
   def keySet: Set[(Int, Int)] = new MatrixKeySet(rows, cols)
 
-  def iterator = for (i <- Iterator.range(0, rows); j <- Iterator.range(0, cols)) yield (i -> j) -> apply(i, j)
+  def iterator: Iterator[((Int, Int), V)] = for (i <- Iterator.range(0, rows); j <- Iterator.range(0, cols))
+    yield (i -> j) -> apply(i, j)
 
-  def valuesIterator = for (i <- Iterator.range(0, rows); j <- Iterator.range(0, cols)) yield apply(i, j)
+  def valuesIterator: Iterator[V] = for (i <- Iterator.range(0, rows); j <- Iterator.range(0, cols)) yield apply(i, j)
 
-  def keysIterator = for (i <- Iterator.range(0, rows); j <- Iterator.range(0, cols)) yield i -> j
+  def keysIterator: Iterator[(Int, Int)] = for (i <- Iterator.range(0, rows); j <- Iterator.range(0, cols)) yield i -> j
 
   def toString(maxLines: Int = Terminal.terminalHeight - 3, maxWidth: Int = Terminal.terminalWidth): String = {
     val showRows = if (rows > maxLines) maxLines - 1 else rows
@@ -90,7 +91,7 @@ trait Matrix[@spec(Double, Int, Float, Long) V] extends MatrixLike[V, Matrix[V]]
     val newline = Terminal.newline
 
     val rv = new scala.StringBuilder
-    for (row <- 0 until showRows; col <- 0 until colWidths.length) {
+    for (row <- 0 until showRows; col <- colWidths.indices) {
       val cell = if (this(row, col) != null) this(row, col).toString else "--"
       rv.append(cell)
       rv.append(new StringOps(" ") * (colWidths(col) - cell.length))
@@ -121,7 +122,7 @@ trait Matrix[@spec(Double, Int, Float, Long) V] extends MatrixLike[V, Matrix[V]]
 
   override def toString: String = toString(Terminal.terminalHeight, Terminal.terminalWidth)
 
-  def toDenseMatrix(implicit cm: ClassTag[V], zero: Zero[V]) = {
+  def toDenseMatrix(implicit cm: ClassTag[V], zero: Zero[V]): DenseMatrix[V] = {
     DenseMatrix.tabulate(rows, cols) { (i, j) =>
       apply(i, j)
     }
@@ -136,7 +137,7 @@ trait Matrix[@spec(Double, Int, Float, Long) V] extends MatrixLike[V, Matrix[V]]
       this.rows == x.rows && this.cols == x.cols &&
       keysIterator.forall(k => this(k) == x(k))
     case _ =>
-      return false
+      false
   }
 
 }
@@ -175,7 +176,7 @@ object Matrix extends MatrixConstructors[Matrix] with LowPriorityMatrix {
 
     def repr: Matrix[V] = this
 
-    def flatten(view: View) = Vector[V]()
+    def flatten(view: View): Vector[V] = Vector[V]()
   }
 
   implicit def canTraverseKeyValuePairs[V]: CanTraverseKeyValuePairs[Matrix[V], (Int, Int), V] = {
@@ -247,10 +248,8 @@ trait MatrixConstructors[Mat[T] <: Matrix[T]] {
   }
 
   implicit def canCreateZeros[T: ClassTag: Zero]: CanCreateZeros[Mat[T], (Int, Int)] =
-    new CanCreateZeros[Mat[T], (Int, Int)] {
-      def apply(dims: (Int, Int)): Mat[T] = {
-        zeros[T](dims._1, dims._2)
-      }
+    (dims: (Int, Int)) => {
+      zeros[T](dims._1, dims._2)
     }
 
   // This method only exists because of trouble in Scala-specialization land.
@@ -269,82 +268,69 @@ trait MatrixConstructors[Mat[T] <: Matrix[T]] {
 trait LowPriorityMatrix {
   implicit def canSliceTensorBooleanRows[V: Semiring: ClassTag]
     : CanSlice2[Matrix[V], Tensor[Int, Boolean], ::.type, SliceMatrix[Int, Int, V]] = {
-    new CanSlice2[Matrix[V], Tensor[Int, Boolean], ::.type, SliceMatrix[Int, Int, V]] {
-      def apply(from: Matrix[V], rows: Tensor[Int, Boolean], cols: ::.type): SliceMatrix[Int, Int, V] = {
+    (from: Matrix[V], rows: Tensor[Int, Boolean], cols: ::.type) =>
+      {
         val cols = 0 until from.cols
         new SliceMatrix(from, SliceUtils.mapRowSeq(rows.findAll(_ == true), from.rows), cols)
       }
-    }
   }
 
   implicit def canSliceTensorBooleanCols[V: Semiring: ClassTag]
     : CanSlice2[Matrix[V], ::.type, Tensor[Int, Boolean], SliceMatrix[Int, Int, V]] = {
-    new CanSlice2[Matrix[V], ::.type, Tensor[Int, Boolean], SliceMatrix[Int, Int, V]] {
-      def apply(from: Matrix[V], rows: ::.type, cols: Tensor[Int, Boolean]): SliceMatrix[Int, Int, V] = {
+    (from: Matrix[V], rows: ::.type, cols: Tensor[Int, Boolean]) =>
+      {
         val rows = 0 until from.rows
         new SliceMatrix(from, rows, SliceUtils.mapColumnSeq(cols.findAll(_ == true), from.cols))
       }
-    }
   }
 
   implicit def canSliceTensorBooleanRowsAndCol[V: Semiring: ClassTag]
     : CanSlice2[Matrix[V], Tensor[Int, Boolean], Int, SliceVector[(Int, Int), V]] = {
-    new CanSlice2[Matrix[V], Tensor[Int, Boolean], Int, SliceVector[(Int, Int), V]] {
-      def apply(from: Matrix[V], sliceRows: Tensor[Int, Boolean], sliceCol: Int): SliceVector[(Int, Int), V] = {
+    (from: Matrix[V], sliceRows: Tensor[Int, Boolean], sliceCol: Int) =>
+      {
         val rows = SliceUtils.mapRowSeq(sliceRows.findAll(_ == true), from.rows)
         val col = SliceUtils.mapColumn(sliceCol, from.cols)
         new SliceVector(from, slices = rows.map(row => (row, col)))
       }
-    }
   }
 
   implicit def canSliceRowAndTensorBooleanCols[V: Semiring: ClassTag]
     : CanSlice2[Matrix[V], Int, Tensor[Int, Boolean], Transpose[SliceVector[(Int, Int), V]]] = {
-    new CanSlice2[Matrix[V], Int, Tensor[Int, Boolean], Transpose[SliceVector[(Int, Int), V]]] {
-      def apply(from: Matrix[V],
-                sliceRow: Int,
-                sliceCols: Tensor[Int, Boolean]
-      ): Transpose[SliceVector[(Int, Int), V]] = {
+    (from: Matrix[V], sliceRow: Int, sliceCols: Tensor[Int, Boolean]) =>
+      {
         val row = SliceUtils.mapRow(sliceRow, from.rows)
         val cols = SliceUtils.mapColumnSeq(sliceCols.findAll(_ == true), from.cols)
         new SliceVector(from, slices = cols.map(col => (row, col))).t
       }
-    }
   }
 
   implicit def canSliceTensorBooleanRowsAndCols[V: Semiring: ClassTag]
     : CanSlice2[Matrix[V], Tensor[Int, Boolean], Tensor[Int, Boolean], SliceMatrix[Int, Int, V]] = {
-    new CanSlice2[Matrix[V], Tensor[Int, Boolean], Tensor[Int, Boolean], SliceMatrix[Int, Int, V]] {
-      def apply(from: Matrix[V],
-                sliceRows: Tensor[Int, Boolean],
-                sliceCols: Tensor[Int, Boolean]
-      ): SliceMatrix[Int, Int, V] = {
+    (from: Matrix[V], sliceRows: Tensor[Int, Boolean], sliceCols: Tensor[Int, Boolean]) =>
+      {
         val rows = SliceUtils.mapRowSeq(sliceRows.findAll(_ == true), from.rows)
         val cols = SliceUtils.mapColumnSeq(sliceCols.findAll(_ == true), from.cols)
         new SliceMatrix(from, rows, cols)
       }
-    }
   }
 
   implicit def canSliceTensorBooleanRowsAndWeirdCols[V: Semiring: ClassTag]
     : CanSlice2[Matrix[V], Tensor[Int, Boolean], Seq[Int], SliceMatrix[Int, Int, V]] = {
-    new CanSlice2[Matrix[V], Tensor[Int, Boolean], Seq[Int], SliceMatrix[Int, Int, V]] {
-      def apply(from: Matrix[V], sliceRows: Tensor[Int, Boolean], sliceCols: Seq[Int]): SliceMatrix[Int, Int, V] = {
+    (from: Matrix[V], sliceRows: Tensor[Int, Boolean], sliceCols: Seq[Int]) =>
+      {
         val rows = SliceUtils.mapRowSeq(sliceRows.findAll(_ == true), from.rows)
         val cols = SliceUtils.mapColumnSeq(sliceCols, from.cols)
         new SliceMatrix(from, rows, cols)
       }
-    }
   }
 
   implicit def canSliceWeirdRowsAndTensorBooleanCols[V: Semiring: ClassTag]
     : CanSlice2[Matrix[V], Seq[Int], Tensor[Int, Boolean], SliceMatrix[Int, Int, V]] = {
-    new CanSlice2[Matrix[V], Seq[Int], Tensor[Int, Boolean], SliceMatrix[Int, Int, V]] {
-      def apply(from: Matrix[V], sliceRows: Seq[Int], sliceCols: Tensor[Int, Boolean]): SliceMatrix[Int, Int, V] = {
+    (from: Matrix[V], sliceRows: Seq[Int], sliceCols: Tensor[Int, Boolean]) =>
+      {
         val rows = SliceUtils.mapRowSeq(sliceRows, from.rows)
         val cols = SliceUtils.mapColumnSeq(sliceCols.findAll(_ == true), from.cols)
         new SliceMatrix(from, rows, cols)
       }
-    }
   }
 }

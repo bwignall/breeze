@@ -87,9 +87,9 @@ package object linalg {
   ): DenseMatrix[Double] = {
     val input = new FileReader(file)
     var mat = CSVReader.read(input, separator, quote, escape, skipLines)
-    mat = mat.takeWhile(line => line.length != 0 && line.head.nonEmpty) // empty lines at the end
+    mat = mat.takeWhile(line => line.nonEmpty && line.head.nonEmpty) // empty lines at the end
     input.close()
-    if (mat.length == 0) {
+    if (mat.isEmpty) {
       DenseMatrix.zeros[Double](0, 0)
     } else {
       DenseMatrix.tabulate(mat.length, mat.head.length)((i, j) => mat(i)(j).toDouble)
@@ -300,7 +300,7 @@ package object linalg {
    * if necessary. Very simple, just does the basic thing.
    */
   def cov(x: DenseMatrix[Double], center: Boolean = true): DenseMatrix[Double] = {
-    val xc = scale(x, center, false)
+    val xc = scale(x, center, scale = false)
     (xc.t * xc) /= xc.rows - 1.0
   }
 
@@ -347,7 +347,7 @@ package object linalg {
    * matrix. Feel free to make this more general.
    */
   private def columnRMS(x: DenseMatrix[Double]): DenseVector[Double] =
-    (sum(x *:* x, Axis._0) / (x.rows - 1.0)).t.map(scala.math.sqrt _)
+    (sum(x *:* x, Axis._0) / (x.rows - 1.0)).t.map(scala.math.sqrt)
 
   /** Alias for randomDouble */
   val rand: randomDouble.type = randomDouble

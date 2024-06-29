@@ -72,11 +72,11 @@ abstract class BaseMetropolisHastings[T](logLikelihoodFunc: T => Double, init: T
 
   def logLikelihood(x: T): Double = logLikelihoodFunc(x)
 
-  def aboveOneCount = acceptanceAboveOne
-  def total = totalCount
-  def acceptanceCount = acceptances
+  def aboveOneCount: Long = acceptanceAboveOne
+  def total: Long = totalCount
+  def acceptanceCount: Long = acceptances
 
-  private def getNext(): T = {
+  private def getNext: T = {
     totalCount += 1
     val maybeNext = proposalDraw(last)
     val logAcceptanceRatio = logLikelihoodRatio(last, maybeNext)
@@ -97,25 +97,25 @@ abstract class BaseMetropolisHastings[T](logLikelihoodFunc: T => Double, init: T
 
   // Burn in
   cforRange(0 until burnIn)(i => {
-    getNext()
+    getNext
   })
   // end burn in
 
   def draw(): T = {
     if (dropCount == 0) {
-      getNext()
+      getNext
     } else {
       cforRange(0 until dropCount)(i => {
-        getNext()
+        getNext
       })
-      getNext()
+      getNext
     }
   }
 }
 
 case class ArbitraryMetropolisHastings[T](logLikelihood: T => Double,
-                                          val proposal: T => Rand[T],
-                                          val logProposalDensity: (T, T) => Double,
+                                          proposal: T => Rand[T],
+                                          logProposalDensity: (T, T) => Double,
                                           init: T,
                                           burnIn: Int = 0,
                                           dropCount: Int = 0
@@ -128,7 +128,7 @@ case class ArbitraryMetropolisHastings[T](logLikelihood: T => Double,
 }
 
 case class AffineStepMetropolisHastings[T](logLikelihood: T => Double,
-                                           val proposalStep: Rand[T],
+                                           proposalStep: Rand[T],
                                            init: T,
                                            burnIn: Int = 0,
                                            dropCount: Int = 0

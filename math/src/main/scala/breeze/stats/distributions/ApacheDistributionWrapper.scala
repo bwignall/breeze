@@ -31,8 +31,8 @@ trait ApacheContinuousDistribution extends ContinuousDistr[Double] with HasCdf w
   def drawMany(n: Int): Array[Double] = inner.sample(n)
   def probability(x: Double, y: Double): Double = inner.probability(x, y)
   def inverseCdf(p: Double): Double = inner.inverseCumulativeProbability(p)
-  def mean: Double = inner.getNumericalMean()
-  def variance: Double = inner.getNumericalVariance()
+  def mean: Double = inner.getNumericalMean
+  def variance: Double = inner.getNumericalVariance
 
   override def cdf(x: Double): Double = inner.cumulativeProbability(x)
 }

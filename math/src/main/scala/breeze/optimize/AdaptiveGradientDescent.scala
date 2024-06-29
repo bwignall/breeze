@@ -43,9 +43,14 @@ object AdaptiveGradientDescent {
     import vspace._
 
     case class History(sumOfSquaredGradients: T)
-    override def initialHistory(f: StochasticDiffFunction[T], init: T) = History(zeroLike(init))
+    override def initialHistory(f: StochasticDiffFunction[T], init: T): History = History(zeroLike(init))
 
-    override def updateHistory(newX: T, newGrad: T, newValue: Double, f: StochasticDiffFunction[T], oldState: State) = {
+    override def updateHistory(newX: T,
+                               newGrad: T,
+                               newValue: Double,
+                               f: StochasticDiffFunction[T],
+                               oldState: State
+    ): History = {
       val oldHistory = oldState.history
       val newG = oldState.grad *:* oldState.grad
       val maxAge = 1000.0
@@ -55,10 +60,10 @@ object AdaptiveGradientDescent {
       } else {
         newG += oldHistory.sumOfSquaredGradients
       }
-      new History(newG)
+      History(newG)
     }
 
-    override protected def takeStep(state: State, dir: T, stepSize: Double) = {
+    override protected def takeStep(state: State, dir: T, stepSize: Double): T = {
       import state._
       val s = sqrt(state.history.sumOfSquaredGradients +:+ (state.grad *:* state.grad))
       val newx = x *:* s
@@ -68,12 +73,12 @@ object AdaptiveGradientDescent {
       newx
     }
 
-    override def determineStepSize(state: State, f: StochasticDiffFunction[T], dir: T) = {
+    override def determineStepSize(state: State, f: StochasticDiffFunction[T], dir: T): Double = {
       defaultStepSize
     }
 
-    override protected def adjust(newX: T, newGrad: T, newVal: Double) = {
-      val av = newVal + (newX.dot(newX)) * regularizationConstant / 2.0
+    override protected def adjust(newX: T, newGrad: T, newVal: Double): (Double, T) = {
+      val av = newVal + newX.dot(newX) * regularizationConstant / 2.0
       val ag = newGrad + newX * regularizationConstant
       av -> ag
     }
@@ -97,7 +102,7 @@ object AdaptiveGradientDescent {
 
     import space._
     case class History(sumOfSquaredGradients: T)
-    def initialHistory(f: StochasticDiffFunction[T], init: T) = History(zeroLike(init))
+    def initialHistory(f: StochasticDiffFunction[T], init: T): History = History(zeroLike(init))
     /*
     override def updateHistory(newX: T, newGrad: T, newValue: Double, oldState: State) = {
       val oldHistory = oldState.history
@@ -106,7 +111,12 @@ object AdaptiveGradientDescent {
     }
      */
 
-    override def updateHistory(newX: T, newGrad: T, newValue: Double, f: StochasticDiffFunction[T], oldState: State) = {
+    override def updateHistory(newX: T,
+                               newGrad: T,
+                               newValue: Double,
+                               f: StochasticDiffFunction[T],
+                               oldState: State
+    ): History = {
       val oldHistory = oldState.history
       val newG = oldState.grad *:* oldState.grad
       val maxAge = 200.0
@@ -116,10 +126,10 @@ object AdaptiveGradientDescent {
       } else {
         newG += oldHistory.sumOfSquaredGradients
       }
-      new History(newG)
+      History(newG)
     }
 
-    override protected def takeStep(state: State, dir: T, stepSize: Double) = {
+    override protected def takeStep(state: State, dir: T, stepSize: Double): T = {
       import state._
       val s: T = sqrt(state.history.sumOfSquaredGradients +:+ (grad *:* grad) +:+ delta)
       val res: T = x + (dir *:* stepSize /:/ s)
@@ -136,11 +146,11 @@ object AdaptiveGradientDescent {
       )
     }
 
-    override def determineStepSize(state: State, f: StochasticDiffFunction[T], dir: T) = {
+    override def determineStepSize(state: State, f: StochasticDiffFunction[T], dir: T): Double = {
       defaultStepSize
     }
 
-    override protected def adjust(newX: T, newGrad: T, newVal: Double) = {
+    override protected def adjust(newX: T, newGrad: T, newVal: Double): (Double, T) = {
       val av = newVal + norm(newX, 1.0) * lambda
       val ag = newGrad + (signum(newX) *:* lambda)
       av -> ag

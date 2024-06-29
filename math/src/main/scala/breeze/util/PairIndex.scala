@@ -5,25 +5,25 @@ package breeze.util
  * @author dlwh
  */
 class PairIndex[T, U](tIndex: Index[T], uIndex: Index[U]) extends Index[(T, U)] {
-  def iterator = for (t <- tIndex.iterator; u <- uIndex.iterator) yield (t, u);
+  def iterator: Iterator[(T, U)] = for (t <- tIndex.iterator; u <- uIndex.iterator) yield (t, u)
 
-  def pairs = iterator.zipWithIndex;
+  def pairs: Iterator[((T, U), Int)] = iterator.zipWithIndex
 
-  def mapIndex(indexInT: Int, indexInU: Int) = {
+  def mapIndex(indexInT: Int, indexInU: Int): Int = {
     if (indexInT < 0 || indexInU < 0) -1
     else indexInT * uIndex.size + indexInU
   }
 
-  def unapply(i: Int) =
+  def unapply(i: Int): Option[(T, U)] =
     if (i >= 0) {
-      val ti = i / uIndex.size;
-      val ui = i % uIndex.size;
-      for (t <- tIndex.unapply(ti); u <- uIndex.unapply(ui)) yield t -> u;
+      val ti = i / uIndex.size
+      val ui = i % uIndex.size
+      for (t <- tIndex.unapply(ti); u <- uIndex.unapply(ui)) yield t -> u
     } else {
       None
     }
 
-  def apply(t: (T, U)) = {
+  def apply(t: (T, U)): Int = {
     mapIndex(tIndex(t._1), uIndex(t._2))
   }
 

@@ -1,7 +1,6 @@
 package breeze.linalg
 
 import breeze.benchmark._
-import breeze.linalg.DenseVector
 import breeze.macros._
 import breeze.stats.distributions._
 import com.google.caliper.Benchmark
@@ -60,13 +59,13 @@ class DenseVectorBenchmark extends BreezeBenchmark with BuildsRandomVectors {
   @Benchmark
   def timeFill(reps: Int): Unit = run(reps) {
     DenseVector.fill[Double](1024, 23)
+    ()
   }
 
   @Benchmark
   def timeForeach(reps: Int): Unit = runWith(reps, randomArray(4000)) { arr =>
     var sum = 0.0
     arr.foreach(sum += _)
-    sum
   }
 
   @Benchmark
@@ -76,10 +75,9 @@ class DenseVectorBenchmark extends BreezeBenchmark with BuildsRandomVectors {
     cforRange(0 until arr.length) { i =>
       sum += d(i)
     }
-    sum
   }
 
-  def valueAtBench(reps: Int, size: Int, stride: Int): Double =
+  private def valueAtBench(reps: Int, size: Int, stride: Int): Double =
     runWith(reps, { randomArray(size, stride = stride) })(arr => {
       var i = 0
       var t: Double = 0
@@ -97,7 +95,7 @@ class DenseVectorBenchmark extends BreezeBenchmark with BuildsRandomVectors {
   @Benchmark
   def timeValueAtStride4(reps: Int): Double = valueAtBench(reps, 1024 * 8, 4)
 
-  def updateBench(reps: Int, size: Int, stride: Int): DenseVector[Double] =
+  private def updateBench(reps: Int, size: Int, stride: Int): DenseVector[Double] =
     runWith(reps, { randomArray(size, stride = stride) })(arr => {
       var i = 0
       while (i < arr.size) {

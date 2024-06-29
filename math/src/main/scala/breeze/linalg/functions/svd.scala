@@ -27,7 +27,7 @@ object svd extends UFunc {
   case class SVD[M, V](leftVectors: M, singularValues: V, rightVectors: M) {
     def U: M = leftVectors
     def ∑ : V = singularValues
-    def S = ∑
+    def S: V = ∑
     def Vt: M = rightVectors
   }
 
@@ -81,7 +81,7 @@ object svd extends UFunc {
       case CompleteSVD => DenseMatrix.zeros[Double](n, n)
       case ReducedSVD  => DenseMatrix.zeros[Double](m.min(n), n)
     }
-    val iwork = new Array[Int](8 * (m.min(n)))
+    val iwork = new Array[Int](8 * m.min(n))
     val workSize = (3L
       * scala.math.min(m, n)
       * scala.math.min(m, n)
@@ -150,13 +150,13 @@ object svd extends UFunc {
       case "A" => DenseMatrix.zeros[Float](n, n)
       case "S" => DenseMatrix.zeros[Float](m.min(n), n)
     }
-    val iwork = new Array[Int](8 * (m.min(n)))
+    val iwork = new Array[Int](8 * m.min(n))
     val workSize = (3
-      * scala.math.min(m, n)
-      * scala.math.min(m, n)
-      + scala.math.max(scala.math.max(m, n),
-                       4 * scala.math.min(m, n)
-                         * scala.math.min(m, n) + 4 * scala.math.min(m, n)
+      * min(m, n)
+      * min(m, n)
+      + max(max(m, n),
+            4 * min(m, n)
+              * min(m, n) + 4 * min(m, n)
       ))
     val work = new Array[Float](workSize)
     val info = new intW(0)
@@ -235,7 +235,7 @@ object svd extends UFunc {
   ): Impl3[Mat, Int, Double, DenseSVD] = {
 
     class Svd_Sparse_Impl_Instance extends Impl3[Mat, Int, Double, DenseSVD] {
-      val arpack = ARPACK.getInstance()
+      val arpack: ARPACK = ARPACK.getInstance()
 
       def av(mat: Mat,
              matTrans: MatTranspose,
@@ -284,18 +284,18 @@ object svd extends UFunc {
         val bmat = "I"
         val which = "LM"
 
-        var iparam = new Array[Int](11)
+        val iparam = new Array[Int](11)
         iparam(0) = 1
         iparam(2) = 300
         iparam(6) = 1
 
-        var ido = new intW(0)
-        var info = new intW(0)
-        var resid: Array[Double] = new Array[Double](n)
-        var v = new Array[Double](n * ncv)
-        var workd = new Array[Double](3 * n)
-        var workl = new Array[Double](ncv * (ncv + 8))
-        var ipntr = new Array[Int](11)
+        val ido = new intW(0)
+        val info = new intW(0)
+        val resid: Array[Double] = new Array[Double](n)
+        val v = new Array[Double](n * ncv)
+        val workd = new Array[Double](3 * n)
+        val workl = new Array[Double](ncv * (ncv + 8))
+        val ipntr = new Array[Int](11)
 
         arpack.dsaupd(ido,
                       bmat,
@@ -387,8 +387,8 @@ object svd extends UFunc {
         mp = mp.sortBy(-1 * _._1)
         val sp = mp.map(_._1)
 
-        val s = DenseVector(sp.toArray)
-        val siMatrix: DenseMatrix[Double] = diag(DenseVector(sp.map(u => 1 / u).toArray))
+        val s = DenseVector(sp)
+        val siMatrix: DenseMatrix[Double] = diag(DenseVector(sp.map(u => 1 / u)))
 
         val va = mp.map { case (ek, ev) => ev }
         val uOutput = DenseMatrix(va.map(r => r.toArray).toSeq: _*).t

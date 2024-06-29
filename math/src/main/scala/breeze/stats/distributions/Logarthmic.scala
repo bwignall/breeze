@@ -54,8 +54,8 @@ case class Logarthmic(p: Double)(implicit rand: RandBasis) extends DiscreteDistr
   }
 
   def mode = 1
-  def entropy = ???
+  def entropy: Nothing = ???
 
-  override def toString(): String = ScalaRunTime._toString(this)
+  override def toString: String = ScalaRunTime._toString(this)
 
 }

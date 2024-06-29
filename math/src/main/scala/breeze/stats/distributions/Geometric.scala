@@ -36,16 +36,16 @@ case class Geometric(p: Double)(implicit rand: RandBasis) extends DiscreteDistr[
   def mode = 1
   def entropy: Double = (-(1 - p) * math.log(1 - p) - p * math.log(p)) / p
 
-  override def toString(): String = ScalaRunTime._toString(this)
+  override def toString: String = ScalaRunTime._toString(this)
 }
 
 object Geometric extends ExponentialFamily[Geometric, Int] with HasConjugatePrior[Geometric, Int] {
   type Parameter = Double
   case class SufficientStatistic(sum: Double, n: Double)
       extends breeze.stats.distributions.SufficientStatistic[SufficientStatistic] {
-    def +(t: SufficientStatistic) = SufficientStatistic(sum + t.sum, n + t.n)
+    def +(t: SufficientStatistic): SufficientStatistic = SufficientStatistic(sum + t.sum, n + t.n)
 
-    def *(weight: Double) = SufficientStatistic(sum * weight, n * weight)
+    def *(weight: Double): SufficientStatistic = SufficientStatistic(sum * weight, n * weight)
   }
 
   def emptySufficientStatistic: SufficientStatistic = SufficientStatistic(0, 0)
@@ -54,13 +54,11 @@ object Geometric extends ExponentialFamily[Geometric, Int] with HasConjugatePrio
 
   def mle(stats: SufficientStatistic): Parameter = stats.n / stats.sum
 
-  def likelihoodFunction(stats: SufficientStatistic): DiffFunction[Parameter] = new DiffFunction[Geometric.Parameter] {
-    def calculate(p: Geometric.Parameter) = {
-      val obj = stats.n * math.log(p) + stats.sum * math.log(1 - p)
-      val grad = stats.n / p - stats.sum / (1 - p)
-      (-obj, -grad)
+  def likelihoodFunction(stats: SufficientStatistic): DiffFunction[Parameter] = (p: Geometric.Parameter) => {
+    val obj = stats.n * math.log(p) + stats.sum * math.log(1 - p)
+    val grad = stats.n / p - stats.sum / (1 - p)
+    (-obj, -grad)
 
-    }
   }
 
   override def distribution(p: Geometric.Parameter)(implicit rand: RandBasis) = new Geometric(p)
@@ -68,10 +66,10 @@ object Geometric extends ExponentialFamily[Geometric, Int] with HasConjugatePrio
   type ConjugatePrior = Beta
   val conjugateFamily: Beta.type = Beta
 
-  def predictive(parameter: conjugateFamily.Parameter)(implicit basis: RandBasis) = ???
+  def predictive(parameter: conjugateFamily.Parameter)(implicit basis: RandBasis): Density[Int] = ???
 
-  def posterior(prior: conjugateFamily.Parameter, evidence: TraversableOnce[Int]): (Double, Double) = {
-    evidence.foldLeft(prior) { (acc, x) =>
+  def posterior(prior: conjugateFamily.Parameter, evidence: IterableOnce[Int]): (Double, Double) = {
+    evidence.iterator.foldLeft(prior) { (acc, x) =>
       (acc._1 + 1, acc._2 + x)
     }
   }

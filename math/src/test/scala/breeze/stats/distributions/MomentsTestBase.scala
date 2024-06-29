@@ -25,9 +25,9 @@ trait MomentsTestBase[T] extends RandTestBase {
 
   test("mean") {
     check(Prop.forAll { (distr: Distr) =>
-      val sample = distr.sample(numSamples).map(asDouble _)
+      val sample = distr.sample(numSamples).map(asDouble)
       val m = mean(sample)
-      if ((m - distr.mean).abs / (m.abs.max(1)) > 1e-1) {
+      if ((m - distr.mean).abs / m.abs.max(1) > 1e-1) {
         println("MExpected " + distr.mean + " but got " + m)
         false
       } else {
@@ -43,10 +43,10 @@ trait MomentsTestBase[T] extends RandTestBase {
       // try twice, and only fail if both fail.
       // just a little more robustness...
       Iterator.range(0, numFailures).exists { _ =>
-        val sample = distr.sample(numSamples).map(asDouble _)
+        val sample = distr.sample(numSamples).map(asDouble)
         val vari = variance(sample)
 
-        if ((vari - distr.variance).abs / (vari.max(1)) > VARIANCE_TOLERANCE) {
+        if ((vari - distr.variance).abs / vari.max(1) > VARIANCE_TOLERANCE) {
           println("Expected " + distr.variance + " but got " + vari)
           false
         } else true

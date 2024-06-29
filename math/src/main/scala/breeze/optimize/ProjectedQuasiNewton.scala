@@ -73,7 +73,7 @@ class CompactHessian(M: DenseMatrix[Double],
   }
 
   def *(v: DenseVector[Double]): DenseVector[Double] = {
-    if (Y.size == 0) {
+    if (Y.isEmpty) {
       v
     } else {
       val nTv = N.t * v.toDenseMatrix.t

@@ -38,65 +38,65 @@ case class Complex(real: Double, imag: Double) {
 
   /** Redundant accessor method, placed for transparent interlink with MATLAB/Mathematica.
    */
-  def re() = real
+  def re(): Double = real
 
   /** Redundant accessor method, placed for transparent interlink with MATLAB/Mathematica.
    */
-  def im() = imag
+  def im(): Double = imag
 
-  def +(that: Complex) =
+  def +(that: Complex): Complex =
     Complex(this.real + that.real, this.imag + that.imag)
 
-  def +(that: Int) =
+  def +(that: Int): Complex =
     Complex(this.real + that, this.imag)
 
-  def +(that: Float) =
+  def +(that: Float): Complex =
     Complex(this.real + that, this.imag)
 
-  def +(that: Double) =
+  def +(that: Double): Complex =
     Complex(this.real + that, this.imag)
 
-  def -(that: Complex) =
+  def -(that: Complex): Complex =
     Complex(this.real - that.real, this.imag - that.imag)
 
-  def -(that: Int) =
+  def -(that: Int): Complex =
     Complex(this.real - that, this.imag)
 
-  def -(that: Float) =
+  def -(that: Float): Complex =
     Complex(this.real - that, this.imag)
 
-  def -(that: Double) =
+  def -(that: Double): Complex =
     Complex(this.real - that, this.imag)
 
-  def *(that: Complex) =
+  def *(that: Complex): Complex =
     Complex(this.real * that.real - this.imag * that.imag, this.real * that.imag + this.imag * that.real)
 
-  def *(that: Int) =
+  def *(that: Int): Complex =
     Complex(this.real * that, this.imag * that)
 
-  def *(that: Float) =
+  def *(that: Float): Complex =
     Complex(this.real * that, this.imag * that)
 
-  def *(that: Double) =
+  def *(that: Double): Complex =
     Complex(this.real * that, this.imag * that)
 
-  def /(that: Complex) = {
+  def /(that: Complex): Complex = {
     val denom = that.real * that.real + that.imag * that.imag
     Complex((this.real * that.real + this.imag * that.imag) / denom,
             (this.imag * that.real - this.real * that.imag) / denom
     )
   }
 
-  def /(that: Int) =
+  def /(that: Int): Complex =
     Complex(this.real / that, this.imag / that)
 
-  def /(that: Float) =
+  def /(that: Float): Complex =
     Complex(this.real / that, this.imag / that)
 
-  def /(that: Double) =
+  def /(that: Double): Complex =
     Complex(this.real / that, this.imag / that)
 
-  def %(that: Complex) = {
+  def %(that: Complex): Complex = {
     val div = this./(that)
     this - (Complex(floor(div.re()), floor(div.im())) * div)
   }
@@ -105,7 +105,7 @@ case class Complex(real: Double, imag: Double) {
   def %(that: Float): Complex = %(Complex(that, 0))
   def %(that: Double): Complex = %(Complex(that, 0))
 
-  def unary_- =
+  def unary_- : Complex =
     Complex(-real, -imag)
 
   def abs: Double =
@@ -170,35 +170,35 @@ object Complex { outer =>
   //
 
   implicit object scalar extends Field[Complex] {
-    def zero = outer.zero
+    def zero: Complex = outer.zero
 
-    def one = outer.one
+    def one: Complex = outer.one
 
-    def nan = outer.nan
+    def nan: Complex = outer.nan
 
-    def ==(a: Complex, b: Complex) = a == b
+    def ==(a: Complex, b: Complex): Boolean = a == b
 
-    def !=(a: Complex, b: Complex) = a != b
+    def !=(a: Complex, b: Complex): Boolean = a != b
 
-    def >(a: Complex, b: Complex) =
+    def >(a: Complex, b: Complex): Boolean =
       a.real > b.real || (a.real == b.real && a.imag > b.imag)
 
-    def >=(a: Complex, b: Complex) =
+    def >=(a: Complex, b: Complex): Boolean =
       a.real >= b.real || (a.real == b.real && a.imag >= b.imag)
 
-    def <(a: Complex, b: Complex) =
+    def <(a: Complex, b: Complex): Boolean =
       a.real < b.real || (a.real == b.real && a.imag < b.imag)
 
-    def <=(a: Complex, b: Complex) =
+    def <=(a: Complex, b: Complex): Boolean =
       a.real <= b.real || (a.real == b.real && a.imag <= b.imag)
 
-    def +(a: Complex, b: Complex) = a + b
+    def +(a: Complex, b: Complex): Complex = a + b
 
-    def -(a: Complex, b: Complex) = a - b
+    def -(a: Complex, b: Complex): Complex = a - b
 
-    def *(a: Complex, b: Complex) = a * b
+    def *(a: Complex, b: Complex): Complex = a * b
 
-    def /(a: Complex, b: Complex) = a / b
+    def /(a: Complex, b: Complex): Complex = a / b
 
     def toDouble(a: Complex): Nothing =
       throw new UnsupportedOperationException("Cannot automatically convert complex numbers to doubles")
@@ -211,9 +211,7 @@ object Complex { outer =>
     val defaultArrayValue: Zero[Complex] = Zero(Complex(0, 0))
 
     implicit val normImpl: linalg.norm.Impl[Complex, Double] =
-      new linalg.norm.Impl[Complex, Double] {
-        def apply(v: Complex): Double = v.abs
-      }
+      (v: Complex) => v.abs
 
     override def close(a: Complex, b: Complex, tolerance: Double): Boolean = {
       sNorm(a - b) <= tolerance * math.max(sNorm(a), sNorm(b))
@@ -224,9 +222,7 @@ object Complex { outer =>
     def %(a: Complex, b: Complex): Complex = a.%(b)
   }
 
-  implicit val complexNorm: norm.Impl[Complex, Double] = new norm.Impl[Complex, Double] {
-    def apply(v1: Complex): Double = v1.abs
-  }
+  implicit val complexNorm: norm.Impl[Complex, Double] = (v1: Complex) => v1.abs
 
   implicit val ComplexZero: Zero[Complex] = Zero(Complex.zero)
 
@@ -475,9 +471,15 @@ object Complex { outer =>
     )
   }
 
-  implicit object logComplexImpl extends breeze.numerics.log.Impl[Complex, Complex] { def apply(v: Complex) = v.log }
-  implicit object expComplexImpl extends breeze.numerics.exp.Impl[Complex, Complex] { def apply(v: Complex) = v.exp }
-  implicit object absComplexImpl extends breeze.numerics.abs.Impl[Complex, Double] { def apply(v: Complex) = v.abs }
+  implicit object logComplexImpl extends breeze.numerics.log.Impl[Complex, Complex] {
+    def apply(v: Complex): Complex = v.log
+  }
+  implicit object expComplexImpl extends breeze.numerics.exp.Impl[Complex, Complex] {
+    def apply(v: Complex): Complex = v.exp
+  }
+  implicit object absComplexImpl extends breeze.numerics.abs.Impl[Complex, Double] {
+    def apply(v: Complex): Double = v.abs
+  }
   implicit object powComplexDoubleImpl extends breeze.numerics.pow.Impl2[Complex, Double, Complex] {
     def apply(v: Complex, d: Double): Complex = v.pow(d)
   }

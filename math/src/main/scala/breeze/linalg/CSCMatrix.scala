@@ -67,8 +67,8 @@ class CSCMatrix[@spec(Double, Int, Float, Long) V: Zero](private var _data: Arra
   def this(data: Array[V], rows: Int, cols: Int, colPtrs: Array[Int], rowIndices: Array[Int]) =
     this(data, rows, cols, colPtrs, data.length, rowIndices)
 
-  def rowIndices = _rowIndices
-  def data = _data
+  def rowIndices: Array[Int] = _rowIndices
+  def data: Array[V] = _data
 
   // don't delete
   CSCMatrix.init()
@@ -165,7 +165,7 @@ class CSCMatrix[@spec(Double, Int, Float, Long) V: Zero](private var _data: Arra
 
   override def toString(maxLines: Int, maxWidth: Int): String = {
     val buf = new StringBuilder()
-    buf ++= ("%d x %d CSCMatrix".format(rows, cols))
+    buf ++= "%d x %d CSCMatrix".format(rows, cols)
     activeIterator.take(maxLines - 1).foreach { case ((r, c), v) =>
       buf += '\n'
       buf ++= "(%d,%d) ".format(r, c)
@@ -274,11 +274,11 @@ class CSCMatrix[@spec(Double, Int, Float, Long) V: Zero](private var _data: Arra
           while (yIter.hasNext) if (yIter.next()._2 != 0) return false
         }
       }
-      return true
+      true
     case y: Matrix[_] =>
-      return y == this
+      y == this
     case _ =>
-      return false
+      false
   }
 
 }
@@ -336,7 +336,7 @@ object CSCMatrix extends MatrixConstructors[CSCMatrix] {
       vs.sizeHint(nnz)
     }
 
-    def result: CSCMatrix[T] = result(false, false)
+    def result: CSCMatrix[T] = result(keysAlreadyUnique = false, keysAlreadySorted = false)
 
     private def rowFromIndex(idx: Long) = idx.toInt
     private def colFromIndex(idx: Long) = (idx >>> 32).toInt
@@ -433,9 +433,7 @@ object CSCMatrix extends MatrixConstructors[CSCMatrix] {
     }
   }
 
-  implicit def canDim[E]: dim.Impl[CSCMatrix[E], (Int, Int)] = new dim.Impl[CSCMatrix[E], (Int, Int)] {
-    def apply(v: CSCMatrix[E]): (Int, Int) = (v.rows, v.cols)
-  }
+  implicit def canDim[E]: dim.Impl[CSCMatrix[E], (Int, Int)] = (v: CSCMatrix[E]) => (v.rows, v.cols)
 
   object FrobeniusInnerProductCSCMatrixSpace {
     implicit def space[S: Field: ClassTag]: MutableFiniteCoordinateField[CSCMatrix[S], (Int, Int), S] = {
@@ -446,5 +444,5 @@ object CSCMatrix extends MatrixConstructors[CSCMatrix] {
   }
 
   @noinline
-  private def init() = {}
+  private def init(): Unit = {}
 }

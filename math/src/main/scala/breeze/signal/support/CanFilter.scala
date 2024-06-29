@@ -32,30 +32,20 @@ object CanFilter {
    *
    */
   implicit val dvDouble1DFilter: CanFilter[DenseVector[Double], FIRKernel1D[Double], DenseVector[Double]] = {
-    new CanFilter[DenseVector[Double], FIRKernel1D[Double], DenseVector[Double]] {
-      def apply(data: DenseVector[Double],
-                kernel: FIRKernel1D[Double],
-                overhang: OptOverhang,
-                padding: OptPadding
-      ): DenseVector[Double] = {
+    (data: DenseVector[Double], kernel: FIRKernel1D[Double], overhang: OptOverhang, padding: OptPadding) =>
+      {
         convolve(data, kernel.kernel, OptRange.All, overhang, padding)
       }
-    }
   }
 
   /** Use via implicit delegate syntax filter(x: DenseVector)
    *
    */
   implicit val dvInt1DFilter: CanFilter[DenseVector[Int], FIRKernel1D[Int], DenseVector[Int]] = {
-    new CanFilter[DenseVector[Int], FIRKernel1D[Int], DenseVector[Int]] {
-      def apply(data: DenseVector[Int],
-                kernel: FIRKernel1D[Int],
-                overhang: OptOverhang,
-                padding: OptPadding
-      ): DenseVector[Int] = {
+    (data: DenseVector[Int], kernel: FIRKernel1D[Int], overhang: OptOverhang, padding: OptPadding) =>
+      {
         convolve(data, kernel.kernel, OptRange.All, overhang, padding)
       }
-    }
   }
 
   /** Use via implicit delegate syntax filter(x: DenseVector)
@@ -63,15 +53,10 @@ object CanFilter {
    */
   implicit val dvDouble1DFilterVectorKernel
     : CanFilter[DenseVector[Double], DenseVector[Double], DenseVector[Double]] = {
-    new CanFilter[DenseVector[Double], DenseVector[Double], DenseVector[Double]] {
-      def apply(data: DenseVector[Double],
-                kernel: DenseVector[Double],
-                overhang: OptOverhang,
-                padding: OptPadding
-      ): DenseVector[Double] = {
+    (data: DenseVector[Double], kernel: DenseVector[Double], overhang: OptOverhang, padding: OptPadding) =>
+      {
         convolve(data, kernel, /*new FIRKernel1D(kernel, "User-specified kernel"),*/ OptRange.All, overhang, padding)
       }
-    }
   }
 
 }

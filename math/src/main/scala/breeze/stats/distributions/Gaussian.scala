@@ -35,7 +35,7 @@ case class Gaussian(mu: Double, sigma: Double)(implicit rand: RandBasis)
   private val inner = rand.gaussian(mu, sigma)
   def draw(): Double = inner.get()
 
-  override def toString(): String = "Gaussian(" + mu + ", " + sigma + ")"
+  override def toString: String = "Gaussian(" + mu + ", " + sigma + ")"
 
   /**
    * Computes the probability that a Gaussian variable Z is within the interval [x, y].
@@ -75,9 +75,9 @@ case class Gaussian(mu: Double, sigma: Double)(implicit rand: RandBasis)
   override lazy val normalizer: Double = 1.0 / sqrt(2 * Pi) / sigma
   lazy val logNormalizer: Double = log(sqrt(2 * Pi)) + log(sigma)
 
-  def mean = mu
+  def mean: Double = mu
   def variance: Double = sigma * sigma
-  def mode = mean
+  def mode: Double = mean
   def entropy: Double = log(sigma) + .5 * log1p(log(math.Pi * 2))
 }
 
@@ -94,10 +94,10 @@ object Gaussian extends ExponentialFamily[Gaussian, Double] with ContinuousDistr
    */
   final case class SufficientStatistic(n: Double, mean: Double, M2: Double) extends BaseSuffStat[SufficientStatistic] {
     // multiply M2 (which is variance * n)
-    def *(weight: Double) = SufficientStatistic(n * weight, mean, M2 * weight)
+    def *(weight: Double): SufficientStatistic = SufficientStatistic(n * weight, mean, M2 * weight)
 
     // Due to Chan
-    def +(t: SufficientStatistic) = {
+    def +(t: SufficientStatistic): SufficientStatistic = {
       val delta = t.mean - mean
       val newMean = mean + delta * (t.n / (t.n + n))
       val newM2 = M2 + t.M2 + delta * delta * (t.n * n) / (t.n + n)
@@ -118,8 +118,8 @@ object Gaussian extends ExponentialFamily[Gaussian, Double] with ContinuousDistr
   override def distribution(p: (Double, Double))(implicit rand: RandBasis) = new Gaussian(p._1, math.sqrt(p._2))
 
   def likelihoodFunction(stats: SufficientStatistic): DiffFunction[(Double, Double)] = new DiffFunction[Parameter] {
-    val normPiece = math.log(2 * Pi)
-    def calculate(x: (Double, Double)) = {
+    val normPiece: Double = math.log(2 * Pi)
+    def calculate(x: (Double, Double)): (Double, (Double, Double)) = {
       val (mu, sigma2) = x
       val SufficientStatistic(n, mean, _) = stats
       val variance = stats.variance

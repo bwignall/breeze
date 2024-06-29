@@ -4,10 +4,6 @@ import breeze.linalg.DenseVector
 import breeze.linalg.norm
 import org.scalatest.funsuite.AnyFunSuite
 
-/**
- * @author ktakagaki
- * @date 2/11/14.
- */
 class FilterTest extends AnyFunSuite {
 
   test("BP filtering tested against output from scipy.signal.firwin/ifilter (0.13.2-1)") {

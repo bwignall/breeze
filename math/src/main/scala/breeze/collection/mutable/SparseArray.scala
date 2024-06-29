@@ -315,7 +315,7 @@ final class SparseArray[@specialized(Double, Int, Float, Long) V](var index: Arr
       if (used > data.length) {
         // need to grow array
         val newLength = {
-          if (data.length == 0) { 4 }
+          if (data.isEmpty) { 4 }
           else if (data.length < 0x0400) { data.length * 2 }
           else if (data.length < 0x0800) {
             data.length + 0x0400
@@ -410,8 +410,8 @@ final class SparseArray[@specialized(Double, Int, Float, Long) V](var index: Arr
   def concatenate(that: SparseArray[V])(implicit man: ClassTag[V]): SparseArray[V] = {
     require(this.default == that.default, "default values should be equal")
     new SparseArray(
-      this.index.slice(0, this.used).++(that.index.slice(0, that.used).map(_ + this.size)).toArray,
-      this.data.slice(0, this.used).++(that.data.slice(0, that.used)).toArray,
+      this.index.slice(0, this.used).++(that.index.slice(0, that.used).map(_ + this.size)),
+      this.data.slice(0, this.used).++(that.data.slice(0, that.used)),
       this.used + that.used,
       this.size + that.size,
       this.default
@@ -510,7 +510,7 @@ object SparseArray {
     rv
   }
 
-  def tabulate[@specialized(Int, Float, Double) T: ClassTag: Zero](length: Int)(fn: (Int => T)): SparseArray[T] = {
+  def tabulate[@specialized(Int, Float, Double) T: ClassTag: Zero](length: Int)(fn: Int => T): SparseArray[T] = {
     val rv = new SparseArray[T](length)
     var i = 0
     while (i < length) {

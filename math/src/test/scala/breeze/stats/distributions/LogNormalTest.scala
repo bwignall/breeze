@@ -65,13 +65,13 @@ class LogNormalTest
     ) yield new LogNormal(mean, std)
   }
 
-  def asDouble(x: Double) = x
+  def asDouble(x: Double): Double = x
 
-  def fromDouble(x: Double) = x
+  def fromDouble(x: Double): Double = x
 
   test("pdf should return the correct value") {
     val dist = LogNormal(0.0, 1.0)
-    assert(dist.pdf(1.0) == (1.0 / Math.sqrt(2 * Math.PI)));
+    assert(dist.pdf(1.0) == (1.0 / Math.sqrt(2 * Math.PI)))
   }
 
   test("the probability of non-positive numbers should be 0.0") {

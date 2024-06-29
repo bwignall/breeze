@@ -6,10 +6,6 @@ import breeze.math._
 import breeze.util.JavaArrayOps._
 import org.scalatest.funsuite.AnyFunSuite
 
-/**
- * @author ktakagaki
- * @date 03/31/2014.
- */
 class JavaArrayOpsTest extends AnyFunSuite {
 
   test("JavaOpts 1D conversions") {

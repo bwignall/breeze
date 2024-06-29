@@ -63,8 +63,8 @@ case class VonMises(mu: Double, k: Double)(implicit rand: RandBasis)
 
   override lazy val toString: String = "VonMises(mu=" + mu + ", k=" + k + ")"
 
-  def mean = mu
-  def mode = mean
+  def mean: Double = mu
+  def mode: Double = mean
   def variance: Double = 1 - Bessel.i1(k) / Bessel.i0(k)
   def entropy: Double = -k * Bessel.i1(k) / Bessel.i0(k) + math.log(2 * math.Pi * Bessel.i0(k))
 }
@@ -73,9 +73,9 @@ object VonMises extends ExponentialFamily[VonMises, Double] {
   type Parameter = (Double, Double)
   case class SufficientStatistic(n: Double, sines: Double, cosines: Double)
       extends breeze.stats.distributions.SufficientStatistic[SufficientStatistic] {
-    def +(t: SufficientStatistic) = new SufficientStatistic(n + t.n, sines + t.sines, cosines + t.cosines)
+    def +(t: SufficientStatistic) = SufficientStatistic(n + t.n, sines + t.sines, cosines + t.cosines)
 
-    def *(weight: Double) = SufficientStatistic(weight * n, weight * sines, weight * cosines)
+    def *(weight: Double): SufficientStatistic = SufficientStatistic(weight * n, weight * sines, weight * cosines)
   }
 
   def emptySufficientStatistic: SufficientStatistic = SufficientStatistic(0, 0, 0)
@@ -114,27 +114,23 @@ object VonMises extends ExponentialFamily[VonMises, Double] {
       else 1 / (t * (3 + t * (-4 + t)))
     }
     val result = minimize(lensed, DenseVector(mu, kx))
-    val res @ (a, b) = (result(0), result(1))
-    res
+    (result(0), result(1))
   }
 
-  def likelihoodFunction(stats: SufficientStatistic): DiffFunction[Parameter] = new DiffFunction[(Double, Double)] {
-    def calculate(x: (Double, Double)) = {
-      val DELTA = 1e-5
-      val (mu, k) = x
-      if (mu < 0 || mu > 2 * Pi || k < 0) (Double.PositiveInfinity, (0.0, 0.0))
-      else {
-        val (sinx, cosx) = (sin(mu), cos(mu))
-        val bessel_k = Bessel.i0(k)
-        val logprob = stats.n * math.log(bessel_k * 2 * Pi) - (stats.sines * sinx + stats.cosines * cosx) * k
-        val mugrad = -k * (stats.sines * cos(mu) - stats.cosines * sin(mu))
-        val kgrad = stats.n * (Bessel.i1(k) / bessel_k) - (stats.sines * sinx + stats.cosines * cosx)
+  def likelihoodFunction(stats: SufficientStatistic): DiffFunction[Parameter] = (x: (Double, Double)) => {
+    val (mu, k) = x
+    if (mu < 0 || mu > 2 * Pi || k < 0) (Double.PositiveInfinity, (0.0, 0.0))
+    else {
+      val (sinx, cosx) = (sin(mu), cos(mu))
+      val bessel_k = Bessel.i0(k)
+      val logprob = stats.n * math.log(bessel_k * 2 * Pi) - (stats.sines * sinx + stats.cosines * cosx) * k
+      val mugrad = -k * (stats.sines * cos(mu) - stats.cosines * sin(mu))
+      val kgrad = stats.n * (Bessel.i1(k) / bessel_k) - (stats.sines * sinx + stats.cosines * cosx)
 
-        (logprob, (mugrad, kgrad))
-
-      }
+      (logprob, (mugrad, kgrad))
 
     }
+
   }
   /*
 

@@ -36,7 +36,7 @@ class RandomizationTest[L](val numSamples: Int, val errorMeasure: Seq[L] => Doub
   def apply(labeling1: Seq[L], labeling2: Seq[L]): Double = {
     assume(labeling1.length == labeling2.length)
     // git rid of any overlapping labels
-    val lpairs = labeling1.iterator.zip(labeling2.iterator).filter(a => a._1 != a._2).toStream
+    val lpairs = labeling1.iterator.zip(labeling2.iterator).filter(a => a._1 != a._2).to(LazyList)
     val baseDiff = diff(lpairs.map(_._1), lpairs.map(_._2))
     var numBetter = 0
     for (i <- 1 to numSamples) {

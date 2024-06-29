@@ -14,7 +14,6 @@ package breeze.linalg
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import breeze.linalg.Counter2.Curried
 import breeze.linalg.operators.Counter2Ops
 import breeze.linalg.support.CanMapValues.DenseCanMapValues
 import breeze.linalg.support.CanTraverseKeyValuePairs.KeyValuePairsVisitor
@@ -23,8 +22,6 @@ import breeze.math.Semiring
 import breeze.storage.Zero
 
 import scala.collection.Set
-import scala.collection.compat._
-import scala.collection.immutable
 import scala.reflect.ClassTag
 
 import collection.mutable
@@ -45,7 +42,7 @@ trait Counter2Like[K1, K2, V, T <: Counter[K2, V], +This <: Counter2[K1, K2, V]]
 
   def default: V
 
-  override def size = {
+  override def size: Int = {
     var s = 0
     for (m <- data.valuesIterator) {
       s += m.size
@@ -53,36 +50,37 @@ trait Counter2Like[K1, K2, V, T <: Counter[K2, V], +This <: Counter2[K1, K2, V]]
     s
   }
 
-  def apply(i: (K1, K2)) = apply(i._1, i._2)
+  def apply(i: (K1, K2)): V = apply(i._1, i._2)
 
-  def apply(k: K1, k2: K2) = data.get(k).map(t => t(k2)).getOrElse(default)
+  def apply(k: K1, k2: K2): V = data.get(k).map(t => t(k2)).getOrElse(default)
 
-  def contains(k: K1) = data.contains(k)
+  def contains(k: K1): Boolean = data.contains(k)
 
-  def contains(k1: K1, k2: K2) = data.contains(k1) && data(k1).contains(k2)
+  def contains(k1: K1, k2: K2): Boolean = data.contains(k1) && data(k1).contains(k2)
 
   def update(i: (K1, K2), v: V): Unit = { update(i._1, i._2, v) }
 
-  def update(k1: K1, k2: K2, v: V) =
+  def update(k1: K1, k2: K2, v: V): Unit =
     innerGetOrElseUpdate(k1, data)(k2) = v
 
   private[linalg] def innerGetOrElseUpdate[M](k: K1, m: scala.collection.mutable.Map[K1, M]): M = {
     m.getOrElseUpdate(k, m.default(k))
   }
 
-  override def keysIterator = for ((k1, m) <- data.iterator; k2 <- m.keysIterator) yield (k1, k2)
+  override def keysIterator: Iterator[(K1, K2)] = for ((k1, m) <- data.iterator; k2 <- m.keysIterator) yield (k1, k2)
 
-  override def valuesIterator = for (m <- data.valuesIterator; v <- m.valuesIterator) yield v
+  override def valuesIterator: Iterator[V] = for (m <- data.valuesIterator; v <- m.valuesIterator) yield v
 
-  override def iterator = for ((k1, m) <- data.iterator; (k2, v) <- m.iterator) yield (k1, k2) -> v
+  override def iterator: Iterator[((K1, K2), V)] = for ((k1, m) <- data.iterator; (k2, v) <- m.iterator)
+    yield (k1, k2) -> v
 
-  def activeSize = size
+  def activeSize: Int = size
 
-  def activeIterator = iterator
-  def activeKeysIterator = keysIterator
-  def activeValuesIterator = valuesIterator
+  def activeIterator: Iterator[((K1, K2), V)] = iterator
+  def activeKeysIterator: Iterator[(K1, K2)] = keysIterator
+  def activeValuesIterator: Iterator[V] = valuesIterator
 
-  def repr = this.asInstanceOf[This]
+  def repr: This = this.asInstanceOf[This]
 
   override def toString: String = {
     data.iterator.map { case (k1, c) => s"$k1 -> ${c.toString}" }.mkString("Counter2(", ",\n", ")")
@@ -104,7 +102,7 @@ object Counter2 extends LowPriorityCounter2 with Counter2Ops {
   class Impl[K1, K2, V](override val data: scala.collection.mutable.Map[K1, Counter[K2, V]])(implicit scalar: Zero[V])
       extends Counter2[K1, K2, V]
       with Serializable {
-    def default = scalar.zero
+    def default: V = scalar.zero
 
     def keySet: Set[(K1, K2)] = new Counter2KeySet(data)
   }
@@ -116,7 +114,7 @@ object Counter2 extends LowPriorityCounter2 with Counter2Ops {
 
   @SerialVersionUID(1L)
   private class CounterHashMap[K1, K2, V: Zero] extends HashMap[K1, Counter[K2, V]] with Serializable {
-    override def default(k: K1) = Counter[K2, V]()
+    override def default(k: K1): Counter[K2, V] = Counter[K2, V]()
   }
 
   /** Aggregates the counts in the given items. */
@@ -124,14 +122,14 @@ object Counter2 extends LowPriorityCounter2 with Counter2Ops {
     apply(values.iterator)
 
   /** Aggregates the counts in the given items. */
-  def apply[K1, K2, V: Semiring: Zero](values: TraversableOnce[(K1, K2, V)]): Counter2[K1, K2, V] = {
+  def apply[K1, K2, V: Semiring: Zero](values: IterableOnce[(K1, K2, V)]): Counter2[K1, K2, V] = {
     val rv = apply[K1, K2, V]()
     values.iterator.foreach { case (k1, k2, v) => rv(k1, k2) = implicitly[Semiring[V]].+(rv(k1, k2), v) }
     rv
   }
 
   /** Counts the given elements. */
-  def count[K1, K2](values: TraversableOnce[(K1, K2)]): Counter2[K1, K2, Int] = {
+  def count[K1, K2](values: IterableOnce[(K1, K2)]): Counter2[K1, K2, Int] = {
     val rv = apply[K1, K2, Int]()
     values.iterator.foreach { case (k1, k2) => rv(k1, k2) += 1; }
     rv
@@ -140,7 +138,7 @@ object Counter2 extends LowPriorityCounter2 with Counter2Ops {
   implicit def CanMapValuesCounter[K1, K2, V, RV: Semiring: Zero]
     : CanMapValues[Counter2[K1, K2, V], V, RV, Counter2[K1, K2, RV]] = {
     new DenseCanMapValues[Counter2[K1, K2, V], V, RV, Counter2[K1, K2, RV]] {
-      override def map(from: Counter2[K1, K2, V], fn: (V => RV)) = {
+      override def map(from: Counter2[K1, K2, V], fn: V => RV): Counter2[K1, K2, RV] = {
         val rv = Counter2[K1, K2, RV]()
         for ((k, v) <- from.iterator) {
           rv(k) = fn(v)
@@ -180,19 +178,15 @@ object Counter2 extends LowPriorityCounter2 with Counter2Ops {
   // slicing
 
   implicit def canSliceRow[K1, K2, V]: CanSlice2[Counter2[K1, K2, V], K1, ::.type, Counter[K2, V]] =
-    new CanSlice2[Counter2[K1, K2, V], K1, ::.type, Counter[K2, V]] {
-      override def apply(from: Counter2[K1, K2, V], row: K1, unused: ::.type) =
-        from.innerGetOrElseUpdate(row, from.data)
-    }
+    (from: Counter2[K1, K2, V], row: K1, unused: ::.type) => from.innerGetOrElseUpdate(row, from.data)
 
   implicit def canSliceCol[K1, K2, V]: CanSlice2[Counter2[K1, K2, V], ::.type, K2, Counter[K1, V]] =
-    new CanSlice2[Counter2[K1, K2, V], ::.type, K2, Counter[K1, V]] {
-      def apply(from: Counter2[K1, K2, V], x: ::.type, col: K2) = new Counter[K1, V] {
-        def default = from.default
+    (from: Counter2[K1, K2, V], x: ::.type, col: K2) =>
+      new Counter[K1, V] {
+        def default: V = from.default
 
         override val data = new Counter2ProjectionMap(from, col)
       }
-    }
 
   /**
    * Returns a Counter[K2, V]
@@ -203,7 +197,7 @@ object Counter2 extends LowPriorityCounter2 with Counter2Ops {
     : CanCollapseAxis[Counter2[K1, K2, V], Axis._0.type, Counter[K1, V], Counter[K1, R], Counter2[K1, K2, R]] = {
     new CanCollapseAxis[Counter2[K1, K2, V], Axis._0.type, Counter[K1, V], Counter[K1, R], Counter2[K1, K2, R]] {
       def apply(from: Counter2[K1, K2, V], axis: Axis._0.type)(
-        f: (Counter[K1, V]) => Counter[K1, R]
+        f: Counter[K1, V] => Counter[K1, R]
       ): Counter2[K1, K2, R] = {
         val result = Counter2[K1, K2, R]()
         for (dom <- from.keySet.map(_._2)) {
@@ -228,7 +222,7 @@ object Counter2 extends LowPriorityCounter2 with Counter2Ops {
     : CanCollapseAxis[Counter2[K1, K2, V], Axis._1.type, Counter[K2, V], Counter[K2, R], Counter2[K1, K2, R]] =
     new CanCollapseAxis[Counter2[K1, K2, V], Axis._1.type, Counter[K2, V], Counter[K2, R], Counter2[K1, K2, R]] {
       def apply(from: Counter2[K1, K2, V], axis: Axis._1.type)(
-        f: (Counter[K2, V]) => Counter[K2, R]
+        f: Counter[K2, V] => Counter[K2, R]
       ): Counter2[K1, K2, R] = {
         val result = Counter2[K1, K2, R]()
         for ((dom, c) <- from.data) {
@@ -265,7 +259,7 @@ trait LowPriorityCounter2 {
   implicit def canCollapseRows[K1, K2, V, R: ClassTag: Zero: Semiring]
     : CanCollapseAxis[Counter2[K1, K2, V], Axis._0.type, Counter[K1, V], R, Counter[K2, R]] =
     new CanCollapseAxis[Counter2[K1, K2, V], Axis._0.type, Counter[K1, V], R, Counter[K2, R]] {
-      def apply(from: Counter2[K1, K2, V], axis: Axis._0.type)(f: (Counter[K1, V]) => R): Counter[K2, R] = {
+      def apply(from: Counter2[K1, K2, V], axis: Axis._0.type)(f: Counter[K1, V] => R): Counter[K2, R] = {
         val result = Counter[K2, R]()
         for (dom <- from.keySet.map(_._2)) {
           result(dom) = f(from(::, dom))
@@ -283,7 +277,7 @@ trait LowPriorityCounter2 {
   implicit def canCollapseCols[K1, K2, V, R: ClassTag: Zero: Semiring]
     : CanCollapseAxis[Counter2[K1, K2, V], Axis._1.type, Counter[K2, V], R, Counter[K1, R]] =
     new CanCollapseAxis[Counter2[K1, K2, V], Axis._1.type, Counter[K2, V], R, Counter[K1, R]] {
-      def apply(from: Counter2[K1, K2, V], axis: Axis._1.type)(f: (Counter[K2, V]) => R): Counter[K1, R] = {
+      def apply(from: Counter2[K1, K2, V], axis: Axis._1.type)(f: Counter[K2, V] => R): Counter[K1, R] = {
         val result = Counter[K1, R]()
         for ((dom, c) <- from.data) {
           result(dom) = f(c)

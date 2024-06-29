@@ -64,9 +64,9 @@ class SparseVector[@spec(Double, Int, Float, Long) V](val array: SparseArray[V])
 
   def data: Array[V] = array.data
   def index: Array[Int] = array.index
-  def activeSize = array.activeSize
-  def used = activeSize
-  def length = array.length
+  def activeSize: Int = array.activeSize
+  def used: Int = activeSize
+  def length: Int = array.length
 
   def repr: SparseVector[V] = this
 
@@ -101,14 +101,14 @@ class SparseVector[@spec(Double, Int, Float, Long) V](val array: SparseArray[V])
     case x: SparseVector[_] => this.array == x.array
     case x: Vector[_] =>
       this.length == x.length &&
-      (valuesIterator.sameElements(x.valuesIterator))
+      valuesIterator.sameElements(x.valuesIterator)
     case _ => false
   }
 
   /**
    * This hashcode is consistent with over [[breeze.linalg.Vector]] hashcodes so long as the hashcode of "0" is 0.
    **/
-  override def hashCode = array.hashCode
+  override def hashCode(): Int = array.hashCode
 
   def isActive(rawIndex: Int): Boolean = array.isActive(rawIndex)
 
@@ -254,7 +254,7 @@ object SparseVector {
     new CanMapValues[SparseVector[V], V, V2, SparseVector[V2]] {
 
       /**Maps all key-value pairs from the given collection. */
-      override def map(from: SparseVector[V], fn: (V) => V2): SparseVector[V2] = {
+      override def map(from: SparseVector[V], fn: V => V2): SparseVector[V2] = {
         SparseVector.tabulate(from.length)(i => fn(from(i)))
       }
 
@@ -285,28 +285,25 @@ object SparseVector {
     }
   }
 
-  implicit def canCreateZeros[V: ClassTag: Zero]: CanCreateZeros[SparseVector[V], Int] = {
-    new CanCreateZeros[SparseVector[V], Int] {
-      def apply(d: Int): SparseVector[V] = {
-        zeros[V](d)
-      }
+  implicit def canCreateZeros[V: ClassTag: Zero]: CanCreateZeros[SparseVector[V], Int] = { (d: Int) =>
+    {
+      zeros[V](d)
     }
   }
 
   implicit def canCreateZerosLike[V: ClassTag: Zero]: CanCreateZerosLike[SparseVector[V], SparseVector[V]] = {
-    new CanCreateZerosLike[SparseVector[V], SparseVector[V]] {
-      def apply(d: SparseVector[V]): SparseVector[V] = {
+    (d: SparseVector[V]) =>
+      {
         zeros[V](d.length)
       }
-    }
   }
 
   implicit def canTransformValues[V: Zero: ClassTag]: CanTransformValues[SparseVector[V], V] = {
     new CanTransformValues[SparseVector[V], V] {
-      val z = implicitly[Zero[V]]
+      val z: Zero[V] = implicitly[Zero[V]]
 
       /**Transforms all key-value pairs from the given collection. */
-      def transform(from: SparseVector[V], fn: (V) => V): Unit = {
+      def transform(from: SparseVector[V], fn: V => V): Unit = {
         val newData = mutable.ArrayBuilder.make[V]
         val newIndex = mutable.ArrayBuilder.make[Int]
         var used = 0
@@ -324,7 +321,7 @@ object SparseVector {
       }
 
       /**Transforms all active key-value pairs from the given collection. */
-      def transformActive(from: SparseVector[V], fn: (V) => V): Unit = {
+      def transformActive(from: SparseVector[V], fn: V => V): Unit = {
         var i = 0
         while (i < from.activeSize) {
           from.data(i) = fn(from.data(i))
@@ -371,9 +368,7 @@ object SparseVector {
 //    }
 //  }
 
-  implicit def canDim[E]: dim.Impl[SparseVector[E], Int] = new dim.Impl[SparseVector[E], Int] {
-    def apply(v: SparseVector[E]): Int = v.size
-  }
+  implicit def canDim[E]: dim.Impl[SparseVector[E], Int] = (v: SparseVector[E]) => v.size
 
   implicit def space[E: Field: ClassTag: Zero]: MutableFiniteCoordinateField[SparseVector[E], Int, E] = {
     MutableFiniteCoordinateField.make[SparseVector[E], Int, E]
@@ -382,5 +377,5 @@ object SparseVector {
   implicit def scalarOf[T]: ScalarOf[SparseVector[T], T] = ScalarOf.dummy
 
   @noinline
-  private def init() = {}
+  private def init(): Unit = {}
 }

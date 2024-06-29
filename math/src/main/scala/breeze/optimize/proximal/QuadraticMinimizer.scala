@@ -74,14 +74,14 @@ class QuadraticMinimizer(nGram: Int,
                                                 converged: Boolean
   ) {}
 
-  val linearEquality = if (Aeq != null) Aeq.rows else 0
+  val linearEquality: Int = if (Aeq != null) Aeq.rows else 0
 
   if (linearEquality > 0)
     require(beq.length == linearEquality, s"QuadraticMinimizer linear equalities should match beq vector")
 
-  val n = nGram + linearEquality
-  val full = n * n
-  val upperSize = nGram * (nGram + 1) / 2
+  val n: Int = nGram + linearEquality
+  val full: Int = n * n
+  val upperSize: Int = nGram * (nGram + 1) / 2
 
   /**
    * wsH is the workspace for gram matrix / quasi definite system based on the problem definition
@@ -115,13 +115,13 @@ class QuadraticMinimizer(nGram: Int,
    */
   private val wsH = DenseMatrix.zeros[Double](n, n)
 
-  val transAeq = if (linearEquality > 0) Aeq.t else null
+  val transAeq: DenseMatrix[Double] = if (linearEquality > 0) Aeq.t else null
 
-  val admmIters = if (maxIters < 0) Math.max(400, 20 * n) else maxIters
+  val admmIters: Int = if (maxIters < 0) Math.max(400, 20 * n) else maxIters
 
-  def getProximal = proximal
+  def getProximal: Proximal = proximal
 
-  private def updateQuasiDefinite = {
+  private def updateQuasiDefinite() = {
     if (linearEquality > 0) {
       wsH(nGram until (nGram + Aeq.rows), 0 until Aeq.cols) := Aeq
       wsH(0 until nGram, nGram until (nGram + Aeq.rows)) := transAeq
@@ -137,7 +137,7 @@ class QuadraticMinimizer(nGram: Int,
    */
   def updateGram(H: DenseMatrix[Double]): Unit = {
     wsH(0 until nGram, 0 until nGram) := H
-    updateQuasiDefinite
+    updateQuasiDefinite()
   }
 
   /**
@@ -162,7 +162,7 @@ class QuadraticMinimizer(nGram: Int,
       }
       i += 1
     }
-    updateQuasiDefinite
+    updateQuasiDefinite()
   }
 
   /**
@@ -171,7 +171,7 @@ class QuadraticMinimizer(nGram: Int,
    *
    * @return the state for the optimizer
    */
-  def initialize = {
+  def initialize: State = {
     var pivot: Array[Int] = null
     // Allocate memory for pivot
     if (linearEquality > 0) pivot = Array.fill[Int](n)(0)
@@ -183,7 +183,7 @@ class QuadraticMinimizer(nGram: Int,
     val scale = DenseVector.zeros[Double](n)
 
     if (proximal == null) {
-      State(x, u, z, scale, null, pivot, null, null, null, null, 0, false)
+      State(x, u, z, scale, null, pivot, null, null, null, null, 0, converged = false)
     } else {
       val xHat = DenseVector.zeros[Double](nGram)
       val zOld = DenseVector.zeros[Double](nGram)
@@ -191,7 +191,7 @@ class QuadraticMinimizer(nGram: Int,
       val residual = DenseVector.zeros[Double](nGram)
       val s = DenseVector.zeros[Double](nGram)
 
-      State(x, u, z, scale, null, pivot, xHat, zOld, residual, s, 0, false)
+      State(x, u, z, scale, null, pivot, xHat, zOld, residual, s, 0, converged = false)
     }
   }
 
@@ -219,10 +219,10 @@ class QuadraticMinimizer(nGram: Int,
     u := 0.0
     z := 0.0
 
-    State(x, u, z, scale, wsH, pivot, xHat, zOld, residual, s, 0, false)
+    State(x, u, z, scale, wsH, pivot, xHat, zOld, residual, s, 0, converged = false)
   }
 
-  private def updatePrimal(q: BDV, x: BDV, u: BDV, z: BDV, scale: BDV, rho: Double, R: BDM, pivot: Array[Int]) = {
+  private def updatePrimal(q: BDV, x: BDV, u: BDV, z: BDV, scale: BDV, rho: Double, R: BDM, pivot: Array[Int]): Unit = {
     // scale = rho*(z - u) - q
     cforRange(0 until z.length) { i =>
       val entryScale = rho * (z(i) - u(i)) - q(i)
@@ -273,7 +273,7 @@ class QuadraticMinimizer(nGram: Int,
     if (proximal == null) {
       updatePrimal(q, x, u, z, scale, rho, R, pivot)
       z := x
-      return State(x, u, z, scale, R, pivot, xHat, zOld, residual, s, 1, true)
+      return State(x, u, z, scale, R, pivot, xHat, zOld, residual, s, 1, converged = true)
     }
 
     // scale will hold q + linearEqualities
@@ -334,11 +334,11 @@ class QuadraticMinimizer(nGram: Int,
       val epsDual = convergenceScale * abstol + reltol * norm(s, 2)
 
       if (residualNorm < epsPrimal && sNorm < epsDual) {
-        return State(x, u, z, scale, R, pivot, xHat, zOld, residual, s, nextIter, true)
+        return State(x, u, z, scale, R, pivot, xHat, zOld, residual, s, nextIter, converged = true)
       }
       nextIter += 1
     }
-    State(x, u, z, scale, R, pivot, xHat, zOld, residual, s, nextIter, false)
+    State(x, u, z, scale, R, pivot, xHat, zOld, residual, s, nextIter, converged = false)
   }
 
   private def computeRhoSparse(H: DenseMatrix[Double]): Double = {
@@ -554,12 +554,15 @@ object QuadraticMinimizer {
   }
 
   case class Cost(H: DenseMatrix[Double], q: DenseVector[Double]) extends DiffFunction[DenseVector[Double]] {
-    def calculate(x: DenseVector[Double]) = {
+    def calculate(x: DenseVector[Double]): (Double, DenseVector[Double]) = {
       (computeObjective(H, q, x), H * x + q)
     }
   }
 
-  def optimizeWithLBFGS(init: DenseVector[Double], H: DenseMatrix[Double], q: DenseVector[Double]) = {
+  def optimizeWithLBFGS(init: DenseVector[Double],
+                        H: DenseMatrix[Double],
+                        q: DenseVector[Double]
+  ): DenseVector[Double] = {
     val lbfgs = new LBFGS[DenseVector[Double]](-1, 7)
     val state = lbfgs.minimizeAndReturnState(Cost(H, q), init)
     state.x

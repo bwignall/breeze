@@ -56,8 +56,8 @@ class OpenAddressHashArrayTest extends AnyFunSuite with Checkers {
             if (i != 0)
               arr2(i) = i
           }
-          (arr == arr.copy && arr.hashCode == arr.copy.hashCode
-          && arr2 == arr && arr2.copy.hashCode == arr.copy.hashCode)
+          arr == arr.copy && arr.hashCode == arr.copy.hashCode
+          && arr2 == arr && arr2.copy.hashCode == arr.copy.hashCode
         }
       )
     }

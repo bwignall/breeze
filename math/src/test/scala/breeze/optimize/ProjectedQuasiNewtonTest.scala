@@ -21,7 +21,6 @@ import breeze.optimize.proximal.NonlinearMinimizer.Projection
 import breeze.optimize.proximal.ProjectL1
 import breeze.optimize.proximal.QuadraticMinimizer
 import org.scalatest._
-import org.scalatest.funsuite._
 import org.scalatest.propspec._
 import org.scalatestplus.scalacheck._
 
@@ -37,7 +36,7 @@ class ProjectedQuasiNewtonTest
     val optimizer = new ProjectedQuasiNewton(tolerance = 1.0e-9)
     forAll { (init: DenseVector[Double]) =>
       val f = new DiffFunction[DenseVector[Double]] {
-        def calculate(x: DenseVector[Double]) = {
+        def calculate(x: DenseVector[Double]): (Double, DenseVector[Double]) = {
           (sum((x - 3.0) ^:^ 2.0), (x * 2.0) - 6.0)
         }
       }
@@ -53,7 +52,7 @@ class ProjectedQuasiNewtonTest
     forAll { (init: DenseVector[Double]) =>
       init := clip(init, Double.NegativeInfinity, 2.0)
       val f = new DiffFunction[DenseVector[Double]] {
-        def calculate(x: DenseVector[Double]) = {
+        def calculate(x: DenseVector[Double]): (Double, DenseVector[Double]) = {
           (sum((x - 3.0) ^:^ 4.0), ((x - 3.0) ^:^ 3.0) *:* 4.0)
         }
       }
@@ -68,7 +67,7 @@ class ProjectedQuasiNewtonTest
 
     forAll { (init: DenseVector[Double]) =>
       val f = new DiffFunction[DenseVector[Double]] {
-        def calculate(x: DenseVector[Double]) = {
+        def calculate(x: DenseVector[Double]): (Double, DenseVector[Double]) = {
           (norm((x - 3.0) ^:^ 2.0, 1), (x * 2.0) - 6.0)
         }
       }
@@ -87,7 +86,7 @@ class ProjectedQuasiNewtonTest
     forAll { (a: DenseVector[Double]) =>
       val init = DenseVector.rand(a.size)
       val f = new DiffFunction[DenseVector[Double]] {
-        def calculate(x: DenseVector[Double]) = {
+        def calculate(x: DenseVector[Double]): (Double, DenseVector[Double]) = {
           (sum(exp((x ^:^ 2.0) -:- (a *:* x))), (x * 2.0 -:- a) *:* exp((x ^:^ 2.0) -:- (a *:* x)))
         }
       }

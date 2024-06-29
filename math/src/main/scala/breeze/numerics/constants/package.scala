@@ -11,14 +11,14 @@ package object constants {
   /** ALIAS FOR [[scala.math.Pi]].
    * @see <a href="http://en.wikipedia.org/wiki/Pi">http://en.wikipedia.org/wiki/Pi</a>
    */
-  lazy val Pi = scala.math.Pi
+  lazy val Pi: Double = scala.math.Pi
 
-  lazy val π = Pi
+  lazy val π: Double = Pi
 
   /** ALIAS FOR [[scala.math.E]].
    * @see <a href="http://en.wikipedia.org/wiki/%E2%84%AF">http://en.wikipedia.org/wiki/%E2%84%AF</a>
    */
-  lazy val E = scala.math.E
+  lazy val E: Double = scala.math.E
 
   /** (1 + sqrt(5))/2
    * @see <a href="http://en.wikipedia.org/wiki/Golden_ratio">http://en.wikipedia.org/wiki/Golden_ratio</a>
@@ -31,7 +31,7 @@ package object constants {
    */
   lazy val eulerMascheroni = 0.5772156649015328606065120900824024310421
 
-  lazy val γ = eulerMascheroni
+  lazy val γ: Double = eulerMascheroni
 
   // </editor-fold>
 
@@ -80,7 +80,7 @@ package object constants {
 
   /** ALIAS FOR [[StandardAccelerationOfGravity]]
    */
-  val g = StandardAccelerationOfGravity
+  val g: Double = StandardAccelerationOfGravity
 
   // </editor-fold>
 
@@ -93,7 +93,7 @@ package object constants {
 
   /** ALIAS FOR [[AvogadroNumber]]
    */
-  lazy val NA = AvogadroNumber
+  lazy val NA: Double = AvogadroNumber
 
   /** [J /mol /K]
    * @see <a href="http://physics.nist.gov/cgi-bin/cuu/Value?r">http://physics.nist.gov/cgi-bin/cuu/Value?r</a>
@@ -111,7 +111,7 @@ package object constants {
 
   /** ALIAS FOR [[BoltzmannConstant]]
    */
-  lazy val k = BoltzmannConstant
+  lazy val k: Double = BoltzmannConstant
 
   // </editor-fold>
 
@@ -123,7 +123,7 @@ package object constants {
 
   /** ALIAS FOR [[LightSpeed]]
    */
-  lazy val c = LightSpeed
+  lazy val c: Double = LightSpeed
 
   /** [J * s]
    * @see <a href="http://physics.nist.gov/cgi-bin/cuu/Value?h">http://physics.nist.gov/cgi-bin/cuu/Value?h</a>
@@ -132,7 +132,7 @@ package object constants {
 
   /** ALIAS FOR [[PlanckConstant]]
    */
-  lazy val h = PlanckConstant
+  lazy val h: Double = PlanckConstant
 
   /** ALIAS FOR [[PlanckConstant]]/(2Pi)
    */
@@ -145,7 +145,7 @@ package object constants {
 
   /** ALIAS FOR [[ElementaryCharge]]
    */
-  lazy val e = ElementaryCharge
+  lazy val e: Double = ElementaryCharge
 
   /** [kg]
    * @see <a href="http://physics.nist.gov/cgi-bin/cuu/Value?me">http://physics.nist.gov/cgi-bin/cuu/Value?me</a>
@@ -174,7 +174,7 @@ package object constants {
 
   /** ALIAS FOR [[WienDisplacementLawConstant]]
    */
-  lazy val Wien = WienDisplacementLawConstant
+  lazy val Wien: Double = WienDisplacementLawConstant
 
   /** [W /m2 /K4]
    * @see <a href="http://physics.nist.gov/cgi-bin/cuu/Value?sigma">http://physics.nist.gov/cgi-bin/cuu/Value?sigma</a>
@@ -183,7 +183,7 @@ package object constants {
 
   /** ALIAS FOR [[StefanBoltzmannConstant]]
    */
-  lazy val sigma = StefanBoltzmannConstant
+  lazy val sigma: Double = StefanBoltzmannConstant
 
   // </editor-fold>
 

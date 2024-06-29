@@ -3,10 +3,6 @@ package breeze.signal
 import breeze.linalg.DenseVector
 import org.scalatest.funsuite.AnyFunSuite
 
-/**
- * @author ktakagaki
- * @date 2/18/14.
- */
 class rootMeanSquareTest extends AnyFunSuite {
 
   test("rootMeanSquare Double") {

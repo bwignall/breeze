@@ -16,26 +16,20 @@ trait TransposeOps extends TransposeOps_Generic with TransposeOps_Complex with C
 
 trait TransposeOps_Generic extends TransposeOps_LowPrio {
 
-  implicit def canUntranspose[T]: CanTranspose[Transpose[T], T] = {
-    new CanTranspose[Transpose[T], T] {
-      def apply(from: Transpose[T]): T = from.inner
-    }
+  implicit def canUntranspose[T]: CanTranspose[Transpose[T], T] = { (from: Transpose[T]) =>
+    from.inner
   }
 
   implicit def transTimesNormalFromDot[T, U, R](implicit
     dot: OpMulInner.Impl2[T, U, R]
-  ): OpMulMatrix.Impl2[Transpose[T], U, R] = {
-    new OpMulMatrix.Impl2[Transpose[T], U, R] {
-      def apply(v: Transpose[T], v2: U): R = {
-        dot(v.inner, v2)
-      }
+  ): OpMulMatrix.Impl2[Transpose[T], U, R] = { (v: Transpose[T], v2: U) =>
+    {
+      dot(v.inner, v2)
     }
   }
 
-  implicit def transposeTensor[K, V, T](implicit ev: T <:< Tensor[K, V]): CanTranspose[T, Transpose[T]] = {
-    new CanTranspose[T, Transpose[T]] {
-      def apply(from: T): Transpose[T] = new Transpose(from)
-    }
+  implicit def transposeTensor[K, V, T](implicit ev: T <:< Tensor[K, V]): CanTranspose[T, Transpose[T]] = { (from: T) =>
+    Transpose(from)
   }
 
 }
@@ -46,21 +40,17 @@ trait TransposeOps_LowPrio extends TransposeOps_LowPrio2 {
     transT: CanTranspose[T, TT],
     op: OpMulMatrix.Impl2[TT, U, R],
     canTranspose: CanTranspose[R, RT]
-  ): OpMulMatrix.Impl2[Transpose[U], T, RT] = {
-    new OpMulMatrix.Impl2[Transpose[U], T, RT] {
-      def apply(v: Transpose[U], v2: T): RT = canTranspose(op(transT(v2), v.inner))
-    }
+  ): OpMulMatrix.Impl2[Transpose[U], T, RT] = { (v: Transpose[U], v2: T) =>
+    canTranspose(op(transT(v2), v.inner))
   }
 
   implicit def impl_Op_Tt_S_eq_RT_from_T_S[Op, K, V, T, R, RT](implicit
     ev: ScalarOf[T, V],
     op: UFunc.UImpl2[Op, T, V, R],
     canTranspose: CanTranspose[R, RT]
-  ): UFunc.UImpl2[Op, Transpose[T], V, RT] = {
-    new UFunc.UImpl2[Op, Transpose[T], V, RT] {
-      def apply(a: Transpose[T], b: V) = {
-        canTranspose(op(a.inner, b))
-      }
+  ): UFunc.UImpl2[Op, Transpose[T], V, RT] = { (a: Transpose[T], b: V) =>
+    {
+      canTranspose(op(a.inner, b))
     }
 
   }
@@ -68,11 +58,9 @@ trait TransposeOps_LowPrio extends TransposeOps_LowPrio2 {
   implicit def impl_Op_InPlace_Tt_S_from_T_S[Op, K, V, T](implicit
     ev: ScalarOf[T, V],
     op: UFunc.InPlaceImpl2[Op, T, V]
-  ): UFunc.InPlaceImpl2[Op, Transpose[T], V] = {
-    new UFunc.InPlaceImpl2[Op, Transpose[T], V] {
-      def apply(a: Transpose[T], b: V): Unit = {
-        op(a.inner, b)
-      }
+  ): UFunc.InPlaceImpl2[Op, Transpose[T], V] = { (a: Transpose[T], b: V) =>
+    {
+      op(a.inner, b)
     }
   }
 
@@ -82,11 +70,9 @@ trait TransposeOps_LowPrio2 extends GenericOps {
   implicit def impl_EOp_Tt_Ut_eq_Rt_from_T_U[Op <: ElementwiseUFunc, T, U, R, RT](implicit
     op: UFunc.UImpl2[Op, T, U, R],
     canTranspose: CanTranspose[R, RT]
-  ): UFunc.UImpl2[Op, Transpose[T], Transpose[U], RT] = {
-    new UFunc.UImpl2[Op, Transpose[T], Transpose[U], RT] {
-      def apply(a: Transpose[T], b: Transpose[U]) = {
-        canTranspose(op(a.inner, b.inner))
-      }
+  ): UFunc.UImpl2[Op, Transpose[T], Transpose[U], RT] = { (a: Transpose[T], b: Transpose[U]) =>
+    {
+      canTranspose(op(a.inner, b.inner))
     }
 
   }
@@ -95,11 +81,9 @@ trait TransposeOps_LowPrio2 extends GenericOps {
     notScalar: NotGiven[ScalarOf[T, U]],
     transU: CanTranspose[U, UT],
     op: UFunc.InPlaceImpl2[Op, T, UT]
-  ): UFunc.InPlaceImpl2[Op, Transpose[T], U] = {
-    new UFunc.InPlaceImpl2[Op, Transpose[T], U] {
-      def apply(a: Transpose[T], b: U): Unit = {
-        op(a.inner, transU(b))
-      }
+  ): UFunc.InPlaceImpl2[Op, Transpose[T], U] = { (a: Transpose[T], b: U) =>
+    {
+      op(a.inner, transU(b))
     }
 
   }
@@ -112,29 +96,23 @@ trait TransposeOps_LowPrio2 extends GenericOps {
   implicit def liftSlice[Op, T, S, U, UT](implicit
     op: CanSlice[T, S, U],
     trans: CanTranspose[U, UT]
-  ): CanSlice[Transpose[T], S, UT] = {
-    new CanSlice[Transpose[T], S, UT] {
-      override def apply(from: Transpose[T], slice: S): UT = {
-        op(from.inner, slice).t
-      }
+  ): CanSlice[Transpose[T], S, UT] = { (from: Transpose[T], slice: S) =>
+    {
+      op(from.inner, slice).t
     }
   }
 
   implicit def liftUFunc[Op, T, U, UT](implicit
     op: UFunc.UImpl[Op, T, U],
     trans: CanTranspose[U, UT]
-  ): UFunc.UImpl[Op, Transpose[T], UT] = {
-    new UFunc.UImpl[Op, Transpose[T], UT] {
-      override def apply(v: Transpose[T]): UT = trans(op(v.inner))
-    }
+  ): UFunc.UImpl[Op, Transpose[T], UT] = { (v: Transpose[T]) =>
+    trans(op(v.inner))
   }
 
   implicit def impl_Op_InPlace_Tt_from_Op_T[Op, T, U](implicit
     op: UFunc.InPlaceImpl[Op, T]
-  ): UFunc.InPlaceImpl[Op, Transpose[T]] = {
-    new UFunc.InPlaceImpl[Op, Transpose[T]] {
-      override def apply(v: Transpose[T]) = op(v.inner)
-    }
+  ): UFunc.InPlaceImpl[Op, Transpose[T]] = { (v: Transpose[T]) =>
+    op(v.inner)
   }
 
   implicit def liftUFunc3_1[Op <: ElementwiseUFunc, T, T2, U2, T3, U3, R, RT](implicit
@@ -142,12 +120,9 @@ trait TransposeOps_LowPrio2 extends GenericOps {
     t3Trans: CanTranspose[T3, U3],
     op: UFunc.UImpl3[Op, T, U2, U3, R],
     transR: CanTranspose[R, RT]
-  ): UFunc.UImpl3[Op, Transpose[T], T2, T3, RT] = {
-    new UFunc.UImpl3[Op, Transpose[T], T2, T3, RT] {
-
-      override def apply(v: Transpose[T], v2: T2, v3: T3): RT = {
-        transR(op(v.inner, t2Trans(v2), t3Trans(v3)))
-      }
+  ): UFunc.UImpl3[Op, Transpose[T], T2, T3, RT] = { (v: Transpose[T], v2: T2, v3: T3) =>
+    {
+      transR(op(v.inner, t2Trans(v2), t3Trans(v3)))
     }
   }
 
@@ -155,12 +130,9 @@ trait TransposeOps_LowPrio2 extends GenericOps {
     t2Trans: CanTranspose[T2, U2],
     t3Trans: CanTranspose[T3, U3],
     op: UFunc.InPlaceImpl3[Op, T, U2, U3]
-  ): UFunc.InPlaceImpl3[Op, Transpose[T], T2, T3] = {
-    new UFunc.InPlaceImpl3[Op, Transpose[T], T2, T3] {
-
-      override def apply(v: Transpose[T], v2: T2, v3: T3): Unit = {
-        op(v.inner, t2Trans(v2), t3Trans(v3))
-      }
+  ): UFunc.InPlaceImpl3[Op, Transpose[T], T2, T3] = { (v: Transpose[T], v2: T2, v3: T3) =>
+    {
+      op(v.inner, t2Trans(v2), t3Trans(v3))
     }
   }
 
@@ -169,21 +141,22 @@ trait TransposeOps_LowPrio2 extends GenericOps {
 trait TransposeOps_Complex extends TransposeOps_Generic with DenseMatrix_TransposeOps {
 
   implicit def canTranspose_DV_Complex: CanTranspose[DenseVector[Complex], DenseMatrix[Complex]] = {
-    new CanTranspose[DenseVector[Complex], DenseMatrix[Complex]] {
-      def apply(from: DenseVector[Complex]): DenseMatrix[Complex] = {
-        new DenseMatrix(data = from.data.map { _.conjugate },
+    (from: DenseVector[Complex]) =>
+      {
+        new DenseMatrix(data = from.data.map {
+                          _.conjugate
+                        },
                         offset = from.offset,
                         cols = from.length,
                         rows = 1,
                         majorStride = from.stride
         )
       }
-    }
   }
 
   implicit def canTranspose_SV_Complex: CanTranspose[SparseVector[Complex], CSCMatrix[Complex]] = {
-    new CanTranspose[SparseVector[Complex], CSCMatrix[Complex]] {
-      def apply(from: SparseVector[Complex]) = {
+    (from: SparseVector[Complex]) =>
+      {
         val transposedMtx: CSCMatrix[Complex] = CSCMatrix.zeros[Complex](1, from.length)
         var i = 0
         while (i < from.activeSize) {
@@ -193,30 +166,29 @@ trait TransposeOps_Complex extends TransposeOps_Generic with DenseMatrix_Transpo
         }
         transposedMtx
       }
-    }
   }
 }
 
 trait DenseMatrix_TransposeOps extends TransposeOps_Generic {
 
-  implicit def canTranspose_DM[V]: CanTranspose[DenseMatrix[V], DenseMatrix[V]] = {
-    new CanTranspose[DenseMatrix[V], DenseMatrix[V]] {
-      def apply(from: DenseMatrix[V]): DenseMatrix[V] = {
-        DenseMatrix.create(data = from.data,
-                           offset = from.offset,
-                           cols = from.rows,
-                           rows = from.cols,
-                           majorStride = from.majorStride,
-                           isTranspose = !from.isTranspose
-        )
-      }
+  implicit def canTranspose_DM[V]: CanTranspose[DenseMatrix[V], DenseMatrix[V]] = { (from: DenseMatrix[V]) =>
+    {
+      DenseMatrix.create(data = from.data,
+                         offset = from.offset,
+                         cols = from.rows,
+                         rows = from.cols,
+                         majorStride = from.majorStride,
+                         isTranspose = !from.isTranspose
+      )
     }
   }
 
   implicit def canTranspose_DM_Complex: CanTranspose[DenseMatrix[Complex], DenseMatrix[Complex]] = {
-    new CanTranspose[DenseMatrix[Complex], DenseMatrix[Complex]] {
-      def apply(from: DenseMatrix[Complex]) = {
-        new DenseMatrix(data = from.data.map { _.conjugate },
+    (from: DenseMatrix[Complex]) =>
+      {
+        new DenseMatrix(data = from.data.map {
+                          _.conjugate
+                        },
                         offset = from.offset,
                         cols = from.rows,
                         rows = from.cols,
@@ -224,15 +196,14 @@ trait DenseMatrix_TransposeOps extends TransposeOps_Generic {
                         isTranspose = !from.isTranspose
         )
       }
-    }
   }
 
 }
 
 trait CSCMatrix_TransposeOps extends TransposeOps_Generic {
   implicit def canTranspose_CSC[V: ClassTag: Zero: Semiring]: CanTranspose[CSCMatrix[V], CSCMatrix[V]] = {
-    new CanTranspose[CSCMatrix[V], CSCMatrix[V]] {
-      def apply(from: CSCMatrix[V]) = {
+    (from: CSCMatrix[V]) =>
+      {
         val transposedMtx = new CSCMatrix.Builder[V](from.cols, from.rows, from.activeSize)
 
         var j = 0
@@ -248,14 +219,13 @@ trait CSCMatrix_TransposeOps extends TransposeOps_Generic {
         // this doesn't hold if there are zeros in the matrix
         //        assert(transposedMtx.activeSize == from.activeSize,
         //          s"We seem to have lost some elements?!?! ${transposedMtx.activeSize} ${from.activeSize}")
-        transposedMtx.result(false, false)
+        transposedMtx.result(keysAlreadyUnique = false, keysAlreadySorted = false)
       }
-    }
   }
 
   implicit def canTranspose_CSC_Complex: CanTranspose[CSCMatrix[Complex], CSCMatrix[Complex]] = {
-    new CanTranspose[CSCMatrix[Complex], CSCMatrix[Complex]] {
-      def apply(from: CSCMatrix[Complex]) = {
+    (from: CSCMatrix[Complex]) =>
+      {
         val transposedMtx = CSCMatrix.zeros[Complex](from.cols, from.rows)
 
         var j = 0
@@ -270,6 +240,5 @@ trait CSCMatrix_TransposeOps extends TransposeOps_Generic {
         }
         transposedMtx
       }
-    }
   }
 }

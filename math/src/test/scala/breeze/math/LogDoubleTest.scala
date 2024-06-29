@@ -31,7 +31,7 @@ class LogDoubleTest extends AnyFunSuite with Checkers {
   )
 
   implicit class ae(x: Double) {
-    def =~=(y: Double) = (x == 0.0 && y.abs < 1e-6) || math.abs(x - y) / math.max(x.abs, y.abs) < 1e-6
+    def =~=(y: Double): Boolean = (x == 0.0 && y.abs < 1e-6) || math.abs(x - y) / math.max(x.abs, y.abs) < 1e-6
   }
 
   test("addition") {

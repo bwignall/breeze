@@ -1,7 +1,6 @@
 package breeze.plot
 
 import breeze.compat.Scala3Compat._
-import breeze.compat._
 
 import java.awt.Color
 import scala.language.implicitConversions
@@ -12,7 +11,7 @@ import scala.language.implicitConversions
  *
  * @author dramage
  */
-trait PaintScaleFactory[T] extends (Traversable[T] => PaintScale[T])
+trait PaintScaleFactory[T] extends (Iterable[T] => PaintScale[T])
 
 /**
  * Creates a GradientPaintScale from the min and max of a set of data points.
@@ -23,7 +22,7 @@ trait PaintScaleFactory[T] extends (Traversable[T] => PaintScale[T])
 case class GradientPaintScaleFactory[T](gradient: Array[Color] = PaintScale.WhiteToBlack)(implicit
   view: ConversionOrSubtype[T, Double]
 ) extends PaintScaleFactory[T] {
-  override def apply(items: Traversable[T]): PaintScale[T] = {
+  override def apply(items: Iterable[T]): PaintScale[T] = {
     var min = items.head
     var max = items.head
     for (item <- items) {
@@ -46,9 +45,9 @@ case class GradientPaintScaleFactory[T](gradient: Array[Color] = PaintScale.Whit
  * @author dramage
  */
 case class CategoricalPaintScaleFactory[T]() extends PaintScaleFactory[T] {
-  override def apply(items: Traversable[T]): PaintScale[T] = {
+  override def apply(items: Iterable[T]): PaintScale[T] = {
     val distinct = items.toList.distinct
-    CategoricalPaintScale[T](Map() ++ (distinct.zip(Stream.continually(PaintScale.Category20.values.toList).flatten)))
+    CategoricalPaintScale[T](Map() ++ distinct.zip(LazyList.continually(PaintScale.Category20.values.toList).flatten))
   }
 }
 
@@ -60,7 +59,5 @@ object PaintScaleFactory {
    */
   implicit def singletonFactoryForPaintScale[S, T](
     paintScale: S
-  )(implicit view: Conversion[S, PaintScale[T]]): PaintScaleFactory[T] = new PaintScaleFactory[T] {
-    def apply(items: Traversable[T]) = view(paintScale)
-  }
+  )(implicit view: Conversion[S, PaintScale[T]]): PaintScaleFactory[T] = (items: Iterable[T]) => view(paintScale)
 }

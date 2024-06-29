@@ -30,7 +30,7 @@ case class Poisson(mean: Double)(implicit rand: RandBasis) extends DiscreteDistr
 
   private val ell = math.exp(-mean)
 
-  override def toString(): String = "Poisson(" + mean + ")"
+  override def toString: String = "Poisson(" + mean + ")"
 
   // impl from winrand
   def draw(): Int = {
@@ -108,9 +108,9 @@ object Poisson extends ExponentialFamily[Poisson, Int] {
   type Parameter = Double
   case class SufficientStatistic(sum: Double, n: Double)
       extends distributions.SufficientStatistic[SufficientStatistic] {
-    def +(t: SufficientStatistic) = SufficientStatistic(t.sum + sum, t.n + n)
+    def +(t: SufficientStatistic): SufficientStatistic = SufficientStatistic(t.sum + sum, t.n + n)
 
-    def *(weight: Double) = SufficientStatistic(sum * weight, n * weight)
+    def *(weight: Double): SufficientStatistic = SufficientStatistic(sum * weight, n * weight)
   }
 
   def emptySufficientStatistic: SufficientStatistic = SufficientStatistic(0, 0)
@@ -119,12 +119,10 @@ object Poisson extends ExponentialFamily[Poisson, Int] {
 
   def mle(stats: SufficientStatistic): Parameter = stats.sum / stats.n
 
-  def likelihoodFunction(stats: SufficientStatistic): DiffFunction[Parameter] = new DiffFunction[Double] {
-    def calculate(x: Double) = {
-      val obj = math.log(x) * stats.sum - x * stats.n
-      val grad = stats.sum / x - stats.n
-      (-obj, -grad)
-    }
+  def likelihoodFunction(stats: SufficientStatistic): DiffFunction[Parameter] = (x: Double) => {
+    val obj = math.log(x) * stats.sum - x * stats.n
+    val grad = stats.sum / x - stats.n
+    (-obj, -grad)
   }
 
   override def distribution(p: Poisson.Parameter)(implicit rand: RandBasis) = new Poisson(p)

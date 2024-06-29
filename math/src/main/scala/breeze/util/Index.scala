@@ -79,7 +79,7 @@ trait Index[T] extends Iterable[T] with (T => Int) with Serializable {
   override def equals(other: Any): Boolean = {
     other match {
       case that: Index[_] if this.size == that.size =>
-        this.sameElements(that)
+        this.iterator.sameElements(that)
       case _ => false
     }
   }
@@ -87,7 +87,7 @@ trait Index[T] extends Iterable[T] with (T => Int) with Serializable {
   protected lazy val defaultHashCode: Int =
     foldLeft(17)(_ * 41 + _.hashCode())
 
-  override def hashCode = defaultHashCode
+  override def hashCode: Int = defaultHashCode
 
   override def toString: String = {
     iterator.mkString("Index(", ",", ")")
@@ -131,7 +131,7 @@ class HashIndex[T] extends MutableIndex[T] with Serializable {
   /** Map from object back to int index */
   private var indices = new util.HashMap[T, Int]()
 
-  override def size =
+  override def size: Int =
     indices.size
 
   override def apply(t: T): Int =
@@ -149,7 +149,7 @@ class HashIndex[T] extends MutableIndex[T] with Serializable {
   override def get(pos: Int): T =
     objects(pos); // throws IndexOutOfBoundsException as required
 
-  override def iterator =
+  override def iterator: Iterator[T] =
     objects.iterator
 
   /** Returns the position of T, adding it to the index if it's not there. */
@@ -164,7 +164,7 @@ class HashIndex[T] extends MutableIndex[T] with Serializable {
     }
   }
 
-  def pairs = indices.asScala.iterator
+  def pairs: Iterator[(T, Int)] = indices.asScala.iterator
 
   @throws(classOf[ObjectStreamException])
   private def writeReplace(): Object = {
@@ -198,7 +198,7 @@ object HashIndex extends SerializableLogging {
     }
   }
 
-  private def logError(str: => String) = logger.error(str)
+  private def logError(str: => String): Unit = logger.error(str)
 
 }
 
@@ -224,7 +224,7 @@ class DenseIntIndex(beg: Int, end: Int) extends Index[Int] {
   override def contains(t: Int): Boolean = t < end - beg && t >= 0
 
   override def indexOpt(t: Int): Option[Int] =
-    if (contains(t)) Some(t) else None
+    Some(t).filter(contains)
 
   override def get(i: Int): Int =
     if (contains(i)) i else throw new IndexOutOfBoundsException()
@@ -294,7 +294,7 @@ class EitherIndex[L, R](left: Index[L], right: Index[R]) extends Index[Either[L,
    * What you add to the indices from the rightIndex to get indices into this index
    * @return
    */
-  def rightOffset = left.size
+  def rightOffset: Int = left.size
 
   def unapply(i: Int): Option[Either[L, R]] = {
     if (i < 0 || i >= size) None

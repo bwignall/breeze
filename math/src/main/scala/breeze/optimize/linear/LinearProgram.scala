@@ -4,7 +4,7 @@ import breeze.linalg._
 import org.apache.commons.math3.optim.linear._
 import org.apache.commons.math3.optim.nonlinear.scalar._
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 import collection.mutable.ArrayBuffer
 
@@ -109,103 +109,103 @@ class LinearProgram {
     def +(other: Expression): Expression = new Expression {
       def coefficients: Vector[Double] = outer.coefficients + other.coefficients
       override def scalarComponent: Double = outer.scalarComponent + other.scalarComponent
-      override def toString = outer.toString + " + " + other
+      override def toString: String = outer.toString + " + " + other
     }
 
     def +(other: Double): Expression = new Expression {
       def coefficients: Vector[Double] = outer.coefficients
       override def scalarComponent: Double = outer.scalarComponent + other
-      override def toString = outer.toString + " + " + other
+      override def toString: String = outer.toString + " + " + other
     }
 
     def -(other: Expression): Expression = new Expression {
       def coefficients: Vector[Double] = outer.coefficients - other.coefficients
       override def scalarComponent: Double = outer.scalarComponent - other.scalarComponent
-      override def toString = outer.toString + " - " + other
+      override def toString: String = outer.toString + " - " + other
     }
 
     def -(other: Double): Expression = new Expression {
       def coefficients: Vector[Double] = outer.coefficients
       override def scalarComponent: Double = outer.scalarComponent - other
-      override def toString = outer.toString + " - " + other
+      override def toString: String = outer.toString + " - " + other
     }
 
     def unary_- : Expression = new Expression {
       def coefficients: Vector[Double] = outer.coefficients * -1.0
       override def scalarComponent: Double = -outer.scalarComponent
-      override def toString = s"-($outer)"
+      override def toString: String = s"-($outer)"
     }
 
     def <=(rhs_ : Expression): Constraint = new Constraint {
       def relation: LinearProgram.this.type#Relation = LTE
 
-      def lhs = outer
-      def rhs = rhs_
+      def lhs: Expression = outer
+      def rhs: Expression = rhs_
     }
 
     def <=(c: Double): Constraint = new Constraint {
 
       def relation: Relation = LTE
 
-      def lhs = outer
-      def rhs = new Expression {
-        def coefficients = SparseVector.zeros[Double](variables.length)
-        override def scalarComponent = c
+      def lhs: Expression = outer
+      def rhs: Expression = new Expression {
+        def coefficients: SparseVector[Double] = SparseVector.zeros[Double](variables.length)
+        override def scalarComponent: Double = c
 
-        override def toString = c.toString
+        override def toString: String = c.toString
       }
     }
 
     def >=(rhs_ : Expression): Constraint = new Constraint {
       def relation: Relation = GTE
 
-      def lhs = outer
-      def rhs = rhs_
+      def lhs: Expression = outer
+      def rhs: Expression = rhs_
     }
 
     def >=(c: Double): Constraint = new Constraint {
 
       def relation: Relation = GTE
 
-      def lhs = outer
-      def rhs = new Expression {
-        def coefficients = SparseVector.zeros[Double](variables.length)
-        override def scalarComponent = c
+      def lhs: Expression = outer
+      def rhs: Expression = new Expression {
+        def coefficients: SparseVector[Double] = SparseVector.zeros[Double](variables.length)
+        override def scalarComponent: Double = c
 
-        override def toString = c.toString
+        override def toString: String = c.toString
       }
     }
 
     def =:=(rhs_ : Expression): Constraint = new Constraint {
       def relation: Relation = EQ
 
-      def lhs = outer
-      def rhs = rhs_
+      def lhs: Expression = outer
+      def rhs: Expression = rhs_
     }
 
     def =:=(c: Double): Constraint = new Constraint {
 
       def relation: Relation = EQ
 
-      def lhs = outer
-      def rhs = new Expression {
-        def coefficients = SparseVector.zeros[Double](variables.length)
-        override def scalarComponent = c
+      def lhs: Expression = outer
+      def rhs: Expression = new Expression {
+        def coefficients: SparseVector[Double] = SparseVector.zeros[Double](variables.length)
+        override def scalarComponent: Double = c
 
-        override def toString = c.toString
+        override def toString: String = c.toString
       }
     }
 
     def *(c: Double): Expression = new Expression {
-      def coefficients = outer.coefficients * c
-      override def scalarComponent = outer.scalarComponent * c
-      override def toString = s"($outer) * $c"
+      def coefficients: Vector[Double] = outer.coefficients * c
+      override def scalarComponent: Double = outer.scalarComponent * c
+      override def toString: String = s"($outer) * $c"
     }
 
     def *:(c: Double): Expression = new Expression {
-      def coefficients = outer.coefficients * c
-      override def scalarComponent = outer.scalarComponent * c
-      override def toString = s"$c * ($outer)"
+      def coefficients: Vector[Double] = outer.coefficients * c
+      override def scalarComponent: Double = outer.scalarComponent * c
+      override def toString: String = s"$c * ($outer)"
     }
   }
 
@@ -219,19 +219,19 @@ class LinearProgram {
     def rhs: Expression
     def relation: Relation
 
-    override def toString(): String = s"$lhs ${relation.operator} $rhs"
+    override def toString: String = s"$lhs ${relation.operator} $rhs"
 
     def standardize: Constraint = new Constraint {
 
       def relation: Relation = outer.relation
 
-      def lhs = new Expression {
-        def coefficients = outer.lhs.coefficients - outer.rhs.coefficients
+      def lhs: Expression = new Expression {
+        def coefficients: Vector[Double] = outer.lhs.coefficients - outer.rhs.coefficients
         override def scalarComponent = 0.0
       }
-      def rhs = new Expression {
-        def coefficients = SparseVector.zeros[Double](variables.length)
-        override def scalarComponent = outer.rhs.scalarComponent - outer.lhs.scalarComponent
+      def rhs: Expression = new Expression {
+        def coefficients: SparseVector[Double] = SparseVector.zeros[Double](variables.length)
+        override def scalarComponent: Double = outer.rhs.scalarComponent - outer.lhs.scalarComponent
       }
     }
   }
@@ -241,11 +241,11 @@ class LinearProgram {
     def id: Int
     def size: Int = 1
 
-    override def toString = name
+    override def toString: String = name
   }
 
   case class Real(name: String = "x_" + nextId) extends Variable { variable =>
-    val id = variables.length
+    val id: Int = variables.length
     variables += this
 
     def coefficients: Vector[Double] = {
@@ -256,7 +256,7 @@ class LinearProgram {
   }
 
   case class Integer(name: String = "x_" + nextId) extends Variable { variable =>
-    val id = variables.length
+    val id: Int = variables.length
     variables += this
 
     def coefficients: Vector[Double] = {
@@ -267,7 +267,7 @@ class LinearProgram {
   }
 
   case class Binary(name: String = "x_" + nextId) extends Variable { variable =>
-    val id = variables.length
+    val id: Int = variables.length
     variables += this
 
     def coefficients: Vector[Double] = {
@@ -293,7 +293,7 @@ class LinearProgram {
    */
 
   case class Result(result: DenseVector[Double], problem: Problem) {
-    def valueOf(x: Expression): Double = { (result.dot(x.coefficients)) + x.scalarComponent }
+    def valueOf(x: Expression): Double = { result.dot(x.coefficients) + x.scalarComponent }
     def value: Double = valueOf(problem.objective)
   }
 

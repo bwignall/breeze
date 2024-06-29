@@ -349,7 +349,7 @@ class DenseMatrixTest extends AnyFunSuite with Checkers with DoubleImplicits wit
     val y = a.t * a
     assert(y === DenseMatrix((17, 22, 27), (22, 29, 36), (27, 36, 45)))
 
-    val z: DenseMatrix[Int] = b * ((b + 1): DenseMatrix[Int])
+    val z: DenseMatrix[Int] = b * (b + 1: DenseMatrix[Int])
     assert(z === DenseMatrix((164, 5, 107), (-5, 10, -27), (161, -7, 138)))
   }
 
@@ -425,7 +425,7 @@ class DenseMatrixTest extends AnyFunSuite with Checkers with DoubleImplicits wit
     val y = a.t * a
     assert(y === DenseMatrix((17, 22, 27), (22, 29, 36), (27, 36, 45)).mapValues(BigDecimal(_)))
 
-    val z: DenseMatrix[BigDecimal] = b * ((b + BigDecimal(1)): DenseMatrix[BigDecimal])
+    val z: DenseMatrix[BigDecimal] = b * (b + BigDecimal(1): DenseMatrix[BigDecimal])
     assert(z === DenseMatrix((164, 5, 107), (-5, 10, -27), (161, -7, 138)).mapValues(BigDecimal(_)))
   }
 
@@ -559,12 +559,12 @@ class DenseMatrixTest extends AnyFunSuite with Checkers with DoubleImplicits wit
     val a = DenseMatrix.create[String](1, 1, Array("SSS"))
     intercept[IndexOutOfBoundsException] {
       a(3, 3) = ":("
-      assert(false, "Shouldn't be here!")
+      assert(condition = false, "Shouldn't be here!")
     }
     assert(a(0, 0) === "SSS")
     intercept[IndexOutOfBoundsException] {
       a(3, 3)
-      assert(false, "Shouldn't be here!")
+      assert(condition = false, "Shouldn't be here!")
     }
 
     a(0, 0) = ":("
@@ -677,7 +677,7 @@ class DenseMatrixTest extends AnyFunSuite with Checkers with DoubleImplicits wit
 
     val sl2t = area.t(0 until area.cols, 1 until area.rows)
     assert(sl2t.offset === area.offset + area.majorStride,
-           "" + (sl2t.data(area.offset + area.majorStride)) + " " + area.offset
+           "" + sl2t.data(area.offset + area.majorStride) + " " + area.offset
     )
     assert(sl2t.t === DenseMatrix((3, 4, 5, 6, 7), (3, 4, 5, 6, 7)))
 
@@ -730,8 +730,8 @@ class DenseMatrixTest extends AnyFunSuite with Checkers with DoubleImplicits wit
   }
 
   test("lhs scalars") {
-    assert(1.0 /:/ (DenseMatrix.fill(2, 2)(10.0)) === DenseMatrix.fill(2, 2)(1 / 10.0))
-    assert(1.0 -:- (DenseMatrix.fill(2, 2)(10.0)) === DenseMatrix.fill(2, 2)(-9.0))
+    assert(1.0 /:/ DenseMatrix.fill(2, 2)(10.0) === DenseMatrix.fill(2, 2)(1 / 10.0))
+    assert(1.0 -:- DenseMatrix.fill(2, 2)(10.0) === DenseMatrix.fill(2, 2)(-9.0))
   }
 
   test("mapping ufunc") {

@@ -24,12 +24,12 @@ class StochasticGradientDescentTest extends OptimizeTestBase {
     val sgd = StochasticGradientDescent[DenseVector[Double]](2.0, 100)
 
     def optimizeThis(init: DenseVector[Double]) = {
-      val f = new BatchDiffFunction[DenseVector[Double]] {
-        def calculate(x: DenseVector[Double], r: IndexedSeq[Int]) = {
+      val f: BatchDiffFunction[DenseVector[Double]] = new BatchDiffFunction[DenseVector[Double]] {
+        def calculate(x: DenseVector[Double], r: IndexedSeq[Int]): (Double, DenseVector[Double]) = {
           val r = x - 3.0
           (r.dot(r), (x * 2.0) - 6.0)
         }
-        val fullRange = 0 to 1
+        val fullRange: IndexedSeq[Int] = 0 to 1
       }
 
       val result = sgd.minimize(f, init)
@@ -44,12 +44,12 @@ class StochasticGradientDescentTest extends OptimizeTestBase {
     val sgd = StochasticGradientDescent[Counter[String, Double]](1.0, 100)
 
     def optimizeThis(init: Counter[String, Double]) = {
-      val f = new BatchDiffFunction[Counter[String, Double]] {
-        def calculate(x: Counter[String, Double], r: IndexedSeq[Int]) = {
+      val f: BatchDiffFunction = new BatchDiffFunction[Counter[String, Double]] {
+        def calculate(x: Counter[String, Double], r: IndexedSeq[Int]): (Double, Counter[String, Double]) = {
           val r = x - 3.0
           (r.dot(r), (x * 2.0) - 6.0)
         }
-        val fullRange = 0 to 1
+        val fullRange: IndexedSeq[Int] = 0 to 1
       }
 
       val result = sgd.minimize(f, init)

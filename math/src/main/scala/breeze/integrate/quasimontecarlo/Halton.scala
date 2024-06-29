@@ -20,8 +20,6 @@ import breeze.linalg._
 import breeze.macros._
 import breeze.stats.distributions.RandBasis
 
-import scala.reflect.ClassTag
-
 object Halton {
   val HALTON_MAX_DIMENSION = 1229
 
@@ -30,7 +28,7 @@ object Halton {
      * Reads a file from the classpath to an array int's.
      * The file should be stored as text, with integers separated by a ',' and perhaps arbitrary whitespace, including newlines.
      */
-    val fileStream = this.getClass().getClassLoader().getResourceAsStream(filename)
+    val fileStream = this.getClass.getClassLoader.getResourceAsStream(filename)
     val lines = scala.io.Source.fromInputStream(fileStream).getLines()
     val nums = lines.flatMap(x => x.split(',')).map(x => x.replaceAll("\\s+", ""))
     nums.map(x => x.toInt).toArray
@@ -99,7 +97,7 @@ class BaseUniformHaltonGenerator(val dimension: Int) extends QuasiMonteCarloGene
         counters(j).set(lIndex, counters(j).get(lIndex) + 1)
       }
 
-      var lCountSizeI: Int = counters(j).size()
+      val lCountSizeI: Int = counters(j).size()
       var lBasesPow: Long = bases(j)
       var lValue: Double = permutations(j)(counters(j).get(lCountSizeI - 1)).toDouble
       cforRange(lCountSizeI until 0 by -1) { k =>
@@ -107,7 +105,7 @@ class BaseUniformHaltonGenerator(val dimension: Int) extends QuasiMonteCarloGene
         lBasesPow *= bases(j)
       }
 
-      currentValue(j) = lValue.toDouble / lBasesPow.toDouble
+      currentValue(j) = lValue / lBasesPow.toDouble
     }
     generatedCount += 1
     currentValue
@@ -123,9 +121,9 @@ class BaseUniformHaltonGenerator(val dimension: Int) extends QuasiMonteCarloGene
     private var actualSize: Int = 0
 
     def add(x: Int): Unit = {
-      if (actualSize == storage.size) {
+      if (actualSize == storage.length) {
         val oldStorage = storage
-        storage = new Array[Int](oldStorage.size * 2)
+        storage = new Array[Int](oldStorage.length * 2)
       }
       storage(actualSize) = x
       actualSize += 1

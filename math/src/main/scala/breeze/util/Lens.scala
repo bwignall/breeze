@@ -24,14 +24,14 @@ object Lens {
   }
 
   implicit def identity[T]: Lens[T, T] = new Lens[T, T] {
-    def get(t: T) = t
-    def set(t: T, u: T) = u
+    def get(t: T): T = t
+    def set(t: T, u: T): T = u
   }
 
   implicit def isomorphismYieldsLens[T, U](implicit iso: Isomorphism[T, U]): Lens[T, U] = new Lens[T, U] {
-    def get(t: T) = iso.forward(t)
+    def get(t: T): U = iso.forward(t)
 
-    def set(t: T, u: U) = iso.backward(u)
+    def set(t: T, u: U): T = iso.backward(u)
   }
 
 }

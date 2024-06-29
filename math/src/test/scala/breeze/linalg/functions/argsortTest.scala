@@ -11,7 +11,7 @@ class argsortTest extends AnyFunSuite with Checkers {
   test("argsort dv") {
     check(Prop.forAll { (array: Array[Double]) =>
       val ax = argsort(new DenseVector(array))
-      ax.toIndexedSeq.map(array) == array.sorted.toIndexedSeq
+      ax.map(array) == array.sorted.toIndexedSeq
     })
   }
 
@@ -34,7 +34,7 @@ class argtopkTest extends AnyFunSuite {
   }
 
   test("#679") {
-    var a = DenseMatrix((3, 1), (-1, -2), (2, 2), (5, 5))
+    val a = DenseMatrix((3, 1), (-1, -2), (2, 2), (5, 5))
     for (i <- 0 until 10)
       assert(argtopk(a(::, 0), 4).toIndexedSeq == argtopk(a(::, 0), 4).toIndexedSeq)
   }

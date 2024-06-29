@@ -4,10 +4,6 @@ import breeze.linalg.DenseVector
 import breeze.linalg.convert
 import breeze.signal._
 
-/**
- * @author ktakagaki
- * @date 2/4/14.
- */
 trait CanDesignFilterDecimation[Output] {
   def apply(factor: Int,
             multiplier: Double,
@@ -67,18 +63,17 @@ object CanDesignFilterDecimation {
    *
    */
   implicit def decimationFilterLong: CanDesignFilterDecimation[FIRKernel1D[Long]] = {
-    new CanDesignFilterDecimation[FIRKernel1D[Long]] {
-      def apply(factor: Int,
-                multiplier: Double,
-                optDesignMethod: OptDesignMethod,
-                optWindow: OptWindowFunction,
-                optFilterOrder: OptFilterTaps
-      ): FIRKernel1D[Long] = {
+    (factor: Int,
+     multiplier: Double,
+     optDesignMethod: OptDesignMethod,
+     optWindow: OptWindowFunction,
+     optFilterOrder: OptFilterTaps
+    ) =>
+      {
         val temp: FIRKernel1D[Double] =
           designFilterDecimation[FIRKernel1D[Double]](factor, multiplier, optDesignMethod, optWindow, optFilterOrder)
         new FIRKernel1D[Long](convert(temp.kernel, Long), temp.multiplier.toLong, temp.designText)
       }
-    }
   }
 
 }

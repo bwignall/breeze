@@ -1,13 +1,6 @@
 package breeze.plot
 
-import breeze.plot.Plot.Listener
-import org.jfree.chart.axis.NumberTickUnit
-import org.jfree.chart.axis.TickUnits
-import org.jfree.chart.plot.DefaultDrawingSupplier
-
-import java.awt.Color
 import java.awt.Graphics2D
-import java.awt.Paint
 import java.util.concurrent.atomic.AtomicInteger
 import javax.swing.JFrame
 import javax.swing.JPanel
@@ -45,28 +38,28 @@ class Figure(name: String, private var rows_ : Int = 1, private var cols_ : Int 
   }
 
   /** Width of figure on screen (or in image) */
-  def width = width_
+  def width: Int = width_
   def width_=(newwidth: Int): Unit = {
     width_ = newwidth
     refresh()
   }
 
   /** Height of figure on screen (or in image) */
-  def height = height_
+  def height: Int = height_
   def height_=(newheight: Int): Unit = {
     height_ = newheight
     refresh()
   }
 
   /** How many rows of plots are in the figure */
-  def rows = rows_
+  def rows: Int = rows_
   def rows_=(newrows: Int): Unit = {
     rows_ = newrows
     refresh()
   }
 
   /** How many cols of plots are in the figure */
-  def cols = cols_
+  private def cols = cols_
   def cols_=(newcols: Int): Unit = {
     cols_ = newcols
     refresh()
@@ -74,7 +67,7 @@ class Figure(name: String, private var rows_ : Int = 1, private var cols_ : Int 
 
   /** Visibility state of the plot */
   private var visible_ = true
-  def visible = visible_
+  def visible: Boolean = visible_
   def visible_=(newvis: Boolean): Unit = {
     visible_ = newvis
     frame.setVisible(visible_)
@@ -120,17 +113,15 @@ class Figure(name: String, private var rows_ : Int = 1, private var cols_ : Int 
       plots.remove(plots.length - 1)
     }
 
-    SwingUtilities.invokeLater(new Runnable {
-      def run(): Unit = {
-        contents.removeAll()
-        contents.setSize(width_, height_)
-        contents.setLayout(new java.awt.GridLayout(rows, cols))
-        for (plot <- plots) {
-          contents.add(plot match { case Some(plot) => plot.panel; case None => new JPanel() })
-        }
-        frame.setSize(width_, height_)
-        frame.setVisible(visible)
+    SwingUtilities.invokeLater(() => {
+      contents.removeAll()
+      contents.setSize(width_, height_)
+      contents.setLayout(new java.awt.GridLayout(rows, cols))
+      for (plot <- plots) {
+        contents.add(plot match { case Some(plot) => plot.panel; case None => new JPanel() })
       }
+      frame.setSize(width_, height_)
+      frame.setVisible(visible)
     })
 
     frame.repaint()
@@ -157,7 +148,7 @@ class Figure(name: String, private var rows_ : Int = 1, private var cols_ : Int 
     refresh()
 
     ExportGraphics.writeFile(new java.io.File(filename),
-                             draw = drawPlots _,
+                             draw = drawPlots,
                              width = contents.getWidth,
                              height = contents.getHeight,
                              dpi = dpi
@@ -174,16 +165,14 @@ class Figure(name: String, private var rows_ : Int = 1, private var cols_ : Int 
       plots += Some(new Plot)
       plots.last.get
     } else {
-      if (plots(i) == None) {
+      if (plots(i).isEmpty) {
         plots(i) = Some(new Plot)
       }
       plots(i).get
     }
 
-    plot.listen(new Plot.Listener {
-      def refresh(pl: Plot): Unit = {
-        Figure.this.refresh()
-      }
+    plot.listen((pl: Plot) => {
+      Figure.this.refresh()
     })
 
     plot
