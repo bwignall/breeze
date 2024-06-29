@@ -123,7 +123,7 @@ object BinomialHeap {
   }
 
   def empty[T: Ordering]: BinomialHeap[T] = new BinomialHeap[T] {
-    override val trees: scala.Seq[Nothing] = Nil
+    override val trees: List[Node[T]] = Nil
   }
 
   private def mkHeap[T: Ordering](ns: List[Node[T]], sz: Int) = new BinomialHeap[T] {

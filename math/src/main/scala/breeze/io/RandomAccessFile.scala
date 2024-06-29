@@ -2,7 +2,12 @@ package breeze.io
 
 import spire.math.ULong
 
-import java.io.{Closeable, DataInput, DataOutput, File, FileDescriptor, IOException}
+import java.io.Closeable
+import java.io.DataInput
+import java.io.DataOutput
+import java.io.File
+import java.io.FileDescriptor
+import java.io.IOException
 import java.nio.channels.FileChannel
 
 /** Wrapper for [[java.io.RandomAccessFile]].

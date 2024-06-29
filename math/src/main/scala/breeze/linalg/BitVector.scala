@@ -11,7 +11,7 @@ import java.util
 import scala.reflect.ClassTag
 
 /**
- * A BitVector is a Vector of Booleans backed by a [[java.util.Bitset]]. Much better memory usage
+ * A BitVector is a Vector of Booleans backed by a [[java.util.BitSet]]. Much better memory usage
  * and sometimes faster.
  *
  * @param enforceLength if false, then the BitVector won't throw exceptions if it's used in

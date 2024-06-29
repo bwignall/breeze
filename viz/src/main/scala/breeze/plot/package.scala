@@ -161,7 +161,7 @@ package object plot {
         val stroke = new java.awt.BasicStroke(0f)
         override def getItemPaint(series: Int, item: Int): java.awt.Paint =
           paintScale(items(item))
-        override def getItemStroke(series: Int, item: Int): BasicStroke = stroke
+        override def getItemStroke(series: Int, item: Int): Stroke = stroke
 
         // i dunno why we need this all of a sudden
         override def clone(): AnyRef = super.clone()
@@ -268,7 +268,7 @@ package object plot {
 
       val mt: Matrix[Double] = img
 
-      val items: Seq[(Int, Int)] = img.keysIterator.toIndexedSeq
+      val items: IndexedSeq[(Int, Int)] = img.keysIterator.toIndexedSeq
 
       def getChartStuff(defaultName: (Int) => String,
                         defaultColor: (Int) => Paint,

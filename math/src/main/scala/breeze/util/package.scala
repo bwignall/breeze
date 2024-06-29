@@ -1,12 +1,12 @@
 package breeze
 
-import java.io.*
+import java.io._
 import java.util
 import java.util.BitSet
-import java.util.zip.*
-import scala.collection.compat.*
+import java.util.zip._
+import scala.collection.compat._
 import scala.collection.compat.immutable.ArraySeq
-import scala.collection.generic.*
+import scala.collection.generic._
 import scala.collection.mutable
 
 /**
@@ -97,7 +97,7 @@ package object util {
               val s = new StringBuffer("Overriding serialized class version mismatch: ")
               s.append("local serialVersionUID = ").append(localSUID)
               s.append(" stream serialVersionUID = ").append(streamSUID)
-              val e = new InvalidClassException(s.toString())
+              val e = new InvalidClassException(s.toString)
               logger.error(s"Potentially Fatal Deserialization Operation while deserializing $localClass", e)
               resultClassDescriptor = localClassDescriptor; // Use local class descriptor for deserialization
             }
@@ -133,7 +133,7 @@ package object util {
    */
   @noinline def LOCATION: String = {
     val e = new Exception().getStackTrace()(1)
-    e.getFileName() + ":" + e.getLineNumber()
+    e.getFileName + ":" + e.getLineNumber
   }
 
   /**
@@ -142,7 +142,7 @@ package object util {
    */
   @noinline def CALLER(nth: Int): String = {
     val e = new Exception().getStackTrace()(nth + 1)
-    e.getFileName() + ":" + e.getLineNumber()
+    e.getFileName + ":" + e.getLineNumber
   }
 
   /**
@@ -228,20 +228,24 @@ package object util {
       bs
     }
 
-    def |(other: BitSet): util.BitSet = {
-      copy |= other
+    def |(other: BitSet): java.util.BitSet = {
+      val c = copy
+      c | other
     }
 
-    def &~(other: BitSet): util.BitSet = {
-      copy &~= other
+    def &~(other: BitSet): java.util.BitSet = {
+      val c = copy
+      c &~ other
     }
 
-    def &(other: BitSet): util.BitSet = {
-      copy &= other
+    def &(other: BitSet): java.util.BitSet = {
+      val c = copy
+      c & other
     }
 
-    def ^(other: BitSet): util.BitSet = {
-      copy ^= other
+    def ^(other: BitSet): java.util.BitSet = {
+      val c = copy
+      c ^ other
     }
 
     def copy: util.BitSet = bs.clone().asInstanceOf[java.util.BitSet]
@@ -277,7 +281,7 @@ package object util {
   implicit class AwesomeScalaBitSet(val bs: scala.collection.BitSet) extends AnyVal {
     def toJavaBitSet: java.util.BitSet = {
       val jbs = new java.util.BitSet(bs.lastOption.getOrElse(0) + 1)
-      bs.foreach(jbs.set(_))
+      bs.foreach(jbs.set)
       jbs
     }
   }

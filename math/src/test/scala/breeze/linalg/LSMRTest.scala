@@ -5,7 +5,8 @@ import breeze.linalg.support.CanTranspose
 import breeze.optimize.DiffFunction
 import breeze.optimize.GradientTester
 import breeze.optimize.LBFGS
-import breeze.stats.distributions.{Rand, RandBasis}
+import breeze.stats.distributions.Rand
+import breeze.stats.distributions.RandBasis
 import org.scalatest.Assertion
 import org.scalatest.funsuite.AnyFunSuite
 

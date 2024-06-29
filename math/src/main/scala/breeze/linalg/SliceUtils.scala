@@ -8,7 +8,7 @@ import scala.collection.immutable.IndexedSeq
  * @author Michael Petnuch
  */
 private object SliceUtils {
-  def mapColumnSeq[V](cols: Seq[Int], nCols: Int): Seq[Int] = cols match {
+  def mapColumnSeq[V](cols: Seq[Int], nCols: Int): IndexedSeq[Int] = cols match {
     case range: Range => range.getRangeWithoutNegativeIndexes(nCols).map(col => mapColumn(col, nCols))
     case _            => cols.map(col => mapColumn(col, nCols)).toIndexedSeq
   }

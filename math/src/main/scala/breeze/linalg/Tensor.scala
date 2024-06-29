@@ -48,7 +48,7 @@ trait QuasiTensor[@spec(Int) K, @spec(Double, Int, Float, Long) V] extends HasOp
   def activeKeysIterator: Iterator[K]
 
   /** Returns all indices k whose value satisfies a predicate. */
-  def findAll(f: V => Boolean): Seq[K] = activeIterator.filter(p => f(p._2)).map(_._1).toIndexedSeq
+  def findAll(f: V => Boolean): IndexedSeq[K] = activeIterator.filter(p => f(p._2)).map(_._1).toIndexedSeq
 
   override def hashCode(): Int = {
     var hash = 43

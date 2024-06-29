@@ -29,7 +29,7 @@ class StochasticGradientDescentTest extends OptimizeTestBase {
           val r = x - 3.0
           (r.dot(r), (x * 2.0) - 6.0)
         }
-        val fullRange: Seq[Int] = 0 to 1
+        val fullRange: IndexedSeq[Int] = 0 to 1
       }
 
       val result = sgd.minimize(f, init)
@@ -49,7 +49,7 @@ class StochasticGradientDescentTest extends OptimizeTestBase {
           val r = x - 3.0
           (r.dot(r), (x * 2.0) - 6.0)
         }
-        val fullRange: Seq[Int] = 0 to 1
+        val fullRange: IndexedSeq[Int] = 0 to 1
       }
 
       val result = sgd.minimize(f, init)

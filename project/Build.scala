@@ -72,7 +72,7 @@ object Common {
     },
     sonatypeProfileName := "org.scalanlp",
     publishMavenStyle := true,
-    licenses := Seq("Apache Public License 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")),
+    licenses := Seq("Apache Public License 2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0.html")),
     publishTo := sonatypePublishTo.value,
     sonatypeProjectHosting := Some(GitHubHosting("scalanlp", "breeze", "David Hall", "david.lw.hall@gmail.com")),
     Compile / unmanagedSourceDirectories ++= {
