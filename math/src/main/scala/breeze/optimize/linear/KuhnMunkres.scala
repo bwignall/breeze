@@ -34,11 +34,11 @@ object KuhnMunkres extends BipartiteMatching {
 
     // swap rows and columns if num rows > num cols
     val (costs2: Seq[Seq[Double]], inverted: Boolean) =
-      if (costs.length > costs(0).length) {
-        val newCosts = Array.fill(costs(0).length, costs.length)(0.0)
+      if (costs.length > costs.head.length) {
+        val newCosts = Array.fill(costs.head.length, costs.length)(0.0)
         for (
           i <- costs.indices;
-          j <- costs(0).indices
+          j <- costs.head.indices
         ) {
           newCosts(j)(i) = costs(i)(j)
         }
@@ -167,7 +167,6 @@ object KuhnMunkres extends BipartiteMatching {
     }
 
     def step4() = {
-      var star_col = -1
       var done = false
       var step = 0
       while (!done) {
@@ -260,7 +259,7 @@ object KuhnMunkres extends BipartiteMatching {
 
     // invert rows with columns to their original layout
     if (inverted) {
-      val answers2 = Array.fill(costs2(0).length)(-1)
+      val answers2 = Array.fill(costs2.head.length)(-1)
       for (i <- answers.indices) {
         val j = answers(i)
         if (j != -1) {
@@ -275,7 +274,7 @@ object KuhnMunkres extends BipartiteMatching {
 
   private def padMatrix(costs: Seq[Seq[Double]]) = {
     val rows = costs.length
-    val cols = costs(0).length
+    val cols = costs.head.length
     val n = rows.max(cols)
     val ret = Array.tabulate(n, n) { (i, j) =>
       if (i >= rows) 0.0

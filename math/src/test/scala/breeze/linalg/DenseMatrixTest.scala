@@ -559,12 +559,12 @@ class DenseMatrixTest extends AnyFunSuite with Checkers with DoubleImplicits wit
     val a = DenseMatrix.create[String](1, 1, Array("SSS"))
     intercept[IndexOutOfBoundsException] {
       a(3, 3) = ":("
-      assert(false, "Shouldn't be here!")
+      assert(condition = false, "Shouldn't be here!")
     }
     assert(a(0, 0) === "SSS")
     intercept[IndexOutOfBoundsException] {
       a(3, 3)
-      assert(false, "Shouldn't be here!")
+      assert(condition = false, "Shouldn't be here!")
     }
 
     a(0, 0) = ":("

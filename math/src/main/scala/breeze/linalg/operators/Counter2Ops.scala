@@ -52,7 +52,7 @@ trait Counter2Ops {
 
   implicit def addVV[K1, K2, V: Semiring: Zero]()
     : OpAdd.Impl2[Counter2[K1, K2, V], Counter2[K1, K2, V], Counter2[K1, K2, V]] = {
-    binaryOpFromBinaryUpdateOp(canCopy, addIntoVV)
+    binaryOpFromBinaryUpdateOp(canCopy, addIntoVV())
   }
 
   implicit def addIntoVS[K1, K2, V: Semiring](): OpAdd.InPlaceImpl2[Counter2[K1, K2, V], V] =
@@ -66,7 +66,7 @@ trait Counter2Ops {
     }
 
   implicit def addVS[K1, K2, V: Semiring: Zero](): OpAdd.Impl2[Counter2[K1, K2, V], V, Counter2[K1, K2, V]] = {
-    binaryOpFromBinaryUpdateOp(canCopy, addIntoVS)
+    binaryOpFromBinaryUpdateOp(canCopy, addIntoVS())
   }
 
   implicit def subIntoVV[K1, K2, V: Ring]: OpSub.InPlaceImpl2[Counter2[K1, K2, V], Counter2[K1, K2, V]] =

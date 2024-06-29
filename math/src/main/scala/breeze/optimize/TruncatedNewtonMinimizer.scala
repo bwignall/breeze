@@ -49,7 +49,7 @@ class TruncatedNewtonMinimizer[T, H](maxIterations: Int = -1,
     val initDelta = norm(adjgrad)
     val adjfval = v + 0.5 * l2Regularization * initial.dot(initial)
     val f_too_small = if (adjfval < -1.0e+32) true else false
-    State(0, initDelta, initDelta, initial, v, grad, h, adjfval, adjgrad, f_too_small, true, initialHistory(f, initial))
+    State(0, initDelta, initDelta, initial, v, grad, h, adjfval, adjgrad, f_too_small, accept = true, initialHistory(f, initial))
   }
 
   // from tron
@@ -116,7 +116,7 @@ class TruncatedNewtonMinimizer[T, H](maxIterations: Int = -1,
           else false
         val newHistory = updateHistory(x_new, adjNewG, adjNewV, state)
         val this_iter = if (state.accept) iter + 1 else iter
-        State(this_iter, initialGNorm, newDelta, x_new, newv, newg, newh, adjNewV, adjNewG, stop_cond, true, newHistory)
+        State(this_iter, initialGNorm, newDelta, x_new, newv, newg, newh, adjNewV, adjNewG, stop_cond, accept = true, newHistory)
       } else {
         val this_iter = if (state.accept) iter + 1 else iter
         val stop_cond =

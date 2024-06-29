@@ -65,7 +65,7 @@ class Beam[T](val maxSize: Int, xs: T*)(implicit o: Ordering[T])
   }
 
   def min: T = heap.head
-  def best: Option[T] = heap.reduceOption(o.max)
+  def best: Option[T] = heap.reduceOption(o.max(_, _))
 
   // TODO: make this a "real" 2.13 collection
 

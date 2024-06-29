@@ -77,7 +77,7 @@ object JavaCompatible {
 
   /**See [[fourierFreq]]. shifted = false
    */
-  def fourierFreqD(windowLength: Int, fs: Double): Array[Double] = fourierFreqD(windowLength, fs, false)
+  def fourierFreqD(windowLength: Int, fs: Double): Array[Double] = fourierFreqD(windowLength, fs, shifted = false)
 
   // </editor-fold>
 

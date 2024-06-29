@@ -33,7 +33,7 @@ object reshape extends UFunc {
         cscB.add(sv.index(i) / cols, sv.index(i) % cols, sv.data(i))
         i += 1
       }
-      cscB.result(true, false)
+      cscB.result(keysAlreadyUnique = true, keysAlreadySorted = false)
     }
 
   implicit def dvReshape[T: ClassTag: Semiring: Zero]: Impl3[DenseVector[T], Int, Int, DenseMatrix[T]] =

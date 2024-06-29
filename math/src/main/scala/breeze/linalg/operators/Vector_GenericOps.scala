@@ -276,7 +276,7 @@ trait SparseVector_GenericOps extends GenericOps {
         if (r != f.zero)
           result.add(i, r)
       }
-      result.toSparseVector(true, true)
+      result.toSparseVector(alreadySorted = true, keysAlreadyUnique = true)
     }
   }
 
@@ -294,7 +294,7 @@ trait SparseVector_GenericOps extends GenericOps {
             if (r != f.zero)
               result.add(i, r)
           }
-          result.toSparseVector(true, true)
+          result.toSparseVector(alreadySorted = true, keysAlreadyUnique = true)
         }
       }
   }
@@ -313,7 +313,7 @@ trait SparseVector_GenericOps extends GenericOps {
             if (r != f.zero)
               result.add(i, r)
           }
-          result.toSparseVector(true, true)
+          result.toSparseVector(alreadySorted = true, keysAlreadyUnique = true)
         }
       }
   }
@@ -328,7 +328,7 @@ trait SparseVector_GenericOps extends GenericOps {
           result.add(a.indexAt(i), f.*(a.valueAt(i), b))
         }
       }
-      result.toSparseVector(true, true)
+      result.toSparseVector(alreadySorted = true, keysAlreadyUnique = true)
     }
 
   implicit def impl_Op_SV_S_eq_SV_Generic_OpMulMatrix[T: Semiring: ClassTag]
@@ -341,7 +341,7 @@ trait SparseVector_GenericOps extends GenericOps {
           result.add(a.indexAt(i), f.*(a.valueAt(i), b))
         }
       }
-      result.toSparseVector(true, true)
+      result.toSparseVector(alreadySorted = true, keysAlreadyUnique = true)
     }
 
   implicit def impl_Op_SV_SV_eq_SV_Generic_OpMulScalar[T](implicit
@@ -483,7 +483,7 @@ trait SparseVector_GenericOps extends GenericOps {
           result.add(i, r)
         i += 1
       }
-      result.toSparseVector(true, true)
+      result.toSparseVector(alreadySorted = true, keysAlreadyUnique = true)
     }
 
 }

@@ -300,7 +300,7 @@ package object linalg {
    * if necessary. Very simple, just does the basic thing.
    */
   def cov(x: DenseMatrix[Double], center: Boolean = true): DenseMatrix[Double] = {
-    val xc = scale(x, center, false)
+    val xc = scale(x, center, scale = false)
     (xc.t * xc) /= xc.rows - 1.0
   }
 

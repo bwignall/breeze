@@ -18,7 +18,7 @@ package object util {
   /**
    * Deserializes an object using java serialization
    */
-  def readObject[T](loc: File): T = readObject(loc, false)
+  def readObject[T](loc: File): T = readObject(loc, ignoreSerialVersionUID = false)
 
   /**
    * Deserializes an object using java serialization

@@ -336,7 +336,7 @@ object CSCMatrix extends MatrixConstructors[CSCMatrix] {
       vs.sizeHint(nnz)
     }
 
-    def result: CSCMatrix[T] = result(false, false)
+    def result: CSCMatrix[T] = result(keysAlreadyUnique = false, keysAlreadySorted = false)
 
     private def rowFromIndex(idx: Long) = idx.toInt
     private def colFromIndex(idx: Long) = (idx >>> 32).toInt

@@ -79,7 +79,7 @@ class arityizeTest extends AnyFunSuite {
     @arityize(22)
     implicit def tupleToDenseVector(
       tuple: Tuple[Any @arityize.repeat] @arityize.relative(tupleToDenseVector)
-    ): DenseVector[Double] = {
+    ) = {
       new (TupleToDenseVector @arityize.relative(tupleToDenseVector))(tuple)
     }
   }

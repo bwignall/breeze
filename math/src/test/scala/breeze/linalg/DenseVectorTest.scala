@@ -378,12 +378,12 @@ class DenseVectorTest extends AnyFunSuite with Checkers {
     assert(a.copy === a)
     intercept[IndexOutOfBoundsException] {
       a(3) = ":("
-      assert(false, "Shouldn't be here!")
+      assert(condition = false, "Shouldn't be here!")
     }
     assert(a(0) === "SSS")
     intercept[IndexOutOfBoundsException] {
       a(3)
-      assert(false, "Shouldn't be here!")
+      assert(condition = false, "Shouldn't be here!")
     }
   }
 

@@ -30,7 +30,7 @@ class PowerMethod(maxIters: Int = 10, tolerance: Double = 1e-5) extends Serializ
   def initialState(n: Int): State = {
     val ynorm = DenseVector.zeros[Double](n)
     val ay = DenseVector.zeros[Double](n)
-    State(0, ynorm, ay, 0, false)
+    State(0, ynorm, ay, 0, converged = false)
   }
 
   def reset(A: BDM, y: BDV, init: State): State = {
@@ -39,7 +39,7 @@ class PowerMethod(maxIters: Int = 10, tolerance: Double = 1e-5) extends Serializ
     normalize(eigenVector, y)
     QuadraticMinimizer.gemv(1.0, A, eigenVector, 0.0, ay)
     val lambda = nextEigen(eigenVector, ay)
-    State(lambda, eigenVector, ay, 0, false)
+    State(lambda, eigenVector, ay, 0, converged = false)
   }
 
   // in-place modification of eigen vector
@@ -64,8 +64,8 @@ class PowerMethod(maxIters: Int = 10, tolerance: Double = 1e-5) extends Serializ
         QuadraticMinimizer.gemv(1.0, A, eigenVector, 0.0, ay)
         val lambda = nextEigen(eigenVector, ay)
         val val_dif = abs(lambda - eigenValue)
-        if (val_dif <= tolerance || iter > maxIters) State(lambda, eigenVector, ay, iter + 1, true)
-        else State(lambda, eigenVector, ay, iter + 1, false)
+        if (val_dif <= tolerance || iter > maxIters) State(lambda, eigenVector, ay, iter + 1, converged = true)
+        else State(lambda, eigenVector, ay, iter + 1, converged = false)
       }
       .takeUpToWhere(_.converged)
 
@@ -92,7 +92,7 @@ object PowerMethod {
         ay := eigenVector
         QuadraticMinimizer.dpotrs(A, ay)
         val lambda = nextEigen(eigenVector, ay)
-        State(lambda, eigenVector, ay, 0, false)
+        State(lambda, eigenVector, ay, 0, converged = false)
       }
 
       override def iterations(A: BDM, y: BDV, initialState: State): Iterator[State] =
@@ -103,8 +103,8 @@ object PowerMethod {
             QuadraticMinimizer.dpotrs(A, ay)
             val lambda = nextEigen(eigenVector, ay)
             val val_dif = abs(lambda - eigenValue)
-            if (val_dif <= tolerance || iter > maxIters) State(lambda, eigenVector, ay, iter + 1, true)
-            else State(lambda, eigenVector, ay, iter + 1, false)
+            if (val_dif <= tolerance || iter > maxIters) State(lambda, eigenVector, ay, iter + 1, converged = true)
+            else State(lambda, eigenVector, ay, iter + 1, converged = false)
           }
           .takeUpToWhere(_.converged)
     }

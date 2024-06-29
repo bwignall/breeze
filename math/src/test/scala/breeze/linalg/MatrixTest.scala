@@ -69,12 +69,12 @@ class MatrixTest extends AnyFunSuite with Checkers {
     val a = Matrix.create[String](1, 1, Array("SSS"))
     intercept[IndexOutOfBoundsException] {
       a(3, 3) = ":("
-      assert(false, "Shouldn't be here!")
+      assert(condition = false, "Shouldn't be here!")
     }
     assert(a(0, 0) === "SSS")
     intercept[IndexOutOfBoundsException] {
       a(3, 3)
-      assert(false, "Shouldn't be here!")
+      assert(condition = false, "Shouldn't be here!")
     }
     a(0, 0) = ":("
     assert(a(0, 0) === ":(")

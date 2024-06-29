@@ -42,7 +42,7 @@ object diag extends UFunc with diagLowPrio2 {
     (t: SparseVector[V]) => {
       val r = new CSCMatrix.Builder[V](t.length, t.length)
       t.activeIterator.foreach(iv => r.add(iv._1, iv._1, iv._2))
-      r.result(true, true)
+      r.result(keysAlreadyUnique = true, keysAlreadySorted = true)
     }
 
 }

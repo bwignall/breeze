@@ -97,18 +97,18 @@ abstract class BaseMetropolisHastings[T](logLikelihoodFunc: T => Double, init: T
 
   // Burn in
   cforRange(0 until burnIn)(i => {
-    getNext()
+    getNext
   })
   // end burn in
 
   def draw(): T = {
     if (dropCount == 0) {
-      getNext()
+      getNext
     } else {
       cforRange(0 until dropCount)(i => {
-        getNext()
+        getNext
       })
-      getNext()
+      getNext
     }
   }
 }
