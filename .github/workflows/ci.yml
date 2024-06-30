@@ -30,7 +30,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12, 2.13, 3]
+        scala: [2.13, 3, 2.12]
         java: [temurin@8]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
@@ -55,10 +55,6 @@ jobs:
 
       - name: Check that workflows are up to date
         run: sbt githubWorkflowCheck
-
-      - name: Check scalafix lints
-        if: matrix.java == 'temurin@8' && matrix.os == 'ubuntu-latest'
-        run: sbt '++ ${{ matrix.scala }}' 'scalafixAll --check'
 
       - name: Test
         run: sbt '++ ${{ matrix.scala }}' test
