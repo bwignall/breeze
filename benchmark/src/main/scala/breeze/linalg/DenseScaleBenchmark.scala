@@ -1,7 +1,8 @@
 package breeze.linalg
 
-import breeze.benchmark.{MyRunner, BreezeBenchmark}
+import breeze.benchmark.{BreezeBenchmark, MyRunner}
 import breeze.macros._
+import com.google.caliper.Benchmark
 
 /**
  * Created by dlwh on 8/14/15.
@@ -12,6 +13,7 @@ class DenseScaleBenchmark extends BreezeBenchmark {
   val dv, dv2 = DenseVector.rand(10)
 //  val dv, dv2 = DenseVector.rand(100000).apply(0 to -1 by 2)
 
+  @Benchmark
   def timeSmallDVScale(reps: Int) = {
     cforRange(0 until reps) { rep =>
       dv *= 1.0001
@@ -19,6 +21,7 @@ class DenseScaleBenchmark extends BreezeBenchmark {
     dv
   }
 
+  @Benchmark
   def timeSmallDVInlineRange(reps: Int) = {
     cforRange(0 until reps) { rep =>
       val ad = dv.data
@@ -29,6 +32,7 @@ class DenseScaleBenchmark extends BreezeBenchmark {
     dv
   }
 
+  @Benchmark
   def timeSmallDVScaleInline(reps: Int) = {
     val d = dv.data
     cforRange(0 until reps) { rep =>

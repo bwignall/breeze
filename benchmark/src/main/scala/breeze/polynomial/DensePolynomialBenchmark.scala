@@ -3,10 +3,10 @@ package breeze.polynomial
 import breeze.benchmark._
 import breeze.linalg.BuildsRandomVectors
 import breeze.stats.distributions._
-
 import spire.math._
 import spire.math.poly._
 import breeze.macros._
+import com.google.caliper.Benchmark
 
 object DensePolynomialBenchmark extends MyRunner(classOf[DensePolynomialBenchmark])
 
@@ -23,11 +23,13 @@ class DensePolynomialBenchmark extends BreezeBenchmark with BuildsRandomVectors 
     Polynomial.dense(array)
   }
 
+  @Benchmark
   def timePolyOnDenseVector(reps: Int) =
     runWith2(reps, { randomPoly(10) }, { randomArray(1024 * 4) })((poly, arr) => {
       poly(arr)
     })
 
+  @Benchmark
   def timePolyOnDenseMatrix(reps: Int) =
     runWith2(reps, { randomPoly(10) }, { randomMatrix(256, 256) })((poly, arr) => {
       poly(arr)

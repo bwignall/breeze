@@ -1,10 +1,11 @@
 package breeze.linalg
 
-import breeze.benchmark.{MyRunner, BreezeBenchmark}
+import breeze.benchmark.{BreezeBenchmark, MyRunner}
 import breeze.linalg.operators.DenseVectorSupportMethods
 import breeze.numerics._
 import breeze.stats.distributions.Rand
 import breeze.macros._
+import com.google.caliper.Benchmark
 
 /**
  * Created by dlwh on 8/14/15.
@@ -16,6 +17,7 @@ class DenseDotProductBenchmark extends BreezeBenchmark {
   val fv, fv2 = DenseVector.rand(5, Rand.uniform.map(_.toFloat))
   val fvBig, fv2Big = DenseVector.rand(3000, Rand.uniform.map(_.toFloat))
 
+  @Benchmark
   def timeBigDVDotMasked(reps: Int) = {
     var sum = 0.0
     cforRange(0 until reps) { rep =>
@@ -24,6 +26,7 @@ class DenseDotProductBenchmark extends BreezeBenchmark {
     sum
   }
 
+  @Benchmark
   def timeDirectBigDV(reps: Int) = {
     var sum = 0.0
     cforRange(0 until reps) { rep =>
@@ -32,6 +35,7 @@ class DenseDotProductBenchmark extends BreezeBenchmark {
     sum
   }
 
+  @Benchmark
   def timeBigDVZip(reps: Int) = {
     var sum = 0.0
     cforRange(0 until reps) { rep =>
@@ -42,6 +46,7 @@ class DenseDotProductBenchmark extends BreezeBenchmark {
     sum
   }
 
+  @Benchmark
   def timeBigDVDot(reps: Int) = {
     var sum = 0.0
     cforRange(0 until reps) { rep =>
@@ -50,6 +55,7 @@ class DenseDotProductBenchmark extends BreezeBenchmark {
     sum
   }
 
+  @Benchmark
   def timeSmallDVDot(reps: Int) = {
     var sum = 0.0
     cforRange(0 until reps) { rep =>
@@ -58,6 +64,7 @@ class DenseDotProductBenchmark extends BreezeBenchmark {
     sum
   }
 
+  @Benchmark
   def timeSmallDVInlineRange(reps: Int) = {
     var sum = 0.0
     cforRange(0 until reps) { rep =>
@@ -70,6 +77,7 @@ class DenseDotProductBenchmark extends BreezeBenchmark {
     sum
   }
 
+  @Benchmark
   def timeDirectBigFV(reps: Int) = {
     var sum = 0.0
     cforRange(0 until reps) { rep =>
@@ -78,6 +86,7 @@ class DenseDotProductBenchmark extends BreezeBenchmark {
     sum
   }
 
+  @Benchmark
   def timeBigFVDot(reps: Int) = {
     var sum = 0.0
     cforRange(0 until reps) { rep =>

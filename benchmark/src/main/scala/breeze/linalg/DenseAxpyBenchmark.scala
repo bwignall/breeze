@@ -1,10 +1,11 @@
 package breeze.linalg
 
-import breeze.benchmark.{MyRunner, BreezeBenchmark}
+import breeze.benchmark.{BreezeBenchmark, MyRunner}
 import breeze.linalg.operators.DenseVectorSupportMethods
 import breeze.stats.distributions.Rand
 import dev.ludovic.netlib.blas.BLAS
 import breeze.macros._
+import com.google.caliper.Benchmark
 
 /**
  * Created by dlwh on 8/14/15.
@@ -15,18 +16,21 @@ class DenseAxpyBenchmark extends BreezeBenchmark {
   val dv, dv2 = DenseVector.rand(5)
   val fv, fv2 = DenseVector.rand(5000, Rand.uniform.map(_.toFloat))
 
+  @Benchmark
   def timeSaxpy(reps: Int) = {
     cforRange(0 until reps) { _ =>
       scaleAdd.inPlace(fv2, 0.042f, fv)
     }
   }
 
+  @Benchmark
   def timeBlasSaxpy(reps: Int) = {
     cforRange(0 until reps) { _ =>
       BLAS.getInstance.saxpy(fv.length, 0.042f, fv.data, fv.stride, fv2.data, fv2.stride)
     }
   }
 
+  @Benchmark
   def timeFVAddInlineRange(reps: Int) = {
     cforRange(0 until reps) { rep =>
       val ad = fv.data
@@ -39,6 +43,7 @@ class DenseAxpyBenchmark extends BreezeBenchmark {
   }
 
   /*
+  @Benchmark
   def timeSmallDVAxpy(reps: Int) = {
     var sum = 0.0
     cforRange(0 until reps) { rep =>
@@ -47,6 +52,7 @@ class DenseAxpyBenchmark extends BreezeBenchmark {
     dv2
   }
 
+  @Benchmark
   def timeSmallDVInlineRange(reps: Int) = {
     cforRange(0 until reps) { rep =>
       val ad = dv.data
@@ -57,6 +63,8 @@ class DenseAxpyBenchmark extends BreezeBenchmark {
     }
     dv2
   }
+
+  @Benchmark
   def timeSmallDVScaleAddInline(reps: Int) = {
     cforRange(0 until reps) { rep =>
       dv(0) += dv2(0) * 0.042
@@ -71,12 +79,14 @@ class DenseAxpyBenchmark extends BreezeBenchmark {
   val largeDV, largeDV2 = DenseVector.rand(400)
   val largeDM, largeDM2 = DenseMatrix.rand(20, 20)
 
+  @Benchmark
   def timeLargeDMAddInPlace(reps: Int) = {
     cforRange(0 until reps) { rep =>
       largeDM += largeDM2
     }
   }
 
+  @Benchmark
   def timeLargeDVAddInPlace(reps: Int) = {
     cforRange(0 until reps) { rep =>
       largeDV += largeDV2

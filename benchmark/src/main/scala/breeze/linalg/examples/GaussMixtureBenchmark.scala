@@ -3,8 +3,9 @@ package examples
 
 import breeze.numerics._
 import breeze.stats.distributions._
-import breeze.benchmark.{MyRunner, BreezeBenchmark}
+import breeze.benchmark.{BreezeBenchmark, MyRunner}
 import breeze.linalg.DenseVector
+import com.google.caliper.Benchmark
 
 /**
  * Created by dlwh on 8/20/15.
@@ -18,6 +19,7 @@ class GaussMixtureBenchmark extends BreezeBenchmark {
   val gamma = 5.0
   private val n: Int = 1000
 
+  @Benchmark
   def timeGMMVectors(reps: Int) = {
     val denseVectors = IndexedSeq.fill(n)(x)
     (0 until reps).foreach { i =>
@@ -25,6 +27,7 @@ class GaussMixtureBenchmark extends BreezeBenchmark {
     }
   }
 
+  @Benchmark
   def timeGMMMat(reps: Int) = {
     val matrix = DenseMatrix.fill(n, 10)(5.0)
     (0 until reps).foreach { i =>
@@ -32,6 +35,7 @@ class GaussMixtureBenchmark extends BreezeBenchmark {
     }
   }
 
+  @Benchmark
   def timeGMMMatColMajor(reps: Int) = {
     val matrix = DenseMatrix.fill(10, n)(5.0)
     (0 until reps).foreach { i =>
@@ -39,6 +43,7 @@ class GaussMixtureBenchmark extends BreezeBenchmark {
     }
   }
 
+  @Benchmark
   def timeCenterMat(reps: Int) = {
     val matrix = DenseMatrix.fill(n, 10)(5.0)
     (0 until reps).foreach { i =>
@@ -46,6 +51,7 @@ class GaussMixtureBenchmark extends BreezeBenchmark {
     }
   }
 
+  @Benchmark
   def timeCenterMatColMajor(reps: Int) = {
     val matrix = DenseMatrix.fill(10, n)(5.0)
     (0 until reps).foreach { i =>
@@ -53,6 +59,7 @@ class GaussMixtureBenchmark extends BreezeBenchmark {
     }
   }
 
+  @Benchmark
   def timeCenterVector(reps: Int) = {
     val denseVectors = IndexedSeq.fill(n)(x)
     (0 until reps).foreach { i =>

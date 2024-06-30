@@ -3,6 +3,7 @@ package breeze.linalg
 import breeze.benchmark._
 import breeze.stats.distributions._
 import breeze.macros._
+import com.google.caliper.Benchmark
 
 object DenseVectorBenchmark extends MyRunner(classOf[DenseVectorBenchmark])
 
@@ -47,19 +48,24 @@ trait BuildsRandomVectors {
 }
 
 class DenseVectorBenchmark extends BreezeBenchmark with BuildsRandomVectors {
+  @Benchmark
   def timeAllocate(reps: Int): Unit = run(reps) {
     DenseVector.zeros[Double](1024)
   }
+
+  @Benchmark
   def timeFill(reps: Int): Unit = run(reps) {
     DenseVector.fill[Double](1024, 23)
   }
 
+  @Benchmark
   def timeForeach(reps: Int): Unit = runWith(reps, randomArray(4000)) { arr =>
     var sum = 0.0
     arr.foreach(sum += _)
     sum
   }
 
+  @Benchmark
   def timeLoop(reps: Int): Unit = runWith(reps, randomArray(4000)) { arr =>
     var sum = 0.0
     val d = arr.data
@@ -81,7 +87,10 @@ class DenseVectorBenchmark extends BreezeBenchmark with BuildsRandomVectors {
       t
     })
 
+  @Benchmark
   def timeValueAt(reps: Int) = valueAtBench(reps, 1024 * 8, 1)
+
+  @Benchmark
   def timeValueAtStride4(reps: Int) = valueAtBench(reps, 1024 * 8, 4)
 
   def updateBench(reps: Int, size: Int, stride: Int) =
@@ -94,7 +103,10 @@ class DenseVectorBenchmark extends BreezeBenchmark with BuildsRandomVectors {
       arr
     })
 
+  @Benchmark
   def timeUpdate(reps: Int) = updateBench(reps, 1024 * 8, 1)
+
+  @Benchmark
   def timeUpdateStride4(reps: Int) = updateBench(reps, 1024 * 8, 4)
 
   def unsafeUpdateBench(reps: Int, size: Int, stride: Int) =
@@ -107,7 +119,10 @@ class DenseVectorBenchmark extends BreezeBenchmark with BuildsRandomVectors {
       arr
     })
 
+  @Benchmark
   def timeUnsafeUpdate(reps: Int) = unsafeUpdateBench(reps, 1024 * 8, 1)
+
+  @Benchmark
   def timeUnsafeUpdateStride4(reps: Int) = unsafeUpdateBench(reps, 1024 * 8, 4)
 
 }

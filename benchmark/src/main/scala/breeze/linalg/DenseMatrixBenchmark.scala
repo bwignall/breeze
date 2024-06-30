@@ -4,6 +4,7 @@ import breeze.benchmark._
 import breeze.numerics.sin
 import breeze.stats.distributions._
 import breeze.macros._
+import com.google.caliper.Benchmark
 
 object DenseMatrixBenchmark extends MyRunner(classOf[DenseMatrixBenchmark])
 
@@ -28,6 +29,7 @@ trait BuildsRandomMatrices {
 
 class DenseMatrixBenchmark extends BreezeBenchmark with BuildsRandomMatrices {
 //
+  // @Benchmark
 //  def timeUpdateRowCol(reps: Int) =
 //    runWith(reps, { randomMatrix(2048, 2048) })((mat: DenseMatrix[Double]) => {
 //      val size = 2048
@@ -39,20 +41,24 @@ class DenseMatrixBenchmark extends BreezeBenchmark with BuildsRandomMatrices {
 //      mat
 //    })
 //
+  // @Benchmark
 //  def timeMapPairs(reps: Int): DenseMatrix[Double] =
 //    runWith(reps, { randomMatrix(2048, 2048) })((mat: DenseMatrix[Double]) => {
 //      mat.mapPairs((x: (Int, Int), v: Double) => (x._1 * x._2 * v))
 //    })
+  // @Benchmark
 //  def timeMapPairsTranspose(reps: Int): DenseMatrix[Double] =
 //    runWith(reps, { randomMatrix(2048, 2048, true) })((mat: DenseMatrix[Double]) => {
 //      mat.mapPairs((x: (Int, Int), v: Double) => (x._1 * x._2 * v))
 //    })
 //
+  // @Benchmark
 //  def timeSinMatrix(reps: Int): DenseMatrix[Double] = runWith(reps, randomMatrix(2500, 2500)) { dm =>
 //    sin(dm)
 //  }
 
-  def timeIntMatrixMultiply(reps: Int) = runWith(reps, randomIntMatrix(2500, 2500)){ dm =>
+  @Benchmark
+  def timeIntMatrixMultiply(reps: Int) = runWith(reps, randomIntMatrix(2500, 2500)) { dm =>
     dm * dm
   }
 }
