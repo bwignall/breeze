@@ -1,3 +1,4 @@
+import Common.{Scala212, Scala213, Scala3}
 //enablePlugins(GitVersioning)
 
 Common.commonSettings
@@ -23,11 +24,8 @@ ThisBuild / tlCiScalafmtCheck := false
 
 name := "breeze-parent"
 
-val Scala212 = "2.12.19"
-val Scala213 = "2.13.13"
-val Scala3 = "3.3.3"
 val defaultScala = Scala213
-ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
+ThisBuild / crossScalaVersions := Seq(Scala3, Scala213, Scala212)
 ThisBuild / scalaVersion := defaultScala // the default Scala
 
 javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
