@@ -1,6 +1,7 @@
 package breeze.stats.distributions
 
-import breeze.numerics.{exp, log}
+import breeze.numerics.exp
+import breeze.numerics.log
 
 /**
  * http://en.wikipedia.org/wiki/Laplace_distribution

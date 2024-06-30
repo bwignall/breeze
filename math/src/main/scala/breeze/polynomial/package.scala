@@ -1,11 +1,13 @@
 package breeze
 
-import breeze.generic.{UFunc, VariableUFunc}
-import breeze.linalg.{DenseMatrix, DenseVector}
-import breeze.macros.cforRange
-import spire.math.poly.PolyDense
+import breeze.generic.UFunc
+import breeze.generic.VariableUFunc
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
 import breeze.macros._
+import breeze.macros.cforRange
 import spire.implicits.DoubleAlgebra
+import spire.math.poly.PolyDense
 
 package object polynomial {
   object densePolyval extends UFunc {

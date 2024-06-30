@@ -1,10 +1,14 @@
 package breeze.linalg
 package operators
 
+import breeze.generic.UFunc.InPlaceImpl2
+import breeze.generic.UFunc.UImpl2
+import breeze.linalg.support.CanCopy
+import breeze.linalg.support.CanZipMapValues
+import breeze.math.Field
+import breeze.math.Ring
+import breeze.math.Semiring
 import breeze.storage.Zero
-import breeze.math.{Field, Ring, Semiring}
-import breeze.linalg.support.{CanCopy, CanZipMapValues}
-import breeze.generic.UFunc.{InPlaceImpl2, UImpl2}
 
 trait Counter2Ops {
   implicit def canCopy[K1, K2, V: Zero: Semiring]: CanCopy[Counter2[K1, K2, V]] = new CanCopy[Counter2[K1, K2, V]] {

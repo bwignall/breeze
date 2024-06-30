@@ -16,11 +16,12 @@ package breeze.stats.distributions
  limitations under the License.
  */
 
-import java.util.concurrent.atomic.AtomicInteger
 import breeze.linalg.DenseVector
-import org.apache.commons.math3.random.{MersenneTwister, RandomGenerator}
 import breeze.macros.cforRange
+import org.apache.commons.math3.random.MersenneTwister
+import org.apache.commons.math3.random.RandomGenerator
 
+import java.util.concurrent.atomic.AtomicInteger
 import scala.collection.compat.immutable.ArraySeq
 import scala.collection.mutable.ArrayBuffer
 import scala.reflect.ClassTag

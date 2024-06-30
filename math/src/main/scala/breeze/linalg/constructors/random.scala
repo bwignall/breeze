@@ -1,10 +1,12 @@
 package breeze.linalg
 
 import breeze.generic.UFunc
-import breeze.stats.distributions.{Rand, RandBasis}
-import scala.reflect.ClassTag
-import breeze.storage.Zero
 import breeze.macros._
+import breeze.stats.distributions.Rand
+import breeze.stats.distributions.RandBasis
+import breeze.storage.Zero
+
+import scala.reflect.ClassTag
 
 /**Gives a random Double.
  * +  randomDouble()... returns a random double, in [0, 1]

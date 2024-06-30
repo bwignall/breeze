@@ -3,7 +3,9 @@ package breeze.stats.distributions
 import breeze.linalg._
 import breeze.numerics._
 import breeze.stats._
-import org.scalacheck.{Arbitrary, Gen, Prop}
+import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
+import org.scalacheck.Prop
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.Checkers
 

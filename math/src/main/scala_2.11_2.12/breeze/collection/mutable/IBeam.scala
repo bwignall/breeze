@@ -1,7 +1,10 @@
 package breeze.collection.mutable
 
+import scala.collection.IndexedSeq
+import scala.collection.Iterable
+import scala.collection.IterableLike
 import scala.collection.generic.Shrinkable
-import scala.collection.{IndexedSeq, Iterable, IterableLike, mutable}
+import scala.collection.mutable
 
 trait IBeam[T]
     extends Iterable[T]

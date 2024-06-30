@@ -1,10 +1,9 @@
 package breeze.integrate
 
-import org.scalatest.funsuite.AnyFunSuite
-
 import breeze.integrate
 import breeze.linalg._
 import breeze.numerics._
+import org.scalatest.funsuite.AnyFunSuite
 
 /**
  *

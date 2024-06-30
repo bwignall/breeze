@@ -13,10 +13,9 @@
 
 package breeze.util
 
-import scala.reflect.ClassTag
-
 import scala.collection._
 import scala.collection.mutable._
+import scala.reflect.ClassTag
 
 /** A builder class for arrays.
  *

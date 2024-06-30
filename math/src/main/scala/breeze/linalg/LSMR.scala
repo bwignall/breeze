@@ -3,7 +3,8 @@ package breeze.linalg
 import breeze.linalg.operators.OpMulMatrix
 import breeze.linalg.support.CanTranspose
 import breeze.math.MutableInnerProductVectorSpace
-import breeze.numerics.{abs, sqrt}
+import breeze.numerics.abs
+import breeze.numerics.sqrt
 import breeze.util.SerializableLogging
 
 /**

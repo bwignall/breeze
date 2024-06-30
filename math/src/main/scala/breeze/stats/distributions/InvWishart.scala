@@ -2,7 +2,8 @@ package breeze.stats
 package distributions
 
 import breeze.linalg._
-import breeze.numerics.{log, multidigammalog}
+import breeze.numerics.log
+import breeze.numerics.multidigammalog
 
 case class InvWishart(df: Double, scale: DenseMatrix[Double])(implicit rand: RandBasis)
     extends ContinuousDistr[DenseMatrix[Double]]

@@ -1,14 +1,12 @@
 package breeze
 
-import java.util.zip._
 import java.io._
-
-import scala.collection.generic._
-import scala.collection.mutable
 import java.util.BitSet
-
+import java.util.zip._
 import scala.collection.compat._
 import scala.collection.compat.immutable.ArraySeq
+import scala.collection.generic._
+import scala.collection.mutable
 
 /**
  *

@@ -1,14 +1,16 @@
 package breeze.linalg.operators
 
-import breeze.generic.{ElementwiseUFunc, UFunc}
+import breeze.generic.ElementwiseUFunc
+import breeze.generic.UFunc
+import breeze.gymnastics._
 import breeze.linalg._
 import breeze.linalg.support._
-import breeze.math.{Complex, Semiring}
+import breeze.math.Complex
+import breeze.math.Semiring
 import breeze.storage.Zero
-import breeze.gymnastics._
-import scala.util._
 
 import scala.reflect.ClassTag
+import scala.util._
 
 trait TransposeOps extends TransposeOps_Generic with TransposeOps_Complex with CSCMatrix_TransposeOps {}
 

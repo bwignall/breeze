@@ -15,15 +15,14 @@ package breeze.math
  limitations under the License.
  */
 
-import java.util.regex.Pattern
-
 import breeze.linalg
+import breeze.linalg.norm
 import breeze.linalg.operators._
 import breeze.numerics.floor
 import breeze.storage.Zero
 
+import java.util.regex.Pattern
 import scala.reflect.ClassTag
-import breeze.linalg.norm
 
 /**
  * Immutable complex number representation backed by doubles

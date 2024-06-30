@@ -2,8 +2,8 @@ package breeze.stats.distributions
 
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalatest.matchers.should.Matchers._
 import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers._
 
 class InvGammaTest extends AnyFunSuite with MomentsTestBase[Double] {
 

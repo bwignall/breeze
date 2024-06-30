@@ -17,8 +17,10 @@ package math
  limitations under the License.
  */
 
+import breeze.linalg.logDiff
+import breeze.linalg.softmax
+
 import scala.math._
-import breeze.linalg.{logDiff, softmax}
 
 /**
  * Represents a double in log space, to prevent under/overflow

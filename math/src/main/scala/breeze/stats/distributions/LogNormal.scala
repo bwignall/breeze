@@ -1,11 +1,12 @@
 package breeze.stats.distributions
 
-import scala.runtime.ScalaRunTime
-import breeze.optimize.DiffFunction
 import breeze.numerics._
+import breeze.optimize.DiffFunction
+
 import scala.math.exp
 import scala.math.log
 import scala.math.sqrt
+import scala.runtime.ScalaRunTime
 
 /**
  * A log normal distribution is distributed such that log X ~ Normal(\mu, \sigma)

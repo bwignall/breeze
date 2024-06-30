@@ -15,14 +15,15 @@ package breeze.optimize
  limitations under the License.
  */
 
-import breeze.optimize.proximal.{ProjectL1, QuadraticMinimizer}
+import breeze.linalg._
+import breeze.numerics._
+import breeze.optimize.proximal.NonlinearMinimizer.Projection
+import breeze.optimize.proximal.ProjectL1
+import breeze.optimize.proximal.QuadraticMinimizer
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatest.propspec._
 import org.scalatestplus.scalacheck._
-import breeze.linalg._
-import breeze.numerics._
-import breeze.optimize.proximal.NonlinearMinimizer.Projection
 
 import matchers.should.Matchers._
 

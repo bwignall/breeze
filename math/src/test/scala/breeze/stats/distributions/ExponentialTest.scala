@@ -1,9 +1,9 @@
 package breeze.stats.distributions
 
+import breeze.linalg.isClose
 import org.scalacheck.Arbitrary
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.Checkers
-import breeze.linalg.isClose
 
 /**
  * Created by kokorins

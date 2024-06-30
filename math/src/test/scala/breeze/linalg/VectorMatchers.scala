@@ -1,9 +1,10 @@
 package breeze.linalg
 
 import org.scalatest._
+import org.scalatest.matchers.MatchResult
+
 import matchers._
 import matchers.should.Matchers._
-import org.scalatest.matchers.MatchResult
 
 trait VectorMatchers {
 

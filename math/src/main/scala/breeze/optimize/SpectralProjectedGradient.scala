@@ -16,8 +16,9 @@ package breeze.optimize
  limitations under the License.
  */
 
-import breeze.math.{InnerProductModule, MutableVectorField}
 import breeze.linalg.norm
+import breeze.math.InnerProductModule
+import breeze.math.MutableVectorField
 import breeze.util.SerializableLogging
 
 /**

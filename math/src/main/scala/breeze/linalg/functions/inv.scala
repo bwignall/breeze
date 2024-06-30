@@ -1,11 +1,12 @@
 package breeze.linalg
 
-import breeze.macros.expand
-import org.netlib.util.intW
-import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
 import breeze.generic.UFunc
-import breeze.linalg.operators.{OpMulMatrix, OpSolveMatrixBy}
+import breeze.linalg.operators.OpMulMatrix
+import breeze.linalg.operators.OpSolveMatrixBy
 import breeze.linalg.support.CanTranspose
+import breeze.macros.expand
+import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
+import org.netlib.util.intW
 
 /**
  * Computes the inverse of a given real matrix.

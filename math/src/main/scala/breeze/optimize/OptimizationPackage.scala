@@ -1,8 +1,11 @@
 package breeze.optimize
 
 import breeze.linalg
-import breeze.linalg.operators.{HasOps, OpMulMatrix}
-import breeze.linalg.support.{CanMapValues, CanTraverseValues, CanZipMapValues}
+import breeze.linalg.operators.HasOps
+import breeze.linalg.operators.OpMulMatrix
+import breeze.linalg.support.CanMapValues
+import breeze.linalg.support.CanTraverseValues
+import breeze.linalg.support.CanZipMapValues
 import breeze.math._
 import breeze.optimize.DiffFunction.castOps
 import breeze.optimize.FirstOrderMinimizer.OptParams

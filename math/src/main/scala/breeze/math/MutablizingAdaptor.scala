@@ -1,5 +1,7 @@
 package breeze.math
 
+import breeze.compat.Scala3Compat._
+import breeze.compat._
 import breeze.generic.UFunc
 import breeze.generic.UFunc.UImpl2
 import breeze.linalg._
@@ -7,10 +9,9 @@ import breeze.linalg.operators._
 import breeze.linalg.support.CanTraverseValues.ValuesVisitor
 import breeze.linalg.support._
 import breeze.util.Isomorphism
-import breeze.compat._
-import breeze.compat.Scala3Compat._
 
-import scala.language.{higherKinds, implicitConversions}
+import scala.language.higherKinds
+import scala.language.implicitConversions
 
 /**
  *

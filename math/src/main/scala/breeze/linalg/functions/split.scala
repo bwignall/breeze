@@ -1,14 +1,13 @@
 package breeze.linalg
 
+import breeze.collection.compat._
 import breeze.generic.UFunc
-
-import scala.reflect.ClassTag
 import breeze.macros._
 import breeze.storage.Zero
 
 import scala.collection.compat.immutable.ArraySeq
-import breeze.collection.compat._
 import scala.collection.mutable
+import scala.reflect.ClassTag
 
 /**
  * split the array

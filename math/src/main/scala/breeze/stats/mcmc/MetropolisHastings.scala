@@ -16,9 +16,10 @@ package breeze.stats.mcmc
  limitations under the License.
  */
 
-import breeze.stats.distributions._
-import breeze.math._
 import breeze.macros.cforRange
+import breeze.math._
+import breeze.stats.distributions._
+
 import scala.reflect.ClassTag
 
 trait MetropolisHastings[T] extends Rand[T] {

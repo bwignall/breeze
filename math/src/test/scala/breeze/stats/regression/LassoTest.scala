@@ -1,9 +1,10 @@
 package breeze.stats.regression
 
-import org.scalatest.wordspec.AnyWordSpec
-import scala.util.Random
 import breeze.linalg._
 import breeze.macros.cforRange
+import org.scalatest.wordspec.AnyWordSpec
+
+import scala.util.Random
 
 class LassoTest extends AnyWordSpec {
   "Lasso least squares" should {

@@ -1,8 +1,9 @@
 package breeze.util
 
-import breeze.linalg._
 import breeze.collection.mutable._
+import breeze.linalg._
 import breeze.storage._
+
 import java.util
 import scala.reflect.ClassTag
 

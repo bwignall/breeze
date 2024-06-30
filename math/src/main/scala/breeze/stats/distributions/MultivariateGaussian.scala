@@ -16,10 +16,12 @@ package breeze.stats.distributions
  limitations under the License.
  */
 
-import breeze.numerics._
-import math.{log1p, Pi}
 import breeze.linalg._
+import breeze.numerics._
+
 import scala.runtime.ScalaRunTime
+
+import math.{log1p, Pi}
 
 /**
  * Represents a Gaussian distribution over a single real variable.

@@ -1,10 +1,11 @@
 package breeze.linalg
 
-import breeze.generic.{MappingUFunc, UFunc}
+import breeze.generic.MappingUFunc
+import breeze.generic.UFunc
 import breeze.linalg.support.CanTraverseValues
 import breeze.linalg.support.CanTraverseValues.ValuesVisitor
-import breeze.macros.expand
 import breeze.macros._
+import breeze.macros.expand
 
 /**
  * Computes the softmax (a.k.a. logSum) of an object. Softmax is defined as \log \sum_i \exp(x(i)), but

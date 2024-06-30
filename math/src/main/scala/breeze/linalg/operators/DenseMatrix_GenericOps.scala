@@ -1,11 +1,12 @@
 package breeze.linalg.operators
 
 import breeze.linalg._
-import breeze.macros.{cforRange, cforRange2}
+import breeze.macros.cforRange
+import breeze.macros.cforRange2
+import breeze.macros.require
 import breeze.math.Semiring
 import breeze.storage.Zero
 import breeze.util.ReflectionUtil
-import breeze.macros.require
 
 import scala.reflect.ClassTag
 

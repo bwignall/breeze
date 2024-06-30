@@ -16,15 +16,16 @@ package breeze.collection.mutable
  limitations under the License.
  */
 
-import java.util.Comparator
-
-import breeze.collection.mutable.Beam.{BeamResult, NotAdded}
+import breeze.collection.mutable.Beam.BeamResult
+import breeze.collection.mutable.Beam.NotAdded
 import breeze.linalg.clip
 
+import java.util.Comparator
 import scala.collection.JavaConverters._
+import scala.collection._
 import scala.collection.generic._
+import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
-import scala.collection.{mutable, _}
 
 
 /**

@@ -1,20 +1,6 @@
 package breeze.util
 
 import scala.collection.mutable._
-
-// cribbed from. basically unchanged except for specialization
-/*
- * Scala (https://www.scala-lang.org)
- *
- * Copyright EPFL and Lightbend, Inc.
- *
- * Licensed under Apache License 2.0
- * (http://www.apache.org/licenses/LICENSE-2.0).
- *
- * See the NOTICE file distributed with this work for
- * additional information regarding copyright ownership.
- */
-
 import scala.reflect.ClassTag
 
 /** A builder class for arrays. this is more or less a direct copy from scala, but included here with `@specialized`

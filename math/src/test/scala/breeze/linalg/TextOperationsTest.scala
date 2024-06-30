@@ -1,9 +1,10 @@
 package breeze.linalg
 
-import java.io.File
 import org.scalatest.funsuite.AnyFunSuite
 
-import java.nio.file.{Path, Paths}
+import java.io.File
+import java.nio.file.Path
+import java.nio.file.Paths
 
 /**
  * Created by Luca Puggini: lucapuggio@gmail.com on 19/02/16.

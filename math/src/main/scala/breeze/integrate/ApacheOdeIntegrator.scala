@@ -1,7 +1,8 @@
 package breeze.integrate
 
 import breeze.linalg._
-import org.apache.commons.math3.ode.{AbstractIntegrator, FirstOrderDifferentialEquations}
+import org.apache.commons.math3.ode.AbstractIntegrator
+import org.apache.commons.math3.ode.FirstOrderDifferentialEquations
 
 trait ApacheOdeIntegrator extends OdeIntegrator {
 

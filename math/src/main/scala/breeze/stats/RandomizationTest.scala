@@ -17,6 +17,7 @@ package breeze.stats
  */
 
 import scala.collection.mutable.{Seq => _, _}
+
 import distributions._
 
 /** Implements statistical significance testing for the output of two systems by randomization.

@@ -14,7 +14,8 @@ package breeze.optimize
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import breeze.linalg.{norm, DenseVector}
+import breeze.linalg.DenseVector
+import breeze.linalg.norm
 import breeze.numerics.pow
 
 /**

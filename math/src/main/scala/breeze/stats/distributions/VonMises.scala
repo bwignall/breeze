@@ -16,10 +16,11 @@ package breeze.stats.distributions
  limitations under the License.
  */
 
-import breeze.numerics.Bessel
-import math._
-import breeze.optimize._
 import breeze.linalg.DenseVector
+import breeze.numerics.Bessel
+import breeze.optimize._
+
+import math._
 
 /**
  * Represents a Von Mises distribution, which is

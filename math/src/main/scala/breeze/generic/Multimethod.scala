@@ -16,12 +16,13 @@ package breeze.generic
  limitations under the License.
  */
 
-import collection.mutable.{ArrayBuffer, HashMap}
-import java.util.concurrent.ConcurrentHashMap
 import breeze.util.ReflectionUtil
 
-import collection.mutable
+import java.util.concurrent.ConcurrentHashMap
 import scala.collection.compat._
+
+import collection.mutable.{ArrayBuffer, HashMap}
+import collection.mutable
 
 /**
  * A Multimethod is basically a glorified registry that uses dynamic reflection (and subtyping) to determine which

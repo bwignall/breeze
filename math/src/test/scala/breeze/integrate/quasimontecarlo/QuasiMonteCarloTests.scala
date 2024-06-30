@@ -17,8 +17,9 @@ package breeze.integrate.quasimontecarlo
  */
 
 import breeze.stats.distributions._
-import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest._
+import org.scalatest.wordspec.AnyWordSpec
+
 import matchers.should.Matchers._
 
 class QuasiMonteCarloTest extends AnyWordSpec {

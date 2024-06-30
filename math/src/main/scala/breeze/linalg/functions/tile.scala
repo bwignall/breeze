@@ -4,6 +4,7 @@ import breeze.generic.UFunc
 import breeze.linalg.operators.OpSet
 import breeze.math.Semiring
 import breeze.storage.Zero
+
 import scala.reflect.ClassTag
 
 /**

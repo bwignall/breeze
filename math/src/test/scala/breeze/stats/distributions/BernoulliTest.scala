@@ -16,12 +16,11 @@ package breeze.stats.distributions
  limitations under the License.
  */
 
+import breeze.numerics._
+import org.scalacheck._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
-import org.scalacheck._
-
-import breeze.numerics._
 
 class BernoulliTest extends RandTestBase with MomentsTestBase[Boolean] with ExpFamTest[Bernoulli, Boolean] {
   type Distr = Bernoulli

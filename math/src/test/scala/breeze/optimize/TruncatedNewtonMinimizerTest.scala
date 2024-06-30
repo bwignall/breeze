@@ -16,9 +16,8 @@ package breeze.optimize
  limitations under the License.
  */
 
-import org.scalacheck._
-
 import breeze.linalg._
+import org.scalacheck._
 
 class TruncatedNewtonMinimizerTest extends OptimizeTestBase {
 

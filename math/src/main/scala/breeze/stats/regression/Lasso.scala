@@ -2,8 +2,8 @@ package breeze.stats.regression
 
 import breeze.generic.UFunc
 import breeze.linalg._
-import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
 import breeze.macros.cforRange
+import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
 
 private case class LassoCalculator(data: DenseMatrix[Double],
                                    outputs: DenseVector[Double],

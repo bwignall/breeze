@@ -2,12 +2,18 @@ package breeze.linalg.operators
 
 import breeze.generic.UFunc
 import breeze.linalg._
-import breeze.linalg.support.{CanZipMapKeyValues, CanZipMapValues}
-import breeze.macros.{cforRange, expand}
-import breeze.math.{Field, Ring, Semiring}
+import breeze.linalg.support.CanZipMapKeyValues
+import breeze.linalg.support.CanZipMapValues
+import breeze.macros.assert
+import breeze.macros.cforRange
+import breeze.macros.expand
+import breeze.macros.require
+import breeze.math.Field
+import breeze.math.Ring
+import breeze.math.Semiring
 import breeze.storage.Zero
-import breeze.util.{ArrayUtil, ReflectionUtil}
-import breeze.macros.{assert, require}
+import breeze.util.ArrayUtil
+import breeze.util.ReflectionUtil
 
 import java.util
 import scala.reflect.ClassTag

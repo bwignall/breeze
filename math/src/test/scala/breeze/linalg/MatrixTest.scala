@@ -15,10 +15,10 @@ package breeze.linalg
  See the License for the specific language governing permissions and
  limitations under the License.
  */
+import breeze.math.Complex
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
-import breeze.math.Complex
 
 class MatrixTest extends AnyFunSuite with Checkers {
   test("Multiply") {

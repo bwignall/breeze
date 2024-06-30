@@ -1,13 +1,14 @@
 package breeze.linalg
 
-import org.scalatest._
-import org.scalatest.funsuite._
-import matchers.should.Matchers._
 import breeze.linalg._
 import breeze.stats.distributions.RandBasis
 import breeze.stats.hist
+import org.scalatest._
+import org.scalatest.funsuite._
 
 import scala.util.Random
+
+import matchers.should.Matchers._
 
 /**
  * Created by huaminli on 7/25/16.

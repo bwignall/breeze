@@ -16,12 +16,15 @@ package breeze.util
  limitations under the License.
  */
 
-import java.io.{IOException, ObjectInputStream, ObjectStreamException}
-import scala.jdk.CollectionConverters._
-import scala.collection.mutable.{ArrayBuffer, HashMap}
-import java.util.Arrays
+import java.io.IOException
+import java.io.ObjectInputStream
+import java.io.ObjectStreamException
 import java.util
+import java.util.Arrays
+import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable.HashMap
 import scala.io.Source
+import scala.jdk.CollectionConverters._
 
 /**
  * Trait that marks an O(1) bidirectional map between Ints (increasing from 0)

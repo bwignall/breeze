@@ -1,8 +1,8 @@
 package breeze.signal
 
+import breeze.linalg.DenseVector
 import org.scalatest._
 import org.scalatest.funsuite._
-import breeze.linalg.DenseVector
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,11 +1,12 @@
 package breeze.stats
 package distributions
 
-import scala.collection.compat._
 import breeze.linalg.Axis._1
 import breeze.linalg.Counter
 import breeze.numerics._
 import breeze.optimize.DiffFunction
+
+import scala.collection.compat._
 
 /*
  Copyright 2009 David Hall, Daniel Ramage

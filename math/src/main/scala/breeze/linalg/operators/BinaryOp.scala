@@ -15,8 +15,9 @@ package breeze.linalg.operators
  limitations under the License.
  */
 
+import breeze.generic.MMRegistry2
+import breeze.generic.UFunc
 import breeze.generic.UFunc.UImpl2
-import breeze.generic.{MMRegistry2, UFunc}
 import breeze.linalg.support.CanCopy
 
 import scala.annotation.unchecked.uncheckedVariance

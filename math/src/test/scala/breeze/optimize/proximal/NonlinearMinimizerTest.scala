@@ -1,9 +1,12 @@
 package breeze.optimize.proximal
 
-import breeze.linalg.{norm, sum, DenseMatrix, DenseVector}
-import breeze.optimize.proximal.Constraint._
-import breeze.optimize.OptimizeTestBase
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
+import breeze.linalg.norm
+import breeze.linalg.sum
 import breeze.numerics._
+import breeze.optimize.OptimizeTestBase
+import breeze.optimize.proximal.Constraint._
 
 class NonlinearMinimizerTest extends OptimizeTestBase {
   val n = 5

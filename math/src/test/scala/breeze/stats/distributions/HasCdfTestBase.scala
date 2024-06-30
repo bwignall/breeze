@@ -18,7 +18,8 @@
 
 package breeze.stats.distributions
 
-import org.scalacheck.{Arbitrary, Prop}
+import org.scalacheck.Arbitrary
+import org.scalacheck.Prop
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.Checkers
 

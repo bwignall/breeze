@@ -17,12 +17,14 @@ package breeze.numerics
  */
 
 import breeze.linalg._
+import breeze.math.Complex
+import org.scalacheck.Arbitrary
+import org.scalacheck.Prop
 import org.scalatest._
-import matchers.should.Matchers._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
-import org.scalacheck.{Arbitrary, Prop}
-import breeze.math.Complex
+
+import matchers.should.Matchers._
 
 class NumericsTest extends AnyFunSuite with Checkers {
 

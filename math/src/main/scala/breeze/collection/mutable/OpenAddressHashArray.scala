@@ -16,12 +16,13 @@ package breeze.collection.mutable
  limitations under the License.
  */
 
-import java.util
+import breeze.storage.ConfigurableDefault
+import breeze.storage.Storage
+import breeze.storage.Zero
 
+import java.util
 import scala.reflect.ClassTag
 import scala.util.hashing.MurmurHash3
-
-import breeze.storage.{ConfigurableDefault, Storage, Zero}
 
 /**
  * This is a Sparse Array implementation backed by a linear-probing

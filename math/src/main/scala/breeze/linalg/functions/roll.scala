@@ -1,8 +1,9 @@
 package breeze.linalg
 
 import breeze.generic.UFunc
-import scala.reflect.ClassTag
 import breeze.macros._
+
+import scala.reflect.ClassTag
 
 /**
  * roll the array

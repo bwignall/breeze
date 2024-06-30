@@ -37,12 +37,14 @@ package breeze.optimize
 import breeze.linalg._
 import breeze.numerics._
 import breeze.optimize.proximal.NonlinearMinimizer.Projection
-import breeze.optimize.proximal.{ProjectL1, QuadraticMinimizer}
+import breeze.optimize.proximal.ProjectL1
+import breeze.optimize.proximal.QuadraticMinimizer
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatest.propspec._
-import matchers.should.Matchers._
 import org.scalatestplus.scalacheck._
+
+import matchers.should.Matchers._
 
 class SpectralProjectedGradientTest
     extends AnyPropSpec

@@ -1,6 +1,7 @@
 package breeze.linalg
 
-import scala.collection.{Set, immutable}
+import scala.collection.Set
+import scala.collection.immutable
 
 private class Counter2KeySet[K1, K2, V](data: scala.collection.mutable.Map[K1, Counter[K2, V]]) extends Set[(K1, K2)] {
   def contains(k: (K1, K2)): Boolean = data.contains(k._1) && data(k._1).contains(k._2)

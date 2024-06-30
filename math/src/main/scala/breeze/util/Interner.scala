@@ -16,11 +16,11 @@ package breeze.util
  limitations under the License.
  */
 
-import java.io.{ObjectInputStream, ObjectOutputStream}
-import java.lang.ref.WeakReference
-
 import breeze.collection.mutable.AutoUpdater
 
+import java.io.ObjectInputStream
+import java.io.ObjectOutputStream
+import java.lang.ref.WeakReference
 import scala.collection._
 import scala.collection.mutable.WeakHashMap
 import scala.reflect.ClassTag

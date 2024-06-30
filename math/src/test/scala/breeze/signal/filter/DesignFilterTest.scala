@@ -1,9 +1,10 @@
 package breeze.signal.support
 
+import breeze.linalg.DenseVector
+import breeze.linalg.norm
+import breeze.signal._
 import org.scalatest._
 import org.scalatest.funsuite._
-import breeze.linalg.{norm, DenseVector}
-import breeze.signal._
 
 /**
  * @author ktakagaki

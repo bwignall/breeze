@@ -1,18 +1,19 @@
 package breeze.linalg
 
+import breeze.collection.mutable.OpenAddressHashArray
+import breeze.macros._
+import breeze.math._
+import breeze.storage.Zero
+import breeze.util.ReflectionUtil
+
+import scala.reflect.ClassTag
+import scala.util.hashing.MurmurHash3
+import scala.{specialized => spec}
+
 import operators._
 import support._
 import support.CanTraverseValues.ValuesVisitor
 import support.CanTraverseKeyValuePairs.KeyValuePairsVisitor
-import breeze.collection.mutable.OpenAddressHashArray
-import breeze.storage.Zero
-import breeze.macros._
-import breeze.math._
-import breeze.util.ReflectionUtil
-
-import scala.{specialized => spec}
-import scala.reflect.ClassTag
-import scala.util.hashing.MurmurHash3
 
 /**
  * A HashVector is a sparse vector backed by an OpenAddressHashArray

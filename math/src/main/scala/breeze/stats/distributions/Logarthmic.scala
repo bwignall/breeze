@@ -1,7 +1,11 @@
 package breeze.stats.distributions
 
+import breeze.numerics.expm1
+import breeze.numerics.log
+import breeze.numerics.log1p
+import breeze.numerics.round
+
 import runtime.ScalaRunTime
-import breeze.numerics.{expm1, log, log1p, round}
 
 /**
  * The Logarithmic distribution

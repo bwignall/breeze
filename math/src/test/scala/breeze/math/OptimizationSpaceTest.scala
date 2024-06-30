@@ -2,7 +2,9 @@ package breeze.math
 
 import breeze.linalg._
 import breeze.numerics.pow
-import org.scalacheck.{Arbitrary, Gen, Prop}
+import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
+import org.scalacheck.Prop
 
 /**
  * breeze

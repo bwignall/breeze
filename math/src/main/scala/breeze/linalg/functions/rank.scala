@@ -1,11 +1,11 @@
 package breeze.linalg
 
 import breeze.generic.UFunc
-import breeze.linalg.svd.SVD
-import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
 import breeze.linalg.support.CanTraverseValues
 import breeze.linalg.support.CanTraverseValues.ValuesVisitor
+import breeze.linalg.svd.SVD
 import breeze.math.Field
+import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
 
 /**
  * Computes the rank of a matrix.

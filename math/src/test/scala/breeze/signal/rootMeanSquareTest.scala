@@ -1,7 +1,7 @@
 package breeze.signal
 
-import org.scalatest.funsuite.AnyFunSuite
 import breeze.linalg.DenseVector
+import org.scalatest.funsuite.AnyFunSuite
 
 /**
  * @author ktakagaki

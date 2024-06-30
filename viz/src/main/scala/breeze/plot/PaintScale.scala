@@ -1,9 +1,12 @@
 package breeze.plot
 
-import java.awt.{Color, Paint, TexturePaint}
-import java.awt.image.BufferedImage
-import java.awt.geom.Rectangle2D
 import breeze.compat.Scala3Compat._
+
+import java.awt.Color
+import java.awt.Paint
+import java.awt.TexturePaint
+import java.awt.geom.Rectangle2D
+import java.awt.image.BufferedImage
 import scala.language.implicitConversions
 
 /**

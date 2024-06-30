@@ -1,8 +1,13 @@
 package breeze.linalg.operators
 
 import breeze.generic.UFunc
-import breeze.linalg.support.{CanSlice, CanSlice2, CanTranspose}
-import breeze.linalg.{SliceMatrix, SliceVector, Tensor, Transpose}
+import breeze.linalg.SliceMatrix
+import breeze.linalg.SliceVector
+import breeze.linalg.Tensor
+import breeze.linalg.Transpose
+import breeze.linalg.support.CanSlice
+import breeze.linalg.support.CanSlice2
+import breeze.linalg.support.CanTranspose
 import breeze.math.Semiring
 
 import scala.reflect.ClassTag

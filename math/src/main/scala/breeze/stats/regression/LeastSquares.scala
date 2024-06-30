@@ -2,9 +2,10 @@ package breeze.stats.regression
 
 import breeze.generic.UFunc
 import breeze.linalg._
-import breeze.linalg.operators.{OpMulInner, OpMulMatrix}
-import org.netlib.util.intW
+import breeze.linalg.operators.OpMulInner
+import breeze.linalg.operators.OpMulMatrix
 import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
+import org.netlib.util.intW
 
 import java.util.Arrays
 

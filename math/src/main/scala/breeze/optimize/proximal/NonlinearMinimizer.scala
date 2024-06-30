@@ -1,16 +1,18 @@
 package breeze.optimize.proximal
 
-import breeze.linalg.{norm, DenseVector}
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
+import breeze.linalg.max
+import breeze.linalg.norm
+import breeze.linalg.sum
 import breeze.math.MutableInnerProductModule
 import breeze.optimize._
-import breeze.optimize.proximal.LinearGenerator.Cost
-import breeze.util.SerializableLogging
 import breeze.optimize.proximal.Constraint._
-import scala.math._
-import breeze.linalg.DenseMatrix
-import breeze.linalg.sum
-import breeze.linalg.max
+import breeze.optimize.proximal.LinearGenerator.Cost
 import breeze.util.Implicits._
+import breeze.util.SerializableLogging
+
+import scala.math._
 
 /**
  *

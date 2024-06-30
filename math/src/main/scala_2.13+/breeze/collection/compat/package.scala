@@ -1,8 +1,7 @@
 package breeze.collection
 
-import scala.reflect.ClassTag
-
 import scala.collection.compat.immutable.ArraySeq
+import scala.reflect.ClassTag
 
 package object compat {
   def arraySeqBuilder[K: ClassTag] = ArraySeq.newBuilder[K]

@@ -16,8 +16,8 @@ package breeze.integrate.quasimontecarlo
  limitations under the License.
  */
 
-import breeze.macros._
 import breeze.linalg._
+import breeze.macros._
 import breeze.stats.distributions.RandBasis
 
 import scala.reflect.ClassTag

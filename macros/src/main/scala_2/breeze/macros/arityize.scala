@@ -1,8 +1,9 @@
 package breeze.macros
 
-import scala.annotation.{Annotation, StaticAnnotation}
-import scala.reflect.macros.whitebox.Context
+import scala.annotation.Annotation
+import scala.annotation.StaticAnnotation
 import scala.language.experimental.macros
+import scala.reflect.macros.whitebox.Context
 
 /**
  * An annotation for code generating up to 22 replicas a la Tuples.

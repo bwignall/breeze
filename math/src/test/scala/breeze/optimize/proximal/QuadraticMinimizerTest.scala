@@ -1,14 +1,15 @@
 package breeze.optimize.proximal
 
-import breeze.numerics.abs
-import breeze.optimize.linear.NNLS
-import org.scalatest._
-import matchers.should.Matchers._
-import org.scalatest.funsuite._
 import breeze.linalg._
-import breeze.optimize._
-import breeze.optimize.proximal.Constraint._
 import breeze.numerics._
+import breeze.numerics.abs
+import breeze.optimize._
+import breeze.optimize.linear.NNLS
+import breeze.optimize.proximal.Constraint._
+import org.scalatest._
+import org.scalatest.funsuite._
+
+import matchers.should.Matchers._
 
 class QuadraticMinimizerTest extends OptimizeTestBase {
   def matricesNearlyEqual(A: DenseMatrix[Double], B: DenseMatrix[Double], threshold: Double = 1e-6): Unit = {

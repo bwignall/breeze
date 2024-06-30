@@ -15,20 +15,18 @@ package breeze.linalg
  limitations under the License.
  */
 
+import breeze.linalg.operators._
 import breeze.linalg.support.CanTraverseValues.ValuesVisitor
-
-import scala.{specialized => spec}
-import breeze.storage.Zero
-import breeze.util.Terminal
 import breeze.linalg.support._
 import breeze.math._
-import breeze.linalg.operators._
-
-import scala.reflect.ClassTag
-import scala.annotation.unchecked.uncheckedVariance
 import breeze.stats.distributions.Rand
+import breeze.storage.Zero
+import breeze.util.Terminal
 
+import scala.annotation.unchecked.uncheckedVariance
 import scala.collection.immutable.StringOps
+import scala.reflect.ClassTag
+import scala.{specialized => spec}
 
 /**
  *

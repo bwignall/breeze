@@ -2,7 +2,6 @@ package breeze.stats.distributions
 
 import org.apache.commons.math3.random.MersenneTwister
 import org.scalatest.funsuite.AnyFunSuite
-
 import org.scalatest.matchers.should.Matchers._
 
 import java.io._

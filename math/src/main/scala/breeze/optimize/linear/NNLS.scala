@@ -1,12 +1,13 @@
 package breeze.optimize.linear
 
-import breeze.linalg.{DenseMatrix, DenseVector}
-import breeze.stats.distributions.Rand
-import breeze.util.SerializableLogging
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
+import breeze.linalg.axpy
 import breeze.macros._
 import breeze.optimize.proximal.QpGenerator
 import breeze.optimize.proximal.QuadraticMinimizer.gemv
-import breeze.linalg.axpy
+import breeze.stats.distributions.Rand
+import breeze.util.SerializableLogging
 
 /**
  * NNLS solves nonnegative least squares problems using a modified

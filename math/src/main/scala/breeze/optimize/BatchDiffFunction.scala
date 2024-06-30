@@ -1,12 +1,11 @@
 package breeze.optimize
 
+import breeze.linalg.support.CanCopy
 import breeze.stats.distributions.Rand
 import breeze.util.Isomorphism
 
-import scala.collection.immutable
-import breeze.linalg.support.CanCopy
-
 import scala.collection.compat.immutable.ArraySeq
+import scala.collection.immutable
 import scala.collection.mutable.ArrayBuffer
 
 /**

@@ -1,13 +1,15 @@
 package breeze.linalg
 
 import breeze.linalg.operators.HasOps
-import org.scalatest._
-import org.scalatest.funsuite._
 import breeze.math._
-import breeze.numerics.{log, sin}
-import org.scalacheck.{Arbitrary, Gen}
+import breeze.numerics.log
+import breeze.numerics.sin
 import breeze.stats.mean
 import breeze.storage.Zero
+import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
+import org.scalatest._
+import org.scalatest.funsuite._
 
 import scala.reflect.ClassTag
 

@@ -5,9 +5,9 @@ import breeze.linalg.support.CanMapValues.DenseCanMapValues
 import breeze.linalg.support.CanTraverseKeyValuePairs.KeyValuePairsVisitor
 import breeze.linalg.support.CanTraverseValues.ValuesVisitor
 import breeze.linalg.support._
+import breeze.macros._
 import breeze.math.Semiring
 import breeze.storage.Zero
-import breeze.macros._
 
 import scala.reflect.ClassTag
 

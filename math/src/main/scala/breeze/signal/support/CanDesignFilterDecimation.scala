@@ -1,7 +1,8 @@
 package breeze.signal.support
 
+import breeze.linalg.DenseVector
+import breeze.linalg.convert
 import breeze.signal._
-import breeze.linalg.{convert, DenseVector}
 
 /**
  * @author ktakagaki

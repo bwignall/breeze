@@ -15,11 +15,15 @@ package breeze.optimize
  limitations under the License.
  */
 
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
+import breeze.linalg._
 import breeze.linalg.operators.HasOps
-import breeze.linalg.{DenseMatrix, DenseVector, _}
-import breeze.optimize.FirstOrderMinimizer.{ConvergenceCheck, ProjectedStepConverged, State}
-import breeze.util.SerializableLogging
 import breeze.macros._
+import breeze.optimize.FirstOrderMinimizer.ConvergenceCheck
+import breeze.optimize.FirstOrderMinimizer.ProjectedStepConverged
+import breeze.optimize.FirstOrderMinimizer.State
+import breeze.util.SerializableLogging
 
 /**
  * This algorithm is refered the paper

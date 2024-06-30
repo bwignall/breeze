@@ -6,16 +6,17 @@
 
 package breeze.optimize.proximal
 
+import breeze.linalg._
+import breeze.linalg.norm
+import breeze.macros._
 import breeze.numerics.signum
+
+import scala.Double.NegativeInfinity
+import scala.Double.PositiveInfinity
+import scala.math.abs
 import scala.math.max
 import scala.math.min
 import scala.math.sqrt
-import scala.math.abs
-import scala.Double.NegativeInfinity
-import scala.Double.PositiveInfinity
-import breeze.linalg._
-import breeze.macros._
-import breeze.linalg.norm
 
 trait Proximal {
   def prox(x: DenseVector[Double], rho: Double = 1.0): Unit

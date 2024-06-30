@@ -15,10 +15,10 @@ package breeze.linalg.support
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import scala.collection.compat.IterableOnce
-
 import breeze.linalg.support.CanTraverseValues.ValuesVisitor
 import breeze.math.Complex
+
+import scala.collection.compat.IterableOnce
 
 /**
  * Marker for being able to traverse over the values in a collection/tensor

@@ -1,6 +1,7 @@
 package breeze.numerics
 
-import breeze.generic.{MappingUFunc, UFunc}
+import breeze.generic.MappingUFunc
+import breeze.generic.UFunc
 
 /**Package for common unit conversions.
  * @author ktakagaki

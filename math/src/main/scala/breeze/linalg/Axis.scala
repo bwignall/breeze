@@ -1,6 +1,8 @@
 package breeze.linalg
 
-import breeze.generic.UFunc.{UImpl, UImpl2, UImpl3}
+import breeze.generic.UFunc.UImpl
+import breeze.generic.UFunc.UImpl2
+import breeze.generic.UFunc.UImpl3
 import breeze.linalg.support.CanCollapseAxis
 
 /*

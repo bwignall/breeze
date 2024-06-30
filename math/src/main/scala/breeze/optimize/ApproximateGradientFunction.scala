@@ -2,6 +2,7 @@ package breeze.optimize
 
 import breeze._
 import breeze.stats.distributions.Rand
+
 import linalg.operators.{BinaryOp, OpSub}
 import linalg.support.{CanCopy, CanCreateZerosLike}
 import linalg.{NumericOps, Tensor}

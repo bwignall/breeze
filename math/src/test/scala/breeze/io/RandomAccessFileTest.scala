@@ -1,8 +1,9 @@
 package breeze.io
 
 import org.scalatest.funsuite.AnyFunSuite
-import java.io.File
 import spire.math.ULong
+
+import java.io.File
 
 /**
  * Created with IntelliJ IDEA.

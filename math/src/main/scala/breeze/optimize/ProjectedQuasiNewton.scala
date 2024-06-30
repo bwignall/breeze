@@ -16,10 +16,11 @@ package breeze.optimize
  limitations under the License.
  */
 
-import breeze.linalg._
 import breeze.collection.mutable.RingBuffer
+import breeze.linalg._
 import breeze.math.MutableInnerProductModule
-import breeze.optimize.FirstOrderMinimizer.{ConvergenceCheck, ConvergenceReason}
+import breeze.optimize.FirstOrderMinimizer.ConvergenceCheck
+import breeze.optimize.FirstOrderMinimizer.ConvergenceReason
 import breeze.util.SerializableLogging
 
 // Compact representation of an n x n Hessian, maintained via L-BFGS updates

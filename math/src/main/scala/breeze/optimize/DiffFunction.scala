@@ -3,7 +3,10 @@ package breeze.optimize
 import breeze.generic.UFunc
 import breeze.generic.UFunc.UImpl2
 import breeze.linalg.NumericOps
-import breeze.linalg.operators.{OpAdd, OpDiv, OpMulMatrix, OpSub}
+import breeze.linalg.operators.OpAdd
+import breeze.linalg.operators.OpDiv
+import breeze.linalg.operators.OpMulMatrix
+import breeze.linalg.operators.OpSub
 import breeze.linalg.support.CanCopy
 import breeze.math.InnerProductModule
 import breeze.util.Isomorphism

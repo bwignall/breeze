@@ -1,10 +1,11 @@
 package breeze.io
 
-import java.io._
-import au.com.bytecode.opencsv.{CSVReader => OpenCSVReader, CSVWriter => OpenCSVWriter}
+import au.com.bytecode.opencsv.{CSVReader => OpenCSVReader}
+import au.com.bytecode.opencsv.{CSVWriter => OpenCSVWriter}
 
-import scala.collection.compat.immutable.ArraySeq
+import java.io._
 import scala.collection.compat._
+import scala.collection.compat.immutable.ArraySeq
 
 /**
  * Just a simple wrapper for OpenCSV's csvreader.

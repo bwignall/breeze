@@ -1,12 +1,15 @@
 package breeze.signal
 
-import breeze.linalg._
-import breeze.linalg.{sum, DenseMatrix, DenseVector}
 import breeze.generic.UFunc
-import breeze.math.Complex
-import breeze.signal.support.JTransformsSupport._
+import breeze.linalg.DenseMatrix
+import breeze.linalg.DenseVector
+import breeze.linalg._
+import breeze.linalg.sum
 import breeze.macros.expand
-import breeze.numerics.{cos, sin}
+import breeze.math.Complex
+import breeze.numerics.cos
+import breeze.numerics.sin
+import breeze.signal.support.JTransformsSupport._
 
 /**
  * Returns the discrete fourier transform of a DenseVector or DenseMatrix. Currently,

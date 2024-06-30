@@ -1,8 +1,8 @@
 package breeze.linalg;
 
-import breeze.util.Opt
 import breeze.macros.expand
 import breeze.math.Complex
+import breeze.util.Opt
 
 /**
  * @author ktakagaki

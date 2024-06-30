@@ -15,9 +15,11 @@ package breeze.linalg
  limitations under the License.
  */
 
+import breeze.math.Complex
+import breeze.math.Field
 import breeze.math.MutableOptimizationSpace.SparseFieldOptimizationSpace
-import breeze.math.{Complex, Field}
-import breeze.numerics.{abs, inf}
+import breeze.numerics.abs
+import breeze.numerics.inf
 import breeze.storage.Zero
 import org.scalatest._
 import org.scalatest.funsuite._

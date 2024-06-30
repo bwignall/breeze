@@ -1,8 +1,9 @@
 package breeze.stats.distributions
 
-import scala.runtime.ScalaRunTime
-import org.apache.commons.math3.distribution.TDistribution
 import breeze.numerics._
+import org.apache.commons.math3.distribution.TDistribution
+
+import scala.runtime.ScalaRunTime
 
 /**
  * Implements Student's T distribution

@@ -1,6 +1,8 @@
 package breeze.stats.distributions
 
-import breeze.linalg.{sum, Counter, DenseVector}
+import breeze.linalg.Counter
+import breeze.linalg.DenseVector
+import breeze.linalg.sum
 import breeze.math.MutableEnumeratedCoordinateField
 import breeze.numerics._
 import breeze.util.ArrayUtil

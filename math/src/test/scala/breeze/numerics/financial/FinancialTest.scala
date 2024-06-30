@@ -16,9 +16,8 @@ package breeze.numerics.financial
  limitations under the License.
  */
 
-import org.scalatest.funsuite.AnyFunSuite
-
 import breeze.linalg._
+import org.scalatest.funsuite.AnyFunSuite
 
 /**
  *

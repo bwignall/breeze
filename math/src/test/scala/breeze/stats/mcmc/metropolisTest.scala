@@ -1,9 +1,9 @@
 package breeze.stats.mcmc
 
-import breeze.stats.distributions._
+import breeze.linalg._
 import breeze.macros._
 import breeze.numerics._
-import breeze.linalg._
+import breeze.stats.distributions._
 import org.scalatest.funsuite.AnyFunSuite
 
 /**Tests for breeze.stats.mcmc.MetropolisHastings

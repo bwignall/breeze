@@ -1,8 +1,8 @@
 package breeze.signal
 
 import breeze.generic.UFunc
-import breeze.numerics.sqrt
 import breeze.linalg._
+import breeze.numerics.sqrt
 
 /** Root mean square of a vector.
  *

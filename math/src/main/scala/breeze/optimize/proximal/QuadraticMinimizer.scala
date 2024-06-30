@@ -1,18 +1,23 @@
 package breeze.optimize.proximal
 
 import breeze.linalg._
-import breeze.util.SerializableLogging
-import scala.math.sqrt
-import breeze.optimize.{DiffFunction, LBFGS, OWLQN}
-import org.netlib.util.intW
-import breeze.optimize.proximal.Constraint._
-import scala.math.abs
-import breeze.numerics._
-import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
-import dev.ludovic.netlib.blas.BLAS.{getInstance => blas}
-import breeze.optimize.linear.{ConjugateGradient, NNLS, PowerMethod}
-import breeze.stats.distributions.Rand
 import breeze.macros._
+import breeze.numerics._
+import breeze.optimize.DiffFunction
+import breeze.optimize.LBFGS
+import breeze.optimize.OWLQN
+import breeze.optimize.linear.ConjugateGradient
+import breeze.optimize.linear.NNLS
+import breeze.optimize.linear.PowerMethod
+import breeze.optimize.proximal.Constraint._
+import breeze.stats.distributions.Rand
+import breeze.util.SerializableLogging
+import dev.ludovic.netlib.blas.BLAS.{getInstance => blas}
+import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
+import org.netlib.util.intW
+
+import scala.math.abs
+import scala.math.sqrt
 
 /**
  * Proximal operators and ADMM based Primal-Dual QP Solver

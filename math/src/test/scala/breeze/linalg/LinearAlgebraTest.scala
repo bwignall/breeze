@@ -21,16 +21,21 @@ import breeze.linalg.qr.QR
 import breeze.linalg.qrp.QRP
 import breeze.linalg.support.CanTraverseValues
 import breeze.linalg.svd.SVD
-import breeze.stats.distributions.{MultivariateGaussian, RandBasis}
-import org.scalacheck.{Arbitrary, Gen, Prop}
-import breeze.util.DoubleImplicits
 import breeze.numerics._
-import breeze.stats.{mean, meanAndVariance, median}
+import breeze.stats.distributions.MultivariateGaussian
+import breeze.stats.distributions.RandBasis
+import breeze.stats.mean
+import breeze.stats.meanAndVariance
+import breeze.stats.median
+import breeze.util.DoubleImplicits
 import breeze.{math => bmath}
-
+import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
+import org.scalacheck.Prop
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
+
 import matchers.should.Matchers._
 
 /**

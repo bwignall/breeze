@@ -1,9 +1,9 @@
 package breeze.linalg
 
+import breeze.macros._
 import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
-import breeze.macros._
 
 /**
  *

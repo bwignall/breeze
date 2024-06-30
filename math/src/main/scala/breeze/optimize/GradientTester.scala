@@ -1,8 +1,11 @@
 package breeze.optimize
 
+import breeze.linalg.NumericOps
+import breeze.linalg.Tensor
+import breeze.linalg.norm
+import breeze.linalg.operators.BinaryOp
+import breeze.linalg.operators.OpSub
 import breeze.linalg.support.CanCopy
-import breeze.linalg.{norm, NumericOps, Tensor}
-import breeze.linalg.operators.{BinaryOp, OpSub}
 import breeze.stats.distributions.Rand
 import breeze.util.SerializableLogging
 

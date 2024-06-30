@@ -1,7 +1,8 @@
 package breeze.optimize.linear
 
+import breeze.linalg.DenseVector
+import breeze.linalg.norm
 import org.scalatest.funsuite.AnyFunSuite
-import breeze.linalg.{norm, DenseVector}
 
 /**
  * TODO

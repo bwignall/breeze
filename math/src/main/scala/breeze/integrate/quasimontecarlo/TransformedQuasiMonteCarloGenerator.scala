@@ -1,6 +1,7 @@
 package breeze.integrate.quasimontecarlo
 
-import breeze.stats.distributions.{Exponential, RandBasis}
+import breeze.stats.distributions.Exponential
+import breeze.stats.distributions.RandBasis
 
 /*
  Copyright 2016 Chris Stucchio

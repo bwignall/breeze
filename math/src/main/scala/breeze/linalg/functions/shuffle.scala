@@ -1,11 +1,12 @@
 package breeze.linalg
 
 import breeze.generic.UFunc
+import breeze.stats.distributions.Rand
+import breeze.stats.distributions.RandBasis
 
 import scala.collection.compat._
 import scala.collection.mutable.ArrayBuffer
 import scala.reflect.ClassTag
-import breeze.stats.distributions.{Rand, RandBasis}
 
 /**
  * Return the given DenseVector, Array, or DenseMatrix as a shuffled copy

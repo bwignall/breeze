@@ -1,8 +1,7 @@
 package breeze.optimize
 
-import org.scalacheck._
-
 import breeze.linalg._
+import org.scalacheck._
 
 /**
  *

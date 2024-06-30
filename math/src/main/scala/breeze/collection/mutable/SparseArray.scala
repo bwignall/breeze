@@ -15,16 +15,16 @@ package breeze.collection.mutable
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import breeze.storage.{ConfigurableDefault, Storage, Zero}
-
-import breeze.util.ArrayUtil
-import java.util
-
 import breeze.macros._
-
-import scala.reflect.ClassTag
 import breeze.macros.cforRange
+import breeze.storage.ConfigurableDefault
+import breeze.storage.Storage
+import breeze.storage.Zero
+import breeze.util.ArrayUtil
+
 import java.io.Serializable
+import java.util
+import scala.reflect.ClassTag
 
 /**
  * A SparseArray is a sparse representation of an array using a two-array binary-search approach.

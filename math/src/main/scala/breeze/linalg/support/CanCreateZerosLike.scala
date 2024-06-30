@@ -14,7 +14,8 @@ package breeze.linalg.support
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import breeze.math.{Field, Semiring}
+import breeze.math.Field
+import breeze.math.Semiring
 import breeze.util.ArrayUtil
 
 import scala.reflect.ClassTag

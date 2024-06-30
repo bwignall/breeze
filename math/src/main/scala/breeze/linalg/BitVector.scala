@@ -1,12 +1,12 @@
 package breeze.linalg
 
-import java.util
 import breeze.linalg.operators.BitVectorOps
 import breeze.linalg.support.CanMapValues.DenseCanMapValues
 import breeze.linalg.support.CanTraverseValues.ValuesVisitor
 import breeze.linalg.support._
 import breeze.storage.Zero
 
+import java.util
 import scala.reflect.ClassTag
 
 /**
