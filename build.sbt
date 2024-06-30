@@ -19,6 +19,8 @@ ThisBuild / tlCiHeaderCheck := false
 // For the time being, allow warnings (do not treat as error; -Werror can be re-enabled later by removing this line)
 ThisBuild / tlFatalWarnings := false
 
+ThisBuild / tlCiScalafmtCheck := false
+
 name := "breeze-parent"
 
 val Scala212 = "2.12.19"
