@@ -18,7 +18,7 @@ package math
  */
 
 import scala.math._
-import breeze.linalg.{softmax, logDiff}
+import breeze.linalg.{logDiff, softmax}
 
 /**
  * Represents a double in log space, to prevent under/overflow
@@ -49,7 +49,7 @@ class LogDouble(val logValue: Double) {
 
   override def equals(o: Any) = o match {
     case ld: LogDouble => logValue == ld.logValue
-    case _ => false
+    case _             => false
   }
 
   override def hashCode = logValue.hashCode

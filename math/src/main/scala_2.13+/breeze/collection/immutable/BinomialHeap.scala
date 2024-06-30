@@ -27,7 +27,7 @@ import scala.collection._
  * @author dlwh
  */
 class BinomialHeap[T]()(implicit ord: Ordering[T])
-  extends Iterable[T]
+    extends Iterable[T]
     with IterableOps[T, Iterable, BinomialHeap[T]]
     with StrictOptimizedIterableOps[T, Iterable, BinomialHeap[T]]
     with Serializable {

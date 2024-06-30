@@ -25,25 +25,22 @@ package object plot {
    * @param labels Optional in-graph labels for some points.
    * @param tips Optional mouse-over tooltips for some points.
    */
-  def plot[X, Y, V](
-      x: X,
-      y: Y,
-      style: Char = '-',
-      colorcode: String = null,
-      name: String = null,
-      lines: Boolean = true,
-      shapes: Boolean = false,
-      labels: (Int) => String = null.asInstanceOf[Int => String],
-      tips: (Int) => String = null.asInstanceOf[Int => String])(
-      implicit xv: DomainFunction[X, Int, V],
-      yv: DomainFunction[Y, Int, V],
-      vv: V => Double): Series = new Series {
+  def plot[X, Y, V](x: X,
+                    y: Y,
+                    style: Char = '-',
+                    colorcode: String = null,
+                    name: String = null,
+                    lines: Boolean = true,
+                    shapes: Boolean = false,
+                    labels: (Int) => String = null.asInstanceOf[Int => String],
+                    tips: (Int) => String = null.asInstanceOf[Int => String]
+  )(implicit xv: DomainFunction[X, Int, V], yv: DomainFunction[Y, Int, V], vv: V => Double): Series = new Series {
     require(xv.domain(x) == yv.domain(y), "Domains must match!")
 
-    def getChartStuff(
-        defaultName: (Int) => String,
-        defaultColor: (Int) => Paint,
-        defaultStroke: (Int) => Stroke): (xy.XYDataset, XYItemRenderer) = {
+    def getChartStuff(defaultName: (Int) => String,
+                      defaultColor: (Int) => Paint,
+                      defaultStroke: (Int) => Stroke
+    ): (xy.XYDataset, XYItemRenderer) = {
 
       type K = Int
 
@@ -119,17 +116,14 @@ package object plot {
    * @param tips Tooltips to show on mouseover for each point.
    * @param name Series name for legend
    */
-  def scatter[X, V, Y, YV](
-      x: X,
-      y: Y,
-      size: Int => Double,
-      colors: Int => Paint = null.asInstanceOf[Int => Paint],
-      labels: Int => String = null.asInstanceOf[Int => String],
-      tips: Int => String = null.asInstanceOf[Int => String],
-      name: String = null)(
-      implicit xv: DomainFunction[X, Int, V],
-      yv: DomainFunction[Y, Int, V],
-      vv: V => Double): Series = new Series {
+  def scatter[X, V, Y, YV](x: X,
+                           y: Y,
+                           size: Int => Double,
+                           colors: Int => Paint = null.asInstanceOf[Int => Paint],
+                           labels: Int => String = null.asInstanceOf[Int => String],
+                           tips: Int => String = null.asInstanceOf[Int => String],
+                           name: String = null
+  )(implicit xv: DomainFunction[X, Int, V], yv: DomainFunction[Y, Int, V], vv: V => Double): Series = new Series {
     require(xv.domain(x) == yv.domain(y), "Domains must match!")
 
     /**
@@ -139,12 +133,12 @@ package object plot {
      * @param defaultStroke
      * @return
      */
-    def getChartStuff(
-        defaultName: (Int) => String,
-        defaultColor: (Int) => Paint,
-        defaultStroke: (Int) => Stroke): (xy.XYDataset, XYItemRenderer) = {
+    def getChartStuff(defaultName: (Int) => String,
+                      defaultColor: (Int) => Paint,
+                      defaultStroke: (Int) => Stroke
+    ): (xy.XYDataset, XYItemRenderer) = {
 
-      val items = (xv.domain(x)).toIndexedSeq
+      val items = xv.domain(x).toIndexedSeq
 
       val paintScale = CategoricalPaintScale[K](colors)
 
@@ -197,9 +191,10 @@ package object plot {
   }
 
   /** Plots a histogram of the given data into the given number of bins */
-  def hist[D, K, V](data: D, bins: HistogramBins = 10, name: String = null)(
-      implicit xv: DomainFunction[D, Int, V],
-      vv: V => Double): Series = new Series {
+  def hist[D, K, V](data: D, bins: HistogramBins = 10, name: String = null)(implicit
+    xv: DomainFunction[D, Int, V],
+    vv: V => Double
+  ): Series = new Series {
     val values = xv.domain(data).map(xv(data, _)).map(vv)
     val (min, max) = (values.min, values.max)
     val binner: StaticHistogramBins = bins match {
@@ -215,10 +210,10 @@ package object plot {
 
     val width = binner.splits.iterator.zip(binner.splits.iterator.drop(1)).map(tup => tup._2 - tup._1).min
 
-    def getChartStuff(
-        defaultName: (Int) => String,
-        defaultColor: (Int) => Paint,
-        defaultStroke: (Int) => Stroke): (xy.XYDataset, XYItemRenderer) = {
+    def getChartStuff(defaultName: (Int) => String,
+                      defaultColor: (Int) => Paint,
+                      defaultStroke: (Int) => Stroke
+    ): (xy.XYDataset, XYItemRenderer) = {
       val dataset = new org.jfree.data.xy.XYBarDataset(
         XYDataset(
           name = if (name == null) defaultName(0) else name,
@@ -228,7 +223,7 @@ package object plot {
               binner.splits(i - 1) + width / 2.0
             } else {
               binner.splits(i) - width / 2.0
-          },
+            },
           y = (i: Int) => counts(i),
           label = (i: Int) => null,
           tip = (i: Int) => null
@@ -261,13 +256,13 @@ package object plot {
    * @param labels Labels for some subset of the data points
    * @param tips Tooltip popups for some subset of the data points
    */
-  def image[M, V](
-      img: Matrix[Double],
-      scale: GradientPaintScale[Double] = null,
-      name: String = null,
-      offset: (Int, Int) = (0, 0),
-      labels: PartialFunction[(Int, Int), String] = null.asInstanceOf[PartialFunction[(Int, Int), String]],
-      tips: PartialFunction[(Int, Int), String] = null.asInstanceOf[PartialFunction[(Int, Int), String]]): Series =
+  def image[M, V](img: Matrix[Double],
+                  scale: GradientPaintScale[Double] = null,
+                  name: String = null,
+                  offset: (Int, Int) = (0, 0),
+                  labels: PartialFunction[(Int, Int), String] = null.asInstanceOf[PartialFunction[(Int, Int), String]],
+                  tips: PartialFunction[(Int, Int), String] = null.asInstanceOf[PartialFunction[(Int, Int), String]]
+  ): Series =
     new Series {
 
       val mt = img
@@ -277,10 +272,10 @@ package object plot {
 
       val items = img.keysIterator.toIndexedSeq
 
-      def getChartStuff(
-          defaultName: (Int) => String,
-          defaultColor: (Int) => Paint,
-          defaultStroke: (Int) => Stroke): (xy.XYDataset, XYItemRenderer) = {
+      def getChartStuff(defaultName: (Int) => String,
+                        defaultColor: (Int) => Paint,
+                        defaultStroke: (Int) => Stroke
+      ): (xy.XYDataset, XYItemRenderer) = {
         // initialize dataset
         val dataset = XYZDataset(
           items = items,

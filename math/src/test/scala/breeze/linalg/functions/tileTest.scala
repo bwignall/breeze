@@ -33,6 +33,8 @@ class tileTest extends AnyFunSuite {
       tile(v, 2, 3) == new DenseMatrix[Int](
         8,
         3,
-        Array(1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4)))
+        Array(1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4)
+      )
+    )
   }
 }

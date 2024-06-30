@@ -96,9 +96,9 @@ object svdr extends UFunc {
    * @param v right singular vectors
    * @return left and right singular vectors with resolved sign ambiguity
    */
-  private def flipSVDSigns(
-      u: DenseMatrix[Double],
-      v: DenseMatrix[Double]): (DenseMatrix[Double], DenseMatrix[Double]) = {
+  private def flipSVDSigns(u: DenseMatrix[Double],
+                           v: DenseMatrix[Double]
+  ): (DenseMatrix[Double], DenseMatrix[Double]) = {
 //    import DenseMatrix.canMapValues
     val abs_u = abs(u)
     val max_abs_cols = (0 until u.cols).map(c => argmax(abs_u(::, c)))

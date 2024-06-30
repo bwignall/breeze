@@ -20,7 +20,6 @@ import org.scalatest.funsuite._
 import org.scalatestplus.scalacheck._
 import breeze.math.Complex
 
-
 class MatrixTest extends AnyFunSuite with Checkers {
   test("Multiply") {
     val a = Matrix((1.0, 2.0, 3.0), (4.0, 5.0, 6.0))
@@ -51,7 +50,7 @@ class MatrixTest extends AnyFunSuite with Checkers {
     val phi2: Matrix[Double] = DenseMatrix.ones[Double](400, 5)
     val w2: Matrix[Double] = DenseMatrix.ones[Double](5, 24)
 
-    val theta2 = (phi2 * w2) //.toDenseMatrix
+    val theta2 = phi2 * w2 // .toDenseMatrix
     assert(theta2(256, 0) != 0)
   }
 
@@ -84,18 +83,19 @@ class MatrixTest extends AnyFunSuite with Checkers {
   test("Multiply Complex") {
 
     val a = Matrix((Complex(1, 1), Complex(2, 2), Complex(3, 3)), (Complex(4, 4), Complex(5, 5), Complex(6, 6)))
-    val b = Matrix(
-      (Complex(7, 7), Complex(-2, -2), Complex(8, 8)),
-      (Complex(-3, -3), Complex(-3, -3), Complex(1, 1)),
-      (Complex(12, 12), Complex(0, 0), Complex(5, 5)))
+    val b = Matrix((Complex(7, 7), Complex(-2, -2), Complex(8, 8)),
+                   (Complex(-3, -3), Complex(-3, -3), Complex(1, 1)),
+                   (Complex(12, 12), Complex(0, 0), Complex(5, 5))
+    )
     val c = DenseVector(Complex(6, 0), Complex(2, 0), Complex(3, 0))
     val cv: Vector[Complex] = c
     val cs = SparseVector(Complex(6, 0), Complex(2, 0), Complex(3, 0))
     val value: Matrix[Complex] = a * b
     assert(
-      value === Matrix(
-        (Complex(0, 74), Complex(0, -16), Complex(0, 50)),
-        (Complex(0, 170), Complex(0, -46), Complex(0, 134))))
+      value === Matrix((Complex(0, 74), Complex(0, -16), Complex(0, 50)),
+                       (Complex(0, 170), Complex(0, -46), Complex(0, 134))
+      )
+    )
     assert(b * c === DenseVector(Complex(62, 62), Complex(-21, -21), Complex(87, 87)))
     assert(b * c === b * cv)
     assert(b * cs === DenseVector(Complex(62, 62), Complex(-21, -21), Complex(87, 87)))

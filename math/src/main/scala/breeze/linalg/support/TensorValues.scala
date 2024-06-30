@@ -20,9 +20,12 @@ package support
  * Class that is kind of like a collection view of the values in a tensor.
  * @author dlwh
  */
-class TensorValues[K, V, +This](private val tensor: This, active: Boolean = false, f: (V) => Boolean = { (x: Any) =>
-  true
-})(implicit ev: This <:< Tensor[K, V]) {
+class TensorValues[K, V, +This](private val tensor: This,
+                                active: Boolean = false,
+                                f: (V) => Boolean = { (x: Any) =>
+                                  true
+                                }
+)(implicit ev: This <:< Tensor[K, V]) {
   def size = tensor.size
 
   def iterator = { if (active) tensor.activeValuesIterator else tensor.valuesIterator }.filter(f)
@@ -39,7 +42,7 @@ class TensorValues[K, V, +This](private val tensor: This, active: Boolean = fals
 
   override def equals(p1: Any) = p1 match {
     case x: TensorValues[_, _, _] => x.eq(this) || iterator.sameElements(x.iterator)
-    case _ => false
+    case _                        => false
   }
 
   def map[TT >: This, O, That](fn: (V) => O)(implicit bf: CanMapValues[TT, V, O, That]): That = {

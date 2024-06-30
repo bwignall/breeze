@@ -1,13 +1,14 @@
 package breeze.linalg
 
 import org.netlib.util.intW
-import dev.ludovic.netlib.lapack.LAPACK.{ getInstance => lapack }
+import dev.ludovic.netlib.lapack.LAPACK.{getInstance => lapack}
 import breeze.generic.UFunc
 import breeze.math.Semiring
 import breeze.storage.Zero
 import breeze.util.ReflectionUtil
 
 import scala.reflect.ClassTag
+
 /**
  * Computes the LU factorization of the given real M-by-N matrix X such that
  * X = P * L * U where P is a permutation matrix (row exchanges).
@@ -20,7 +21,11 @@ object LU extends UFunc {
 
   type DenseLU[T] = LU[DenseMatrix[T]]
 
-  implicit def fromPrimitiveDecomposition[T, U](implicit prim: primitive.Impl[DenseMatrix[T], (DenseMatrix[U], Array[Int])], ct: ClassTag[U], semi: Semiring[U]): Impl[DenseMatrix[T], DenseLU[U]] = {
+  implicit def fromPrimitiveDecomposition[T, U](implicit
+    prim: primitive.Impl[DenseMatrix[T], (DenseMatrix[U], Array[Int])],
+    ct: ClassTag[U],
+    semi: Semiring[U]
+  ): Impl[DenseMatrix[T], DenseLU[U]] = {
     new Impl[DenseMatrix[T], DenseLU[U]] {
       override def apply(v: DenseMatrix[T]): DenseLU[U] = {
         val (m, p) = prim(v)
@@ -29,7 +34,11 @@ object LU extends UFunc {
     }
   }
 
-  implicit def fromPrimitiveDecompositionSimple[T](implicit prim: primitive.Impl[DenseMatrix[T], (DenseMatrix[T], Array[Int])], ct: ClassTag[T], semi: Semiring[T]): Impl[DenseMatrix[T], DenseLU[T]] = {
+  implicit def fromPrimitiveDecompositionSimple[T](implicit
+    prim: primitive.Impl[DenseMatrix[T], (DenseMatrix[T], Array[Int])],
+    ct: ClassTag[T],
+    semi: Semiring[T]
+  ): Impl[DenseMatrix[T], DenseLU[T]] = {
     new Impl[DenseMatrix[T], DenseLU[T]] {
       override def apply(v: DenseMatrix[T]): DenseLU[T] = {
         val (m, p) = prim(v)
@@ -78,8 +87,9 @@ object LU extends UFunc {
 
     }
 
-    implicit def LU_DM_Cast_Impl_Double[T](
-        implicit cast: T => Double): Impl[DenseMatrix[T], (DenseMatrix[Double], Array[Int])] = {
+    implicit def LU_DM_Cast_Impl_Double[T](implicit
+      cast: T => Double
+    ): Impl[DenseMatrix[T], (DenseMatrix[Double], Array[Int])] = {
       new Impl[DenseMatrix[T], (DenseMatrix[Double], Array[Int])] {
         def apply(v: DenseMatrix[T]): (DenseMatrix[Double], Array[Int]) = {
 //          import DenseMatrix.canMapValues
@@ -124,13 +134,13 @@ object LU extends UFunc {
     * @return The permutation matrix, P from the LU decomposition of the form (P * X = L * U)
     *         size RxR
      */
-  def createPermutationMatrix[T: ClassTag: Semiring](ipiv: Array[Int], rows:Int, cols: Int): DenseMatrix[T] = {
+  def createPermutationMatrix[T: ClassTag: Semiring](ipiv: Array[Int], rows: Int, cols: Int): DenseMatrix[T] = {
     val indices: Array[Int] = new Array[Int](rows)
-    for(i <- 0 until rows) {
+    for (i <- 0 until rows) {
       indices(i) = i
     }
 
-    for(i <- 0 until ipiv.length) {
+    for (i <- 0 until ipiv.length) {
       val j = ipiv(i) - 1
       val t = indices(i)
       indices(i) = indices(j)
@@ -138,7 +148,7 @@ object LU extends UFunc {
     }
 
     val pm: DenseMatrix[T] = DenseMatrix.zeros[T](rows, rows)
-    for(i <- 0 until rows) {
+    for (i <- 0 until rows) {
       pm(indices(i), i) = implicitly[Semiring[T]].one
     }
     pm
@@ -164,7 +174,7 @@ object LU extends UFunc {
     * Returns 1 on the diagonal
    */
   private def lowerTriangular[T: Semiring: ClassTag](X: DenseMatrix[T]): DenseMatrix[T] = {
-    DenseMatrix.tabulate(X.rows, X.cols)( (i, j) =>
+    DenseMatrix.tabulate(X.rows, X.cols)((i, j) =>
       if (j == i) {
         implicitly[Semiring[T]].one
       } else if (j < i) {
@@ -181,7 +191,7 @@ object LU extends UFunc {
     * Returns current values on the diagonal.
    */
   private def upperTriangular[T: Zero: ClassTag](X: DenseMatrix[T]): DenseMatrix[T] = {
-    DenseMatrix.tabulate(X.rows, X.cols)( (i, j) =>
+    DenseMatrix.tabulate(X.rows, X.cols)((i, j) =>
       if (j == i) {
         X(i, j) // Keep values on the diagonal (unlike in lower triangular)
       } else if (j > i) {

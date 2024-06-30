@@ -1,6 +1,6 @@
 package breeze.plot
 
-import java.io.{File, OutputStream, FileOutputStream, IOException}
+import java.io.{File, FileOutputStream, IOException, OutputStream}
 import java.awt.Graphics2D
 
 /**

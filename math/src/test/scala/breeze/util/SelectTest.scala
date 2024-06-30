@@ -1,7 +1,7 @@
 package breeze.util
 
 import org.scalatest.funsuite.AnyFunSuite
-import breeze.linalg.{DenseVector, max, min, shuffle}
+import breeze.linalg.{max, min, shuffle, DenseVector}
 import breeze.stats.distributions.RandBasis
 
 import scala.collection.mutable.ArrayBuffer

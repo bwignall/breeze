@@ -36,9 +36,20 @@ import breeze.util.SerializableLogging
  * @param curvilinear if curvilinear true, do the projection inside line search in place of doing it in chooseDescentDirection
  */
 class SpectralProjectedGradient[T](val projection: T => T = { (t: T) =>
-  t
-}, tolerance: Double = 1e-6, suffDec: Double = 1e-4, fvalMemory: Int = 30, alphaMax: Double = 1e10, alphaMin: Double = 1e-10, bbMemory: Int = 10, maxIter: Int = -1, val initFeas: Boolean = false, val curvilinear: Boolean = false, val bbType: Int = 1, val maxSrcht: Int = 30)(
-    implicit space: MutableVectorField[T, Double])
+                                     t
+                                   },
+                                   tolerance: Double = 1e-6,
+                                   suffDec: Double = 1e-4,
+                                   fvalMemory: Int = 30,
+                                   alphaMax: Double = 1e10,
+                                   alphaMin: Double = 1e-10,
+                                   bbMemory: Int = 10,
+                                   maxIter: Int = -1,
+                                   val initFeas: Boolean = false,
+                                   val curvilinear: Boolean = false,
+                                   val bbType: Int = 1,
+                                   val maxSrcht: Int = 30
+)(implicit space: MutableVectorField[T, Double])
     extends FirstOrderMinimizer[T, DiffFunction[T]](fvalMemory = fvalMemory, maxIter = maxIter, tolerance = tolerance)
     with Projecting[T]
     with SerializableLogging {
@@ -58,19 +69,19 @@ class SpectralProjectedGradient[T](val projection: T => T = { (t: T) =>
    */
   protected def bbAlpha(s: T, y: T): Double = {
     var alpha =
-      if (bbType == 1)(s.dot(s)) / (s.dot(y))
+      if (bbType == 1) (s.dot(s)) / (s.dot(y))
       else (s.dot(y)) / (y.dot(y))
     if (alpha <= alphaMin || alpha > alphaMax) alpha = 1.0
     if (alpha.isNaN) alpha = 1.0
     alpha
   }
 
-  override protected def updateHistory(
-      newX: T,
-      newGrad: T,
-      newVal: Double,
-      f: DiffFunction[T],
-      oldState: State): History = {
+  override protected def updateHistory(newX: T,
+                                       newGrad: T,
+                                       newVal: Double,
+                                       f: DiffFunction[T],
+                                       oldState: State
+  ): History = {
     val s = newX - oldState.x
     val y = newGrad - oldState.grad
     History(bbAlpha(s, y), (newVal +: oldState.history.fvals).take(bbMemory))
@@ -99,7 +110,7 @@ class SpectralProjectedGradient[T](val projection: T => T = { (t: T) =>
       if (curvilinear) functionFromSearchDirection(f, state.x, direction, projection)
       else LineSearch.functionFromSearchDirection(f, state.x, direction)
 
-    //TO DO :
+    // TO DO :
     // 1. Add cubic interpolation and see it's performance. Bisection did not work for L1 projection
     val search = new BacktrackingLineSearch(fb, maxIterations = maxSrcht)
     gamma = search.minimize(searchFun, gamma)
@@ -112,8 +123,9 @@ class SpectralProjectedGradient[T](val projection: T => T = { (t: T) =>
   }
 
   // because of the projection, we have to do our own verstion
-  private def functionFromSearchDirection[T, I](f: DiffFunction[T], x: T, direction: T, project: T => T)(
-      implicit prod: InnerProductModule[T, Double]): DiffFunction[Double] = new DiffFunction[Double] {
+  private def functionFromSearchDirection[T, I](f: DiffFunction[T], x: T, direction: T, project: T => T)(implicit
+    prod: InnerProductModule[T, Double]
+  ): DiffFunction[Double] = new DiffFunction[Double] {
     import prod._
 
     /** calculates the value at a point */

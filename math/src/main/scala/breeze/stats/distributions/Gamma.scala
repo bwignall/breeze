@@ -148,9 +148,11 @@ case class Gamma(shape: Double, scale: Double)(implicit rand: RandBasis)
         v = v * v * v
         val x2 = x * x
         val u = rand.uniform.draw()
-        if (u < 1.0 - 0.0331 * (x2 * x2)
-          || log(u) < 0.5 * x2 + d * (1.0 - v + log(v))) {
-          r = (scale * d * v)
+        if (
+          u < 1.0 - 0.0331 * (x2 * x2)
+          || log(u) < 0.5 * x2 + d * (1.0 - v + log(v))
+        ) {
+          r = scale * d * v
           ok = true
         }
       }
@@ -203,7 +205,7 @@ object Gamma extends ExponentialFamily[Gamma, Double] with ContinuousDistributio
     val k_approx = approx_k(s)
     assert(k_approx > 0, k_approx)
     val k = Nwt_Rph_iter_for_k(k_approx, s)
-    val theta = ss.mean / (k)
+    val theta = ss.mean / k
     (k, theta)
   }
   /*
@@ -211,7 +213,7 @@ object Gamma extends ExponentialFamily[Gamma, Double] with ContinuousDistributio
    */
   def approx_k(s: Double): Double = {
     // correct within 1.5%
-    (3 - s + math.sqrt(math.pow((s - 3), 2) + 24 * s)) / (12 * s)
+    (3 - s + math.sqrt(math.pow(s - 3, 2) + 24 * s)) / (12 * s)
   }
 
   private val MaxIter = 50

@@ -24,9 +24,7 @@ import breeze.optimize.DiffFunction
  * Represents a Poisson random variable.
  * @author dlwh
  */
-case class Poisson(mean: Double)(implicit rand: RandBasis)
-    extends DiscreteDistr[Int]
-    with Moments[Double, Double] {
+case class Poisson(mean: Double)(implicit rand: RandBasis) extends DiscreteDistr[Int] with Moments[Double, Double] {
   require(mean >= 0, "Poisson mean must be non-negative, but got " + mean)
   require(!mean.isInfinite, "Poisson mean must be finite, but got " + mean)
 
@@ -93,7 +91,7 @@ case class Poisson(mean: Double)(implicit rand: RandBasis)
     var k = 0
     var meanmean = 1.0 / mean
 
-    while (correction > 1E-6) {
+    while (correction > 1e-6) {
       meanmean *= mean
       val ln_k_! = lgamma(k.toDouble + 1)
       correction = meanmean * ln_k_! / exp(ln_k_!)

@@ -41,7 +41,7 @@ class MultimethodTest extends AnyFunSuite with Checkers {
 
   val all = Set(t, v, dv, sv, m, dm)
 
-  private def ufunc[T1, T2, R](f: (T1, T2)=>R):UFunc.UImpl2[Tag, T1, T2, R] = (t1, t2) => f(t1, t2)
+  private def ufunc[T1, T2, R](f: (T1, T2) => R): UFunc.UImpl2[Tag, T1, T2, R] = (t1, t2) => f(t1, t2)
 
   test("exceptions for things not present") {
     val mm = new MM
@@ -96,7 +96,7 @@ class MultimethodTest extends AnyFunSuite with Checkers {
     assert(mm(dv, sv) === "Yay")
     assert(mm(dv, dv) === "Woo")
 
-    mm.register(ufunc{ (a: V, b: M) =>
+    mm.register(ufunc { (a: V, b: M) =>
       "Ok"
     })
     assert(mm(dv, m) === "Ok")
@@ -119,7 +119,7 @@ class MultimethodTest extends AnyFunSuite with Checkers {
 
   test("double primitives") {
     val mm = new MMDouble()
-    mm.register(ufunc {(a: Double, b: Double) => "Woo"})
+    mm.register(ufunc { (a: Double, b: Double) => "Woo" })
     assert(mm(5.0, 4.0) === "Woo")
   }
 }

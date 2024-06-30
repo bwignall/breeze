@@ -3,7 +3,7 @@ package breeze.signal.support
 /**Implementation for BP, BS, LP and HP filters (CanFilterBPBS, CanFilterLPHP)
  * @author ktakagaki
  */
-import breeze.linalg.{DenseVector, DenseMatrix}
+import breeze.linalg.{DenseMatrix, DenseVector}
 import breeze.signal._
 
 /**
@@ -15,15 +15,15 @@ import breeze.signal._
  * @author ktakagaki
  */
 trait CanFilterBPBS[Input, Output] {
-  def apply(
-      data: Input,
-      omega: (Double, Double),
-      sampleRate: Double,
-      taps: Int,
-      bandStop: Boolean,
-      kernelType: OptDesignMethod,
-      overhang: OptOverhang,
-      padding: OptPadding): Output
+  def apply(data: Input,
+            omega: (Double, Double),
+            sampleRate: Double,
+            taps: Int,
+            bandStop: Boolean,
+            kernelType: OptDesignMethod,
+            overhang: OptOverhang,
+            padding: OptPadding
+  ): Output
 }
 
 /**
@@ -35,15 +35,15 @@ trait CanFilterBPBS[Input, Output] {
  * @author ktakagaki
  */
 trait CanFilterLPHP[Input, Output] {
-  def apply(
-      data: Input,
-      omega: Double,
-      sampleRate: Double,
-      taps: Int,
-      lowPass: Boolean,
-      kernelType: OptDesignMethod,
-      overhang: OptOverhang,
-      padding: OptPadding): Output
+  def apply(data: Input,
+            omega: Double,
+            sampleRate: Double,
+            taps: Int,
+            lowPass: Boolean,
+            kernelType: OptDesignMethod,
+            overhang: OptOverhang,
+            padding: OptPadding
+  ): Output
 }
 
 object CanFilterBPBS {
@@ -53,24 +53,24 @@ object CanFilterBPBS {
    */
   implicit val dvDouble1DFilterBPBS: CanFilterBPBS[DenseVector[Double], DenseVector[Double]] = {
     new CanFilterBPBS[DenseVector[Double], DenseVector[Double]] {
-      def apply(
-          data: DenseVector[Double],
-          omega: (Double, Double),
-          sampleRate: Double,
-          taps: Int,
-          bandStop: Boolean,
-          kernelType: OptDesignMethod,
-          overhang: OptOverhang,
-          padding: OptPadding): DenseVector[Double] = {
+      def apply(data: DenseVector[Double],
+                omega: (Double, Double),
+                sampleRate: Double,
+                taps: Int,
+                bandStop: Boolean,
+                kernelType: OptDesignMethod,
+                overhang: OptOverhang,
+                padding: OptPadding
+      ): DenseVector[Double] = {
 
         val kernel: FIRKernel1D[Double] = kernelType match {
-          //case x: OptKernelType.OptDefault => KernelDesign.firwin( numtaps, DenseVector[Double](omega._1, omega._2), zeroPass = bandStop, nyquist = sampleRate/2d)
+          // case x: OptKernelType.OptDefault => KernelDesign.firwin( numtaps, DenseVector[Double](omega._1, omega._2), zeroPass = bandStop, nyquist = sampleRate/2d)
           case OptDesignMethod.Firwin =>
-            designFilterFirwin[Double](
-              taps,
-              DenseVector[Double](omega._1, omega._2),
-              zeroPass = bandStop,
-              nyquist = sampleRate / 2d)
+            designFilterFirwin[Double](taps,
+                                       DenseVector[Double](omega._1, omega._2),
+                                       zeroPass = bandStop,
+                                       nyquist = sampleRate / 2d
+            )
           case x => {
             require(false, "Cannot handle option value " + x)
             new FIRKernel1D[Double](DenseVector[Double](), 1d, "null kernel!")
@@ -93,18 +93,18 @@ object CanFilterLPHP {
    */
   implicit val dvDouble1DFilterLPHP: CanFilterLPHP[DenseVector[Double], DenseVector[Double]] = {
     new CanFilterLPHP[DenseVector[Double], DenseVector[Double]] {
-      def apply(
-          data: DenseVector[Double],
-          omega: Double,
-          sampleRate: Double,
-          taps: Int,
-          lowPass: Boolean,
-          kernelType: OptDesignMethod,
-          overhang: OptOverhang,
-          padding: OptPadding): DenseVector[Double] = {
+      def apply(data: DenseVector[Double],
+                omega: Double,
+                sampleRate: Double,
+                taps: Int,
+                lowPass: Boolean,
+                kernelType: OptDesignMethod,
+                overhang: OptOverhang,
+                padding: OptPadding
+      ): DenseVector[Double] = {
 
         val kernel: FIRKernel1D[Double] = kernelType match {
-          //case x: OptKernelType.OptDefault => KernelDesign.firwin( numtaps, DenseVector[Double](omega._1, omega._2), zeroPass = bandStop, nyquist = sampleRate/2d)
+          // case x: OptKernelType.OptDefault => KernelDesign.firwin( numtaps, DenseVector[Double](omega._1, omega._2), zeroPass = bandStop, nyquist = sampleRate/2d)
           case OptDesignMethod.Firwin =>
             designFilterFirwin[Double](taps, DenseVector[Double](omega), zeroPass = lowPass, nyquist = sampleRate / 2d)
           case x => {

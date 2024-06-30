@@ -1,9 +1,9 @@
 package breeze.plot
 
 import collection.mutable.ArrayBuffer
-import javax.swing.{SwingUtilities, WindowConstants, JFrame, JPanel}
+import javax.swing.{JFrame, JPanel, SwingUtilities, WindowConstants}
 import java.util.concurrent.atomic.AtomicInteger
-import java.awt.{Color, Paint, Graphics2D}
+import java.awt.{Color, Graphics2D, Paint}
 import org.jfree.chart.axis.{NumberTickUnit, TickUnits}
 import org.jfree.chart.plot.DefaultDrawingSupplier
 import breeze.plot.Plot.Listener
@@ -148,12 +148,12 @@ class Figure(name: String, private var rows_ : Int = 1, private var cols_ : Int 
     // make sure figure is visible or saved image will come up empty
     refresh()
 
-    ExportGraphics.writeFile(
-      new java.io.File(filename),
-      draw = drawPlots _,
-      width = contents.getWidth,
-      height = contents.getHeight,
-      dpi = dpi)
+    ExportGraphics.writeFile(new java.io.File(filename),
+                             draw = drawPlots _,
+                             width = contents.getWidth,
+                             height = contents.getHeight,
+                             dpi = dpi
+    )
   }
 
   private def selectPlot(i: Int) = {

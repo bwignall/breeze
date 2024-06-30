@@ -1,6 +1,6 @@
 package breeze.signal.support
 
-import breeze.linalg.{DenseVector, DenseMatrix}
+import breeze.linalg.{DenseMatrix, DenseVector}
 
 /**
  * Construction delegate for getting the IFHT of a value of type InputType.

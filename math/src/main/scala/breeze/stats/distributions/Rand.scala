@@ -107,19 +107,17 @@ trait Rand[@specialized(Int, Double) +T] extends Serializable { outer =>
   def condition(p: T => Boolean): Rand[T] = SinglePredicateRand[T](outer, p)
 }
 
-private final case class MappedRand[@specialized(Int, Double) T, @specialized(Int, Double) U](
-    rand: Rand[T],
-    func: T => U)
-    extends Rand[U] {
+final private case class MappedRand[@specialized(Int, Double) T, @specialized(Int, Double) U](rand: Rand[T],
+                                                                                              func: T => U
+) extends Rand[U] {
   def draw() = func(rand.draw())
   override def drawOpt() = rand.drawOpt().map(func)
   override def map[E](f: U => E): Rand[E] = MappedRand(rand, (x: T) => f(func(x)))
 }
 
-private final case class FlatMappedRand[@specialized(Int, Double) T, @specialized(Int, Double) U](
-    rand: Rand[T],
-    func: T => Rand[U])
-    extends Rand[U] {
+final private case class FlatMappedRand[@specialized(Int, Double) T, @specialized(Int, Double) U](rand: Rand[T],
+                                                                                                  func: T => Rand[U]
+) extends Rand[U] {
   def draw() = func(rand.draw()).draw()
   override def drawOpt() = rand.drawOpt().flatMap(x => func(x).drawOpt())
   override def flatMap[E](f: U => Rand[E]): Rand[E] = FlatMappedRand(rand, (x: T) => f(func(x).draw()))
@@ -147,9 +145,9 @@ private trait PredicateRandDraws[@specialized(Int, Double) T] extends Rand[T] {
   }
 }
 
-private final case class SinglePredicateRand[@specialized(Int, Double) T](rand: Rand[T], pred: T => Boolean)
+final private case class SinglePredicateRand[@specialized(Int, Double) T](rand: Rand[T], pred: T => Boolean)
     extends PredicateRandDraws[T] {
-  protected final def predicate(x: T): Boolean = pred(x)
+  final protected def predicate(x: T): Boolean = pred(x)
 
   override def condition(p: T => Boolean): Rand[T] = {
     val newPredicates = new Array[T => Boolean](2)
@@ -159,10 +157,9 @@ private final case class SinglePredicateRand[@specialized(Int, Double) T](rand: 
   }
 }
 
-private final case class MultiplePredicatesRand[@specialized(Int, Double) T](
-    rand: Rand[T],
-    private val predicates: Array[T => Boolean])
-    extends PredicateRandDraws[T] {
+final private case class MultiplePredicatesRand[@specialized(Int, Double) T](rand: Rand[T],
+                                                                             private val predicates: Array[T => Boolean]
+) extends PredicateRandDraws[T] {
   override def condition(p: T => Boolean): Rand[T] = {
     val newPredicates = new Array[T => Boolean](predicates.size + 1)
     cforRange(0 until predicates.size)(i => {
@@ -172,7 +169,7 @@ private final case class MultiplePredicatesRand[@specialized(Int, Double) T](
     MultiplePredicatesRand(rand, newPredicates)
   }
 
-  protected final def predicate(x: T) = {
+  final protected def predicate(x: T) = {
     var result: Boolean = true
     var i = 0
     while ((i < predicates.size) && result) {
@@ -274,9 +271,9 @@ class RandBasis(val generator: RandomGenerator) extends Serializable {
     require(n > 0)
     def draw(): Long = {
       val maxVal = Long.MaxValue - (Long.MaxValue % n) - 1
-      var value = (generator.nextLong() & Long.MaxValue)
-      while ( value > maxVal ) {
-        value = (generator.nextLong() & Long.MaxValue)
+      var value = generator.nextLong() & Long.MaxValue
+      while (value > maxVal) {
+        value = generator.nextLong() & Long.MaxValue
       }
       value % n
     }
@@ -349,6 +346,7 @@ class RandBasis(val generator: RandomGenerator) extends Serializable {
  * identity hashcode of some object
  */
 object Rand extends RandBasis(new ThreadLocalRandomGenerator(new MersenneTwister())) {
+
   /** Import the contents of this to make Rands/Distributions that use the "default" generator */
   object VariableSeed {
     implicit val randBasis: RandBasis = Rand
@@ -360,8 +358,8 @@ object Rand extends RandBasis(new ThreadLocalRandomGenerator(new MersenneTwister
   }
 }
 
-
 object RandBasis {
+
   /**
    * Returns a new MersenneTwister-backed rand basis with "no seed" (i.e. it uses the time plus
    * other metadata to set the seed

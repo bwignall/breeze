@@ -8,9 +8,10 @@ import scala.collection.mutable
  */
 object Implicits extends DoubleImplicits with IteratorImplicits {
   implicit class scEnrichColl[Coll <: Traversable[(_, _)]](val __this: Coll) extends AnyVal {
-    def toMultiMap[Result, A, B](
-        implicit view: Coll <:< Traversable[(A, B)],
-        cbf: CanBuildFrom[Coll, B, Result]): Map[A, Result] = {
+    def toMultiMap[Result, A, B](implicit
+      view: Coll <:< Traversable[(A, B)],
+      cbf: CanBuildFrom[Coll, B, Result]
+    ): Map[A, Result] = {
       var result = collection.mutable.Map[A, mutable.Builder[B, Result]]()
       result = result.withDefault { a =>
         val r = cbf(__this); result.update(a, r); r
@@ -44,15 +45,15 @@ object Implicits extends DoubleImplicits with IteratorImplicits {
 
 trait DoubleImplicits {
   implicit class RichDouble(x: Double) {
-    def closeTo(y: Double, tol: Double = 1E-5) = {
-      (math.abs(x - y) / (math.abs(x) + math.abs(y) + 1e-10) < tol);
+    def closeTo(y: Double, tol: Double = 1e-5) = {
+      math.abs(x - y) / (math.abs(x) + math.abs(y) + 1e-10) < tol;
     }
     def isDangerous = x.isNaN || x.isInfinite
   }
 
   implicit class RichFloat(x: Float) {
-    def closeTo(y: Float, tol: Double = 1E-5) = {
-      (math.abs(x - y) / (math.abs(x) + math.abs(y) + 1e-10) < tol);
+    def closeTo(y: Float, tol: Double = 1e-5) = {
+      math.abs(x - y) / (math.abs(x) + math.abs(y) + 1e-10) < tol;
     }
     def isDangerous: Boolean = x.isNaN || x.isInfinite
   }

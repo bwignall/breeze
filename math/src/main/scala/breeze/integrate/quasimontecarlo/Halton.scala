@@ -42,7 +42,7 @@ object Halton {
   def integrate(func: Array[Double] => Double)(dimension: Int, numSamples: Long): Double = {
     val gen = new BaseUniformHaltonGenerator(dimension)
     var result: Double = 0
-    for ( _ <- 0L until numSamples) {
+    for (_ <- 0L until numSamples) {
       result += func(gen.getNextUnsafe)
     }
     result / numSamples
@@ -65,7 +65,7 @@ class BaseUniformHaltonGenerator(val dimension: Int) extends QuasiMonteCarloGene
   private val bases = java.util.Arrays.copyOfRange(Halton.PRIMES, 0, dimension)
 
   private var count: Long = 0
-  private val counters: Array[UnboxedIntVector] = List.fill(dimension)({ new UnboxedIntVector(16) }).toArray
+  private val counters: Array[UnboxedIntVector] = List.fill(dimension) { new UnboxedIntVector(16) }.toArray
   val permutations: Array[Array[Long]] = {
     implicit val rand: RandBasis = RandBasis.mt0
     (0 to dimension)
@@ -79,7 +79,6 @@ class BaseUniformHaltonGenerator(val dimension: Int) extends QuasiMonteCarloGene
       })
       .toArray
   }
-
 
   private val currentValue = new Array[Double](dimension)
 

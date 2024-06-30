@@ -1,6 +1,6 @@
 package breeze.stats.distributions
 
-import breeze.linalg.{Counter, DenseVector, sum}
+import breeze.linalg.{sum, Counter, DenseVector}
 import breeze.math.MutableEnumeratedCoordinateField
 import breeze.numerics._
 import breeze.util.ArrayUtil
@@ -28,10 +28,10 @@ import breeze.util.ArrayUtil
  *
  * @author dlwh
  */
-class Polya[T, @specialized(Int) I](params: T)(
-    implicit space: MutableEnumeratedCoordinateField[T, I, Double],
-    rand: RandBasis)
-    extends DiscreteDistr[I] {
+class Polya[T, @specialized(Int) I](params: T)(implicit
+  space: MutableEnumeratedCoordinateField[T, I, Double],
+  rand: RandBasis
+) extends DiscreteDistr[I] {
   import space._
   private val innerDirichlet = new Dirichlet(params)
   def draw() = {

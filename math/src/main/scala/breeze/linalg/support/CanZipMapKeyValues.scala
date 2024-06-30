@@ -42,7 +42,12 @@ import scala.reflect.ClassTag
  *
  * @author dlwh
  */
-trait CanZipMapKeyValues[From, @spec(Int) K, @spec(Double, Int, Float, Long) V, @spec(Double, Int, Float, Long) RV, +To] {
+trait CanZipMapKeyValues[From,
+                         @spec(Int) K,
+                         @spec(Double, Int, Float, Long) V,
+                         @spec(Double, Int, Float, Long) RV,
+                         +To
+] {
 
   /** Maps all corresponding values from the two collections. */
   def map(from: From, from2: From, fn: (K, V, V) => RV): To

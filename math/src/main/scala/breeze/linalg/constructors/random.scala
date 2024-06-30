@@ -1,7 +1,7 @@
 package breeze.linalg
 
 import breeze.generic.UFunc
-import breeze.stats.distributions.{RandBasis, Rand}
+import breeze.stats.distributions.{Rand, RandBasis}
 import scala.reflect.ClassTag
 import breeze.storage.Zero
 import breeze.macros._
@@ -20,7 +20,7 @@ object randomDouble extends RandomGeneratorUFunc[Double] {
   protected def gen(implicit basis: RandBasis): Rand[Double] = basis.uniform
   protected def genRange(low: Double, high: Double)(implicit basis: RandBasis): Rand[Double] = {
     require(high >= low, s"High term must be greater than low term. ($low, $high)")
-    val range = (high - low)
+    val range = high - low
     basis.uniform.map(_ * range + low)
   }
 
@@ -74,8 +74,8 @@ object randn extends RandomGeneratorUFunc[Double] {
 trait RandomGeneratorUFunc[T] extends UFunc {
   protected def gen(implicit basis: RandBasis): Rand[T]
   protected def genRange(low: T, high: T)(implicit basis: RandBasis): Rand[T]
-  protected implicit val _classTag: ClassTag[T]
-  protected implicit val _zero: Zero[T]
+  implicit protected val _classTag: ClassTag[T]
+  implicit protected val _zero: Zero[T]
 
   def apply()(implicit basis: RandBasis) = gen(basis).draw()
 

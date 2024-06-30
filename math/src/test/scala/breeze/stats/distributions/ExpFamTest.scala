@@ -2,7 +2,7 @@ package breeze.stats.distributions
 
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.Checkers
-import org.scalacheck.{Prop, Arbitrary}
+import org.scalacheck.{Arbitrary, Prop}
 import scala.reflect.ClassTag
 
 /**

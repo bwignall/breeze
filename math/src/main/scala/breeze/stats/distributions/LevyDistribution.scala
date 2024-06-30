@@ -17,7 +17,7 @@ package distributions
  */
 
 import org.apache.commons.math3.distribution.{LevyDistribution => ApacheLevyDistribution}
-import org.apache.commons.math3.random.{RandomGenerator, JDKRandomGenerator}
+import org.apache.commons.math3.random.{JDKRandomGenerator, RandomGenerator}
 
 /**
  * The Levy-distribution - ratio of two scaled chi^2 variables
@@ -26,7 +26,7 @@ import org.apache.commons.math3.random.{RandomGenerator, JDKRandomGenerator}
  */
 case class LevyDistribution(mu: Double, c: Double, generator: RandomGenerator = new JDKRandomGenerator())
     extends ApacheContinuousDistribution {
-  protected final val inner = new ApacheLevyDistribution(generator, mu, c)
+  final protected val inner = new ApacheLevyDistribution(generator, mu, c)
 }
 
 object LevyDistribution extends ContinuousDistributionUFuncProvider[Double, LevyDistribution]

@@ -153,7 +153,7 @@ package object util {
     val r = Runtime.getRuntime
     val free = r.freeMemory / (1024 * 1024)
     val total = r.totalMemory / (1024 * 1024)
-    s"${(total - free)}M used; ${free}M free; ${total}M total"
+    s"${total - free}M used; ${free}M free; ${total}M total"
   }
 
   /**

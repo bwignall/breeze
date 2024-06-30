@@ -28,10 +28,10 @@ import scala.reflect.ClassTag
  * Represents a Dirichlet distribution, the conjugate prior to the multinomial.
  * @author dlwh
  */
-case class Dirichlet[T, @specialized(Int) I](params: T)(
-    implicit space: EnumeratedCoordinateField[T, I, Double],
-    rand: RandBasis)
-    extends ContinuousDistr[T] {
+case class Dirichlet[T, @specialized(Int) I](params: T)(implicit
+  space: EnumeratedCoordinateField[T, I, Double],
+  rand: RandBasis
+) extends ContinuousDistr[T] {
   import space._
 
   /**
@@ -45,18 +45,22 @@ case class Dirichlet[T, @specialized(Int) I](params: T)(
    * Returns unnormalized probabilities for a Multinomial distribution.
    */
   def unnormalizedDraw() = {
-    mapValues.mapActive(params, { (v: Double) =>
-      if (v == 0.0) 0.0 else new Gamma(v, 1).draw()
-    })
+    mapValues.mapActive(params,
+                        { (v: Double) =>
+                          if (v == 0.0) 0.0 else new Gamma(v, 1).draw()
+                        }
+    )
   }
 
   /**
    * Returns logNormalized probabilities. Use this if you're worried about underflow
    */
   def logDraw() = {
-    val x = mapValues.mapActive(params, { (v: Double) =>
-      if (v == 0.0) 0.0 else new Gamma(v, 1).logDraw()
-    })
+    val x = mapValues.mapActive(params,
+                                { (v: Double) =>
+                                  if (v == 0.0) 0.0 else new Gamma(v, 1).logDraw()
+                                }
+    )
     val m = softmax(x.activeValuesIterator)
     assert(!m.isInfinite, x)
     x.activeKeysIterator.foreach(i => x(i) -= m)
@@ -99,7 +103,9 @@ object Dirichlet {
   def sym(alpha: Double, k: Int)(implicit rand: RandBasis): Dirichlet[DenseVector[Double], Int] =
     this(breeze.util.ArrayUtil.fillNewArray(k, alpha))
 
-  def apply(arr: Array[Double])(implicit rand: RandBasis): Dirichlet[DenseVector[Double], Int] = Dirichlet(new DenseVector[Double](arr))
+  def apply(arr: Array[Double])(implicit rand: RandBasis): Dirichlet[DenseVector[Double], Int] = Dirichlet(
+    new DenseVector[Double](arr)
+  )
 
   class ExpFam[T, I](exemplar: T)(implicit space: MutableFiniteCoordinateField[T, I, Double])
       extends ExponentialFamily[Dirichlet[T, I], T] {

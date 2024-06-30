@@ -69,7 +69,7 @@ object JavaArrayOps {
     var rowIndex = 0
     var tempretIndex = 0
     while (rowIndex < tempRows) {
-      //raggedness check
+      // raggedness check
       require(values(rowIndex).length == tempCols, "Input Array[Array[V]] is ragged!")
       rowIndex += 1
     }

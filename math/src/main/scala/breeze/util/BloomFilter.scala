@@ -35,7 +35,7 @@ class BloomFilter[@specialized(Int, Long) T](val numBuckets: Int, val numHashFun
   private def activeBuckets(key: T) = {
     val baseHash = key.##
     // we only get 16 bits for each hash code, but we combine them in fun ways
-    val hash1 = baseHash & 0xFFFF
+    val hash1 = baseHash & 0xffff
     val hash2 = baseHash >> 16
 
     for {

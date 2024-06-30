@@ -2,7 +2,7 @@ package breeze.math
 
 import breeze.linalg._
 import breeze.numerics.pow
-import org.scalacheck.{Gen, Prop, Arbitrary}
+import org.scalacheck.{Arbitrary, Gen, Prop}
 
 /**
  * breeze
@@ -12,7 +12,7 @@ import org.scalacheck.{Gen, Prop, Arbitrary}
  *
  */
 trait OptimizationSpaceTest[M, V, S] extends TensorSpaceTestBase[V, Int, S] {
-  override implicit val space: MutableOptimizationSpace[M, V, S]
+  implicit override val space: MutableOptimizationSpace[M, V, S]
 
   import space._
 
@@ -133,7 +133,7 @@ trait OptimizationSpaceTest[M, V, S] extends TensorSpaceTestBase[V, Int, S] {
   test("Scalar mult distributes over field addition - Matrix") {
     check(Prop.forAll { (trip: (M, M, M), s: S, t: S) =>
       val (a, _, _) = trip
-      closeM((a) *:* scalars.+(s, t), (a *:* s) + (a *:* t), TOLM * max(tolRefM(a), norm(s), norm(t)).abs)
+      closeM(a *:* scalars.+(s, t), (a *:* s) + (a *:* t), TOLM * max(tolRefM(a), norm(s), norm(t)).abs)
     })
 
     check(Prop.forAll { (trip: (M, M, M), s: S, t: S) =>
@@ -150,7 +150,7 @@ trait OptimizationSpaceTest[M, V, S] extends TensorSpaceTestBase[V, Int, S] {
   test("Compatibility of scalar multiplication with field multiplication - Matrix") {
     check(Prop.forAll { (trip: (M, M, M), s: S, t: S) =>
       val (a, _, _) = trip
-      closeM((a) *:* scalars.*(s, t), a *:* s *:* t, TOL * math.max(tolRefM(a), norm(s)).abs)
+      closeM(a *:* scalars.*(s, t), a *:* s *:* t, TOL * math.max(tolRefM(a), norm(s)).abs)
     })
 
     check(Prop.forAll { (trip: (M, M, M), s: S, t: S) =>
@@ -201,7 +201,7 @@ trait OptimizationSpaceTest[M, V, S] extends TensorSpaceTestBase[V, Int, S] {
   }
 
   // norm
-  val TOLM = 1E-2
+  val TOLM = 1e-2
   test("norm positive homogeneity - Matrix") {
     check(Prop.forAll { (trip: (M, M, M), s: S) =>
       val (a, b, c) = trip
@@ -212,7 +212,7 @@ trait OptimizationSpaceTest[M, V, S] extends TensorSpaceTestBase[V, Int, S] {
   test("norm triangle inequality - Matrix") {
     check(Prop.forAll { (trip: (M, M, M)) =>
       val (a, b, c) = trip
-      ((1.0 - TOLM) * norm(a + b) <= norm(b) + norm(a))
+      (1.0 - TOLM) * norm(a + b) <= norm(b) + norm(a)
     })
   }
 
@@ -288,13 +288,13 @@ trait OptimizationSpaceTest[M, V, S] extends TensorSpaceTestBase[V, Int, S] {
 class DenseOptimizationSpaceTest_Double
     extends DenseVectorPropertyTestBase[Double]
     with OptimizationSpaceTest[DenseMatrix[Double], DenseVector[Double], Double] {
-  override implicit val space: MutableOptimizationSpace[DenseMatrix[Double], DenseVector[Double], Double] =
+  implicit override val space: MutableOptimizationSpace[DenseMatrix[Double], DenseVector[Double], Double] =
     MutableOptimizationSpace.DenseDoubleOptimizationSpace.denseDoubleOptSpace
 
-  val myReasonable: Arbitrary[Double] = RandomInstanceSupport.reasonableDouble(1E-4, 10)
+  val myReasonable: Arbitrary[Double] = RandomInstanceSupport.reasonableDouble(1e-4, 10)
 
   val N = 5
-  override implicit def genTripleM: Arbitrary[(DenseMatrix[Double], DenseMatrix[Double], DenseMatrix[Double])] = {
+  implicit override def genTripleM: Arbitrary[(DenseMatrix[Double], DenseMatrix[Double], DenseMatrix[Double])] = {
     Arbitrary {
       for {
         x <- RandomInstanceSupport.genDenseMatrix[Double](N, N, myReasonable.arbitrary)
@@ -312,25 +312,27 @@ class DenseOptimizationSpaceTest_Double
 class SparseOptimizationSpaceTest_Double
     extends SparseVectorPropertyTestBase[Double]
     with OptimizationSpaceTest[CSCMatrix[Double], SparseVector[Double], Double] {
-  override implicit val space: MutableOptimizationSpace[CSCMatrix[Double], SparseVector[Double], Double] =
+  implicit override val space: MutableOptimizationSpace[CSCMatrix[Double], SparseVector[Double], Double] =
     MutableOptimizationSpace.SparseDoubleOptimizationSpace.sparseDoubleOptSpace
 
   // TODO: generate arbitrarily dimensioned matrices
   val N = 30
   val M = 30
 
-  override val TOLM = 1E-2
+  override val TOLM = 1e-2
 
   def genScalar: Arbitrary[Double] = RandomInstanceSupport.genReasonableDouble
 
   val arbColIndex = Arbitrary(Gen.choose[Int](0, N - 1))
   val arbRowIndex = Arbitrary(Gen.choose[Int](0, M - 1))
   val genAS: Gen[Int] = Gen.chooseNum(0, pow(N, 2))
-  implicit val arbEntry: Arbitrary[(Int, Int, Double)] = Arbitrary.arbTuple3[Int, Int, Double](arbRowIndex, arbColIndex, genScalar)
+  implicit val arbEntry: Arbitrary[(Int, Int, Double)] =
+    Arbitrary.arbTuple3[Int, Int, Double](arbRowIndex, arbColIndex, genScalar)
   implicit val arbVals: Arbitrary[List[(Int, Int, Double)]] = Arbitrary(
-    genAS.flatMap(activeSize => Gen.listOfN[(Int, Int, Double)](activeSize, Arbitrary.arbitrary[(Int, Int, Double)])))
+    genAS.flatMap(activeSize => Gen.listOfN[(Int, Int, Double)](activeSize, Arbitrary.arbitrary[(Int, Int, Double)]))
+  )
   def addToBuilder(bldr: CSCMatrix.Builder[Double], v: (Int, Int, Double)) = bldr.add(v._1, v._2, v._3)
-  override implicit def genTripleM: Arbitrary[(CSCMatrix[Double], CSCMatrix[Double], CSCMatrix[Double])] = {
+  implicit override def genTripleM: Arbitrary[(CSCMatrix[Double], CSCMatrix[Double], CSCMatrix[Double])] = {
     Arbitrary {
       for {
         xvs <- Arbitrary.arbitrary[List[(Int, Int, Double)]]
@@ -341,15 +343,16 @@ class SparseOptimizationSpaceTest_Double
         val yb = new CSCMatrix.Builder[Double](N, N)
         val zb = new CSCMatrix.Builder[Double](N, N)
         ({
-          xvs.foreach(v => addToBuilder(xb, v))
-          xb.result()
-        }, {
-          yvs.foreach(v => addToBuilder(yb, v))
-          yb.result()
-        }, {
-          zvs.foreach(v => addToBuilder(zb, v))
-          zb.result()
-        })
+           xvs.foreach(v => addToBuilder(xb, v))
+           xb.result()
+         }, {
+           yvs.foreach(v => addToBuilder(yb, v))
+           yb.result()
+         }, {
+           zvs.foreach(v => addToBuilder(zb, v))
+           zb.result()
+         }
+        )
       }
 
     }

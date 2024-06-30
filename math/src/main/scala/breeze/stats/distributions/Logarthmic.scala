@@ -1,7 +1,7 @@
 package breeze.stats.distributions
 
 import runtime.ScalaRunTime
-import breeze.numerics.{log, round, log1p, expm1}
+import breeze.numerics.{expm1, log, log1p, round}
 
 /**
  * The Logarithmic distribution
@@ -9,9 +9,7 @@ import breeze.numerics.{log, round, log1p, expm1}
  * http://en.wikipedia.org/wiki/Logarithmic_distribution
  * @author dlwh
  */
-case class Logarthmic(p: Double)(implicit rand: RandBasis)
-    extends DiscreteDistr[Int]
-    with Moments[Double, Double] {
+case class Logarthmic(p: Double)(implicit rand: RandBasis) extends DiscreteDistr[Int] with Moments[Double, Double] {
   require(p >= 0)
   require(p <= 1)
 

@@ -16,7 +16,7 @@ package breeze.linalg.operators
  */
 
 import breeze.generic.UFunc.UImpl2
-import breeze.generic.{UFunc, MMRegistry2 /*, Multimethod2*/}
+import breeze.generic.{MMRegistry2, UFunc}
 import breeze.linalg.support.CanCopy
 
 import scala.annotation.unchecked.uncheckedVariance
@@ -24,9 +24,10 @@ import scala.reflect.ClassTag
 
 object BinaryOp {
 
-  def fromCopyAndUpdate[A, B, Op](
-      implicit op: UFunc.InPlaceImpl2[Op, A, B],
-      copy: CanCopy[A]): UFunc.UImpl2[Op, A, B, A] = {
+  def fromCopyAndUpdate[A, B, Op](implicit
+    op: UFunc.InPlaceImpl2[Op, A, B],
+    copy: CanCopy[A]
+  ): UFunc.UImpl2[Op, A, B, A] = {
     new UFunc.UImpl2[Op, A, B, A] {
       def apply(a: A, b: B): A = {
         val c = copy(a)
@@ -47,19 +48,15 @@ object BinaryOp {
 // because we don't need BinaryOp's to inherit from Function2, which has a lot of @specialzied cruft.
 trait BinaryRegistry[A, B, Op, R]
     extends UFunc.UImpl2[Op, A, B, R]
-    with MMRegistry2[UFunc.UImpl2[Op, _ <: A, _ <: B, _ <: (R)]] {
+    with MMRegistry2[UFunc.UImpl2[Op, _ <: A, _ <: B, _ <: R]] {
   protected def bindingMissing(a: A, b: B): R =
     throw new UnsupportedOperationException("Types not found!" + a + b + " " + ops)
 
-  protected def multipleOptions(
-      a: A,
-      b: B,
-      m: Map[(Class[_], Class[_]), UImpl2[Op, _ <: A, _ <: B, _ <: R]]) = {
+  protected def multipleOptions(a: A, b: B, m: Map[(Class[_], Class[_]), UImpl2[Op, _ <: A, _ <: B, _ <: R]]) = {
     throw new RuntimeException("Multiple bindings for method: " + m)
   }
 
-  private val l1cache
-    : ThreadLocal[((Class[_], Class[_]), Option[UImpl2[Op, _ <: A, _ <: B, _ <: R]])] = {
+  private val l1cache: ThreadLocal[((Class[_], Class[_]), Option[UImpl2[Op, _ <: A, _ <: B, _ <: R]])] = {
     new ThreadLocal[((Class[_], Class[_]), Option[UImpl2[Op, _ <: A, _ <: B, _ <: R]])]
   }
 
@@ -81,12 +78,12 @@ trait BinaryRegistry[A, B, Op, R]
 
   }
 
-  private def slowPath(
-      a: A,
-      b: B,
-      ac: Class[_ <: AnyRef],
-      bc: Class[_ <: AnyRef],
-      pair: (Class[_ <: AnyRef], Class[_ <: AnyRef])): R = {
+  private def slowPath(a: A,
+                       b: B,
+                       ac: Class[_ <: AnyRef],
+                       bc: Class[_ <: AnyRef],
+                       pair: (Class[_ <: AnyRef], Class[_ <: AnyRef])
+  ): R = {
     val cached: Option[UImpl2[Op, _ <: A, _ <: B, _ <: R]] = cache.get(pair)
     if (cached != null) {
       cached match {
@@ -121,8 +118,7 @@ trait BinaryRegistry[A, B, Op, R]
     }
   }
 
-  def register[AA <: A, BB <: B](
-      op: UImpl2[Op, AA, BB, _ <: R])(implicit cA: ClassTag[AA], cB: ClassTag[BB]) = {
+  def register[AA <: A, BB <: B](op: UImpl2[Op, AA, BB, _ <: R])(implicit cA: ClassTag[AA], cB: ClassTag[BB]) = {
     super.register(cA.runtimeClass, cB.runtimeClass, op)
     op
   }

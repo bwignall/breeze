@@ -1,6 +1,6 @@
 package breeze.macros
 
-import scala.annotation.{Annotation, StaticAnnotation, compileTimeOnly}
+import scala.annotation.{compileTimeOnly, Annotation, StaticAnnotation}
 
 /**
  * expand is a macro annotation that is kind of like @specialized, but it's more of a templating mechanism.
@@ -46,8 +46,7 @@ import scala.annotation.{Annotation, StaticAnnotation, compileTimeOnly}
  *@author dlwh
  **/
 @compileTimeOnly("Use the breeze-codegen-expand plugin")
-class expand extends Annotation with StaticAnnotation {
-}
+class expand extends Annotation with StaticAnnotation {}
 
 object expand {
 

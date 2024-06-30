@@ -9,9 +9,7 @@ import breeze.util._
  * happens with probability p.
  * @author dlwh
  */
-case class Geometric(p: Double)(implicit rand: RandBasis)
-    extends DiscreteDistr[Int]
-    with Moments[Double, Double] {
+case class Geometric(p: Double)(implicit rand: RandBasis) extends DiscreteDistr[Int] with Moments[Double, Double] {
   require(p >= 0)
   require(p <= 1)
 
@@ -28,9 +26,9 @@ case class Geometric(p: Double)(implicit rand: RandBasis)
     }
   }
 
-  def probabilityOf(x: Int) = math.pow((1 - p), x) * p
+  def probabilityOf(x: Int) = math.pow(1 - p, x) * p
 
-  def mean = (1) / p
+  def mean = 1 / p
 
   def variance = (1 - p) / (p * p)
 

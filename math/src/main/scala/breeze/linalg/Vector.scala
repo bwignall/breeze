@@ -71,7 +71,7 @@ trait Vector[@spec(Int, Double, Float) V] extends VectorLike[V, Vector[V]] {
   override def equals(p1: Any) = p1 match {
     case x: Vector[_] =>
       this.length == x.length &&
-        (valuesIterator.sameElements(x.valuesIterator))
+      (valuesIterator.sameElements(x.valuesIterator))
     case _ => false
   }
 
@@ -80,7 +80,6 @@ trait Vector[@spec(Int, Double, Float) V] extends VectorLike[V, Vector[V]] {
   def toDenseVector(implicit cm: ClassTag[V]) = {
     DenseVector(toArray)
   }
-
 
   /**Returns copy of this [[breeze.linalg.Vector]] as a [[scala.Vector]]*/
   def toScalaVector: scala.Vector[V] = scala.Vector.empty ++ valuesIterator
@@ -96,11 +95,11 @@ trait Vector[@spec(Int, Double, Float) V] extends VectorLike[V, Vector[V]] {
     result
   }
 
-  //ToDo 2: Should this be deprecated and changed to `toScalaVector`?
+  // ToDo 2: Should this be deprecated and changed to `toScalaVector`?
   /**Returns copy of this [[breeze.linalg.Vector]] as a [[scala.Vector]]*/
   def toVector(implicit cm: ClassTag[V]) = Vector[V](toArray)
 
-  //ToDo 2: implement fold/scan/reduce to operate along one axis of a matrix/tensor
+  // ToDo 2: implement fold/scan/reduce to operate along one axis of a matrix/tensor
   // <editor-fold defaultstate="collapsed" desc=" scala.collection -like padTo, fold/scan/reduce ">
 
   /** See [[scala.collection.mutable.ArrayOps.padTo]].
@@ -190,8 +189,6 @@ object Vector extends VectorConstructors[Vector] {
 
   implicit def scalarOf[T]: ScalarOf[Vector[T], T] = ScalarOf.dummy
 }
-
-
 
 /**
  * Trait that can mixed to companion objects to enable utility methods for creating vectors.

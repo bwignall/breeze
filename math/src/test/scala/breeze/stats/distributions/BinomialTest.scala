@@ -26,7 +26,7 @@ class BinomialTest extends AnyFunSuite with Checkers with MomentsTestBase[Int] {
   import org.scalacheck.Arbitrary.arbitrary;
 
   override val numSamples: Int = 1000
-  override val VARIANCE_TOLERANCE: Double = 1E-1
+  override val VARIANCE_TOLERANCE: Double = 1e-1
 
   def arbDistr: Arbitrary[Binomial] = Arbitrary {
     for {

@@ -13,25 +13,23 @@ import breeze.util.SerializableLogging
  * Based on the code from "Trust Region Newton Method for Large-Scale Logistic Regression"
  * * @author dlwh
  */
-class ConjugateGradient[T, M](
-    maxNormValue: Double = Double.PositiveInfinity,
-    maxIterations: Int = -1,
-    normSquaredPenalty: Double = 0,
-    tolerance: Double = 1E-5)(
-    implicit space: MutableInnerProductVectorSpace[T, Double],
-    mult: OpMulMatrix.Impl2[M, T, T])
+class ConjugateGradient[T, M](maxNormValue: Double = Double.PositiveInfinity,
+                              maxIterations: Int = -1,
+                              normSquaredPenalty: Double = 0,
+                              tolerance: Double = 1e-5
+)(implicit space: MutableInnerProductVectorSpace[T, Double], mult: OpMulMatrix.Impl2[M, T, T])
     extends SerializableLogging {
   import space._
 
   def minimize(a: T, B: M): T = minimize(a, B, zeroLike(a))
   def minimize(a: T, B: M, initX: T): T = minimizeAndReturnResidual(a, B, initX)._1
 
-  case class State private[ConjugateGradient] (
-      x: T,
-      residual: T,
-      private[ConjugateGradient] val direction: T,
-      iter: Int,
-      converged: Boolean) {
+  case class State private[ConjugateGradient] (x: T,
+                                               residual: T,
+                                               private[ConjugateGradient] val direction: T,
+                                               iter: Int,
+                                               converged: Boolean
+  ) {
     lazy val rtr = residual.dot(residual)
   }
 

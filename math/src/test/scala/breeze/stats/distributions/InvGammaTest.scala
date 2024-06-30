@@ -21,7 +21,7 @@ class InvGammaTest extends AnyFunSuite with MomentsTestBase[Double] {
   override def asDouble(x: Double): Double = x
   override def fromDouble(x: Double): Double = x
 
-  private val eps = 1E-9
+  private val eps = 1e-9
 
   test("should have expect values for shape=19.31, scale=1") {
     val g = InvGamma(19.31, 1)
@@ -31,7 +31,7 @@ class InvGammaTest extends AnyFunSuite with MomentsTestBase[Double] {
 
   test("should have expect values for multiple shapes") {
     val means = Seq(10.0, 0.476190476, 0.2173913043)
-    val vars = Seq(Double.NaN,  0.2061430632, 0.01312749422)
+    val vars = Seq(Double.NaN, 0.2061430632, 0.01312749422)
     val shapes = Seq(1.1, 3.1, 5.6)
 
     {
@@ -39,10 +39,10 @@ class InvGammaTest extends AnyFunSuite with MomentsTestBase[Double] {
       g.mean shouldBe means.head +- eps
     }
 
-    shapes.zipWithIndex.tail.foreach({ case (shape, i) =>
+    shapes.zipWithIndex.tail.foreach { case (shape, i) =>
       val g = InvGamma(shape, 1)
       g.mean shouldBe means(i) +- eps
       g.variance shouldBe vars(i) +- eps
-    })
+    }
   }
 }

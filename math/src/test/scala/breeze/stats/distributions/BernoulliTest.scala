@@ -31,16 +31,18 @@ class BernoulliTest extends RandTestBase with MomentsTestBase[Boolean] with ExpF
 
   override val numSamples: Int = 30000
 
-  def arbParameter = Arbitrary(arbitrary[Double].map(x => math.max(math.abs(x) % 1.0, 1E-1)))
+  def arbParameter = Arbitrary(arbitrary[Double].map(x => math.max(math.abs(x) % 1.0, 1e-1)))
 
-  def paramsClose(p: Double, b: Double) = if (b == 0.0) p < 1E-4 else (p - b).abs / b.abs.max(1E-4) < 1E-1
+  def paramsClose(p: Double, b: Double) = if (b == 0.0) p < 1e-4 else (p - b).abs / b.abs.max(1e-4) < 1e-1
 
   implicit def arbDistr = Arbitrary {
     // make scala 2 happy
     implicit val basis: RandBasis = RandBasis.mt0
-    for (p <- arbitrary[Double].map { x =>
-        math.max(math.abs(x) % 1.0, 1E-1)
-      }) yield new Bernoulli(p)
+    for (
+      p <- arbitrary[Double].map { x =>
+        math.max(math.abs(x) % 1.0, 1e-1)
+      }
+    ) yield new Bernoulli(p)
   }
 
   def asDouble(x: Boolean) = I(x)

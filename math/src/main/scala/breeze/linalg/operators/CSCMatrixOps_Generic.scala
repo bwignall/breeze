@@ -7,6 +7,4 @@ import breeze.storage.Zero
 
 import scala.reflect.ClassTag
 
-trait CSCMatrixOps_Generic extends GenericOps with TensorLowPrio {
- 
-}
+trait CSCMatrixOps_Generic extends GenericOps with TensorLowPrio {}

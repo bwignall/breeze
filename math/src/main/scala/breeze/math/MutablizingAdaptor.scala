@@ -42,35 +42,39 @@ object MutablizingAdaptor {
     else VectorSpaceAdaptor(vs)
   }
 
-  def ensureMutable[V, S](vs: InnerProductVectorSpace[V, S])
-    : MutablizingAdaptor[InnerProductVectorSpace, MutableInnerProductVectorSpace, V, S] = {
+  def ensureMutable[V, S](
+    vs: InnerProductVectorSpace[V, S]
+  ): MutablizingAdaptor[InnerProductVectorSpace, MutableInnerProductVectorSpace, V, S] = {
     if (vs.isInstanceOf[MutableInnerProductVectorSpace[_, _]])
       IdentityWrapper[MutableInnerProductVectorSpace, V, S](vs.asInstanceOf[MutableInnerProductVectorSpace[V, S]])
     else InnerProductSpaceAdaptor(vs)
   }
 
-  def ensureMutable[V, S](vs: VectorField[V, S])(
-      implicit canIterate: CanTraverseValues[V, S],
-      canMap: CanMapValues[V, S, S, V],
-      canZipMap: CanZipMapValues[V, S, S, V]): MutablizingAdaptor[VectorField, MutableVectorField, V, S] = {
+  def ensureMutable[V, S](vs: VectorField[V, S])(implicit
+    canIterate: CanTraverseValues[V, S],
+    canMap: CanMapValues[V, S, S, V],
+    canZipMap: CanZipMapValues[V, S, S, V]
+  ): MutablizingAdaptor[VectorField, MutableVectorField, V, S] = {
     if (vs.isInstanceOf[MutableVectorField[_, _]])
       IdentityWrapper[MutableVectorField, V, S](vs.asInstanceOf[MutableVectorField[V, S]])
     else VectorFieldAdaptor(vs)
   }
 
-  def ensureMutable[V, S](vs: VectorRing[V, S])(
-      implicit canIterate: CanTraverseValues[V, S],
-      canMap: CanMapValues[V, S, S, V],
-      canZipMap: CanZipMapValues[V, S, S, V]): MutablizingAdaptor[VectorRing, MutableVectorRing, V, S] = {
+  def ensureMutable[V, S](vs: VectorRing[V, S])(implicit
+    canIterate: CanTraverseValues[V, S],
+    canMap: CanMapValues[V, S, S, V],
+    canZipMap: CanZipMapValues[V, S, S, V]
+  ): MutablizingAdaptor[VectorRing, MutableVectorRing, V, S] = {
     if (vs.isInstanceOf[MutableVectorRing[_, _]])
       IdentityWrapper[MutableVectorRing, V, S](vs.asInstanceOf[MutableVectorRing[V, S]])
     else VectorRingAdaptor(vs)
   }
 
-  def ensureMutable[V, S](vs: CoordinateField[V, S])(
-      implicit canIterate: CanTraverseValues[V, S],
-      canMap: CanMapValues[V, S, S, V],
-      canZipMap: CanZipMapValues[V, S, S, V]): MutablizingAdaptor[CoordinateField, MutableCoordinateField, V, S] = {
+  def ensureMutable[V, S](vs: CoordinateField[V, S])(implicit
+    canIterate: CanTraverseValues[V, S],
+    canMap: CanMapValues[V, S, S, V],
+    canZipMap: CanZipMapValues[V, S, S, V]
+  ): MutablizingAdaptor[CoordinateField, MutableCoordinateField, V, S] = {
     if (vs.isInstanceOf[MutableCoordinateField[_, _]])
       IdentityWrapper[MutableCoordinateField, V, S](vs.asInstanceOf[MutableCoordinateField[V, S]])
     else CoordinateFieldAdaptor(vs)
@@ -303,11 +307,11 @@ object MutablizingAdaptor {
       }
   }
 
-  case class VectorFieldAdaptor[V, S](val underlying: VectorField[V, S])(
-      implicit canIterate: CanTraverseValues[V, S],
-      canMap: CanMapValues[V, S, S, V],
-      canZipMap: CanZipMapValues[V, S, S, V])
-      extends MutablizingAdaptor[VectorField, MutableVectorField, V, S] {
+  case class VectorFieldAdaptor[V, S](val underlying: VectorField[V, S])(implicit
+    canIterate: CanTraverseValues[V, S],
+    canMap: CanMapValues[V, S, S, V],
+    canZipMap: CanZipMapValues[V, S, S, V]
+  ) extends MutablizingAdaptor[VectorField, MutableVectorField, V, S] {
     type Wrapper = Ref[V]
 
     def wrap(v: V): Wrapper = Ref(v)
@@ -461,11 +465,11 @@ object MutablizingAdaptor {
     def map[U](f: T => U) = Ref(f(value))
   }
 
-  case class VectorRingAdaptor[V, S](val underlying: VectorRing[V, S])(
-      implicit canIterate: CanTraverseValues[V, S],
-      canMap: CanMapValues[V, S, S, V],
-      canZipMap: CanZipMapValues[V, S, S, V])
-      extends MutablizingAdaptor[VectorRing, MutableVectorRing, V, S] {
+  case class VectorRingAdaptor[V, S](val underlying: VectorRing[V, S])(implicit
+    canIterate: CanTraverseValues[V, S],
+    canMap: CanMapValues[V, S, S, V],
+    canZipMap: CanZipMapValues[V, S, S, V]
+  ) extends MutablizingAdaptor[VectorRing, MutableVectorRing, V, S] {
     type Wrapper = Ref[V]
 
     def wrap(v: V): Wrapper = Ref(v)
@@ -607,11 +611,11 @@ object MutablizingAdaptor {
     }
   }
 
-  case class CoordinateFieldAdaptor[V, S](underlying: CoordinateField[V, S])(
-      implicit canIterate: CanTraverseValues[V, S],
-      canMap: CanMapValues[V, S, S, V],
-      canZipMap: CanZipMapValues[V, S, S, V])
-      extends MutablizingAdaptor[CoordinateField, MutableCoordinateField, V, S] {
+  case class CoordinateFieldAdaptor[V, S](underlying: CoordinateField[V, S])(implicit
+    canIterate: CanTraverseValues[V, S],
+    canMap: CanMapValues[V, S, S, V],
+    canZipMap: CanZipMapValues[V, S, S, V]
+  ) extends MutablizingAdaptor[CoordinateField, MutableCoordinateField, V, S] {
     type Wrapper = Ref[V]
 
     def wrap(v: V): Wrapper = Ref(v)
@@ -657,7 +661,7 @@ object MutablizingAdaptor {
         }
       }
 
-      override implicit def scalarOf: ScalarOf[Wrapper, S] = ScalarOf.dummy
+      implicit override def scalarOf: ScalarOf[Wrapper, S] = ScalarOf.dummy
 
       implicit def zipMapValues: CanZipMapValues[Wrapper, S, S, Wrapper] = new CanZipMapValues[Wrapper, S, S, Wrapper] {
         def map(from: Wrapper, from2: Wrapper, fn: (S, S) => S): Wrapper = {
@@ -734,17 +738,17 @@ object MutablizingAdaptor {
         }
       }
 
-      override implicit def normImpl2: norm.Impl2[Wrapper, Double, Double] = new norm.Impl2[Wrapper, Double, Double] {
+      implicit override def normImpl2: norm.Impl2[Wrapper, Double, Double] = new norm.Impl2[Wrapper, Double, Double] {
         override def apply(v: Wrapper, v2: Double): Double = underlying.normImpl2(v.value, v2)
       }
 
-      override implicit def divIntoVV: OpDiv.InPlaceImpl2[Wrapper, Wrapper] = liftUpdateV(underlying.divVV)
+      implicit override def divIntoVV: OpDiv.InPlaceImpl2[Wrapper, Wrapper] = liftUpdateV(underlying.divVV)
 
-      override implicit def divVV: OpDiv.Impl2[Wrapper, Wrapper, Wrapper] = liftOpV(underlying.divVV)
+      implicit override def divVV: OpDiv.Impl2[Wrapper, Wrapper, Wrapper] = liftOpV(underlying.divVV)
 
-      override implicit def divIntoVS: OpDiv.InPlaceImpl2[Wrapper, S] = liftUpdate(underlying.divVS)
+      implicit override def divIntoVS: OpDiv.InPlaceImpl2[Wrapper, S] = liftUpdate(underlying.divVS)
 
-      override implicit def divVS: OpDiv.Impl2[Wrapper, S, Wrapper] = liftOp(underlying.divVS)
+      implicit override def divVS: OpDiv.Impl2[Wrapper, S, Wrapper] = liftOp(underlying.divVS)
     }
   }
 

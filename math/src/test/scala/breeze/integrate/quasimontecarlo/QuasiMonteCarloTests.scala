@@ -56,9 +56,10 @@ class QuasiMonteCarloTest extends AnyWordSpec {
       val beta = 5.0
       val mu = 3.0
       val sigma = 5.0
-      val integrationResult = quasiMonteCarloIntegrate(productFunc _)(
-        Gaussian(mu, sigma).toQuasi,
-        RejectionSampledGammaQuasiRandomVariable(alpha, beta))(16 * 1024 * 1024)
+      val integrationResult =
+        quasiMonteCarloIntegrate(productFunc _)(Gaussian(mu, sigma).toQuasi,
+                                                RejectionSampledGammaQuasiRandomVariable(alpha, beta)
+        )(16 * 1024 * 1024)
 //      println("Integration result: " + integrationResult + " should be " + alpha * beta * mu)
       math.abs(integrationResult - alpha * beta * mu) should be < 0.001
     }

@@ -29,12 +29,10 @@ import breeze.optimize.DiffFunction
  * @author dlwh
  * @param p the probability of true
  */
-case class Bernoulli(p: Double)(implicit rand: RandBasis)
-    extends DiscreteDistr[Boolean]
-    with Moments[Double, Double] {
+case class Bernoulli(p: Double)(implicit rand: RandBasis) extends DiscreteDistr[Boolean] with Moments[Double, Double] {
   require(p >= 0.0)
   require(p <= 1.0)
-  def probabilityOf(b: Boolean) = if (b) p else (1 - p)
+  def probabilityOf(b: Boolean) = if (b) p else 1 - p
 
   override def draw() = {
     rand.uniform.draw() < p
@@ -52,7 +50,9 @@ object Bernoulli extends ExponentialFamily[Bernoulli, Boolean] with HasConjugate
   type ConjugatePrior = Beta
   val conjugateFamily: Beta.type = Beta
 
-  override def predictive(parameter: Beta.Parameter)(implicit basis: RandBasis) = new Polya(Counter(true -> parameter._1, false -> parameter._2))
+  override def predictive(parameter: Beta.Parameter)(implicit basis: RandBasis) = new Polya(
+    Counter(true -> parameter._1, false -> parameter._2)
+  )
 
   override def posterior(prior: Beta.Parameter, evidence: IterableOnce[Boolean]) = {
     evidence.foldLeft(prior) { (acc, ev) =>

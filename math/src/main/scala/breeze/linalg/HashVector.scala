@@ -139,7 +139,7 @@ object HashVector {
       def mapActive(from: HashVector[V], fn: (V) => V2): HashVector[V2] = {
         val z = implicitly[Zero[V2]].zero
         val out = new OpenAddressHashArray[V2](from.length)
-        cforRange (0 until from.iterableSize) { i =>
+        cforRange(0 until from.iterableSize) { i =>
           if (from.isActive(i)) {
             val vv = fn(from.data(i))
             if (vv != z)
@@ -160,7 +160,7 @@ object HashVector {
 
       def traverse(from: HashVector[V], fn: ValuesVisitor[V]): fn.type = {
         fn.zeros(from.size - from.activeSize, from.default)
-        cforRange (0 until from.iterableSize) { i =>
+        cforRange(0 until from.iterableSize) { i =>
           if (from.isActive(i))
             fn.visit(from.data(i))
         }
@@ -173,10 +173,10 @@ object HashVector {
     new CanTraverseKeyValuePairs[HashVector[V], Int, V] {
 
       def traverse(from: HashVector[V], fn: KeyValuePairsVisitor[Int, V]): Unit = {
-        fn.zeros(
-          from.size - from.activeSize,
-          Iterator.range(0, from.size).filterNot(from.index contains _),
-          from.default)
+        fn.zeros(from.size - from.activeSize,
+                 Iterator.range(0, from.size).filterNot(from.index contains _),
+                 from.default
+        )
         var i = 0
         while (i < from.iterableSize) {
           if (from.isActive(i))
@@ -211,8 +211,9 @@ object HashVector {
 
   implicit def space[E: Field: ClassTag: Zero]: MutableFiniteCoordinateField[HashVector[E], Int, E] = {
     implicit val _dim: dim.Impl[HashVector[E], Int] = dim.implVDim[E, HashVector[E]]
-    implicit val n: norm.Impl2[HashVector[E], Double, Double] = norm.canNorm(HasOps.impl_CanTraverseValues_HV_Generic, implicitly[Field[E]].normImpl)
-    implicit val add: OpAdd.InPlaceImpl2[breeze.linalg.HashVector[E],E] = HasOps.castUpdateOps_V_S
+    implicit val n: norm.Impl2[HashVector[E], Double, Double] =
+      norm.canNorm(HasOps.impl_CanTraverseValues_HV_Generic, implicitly[Field[E]].normImpl)
+    implicit val add: OpAdd.InPlaceImpl2[breeze.linalg.HashVector[E], E] = HasOps.castUpdateOps_V_S
     MutableFiniteCoordinateField.make[HashVector[E], Int, E]
   }
 

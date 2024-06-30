@@ -49,23 +49,23 @@ class ComplexTest extends AnyFunSuite with Checkers {
 
   test("Abs/Conj") {
     assert((3 + 4 * i).abs === 5)
-    val c = (1.7 + 2.1 * i)
+    val c = 1.7 + 2.1 * i
     assert(c * c.conjugate === 7.3)
   }
 
   test("List[Complex].sum (test ComplexIsFractional)") {
-    val x = List((5 + 7 * i), (1 + 3 * i), (13 + 17 * i))
+    val x = List(5 + 7 * i, 1 + 3 * i, 13 + 17 * i)
     assert(x.sum === (19 + 27 * i))
   }
 
   test("List[Complex].product (test ComplexIsFractional)") {
-    val x = List((5 + 7 * i), (1 + 3 * i), (13 + 17 * i))
+    val x = List(5 + 7 * i, 1 + 3 * i, 13 + 17 * i)
     assert(x.product === (-582 + 14 * i))
   }
 
   test("List[Complex].sorted (test ComplexOrdering)") {
-    val x = List((5 + 7 * i), (1 + 3 * i), (13 + 17 * i))
-    assert(x.sorted === List((1 + 3 * i), (5 + 7 * i), (13 + 17 * i)))
+    val x = List(5 + 7 * i, 1 + 3 * i, 13 + 17 * i)
+    assert(x.sorted === List(1 + 3 * i, 5 + 7 * i, 13 + 17 * i))
   }
 
   test("universal function compatibility") {

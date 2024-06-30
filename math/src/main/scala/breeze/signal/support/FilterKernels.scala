@@ -1,7 +1,7 @@
 package breeze.signal.support
 
-import breeze.linalg.{sum, DenseVector, diff}
-import breeze.numerics.{cos, sincpi, isOdd, isEven}
+import breeze.linalg.{diff, sum, DenseVector}
+import breeze.numerics.{cos, isEven, isOdd, sincpi}
 import breeze.signal._
 import scala.math.{sin, Pi}
 import breeze.math.Complex
@@ -36,7 +36,7 @@ object FIRKernel1D {
  * multiple applications of fft convolution.*/
 class FIRKernel1D[T](val kernel: DenseVector[T], override val multiplier: Double, override val designText: String)
     extends FilterKernel1D[T] {
-  //lazy val kernelFourier: DenseVector[Complex] = fourierTr( kernel )
+  // lazy val kernelFourier: DenseVector[Complex] = fourierTr( kernel )
   lazy val length = kernel.length
 
   /**Amount of overhang to prepend for convolution, to conserve output length.*/
@@ -54,9 +54,8 @@ class FIRKernel1D[T](val kernel: DenseVector[T], override val multiplier: Double
 }
 
 /**This immutable class will encapsulate 1D IIR kernels. Not implemented yet.*/
-class IIRKernel1D[T](
-    val kernelA: DenseVector[T],
-    val kernelB: DenseVector[T],
-    override val multiplier: Double,
-    override val designText: String)
-    extends FilterKernel1D[T] {}
+class IIRKernel1D[T](val kernelA: DenseVector[T],
+                     val kernelB: DenseVector[T],
+                     override val multiplier: Double,
+                     override val designText: String
+) extends FilterKernel1D[T] {}

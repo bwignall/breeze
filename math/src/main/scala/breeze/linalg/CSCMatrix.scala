@@ -46,13 +46,13 @@ import breeze.macros._
  * @author dlwh
  */
 // TODO: maybe put columns in own array of sparse vectors, making slicing easier?
-class CSCMatrix[@spec(Double, Int, Float, Long) V: Zero](
-    private var _data: Array[V],
-    val rows: Int,
-    val cols: Int,
-    val colPtrs: Array[Int], // len cols + 1
-    private[linalg] var used: Int,
-    private var _rowIndices: Array[Int]) // len >= used
+class CSCMatrix[@spec(Double, Int, Float, Long) V: Zero](private var _data: Array[V],
+                                                         val rows: Int,
+                                                         val cols: Int,
+                                                         val colPtrs: Array[Int], // len cols + 1
+                                                         private[linalg] var used: Int,
+                                                         private var _rowIndices: Array[Int]
+) // len >= used
     extends Matrix[V]
     with MatrixLike[V, CSCMatrix[V]]
     with Serializable {
@@ -90,11 +90,15 @@ class CSCMatrix[@spec(Double, Int, Float, Long) V: Zero](
       if (used > data.length) {
         // need to grow array
         val newLength = {
-          if (data.length == 0) { 4 } else if (data.length < 0x0400) { data.length * 2 } else if (data.length < 0x0800) {
+          if (data.length == 0) { 4 }
+          else if (data.length < 0x0400) { data.length * 2 }
+          else if (data.length < 0x0800) {
             data.length + 0x0400
-          } else if (data.length < 0x1000) { data.length + 0x0800 } else if (data.length < 0x2000) {
+          } else if (data.length < 0x1000) { data.length + 0x0800 }
+          else if (data.length < 0x2000) {
             data.length + 0x1000
-          } else if (data.length < 0x4000) { data.length + 0x2000 } else { data.length + 0x4000 }
+          } else if (data.length < 0x4000) { data.length + 0x2000 }
+          else { data.length + 0x4000 }
         }
 
         // allocate new arrays
@@ -159,11 +163,10 @@ class CSCMatrix[@spec(Double, Int, Float, Long) V: Zero](
   override def toString(maxLines: Int, maxWidth: Int): String = {
     val buf = new StringBuilder()
     buf ++= ("%d x %d CSCMatrix".format(rows, cols))
-    activeIterator.take(maxLines - 1).foreach {
-      case ((r, c), v) =>
-        buf += '\n'
-        buf ++= "(%d,%d) ".format(r, c)
-        buf ++= v.toString
+    activeIterator.take(maxLines - 1).foreach { case ((r, c), v) =>
+      buf += '\n'
+      buf ++= "(%d,%d) ".format(r, c)
+      buf ++= v.toString
     }
     buf.toString()
   }
@@ -296,25 +299,23 @@ object CSCMatrix extends MatrixConstructors[CSCMatrix] {
     )
   }
 
-
-
   /**
    * This is basically an unsorted coordinate matrix.
    * @param rows if negative, result will automatically infer size
    * @param cols if negative, result will automatically infer size
    * @param initNnz initial number of nonzero entries
    */
-  class Builder[@spec(Double, Int, Float, Long) T: ClassTag: Semiring: Zero](
-      val rows: Int,
-      val cols: Int,
-      initNnz: Int = 16) {
+  class Builder[@spec(Double, Int, Float, Long) T: ClassTag: Semiring: Zero](val rows: Int,
+                                                                             val cols: Int,
+                                                                             initNnz: Int = 16
+  ) {
     private def ring = implicitly[Semiring[T]]
 
     def add(r: Int, c: Int, v: T): Unit = {
       if (v != ring.zero) {
         numAdded += 1
         vs += v
-        indices += (c.toLong << 32) | (r & 0xFFFFFFFFL)
+        indices += (c.toLong << 32) | (r & 0xffffffffL)
       }
     }
 
@@ -328,7 +329,6 @@ object CSCMatrix extends MatrixConstructors[CSCMatrix] {
       indices.sizeHint(nnz)
       vs.sizeHint(nnz)
     }
-
 
     def result: CSCMatrix[T] = result(false, false)
 
@@ -426,8 +426,6 @@ object CSCMatrix extends MatrixConstructors[CSCMatrix] {
       bldr
     }
   }
-
-
 
   implicit def canDim[E]: dim.Impl[CSCMatrix[E], (Int, Int)] = new dim.Impl[CSCMatrix[E], (Int, Int)] {
     def apply(v: CSCMatrix[E]): (Int, Int) = (v.rows, v.cols)

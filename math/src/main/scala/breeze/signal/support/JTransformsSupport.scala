@@ -15,7 +15,7 @@ import org.jtransforms.fft.{DoubleFFT_1D, DoubleFFT_2D}
  */
 object JTransformsSupport {
 
-  //maintain instance of transform to eliminate repeated initialization
+  // maintain instance of transform to eliminate repeated initialization
   private val fft_instD1D = new ThreadLocal[(Int, DoubleFFT_1D)]
 
   def getD1DInstance(length: Int): DoubleFFT_1D = {

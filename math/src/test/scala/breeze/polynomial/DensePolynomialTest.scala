@@ -17,7 +17,7 @@ package breeze.polynomial
  */
 
 import org.scalatest.funsuite.AnyFunSuite
-import breeze.linalg.{DenseVector, DenseMatrix, norm}
+import breeze.linalg.{norm, DenseMatrix, DenseVector}
 import spire.math._
 import spire.math.poly._
 import spire.algebra._

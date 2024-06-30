@@ -1,7 +1,7 @@
 package breeze.linalg
 
 import breeze.generic.UFunc
-import breeze.linalg.svd.{SVD, DenseSVD}
+import breeze.linalg.svd.{DenseSVD, SVD}
 
 /**
  * Computes the condition number of the given real matrix.

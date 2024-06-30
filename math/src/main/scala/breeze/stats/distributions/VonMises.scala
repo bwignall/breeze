@@ -109,7 +109,7 @@ object VonMises extends ExponentialFamily[VonMises, Double] {
 
     val kx = {
       if (t < 0.53) t * (2 + t * t * (1 + 5 * t * t / 6))
-      else if (t < 0.85) -0.4 + 1.39 * t + (0.43) / (1 - t)
+      else if (t < 0.85) -0.4 + 1.39 * t + 0.43 / (1 - t)
       else 1 / (t * (3 + t * (-4 + t)))
     }
     val result = minimize(lensed, DenseVector(mu, kx))
@@ -119,7 +119,7 @@ object VonMises extends ExponentialFamily[VonMises, Double] {
 
   def likelihoodFunction(stats: SufficientStatistic) = new DiffFunction[(Double, Double)] {
     def calculate(x: (Double, Double)) = {
-      val DELTA = 1E-5
+      val DELTA = 1e-5
       val (mu, k) = x
       if (mu < 0 || mu > 2 * Pi || k < 0) (Double.PositiveInfinity, (0.0, 0.0))
       else {
@@ -138,9 +138,9 @@ object VonMises extends ExponentialFamily[VonMises, Double] {
   /*
 
   /**
- * Returns the maximum likelihood estimate of this distribution
- * For the given observations with (possibly pseudo-)counts
- */
+   * Returns the maximum likelihood estimate of this distribution
+   * For the given observations with (possibly pseudo-)counts
+   */
 
   def mle(obs: Counter[Double,Double]) = {
     val sufStats = for {
@@ -168,5 +168,5 @@ object VonMises extends ExponentialFamily[VonMises, Double] {
     } */
     VonMises(mu,k)
   }
- */
+   */
 }

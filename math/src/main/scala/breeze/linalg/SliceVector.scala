@@ -24,10 +24,9 @@ import breeze.macros._
  *
  * @author dlwh
  */
-class SliceVector[@spec(Int) K, @spec(Double, Int, Float, Long) V: ClassTag](
-    val tensor: Tensor[K, V],
-    val slices: IndexedSeq[K])
-    extends Vector[V]
+class SliceVector[@spec(Int) K, @spec(Double, Int, Float, Long) V: ClassTag](val tensor: Tensor[K, V],
+                                                                             val slices: IndexedSeq[K]
+) extends Vector[V]
     with VectorLike[V, SliceVector[K, V]] {
 
   def apply(i: Int): V = tensor(slices(i))
@@ -109,8 +108,8 @@ object SliceVector {
 
       /** Traverses all values from the given collection. */
       override def traverse(from: SliceVector[K, V], fn: KeyValuePairsVisitor[Int, V]): Unit = {
-        from.iterator.foreach {
-          case (k, v) => fn.visit(k, v)
+        from.iterator.foreach { case (k, v) =>
+          fn.visit(k, v)
         }
 
       }

@@ -26,7 +26,6 @@ import scala.collection.generic._
 import scala.collection.mutable.ArrayBuffer
 import scala.collection._
 
-
 /**
  * Represents a beam, which is essentially a priority queue
  * with a maximum size.
@@ -100,7 +99,7 @@ class Beam[T](val maxSize: Int)(implicit override protected val ordering: Orderi
 
   override def equals(obj: Any): Boolean = obj match {
     case x: Beam[T @unchecked] => maxSize == x.maxSize && iterator.sameElements(x.iterator)
-    case _ => false
+    case _                     => false
   }
 
   override def clone(): Beam[T] = new Beam[T](maxSize) ++= this.iterator
@@ -109,7 +108,7 @@ class Beam[T](val maxSize: Int)(implicit override protected val ordering: Orderi
     Beam.canBuildFrom[T, T].newBuilder(this)
   }
 
-  protected override def fromSpecific(coll: IterableOnce[T]): Beam[T] = {
+  override protected def fromSpecific(coll: IterableOnce[T]): Beam[T] = {
     Beam.canBuildFrom[T, T].fromSpecific(this)(coll)
   }
 

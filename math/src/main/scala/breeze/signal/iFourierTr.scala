@@ -23,14 +23,14 @@ object iFourierTr extends UFunc {
   implicit val dvDoubleIFFT: iFourierTr.Impl[DenseVector[Double], DenseVector[Complex]] = {
     new iFourierTr.Impl[DenseVector[Double], DenseVector[Complex]] {
       def apply(v: DenseVector[Double]) = {
-        //reformat for input: note difference in format for input to complex fft
+        // reformat for input: note difference in format for input to complex fft
         val tempArr = denseVectorDToTemp(v)
 
-        //actual action
+        // actual action
         val fft_instance = getD1DInstance(v.length)
-        fft_instance.realInverseFull(tempArr, true) //does operation in place
+        fft_instance.realInverseFull(tempArr, true) // does operation in place
 
-        //reformat for output
+        // reformat for output
         tempToDenseVector(tempArr)
       }
     }
@@ -42,14 +42,14 @@ object iFourierTr extends UFunc {
   implicit val dvComplexIFFT: iFourierTr.Impl[DenseVector[Complex], DenseVector[Complex]] = {
     new iFourierTr.Impl[DenseVector[Complex], DenseVector[Complex]] {
       def apply(v: DenseVector[Complex]) = {
-        //reformat for input: note difference in format for input to real fft
+        // reformat for input: note difference in format for input to real fft
         val tempArr = denseVectorCToTemp(v)
 
-        //actual action
+        // actual action
         val fft_instance = getD1DInstance(v.length)
-        fft_instance.complexInverse(tempArr, true) //does operation in place
+        fft_instance.complexInverse(tempArr, true) // does operation in place
 
-        //reformat for output
+        // reformat for output
         tempToDenseVector(tempArr)
       }
     }
@@ -61,14 +61,14 @@ object iFourierTr extends UFunc {
   implicit val dmComplex2DIFFT: iFourierTr.Impl[DenseMatrix[Complex], DenseMatrix[Complex]] = {
     new iFourierTr.Impl[DenseMatrix[Complex], DenseMatrix[Complex]] {
       def apply(v: DenseMatrix[Complex]) = {
-        //reformat for input: note difference in format for input to real fft
+        // reformat for input: note difference in format for input to real fft
         val tempMat = denseMatrixCToTemp(v)
 
-        //actual action
+        // actual action
         val fft_instance = getD2DInstance(v.rows, v.cols)
-        fft_instance.complexInverse(tempMat, true) //does operation in place
+        fft_instance.complexInverse(tempMat, true) // does operation in place
 
-        //reformat for output
+        // reformat for output
         tempToDenseMatrix(tempMat, v.rows, v.cols)
       }
     }
@@ -80,15 +80,15 @@ object iFourierTr extends UFunc {
   implicit val dmDouble2DIFFT: iFourierTr.Impl[DenseMatrix[Double], DenseMatrix[Complex]] = {
     new iFourierTr.Impl[DenseMatrix[Double], DenseMatrix[Complex]] {
       def apply(v: DenseMatrix[Double]) = {
-        //reformat for input
+        // reformat for input
         val tempMat = denseMatrixDToTemp(v)
 
-        //actual action
+        // actual action
         val fft_instance = getD2DInstance(v.rows, v.cols)
-        fft_instance.complexInverse(tempMat, true) //does operation in place
-        //ToDo this could be optimized to use realInverseFull for speed, but only if the indexes are powers of two
+        fft_instance.complexInverse(tempMat, true) // does operation in place
+        // ToDo this could be optimized to use realInverseFull for speed, but only if the indexes are powers of two
 
-        //reformat for output
+        // reformat for output
         tempToDenseMatrix(tempMat, v.rows, v.cols)
       }
     }

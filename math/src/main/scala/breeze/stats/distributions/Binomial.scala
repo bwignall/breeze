@@ -15,7 +15,7 @@ package breeze.stats.distributions
  limitations under the License.
  */
 
-import breeze.numerics.{logI, lgamma}
+import breeze.numerics.{lgamma, logI}
 import math._
 
 /**
@@ -72,7 +72,7 @@ case class Binomial(n: Int, p: Double)(implicit rand: RandBasis)
       var continueOuter = true
       while (continueOuter) {
         var continueInner = true
-        while(continueInner) {
+        while (continueInner) {
           val angle = math.Pi * rand.uniform.draw()
           y = tan(angle)
           bnl = sq * y + n * pp
@@ -86,7 +86,7 @@ case class Binomial(n: Int, p: Double)(implicit rand: RandBasis)
             + bnl * plog + (n - bnl) * pclog
         )
 
-        continueOuter = (rand.uniform.draw() > t)
+        continueOuter = rand.uniform.draw() > t
       }
     }
     if (p != pp) bnl = n - bnl
@@ -102,7 +102,7 @@ case class Binomial(n: Int, p: Double)(implicit rand: RandBasis)
   private val pclog = log(pc)
 
   private val sq = sqrt(2.0 * (n * pp) * pc)
-  //}
+  // }
 
   def mean = n * p
   def variance = mean * (1 - p)
