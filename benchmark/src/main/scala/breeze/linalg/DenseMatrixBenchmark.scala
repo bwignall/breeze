@@ -9,6 +9,7 @@ import com.google.caliper.Benchmark
 object DenseMatrixBenchmark extends MyRunner(classOf[DenseMatrixBenchmark])
 
 trait BuildsRandomMatrices {
+  protected implicit val randBasis: RandBasis
   private val uniform = Uniform(0, 1)
   def randomMatrix(m: Int, n: Int, transpose: Boolean = false): DenseMatrix[Double] = {
     if (!transpose) {
@@ -28,6 +29,8 @@ trait BuildsRandomMatrices {
 }
 
 class DenseMatrixBenchmark extends BreezeBenchmark with BuildsRandomMatrices {
+  protected implicit val randBasis: RandBasis = RandBasis.mt0
+
 //
   // @Benchmark
 //  def timeUpdateRowCol(reps: Int) =

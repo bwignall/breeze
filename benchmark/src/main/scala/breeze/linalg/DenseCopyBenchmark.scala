@@ -2,6 +2,7 @@ package breeze.linalg
 
 import breeze.benchmark.{BreezeBenchmark, MyRunner}
 import breeze.macros._
+import breeze.stats.distributions.RandBasis
 import com.google.caliper.Benchmark
 
 /**

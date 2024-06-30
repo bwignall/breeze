@@ -8,7 +8,10 @@ import com.google.caliper.Benchmark
 object DenseVectorBenchmark extends MyRunner(classOf[DenseVectorBenchmark])
 
 trait BuildsRandomVectors {
+  protected implicit val randBasis: RandBasis
+
   private val uniform = Uniform(0, 1)
+
   def randomArray(size: Int, offset: Int = 0, stride: Int = 1): DenseVector[Double] = {
     require(offset >= 0)
     require(stride >= 1)
@@ -48,6 +51,8 @@ trait BuildsRandomVectors {
 }
 
 class DenseVectorBenchmark extends BreezeBenchmark with BuildsRandomVectors {
+  protected implicit val randBasis: RandBasis = RandBasis.mt0
+
   @Benchmark
   def timeAllocate(reps: Int): Unit = run(reps) {
     DenseVector.zeros[Double](1024)

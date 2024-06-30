@@ -2,6 +2,7 @@ package breeze.linalg
 
 import breeze.benchmark._
 import breeze.generic.{MappingUFunc, UFunc}
+import breeze.stats.distributions.RandBasis
 import com.google.caliper.Benchmark
 
 object MappingUfuncBenchmark extends MyRunner(classOf[MappingUfuncBenchmark])
@@ -17,6 +18,8 @@ object harderUfunc extends MappingUFunc {
 }
 
 class MappingUfuncBenchmark extends BreezeBenchmark with BuildsRandomMatrices with BuildsRandomVectors {
+  protected implicit val randBasis: RandBasis = RandBasis.mt0
+
   // these should be roughly similar:
   // Group 1
   @Benchmark

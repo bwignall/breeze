@@ -9,6 +9,7 @@ import breeze.macros.cforRange
 object MetropolisHastingsRunner extends MyRunner(classOf[MetropolisHastingsBenchmark])
 
 class MetropolisHastingsBenchmark extends BreezeBenchmark {
+  protected implicit val randBasis: RandBasis = RandBasis.mt0
 
   val burnIn = 1024 * 1024
   val dropCount = 25
@@ -42,13 +43,13 @@ class MetropolisHastingsBenchmark extends BreezeBenchmark {
     result
   }
 
-  def timeMarkovChainEquiv(reps: Int) = run(reps){
+  def timeMarkovChainEquiv(reps: Int) = run(reps) {
     val m =
       ArbitraryMetropolisHastings(likelihood _, gaussianJump _, gaussianJumpLogProb _, 0.5, burnIn = 0, dropCount = 0)
     pullAllSamples(m)
   }
 
-  def timeMetropolisHastings(reps: Int) = run(reps){
+  def timeMetropolisHastings(reps: Int) = run(reps) {
     val m = ArbitraryMetropolisHastings(
       likelihood _,
       (_: Double) => Uniform(0, 1),
@@ -59,7 +60,7 @@ class MetropolisHastingsBenchmark extends BreezeBenchmark {
     pullAllSamples(m)
   }
 
-  def timeMetropolisHastingsWithWork(reps: Int) = run(reps){
+  def timeMetropolisHastingsWithWork(reps: Int) = run(reps) {
     val m = ArbitraryMetropolisHastings(
       likelihood _,
       (_: Double) => Uniform(0, 1),
@@ -70,7 +71,7 @@ class MetropolisHastingsBenchmark extends BreezeBenchmark {
     pullAllSamplesWithWork(m)
   }
 
-  def timeThreadedBufferedWithWork(reps: Int) = run(reps){
+  def timeThreadedBufferedWithWork(reps: Int) = run(reps) {
     val wrapped = ArbitraryMetropolisHastings(
       likelihood _,
       (_: Double) => Uniform(0, 1),

@@ -9,6 +9,7 @@ import com.google.caliper.Benchmark
 object ProbMonadRunner extends MyRunner(classOf[ProbMonadBenchmark])
 
 class ProbMonadBenchmark extends BreezeBenchmark {
+  protected implicit val randBasis: RandBasis = RandBasis.mt0
 
   val f: Double => Double = x => math.exp(-x * x)
   val f2: Double => Double = x => x * x
