@@ -70,11 +70,11 @@ object LiteralRow {
   // TODO: replace this with appropriate inline defs.
   implicit def tuple2[V]: LiteralRow[(V, V), V] =
     new LiteralRow[(V, V), V] {
-        def foreach[X](tup: (V, V), fn: ((Int, V) => X)) = {
-          fn(0, tup._1)
-          fn(1, tup._2)
-        }
-        def length(tup: Tuple2[V, V]) = 2
+      def foreach[X](tup: (V, V), fn: ((Int, V) => X)) = {
+        fn(0, tup._1)
+        fn(1, tup._2)
+      }
+      def length(tup: Tuple2[V, V]) = 2
     }
 
   implicit def tuple3[V]: LiteralRow[(V, V, V), V] =
@@ -466,7 +466,5 @@ object LiteralRow {
       }
       def length(tup: Tuple22[V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V, V]) = 22
     }
-
-
 
 }
