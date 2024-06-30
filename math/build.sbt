@@ -17,7 +17,7 @@ libraryDependencies ++= Seq(
   "org.apache.logging.log4j" % "log4j-slf4j-impl" % "2.17.1" % "test",
   "org.apache.logging.log4j" % "log4j-core" % "2.17.1" % "test",
   "org.apache.logging.log4j" % "log4j-api" % "2.17.1" % "test",
-  ("org.scala-lang.modules" %% "scala-collection-compat" % "2.7.0")
+  "org.scala-lang.modules" %% "scala-collection-compat" % "2.7.0"
 )
 
 libraryDependencies += {
@@ -29,7 +29,7 @@ libraryDependencies += {
 }
 
 // see https://github.com/typesafehub/scalalogging/issues/23
-testOptions in Test += Tests.Setup(classLoader =>
+Test / testOptions += Tests.Setup(classLoader =>
   try {
     classLoader
       .loadClass("org.slf4j.LoggerFactory")
@@ -37,11 +37,9 @@ testOptions in Test += Tests.Setup(classLoader =>
       .invoke(null, "ROOT")
   } catch {
     case _: Exception =>
-})
+  }
+)
 
-fork in Test := true
+Test / fork := true
 
 javaOptions := Seq("-Xmx4g", "-Xss10m")
-
-
-

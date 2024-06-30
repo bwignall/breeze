@@ -1,37 +1,42 @@
-import sbt.Keys._
-import sbt._
+import sbt.Keys.*
+import sbt.{Def, *}
 import breeze.codegen.plugin.SbtBreezeCodegenPlugin.breezeCodegenSettings
 import xerial.sbt.Sonatype.autoImport.{sonatypeProfileName, sonatypeProjectHosting, sonatypePublishTo}
-import xerial.sbt.Sonatype._
+import xerial.sbt.Sonatype.*
 
 object Common {
 
   def priorTo2_13(scalaVersion: String): Boolean = {
     CrossVersion.partialVersion(scalaVersion) match {
       case Some((2, minor)) if minor < 13 => true
-      case _ => false
+      case _                              => false
     }
   }
 
-  val buildCrossScalaVersions = Seq("3.1.3", "2.12.15", "2.13.8")
+  val Scala212 = "2.12.19"
+  val Scala213 = "2.13.13"
+  val Scala3 = "3.3.3"
+  val defaultScala = Scala213
+  val buildCrossScalaVersions: Seq[String] = Seq(Scala213, Scala3, Scala212)
 
-  lazy val buildScalaVersion = buildCrossScalaVersions.head
+  lazy val buildScalaVersion: String = buildCrossScalaVersions.head
 
-  val commonSettings = Seq(
+  val commonSettings: Seq[Def.Setting[?]] = Seq(
     organization := "org.scalanlp",
     scalaVersion := buildScalaVersion,
     crossScalaVersions := buildCrossScalaVersions,
     scalacOptions ++= Seq("-deprecation", "-language:_"),
     javacOptions ++= Seq("-target", "1.8", "-source", "1.8"),
+    Test / fork := true,
+    Test / javaOptions := Seq("-Xmx3G"),
     credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"),
-
     resolvers ++= Seq(
       Resolver.mavenLocal,
       Resolver.sonatypeRepo("snapshots"),
       Resolver.sonatypeRepo("releases"),
       Resolver.typesafeRepo("releases")
     ),
-    testOptions in Test += Tests.Argument("-oDF"),
+    Test / testOptions += Tests.Argument("-oDF"),
 
     // test dependencies
     libraryDependencies ++= Seq(
@@ -44,11 +49,10 @@ object Common {
     libraryDependencies ++= {
       if (priorTo2_13(scalaVersion.value)) {
         Seq(
-          compilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.patch),
+          compilerPlugin(("org.scalamacros" % "paradise" % "2.1.1").cross(CrossVersion.patch))
         )
       } else {
         Seq(
-
         )
       }
     },
@@ -63,7 +67,7 @@ object Common {
     },
 
     // stuff related to publishing
-    publishArtifact in Test := false,
+    Test / publishArtifact := false,
     pomIncludeRepository := { _ =>
       false
     },
@@ -72,32 +76,34 @@ object Common {
     licenses := Seq("Apache Public License 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")),
     publishTo := sonatypePublishTo.value,
     sonatypeProjectHosting := Some(GitHubHosting("scalanlp", "breeze", "David Hall", "david.lw.hall@gmail.com")),
-
-    unmanagedSourceDirectories in Compile ++= {
+    Compile / unmanagedSourceDirectories ++= {
       CrossVersion.partialVersion(scalaVersion.value) match {
-        case Some((2, 11|12)) => Seq(
-          baseDirectory.value / "src" / "main" / "scala_2.11_2.12",
-          baseDirectory.value / "src" / "main" / "scala_2",
-        )
-        case Some((2, 13)) => Seq(
-          baseDirectory.value / "src" / "main" / "scala_2",
-          baseDirectory.value / "src" / "main" / "scala_2.13+"
-        )
-        case Some( (3, _)) => Seq(
-          baseDirectory.value / "src" / "main" / "scala_2.13+",
-          baseDirectory.value / "src" / "main" / "scala_3"
-        )
+        case Some((2, 11 | 12)) =>
+          Seq(
+            baseDirectory.value / "src" / "main" / "scala_2.11_2.12",
+            baseDirectory.value / "src" / "main" / "scala_2"
+          )
+        case Some((2, 13)) =>
+          Seq(
+            baseDirectory.value / "src" / "main" / "scala_2",
+            baseDirectory.value / "src" / "main" / "scala_2.13+"
+          )
+        case Some((3, _)) =>
+          Seq(
+            baseDirectory.value / "src" / "main" / "scala_2.13+",
+            baseDirectory.value / "src" / "main" / "scala_3"
+          )
         case _ => ???
       }
-    }, 
+    }
     // TODO: remove when possibl`e
-   // publishArtifact in (Compile, packageDoc) := {
+    // publishArtifact in (Compile, packageDoc) := {
     //  CrossVersion.partialVersion(scalaVersion.value) match {
-     //   case Some( (3, _)) => false
+    //   case Some( (3, _)) => false
     //    case _ => true
-//      
-     // }
-   // }
+//
+    // }
+    // }
   ) ++ breezeCodegenSettings
 
 }
