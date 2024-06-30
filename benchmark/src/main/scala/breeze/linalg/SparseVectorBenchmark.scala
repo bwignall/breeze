@@ -19,11 +19,12 @@
 package breeze.linalg
 
 import breeze.benchmark._
+import com.google.caliper.Benchmark
 
 object SparseVectorBenchmark extends MyRunner(classOf[SparseVectorBenchmark])
 
 class SparseVectorBenchmark extends BreezeBenchmark with BuildsRandomVectors {
-  def timeAllocate(reps: Int) = run(reps): Unit = {
+  def timeAllocate(reps: Int) = run(reps) {
     SparseVector.zeros[Double](1024)
   }
 
@@ -38,17 +39,33 @@ class SparseVectorBenchmark extends BreezeBenchmark with BuildsRandomVectors {
     }
   }
 
+  @Benchmark
   def timeDotSmall1_%(reps: Int) = dotProductBench(reps, 1000, 0.01)
+
+  @Benchmark
   def timeDotSmall10_%(reps: Int) = dotProductBench(reps, 1000, 0.10)
+
+  @Benchmark
   def timeDotSmall30_%(reps: Int) = dotProductBench(reps, 1000, 0.30)
 
+  @Benchmark
   def timeDotLargeUneven_10__0_1_%(reps: Int) = dotProductBench(reps, 1000000, 0.1, 0.001)
+
+  @Benchmark
   def timeDotLargeUneven_10_1_%(reps: Int) = dotProductBench(reps, 1000000, 0.1, 0.01)
+
+  @Benchmark
   def timeDotLargeUneven_10_30_%(reps: Int) = dotProductBench(reps, 1000000, 0.10, 0.3)
+
+  @Benchmark
   def timeDotLargeUneven_1_30_%(reps: Int) = dotProductBench(reps, 1000000, 0.01, 0.3)
 
+  @Benchmark
   def timeDotLarge1_%(reps: Int) = dotProductBench(reps, 1000000, 0.01)
-  def timeDotLarge10_%(reps: Int) = dotProductBench(reps, 1000000, 0.10)
-  def timeDotLarge30_%(reps: Int) = dotProductBench(reps, 1000000, 0.30)
 
+  @Benchmark
+  def timeDotLarge10_%(reps: Int) = dotProductBench(reps, 1000000, 0.10)
+
+  @Benchmark
+  def timeDotLarge30_%(reps: Int) = dotProductBench(reps, 1000000, 0.30)
 }

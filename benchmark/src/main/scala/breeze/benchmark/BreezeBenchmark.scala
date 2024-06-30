@@ -24,6 +24,7 @@ import com.google.caliper.runner.CaliperMain
 /**
  * Extend this to create an actual benchmarking class.
  */
+@Benchmark
 trait BreezeBenchmark extends Benchmark {
 
   /**
